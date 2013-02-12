@@ -2,8 +2,7 @@ require 'gtk3'
 require_relative '../model/planet.rb'
 
 class AddPlanetDialog
-  def initialize(parent_system_view, pi_configuration_model)
-	@parent_system_view = parent_system_view
+  def initialize(pi_configuration_model)
 	@pi_configuration_model = pi_configuration_model
 	
 	builder = Gtk::Builder.new
@@ -41,21 +40,19 @@ class AddPlanetDialog
   def run
 	@dialog.run do |response|
 	  case response
-		when (Gtk::ResponseType::OK)
-		  planet_type_value = @planet_type_combo_box.active_iter.get_value(0)
-		  
-		  new_planet = Planet.new(planet_type_value, @name_field.text, @alias_field.text)
-		  
-		  # Then, once we've done whatever the user wants, destroy ourselves.
-		  @dialog.destroy
-		  
-		  return new_planet
-		else
-		  puts "AddPlanetDialog.run: Do nothing because we cancelled."
-		  
-		  # Then, once we've done whatever the user wants, destroy ourselves.
-		  @dialog.destroy
-		end
+	  when (Gtk::ResponseType::OK)
+		planet_type_value = @planet_type_combo_box.active_iter.get_value(0)
+		
+		new_planet = Planet.new(planet_type_value, @name_field.text, @alias_field.text)
+		
+		# Add the new planet to the model.
+		@pi_configuration_model.add_planet(new_planet)
+	  else
+		puts "AddPlanetDialog.run: Do nothing because we cancelled."
+	  end
 	end
+	
+	# Then, once we've done whatever the user wants, destroy ourselves.
+	@dialog.destroy
   end
 end

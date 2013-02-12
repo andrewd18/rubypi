@@ -24,6 +24,10 @@ class PIConfiguration
   
   def add_planet(new_planet)
 	@planets << new_planet
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
   end
   
   def remove_planet(planet_to_remove)

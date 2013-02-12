@@ -12,40 +12,50 @@ class SystemViewWidget < Gtk::Box
 	
 	# Hook up our model data.
 	@pi_configuration_model = pi_configuration_model
+	@pi_configuration_model.add_observer(self)
 	
-	# Add the individual planet views.
-	@pi_configuration_model.planets.each do |planet|
-	  add_planet_view_overview_widget_for(planet)
-	end
-	
-	# Add the "Add Planet" button.
-	@add_planet_button = Gtk::Button.new(:label => "Add Planet")
-	@add_planet_button.signal_connect("clicked") do
-	  add_planet_from_dialog
-	end
-	self.pack_end(@add_planet_button)
-	
-	self.show_all
+	update
 	
 	return self
   end
   
-  def add_planet_from_dialog
-	dialog = AddPlanetDialog.new(self, @pi_configuration_model)
+  # Called when the PI model changes.
+  def update
+	# Blow away old widget children.
+	self.children.each do |gtk_child|
+	  gtk_child.destroy
+	end
 	
-	# Run the dialog and store its return value.
-	new_planet = dialog.run
+	repopulate_planet_widgets
 	
-	# Add the new planet to the model.
-	@pi_configuration_model.add_planet(new_planet)
+	create_add_planet_button
 	
-	# Add the new overview widget to the view.
-	add_planet_view_overview_widget_for(new_planet)
+	self.show_all
   end
   
-  def add_planet_view_overview_widget_for(planet)
-	# Create a new overview widget for our new planet.
-	widget = SystemViewPlanetOverviewWidget.new(planet)
-	self.pack_start(widget)
+  def add_planet_from_dialog
+	dialog = AddPlanetDialog.new(@pi_configuration_model)
+	
+	# Run the dialog and store its return value.
+	dialog.run
+  end
+  
+  private
+  
+  def repopulate_planet_widgets
+	@pi_configuration_model.planets.each do |planet|
+	  # Create a new overview widget for our new planet.
+	  widget = SystemViewPlanetOverviewWidget.new(planet)
+	  self.pack_start(widget)
+	end
+  end
+  
+  def create_add_planet_button
+	# Add the "Add Planet" button.
+	add_planet_button = Gtk::Button.new(:label => "Add Planet")
+	add_planet_button.signal_connect("clicked") do
+	  add_planet_from_dialog
+	end
+	self.pack_end(add_planet_button)
   end
 end
