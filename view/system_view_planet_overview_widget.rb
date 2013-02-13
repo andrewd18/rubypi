@@ -42,8 +42,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
   end
   
   def on_delete_planet_button_clicked
-	@planet.delete
-	self.destroy
+	@planet.remove_planet
   end
   
   private

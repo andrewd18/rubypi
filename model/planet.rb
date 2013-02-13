@@ -21,6 +21,7 @@ class Planet
   attr_reader :name
   attr_reader :buildings
   attr_reader :planet_alias
+  attr_accessor :pi_configuration
   
   PLANET_TYPES = {:gas => "Gas",
                   :ice => "Ice",
@@ -31,7 +32,7 @@ class Planet
                   :oceanic => "Oceanic",
                   :plasma => "Plasma"}
   
-  def initialize(planet_type, planet_name, planet_alias = nil, planet_buildings = Array.new)
+  def initialize(planet_type, planet_name, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
 	if (PLANET_TYPES.has_value?(planet_type))
 	  @type = planet_type
 	else
@@ -46,6 +47,8 @@ class Planet
 	@buildings = planet_buildings
 	
 	total_values_from_buildings
+	
+	@pi_configuration = pi_configuration
 	
 	return self
   end
@@ -74,6 +77,10 @@ class Planet
   def add_building_from_class_name(class_name)
 	building = class_name.new
 	self.add_building(building)
+  end
+  
+  def remove_planet
+	@pi_configuration.remove_planet(self)
   end
   
   private

@@ -43,5 +43,20 @@
         <property name="position">2</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkButton" id="delete_planet_button">
+        <property name="label">gtk-delete</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_stock">True</property>
+        <signal name="clicked" handler="on_delete_planet_button_clicked" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
   </object>
 </interface>
