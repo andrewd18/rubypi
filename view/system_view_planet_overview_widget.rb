@@ -50,7 +50,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
   # Update image, name, and alias values from the model.
   def update_image_name_and_alias
 	# planet_image.image = planet.image
-	@planet_name_label.text = @planet.name
+	@planet_name_label.text = @planet.name || ""
 	@planet_alias_label.text = @planet.planet_alias || ""
   end
 end

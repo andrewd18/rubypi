@@ -47,12 +47,18 @@ class AddPlanetDialog
 		
 		# Add the new planet to the model.
 		@pi_configuration_model.add_planet(new_planet)
+		
+		# Then, once we've done whatever the user wants, destroy ourselves.
+		@dialog.destroy
+		
+		# Finally, return the new planet.
+		return new_planet
 	  else
 		puts "AddPlanetDialog.run: Do nothing because we cancelled."
+		
+		# Then, once we've done whatever the user wants, destroy ourselves.
+		@dialog.destroy
 	  end
 	end
-	
-	# Then, once we've done whatever the user wants, destroy ourselves.
-	@dialog.destroy
   end
 end

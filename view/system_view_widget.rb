@@ -14,30 +14,37 @@ class SystemViewWidget < Gtk::Box
 	@pi_configuration_model = pi_configuration_model
 	@pi_configuration_model.add_observer(self)
 	
-	update
+	@pi_configuration_model.planets.each do |planet|
+	  add_planet(planet)
+	end
+	
+	create_add_planet_button
 	
 	return self
   end
   
   # Called when the PI model changes.
   def update
-	# Blow away old widget children.
-	self.children.each do |gtk_child|
-	  gtk_child.destroy
-	end
-	
-	repopulate_planet_widgets
-	
-	create_add_planet_button
-	
-	self.show_all
+	# Let the planet views take care of themselves.
+  end
+  
+  def add_planet(planet)
+	# Create a new view widget from that planet.
+	widget = SystemViewPlanetOverviewWidget.new(planet)
+	self.pack_start(widget)
   end
   
   def add_planet_from_dialog
 	dialog = AddPlanetDialog.new(@pi_configuration_model)
 	
 	# Run the dialog and store its return value.
-	dialog.run
+	new_planet = dialog.run
+	
+	if (new_planet != nil)
+	  # Create a new view widget from that planet.
+	  widget = SystemViewPlanetOverviewWidget.new(new_planet)
+	  self.pack_start(widget)
+	end
   end
   
   private
