@@ -15,10 +15,10 @@ class SystemViewWidget < Gtk::Box
 	@pi_configuration_model.add_observer(self)
 	
 	@pi_configuration_model.planets.each do |planet|
-	  add_planet(planet)
+	  add_planet_overview_widget(planet)
 	end
 	
-	create_add_planet_button
+	# create_add_planet_button
 	
 	return self
   end
@@ -28,7 +28,7 @@ class SystemViewWidget < Gtk::Box
 	# Let the planet views take care of themselves.
   end
   
-  def add_planet(planet)
+  def add_planet_overview_widget(planet)
 	# Create a new view widget from that planet.
 	widget = SystemViewPlanetOverviewWidget.new(planet)
 	self.pack_start(widget)
@@ -48,14 +48,6 @@ class SystemViewWidget < Gtk::Box
   end
   
   private
-  
-  def repopulate_planet_widgets
-	@pi_configuration_model.planets.each do |planet|
-	  # Create a new overview widget for our new planet.
-	  widget = SystemViewPlanetOverviewWidget.new(planet)
-	  self.pack_start(widget)
-	end
-  end
   
   def create_add_planet_button
 	# Add the "Add Planet" button.

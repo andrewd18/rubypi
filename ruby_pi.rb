@@ -15,9 +15,28 @@ class RubyPI < Gtk::Window
 	
 	@pi_configuration = PIConfiguration.new
 	
-	# Add a tree view.
-	leftmost_widget = SystemViewWidget.new(@pi_configuration)
-	self.add(leftmost_widget)
+	# Load six uncolonized planets.
+	# TODO: Allow user to load from file.
+	#6.times do
+	  #@pi_configuration.add_planet(Planet.new("Uncolonized"))
+	#end
+	
+	# HACK for testing.
+	# (planet_type, planet_name = nil, planet_alias = nil, colonized = false, planet_buildings = Array.new, pi_configuration = nil)
+	@pi_configuration.add_planet(Planet.new("Barren", "J100820 I", "Factory", true))
+	@pi_configuration.add_planet(Planet.new("Lava", "J100820 III", "Chiral & Silicon", true))
+	@pi_configuration.add_planet(Planet.new("Lava", "J100820 VII", "Metals", true))
+	@pi_configuration.add_planet(Planet.new("Oceanic", "J100820 VIII", "Microorganisms", true))
+	@pi_configuration.add_planet(Planet.new("Temperate", "J100820 IX", "Infected Sheep", true))
+	@pi_configuration.add_planet(Planet.new("Uncolonized"))
+	
+	vertical_layout = Gtk::Box.new(:vertical)
+	
+	system_view_widget = SystemViewWidget.new(@pi_configuration)
+	vertical_layout.pack_start(system_view_widget)
+	
+	
+	self.add(vertical_layout)
 	
 	# Make sure all our widgets are visible.
 	self.show_all

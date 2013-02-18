@@ -19,11 +19,17 @@ class Planet
   
   attr_reader :type
   attr_reader :name
-  attr_reader :buildings
   attr_reader :planet_alias
+  attr_accessor :colonized
+  attr_reader :buildings
+  attr_reader :cpu_usage
+  attr_reader :powergrid_usage
+  attr_reader :cpu_provided
+  attr_reader :powergrid_provided
   attr_accessor :pi_configuration
   
-  PLANET_TYPES = {:gas => "Gas",
+  PLANET_TYPES = {:uncolonized => "Uncolonized",
+                  :gas => "Gas",
                   :ice => "Ice",
                   :storm => "Storm",
                   :barren => "Barren",
@@ -32,7 +38,7 @@ class Planet
                   :oceanic => "Oceanic",
                   :plasma => "Plasma"}
   
-  def initialize(planet_type, planet_name, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
+  def initialize(planet_type, planet_name = nil, planet_alias = nil, colonized = false, planet_buildings = Array.new, pi_configuration = nil)
 	if (PLANET_TYPES.has_value?(planet_type))
 	  @type = planet_type
 	else
@@ -43,6 +49,8 @@ class Planet
 	@name = planet_name
 	
 	@planet_alias = planet_alias
+	
+	@colonized = colonized
 	
 	@buildings = planet_buildings
 	
