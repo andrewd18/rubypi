@@ -85,8 +85,10 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	colonize_planet_dialog = ColonizePlanetDialog.new(@planet_model)
 	colonize_planet_dialog.run
 	
-	# Once done, edit the planet we just colonized.
-	edit_planet
+	# Assuming the user colonized the planet rather than canceling, edit the planet we just colonized.
+	if (@planet_model.type != "Uncolonized")
+	  edit_planet
+	end
   end
   
   private

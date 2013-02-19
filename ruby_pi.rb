@@ -1,6 +1,5 @@
 require 'gtk3'
 
-# require_relative 'view/add_planetary_building_widget.rb'
 require_relative 'view/system_view_widget.rb'
 require_relative 'model/pi_configuration.rb'
 
