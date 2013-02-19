@@ -4,6 +4,8 @@ require 'gtk3'
 require_relative 'planet_view_widget.rb'
 require_relative 'colonize_planet_dialog.rb'
 
+# TODO: This widget is really similar to the Planetary Stats Widget. I should clean that up.
+
 # This widget is designed to show a single planet's image, its name, and its alias.
 class SystemViewPlanetOverviewWidget < Gtk::Box
   def initialize(planet)
