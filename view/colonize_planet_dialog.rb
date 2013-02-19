@@ -38,6 +38,8 @@ class ColonizePlanetDialog < Gtk::Dialog
 	combobox_renderer = Gtk::CellRendererText.new
 	@planet_type_combo_box.pack_start(combobox_renderer, true)
 	@planet_type_combo_box.add_attribute(combobox_renderer, "text", 0)
+	# Set the first row active.
+	@planet_type_combo_box.active=(0)
 	
 	# Finish packing Row 1.
 	row_one.pack_start(planet_type_label)
@@ -62,15 +64,8 @@ class ColonizePlanetDialog < Gtk::Dialog
 	
 	# Connect up all the signals.
 	self.signal_connect("response") do |dialog_box, response_id|
-	  case response_id
-	  when (Gtk::ResponseType::OK)
-		planet_type_value = @planet_type_combo_box.active_iter.get_value(0)
-		  
-		@planet_model.type = planet_type_value
-		@planet_model.name = @planet_name_text_entry.text
-		@planet_model.alias = @planet_alias_text_entry.text
-	  else
-		puts "Cancelled."
+	  if (response_id == Gtk::ResponseType::OK)
+		on_ok_response
 	  end
 	  
 	  self.destroy
@@ -80,5 +75,15 @@ class ColonizePlanetDialog < Gtk::Dialog
 	self.show_all
 	
 	return self
+  end
+  
+  def on_ok_response
+	planet_type_value = @planet_type_combo_box.active_iter.get_value(0)
+	
+	if (planet_type_value != "Uncolonized")
+	  @planet_model.type = planet_type_value
+	  @planet_model.name = @planet_name_text_entry.text
+	  @planet_model.alias = @planet_alias_text_entry.text
+	end
   end
 end
