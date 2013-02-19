@@ -17,7 +17,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	@planet_image_event_wrapper.events = Gdk::Event::Mask::BUTTON_PRESS_MASK
 	
 	# TODO: Chage planet image based on type.
-	@planet_image = Gtk::Image.new("view/images/extractor_icon.svg")
+	@planet_image = Gtk::Image.new(:file => "view/images/extractor_icon.svg")
 	@planet_image_event_wrapper.add(@planet_image)
 	
 	if (@planet_model.type == "Uncolonized")

@@ -12,7 +12,7 @@ class PlanetStatsWidget < Gtk::Box
 	@planet_model.add_observer(self)
 	
 	# Add planet info widgets.
-	@planet_image = Gtk::Image.new("view/images/extractor_icon.svg")
+	@planet_image = Gtk::Image.new(:file => "view/images/extractor_icon.svg")
 	@planet_name_label = Gtk::Label.new("#{@planet_model.name}")
 	@planet_alias_label = Gtk::Label.new("#{@planet_model.alias}")
 	
