@@ -1,0 +1,46 @@
+Ruby PI TODO:
+=============
+
+Core Features
+-------------
+* Add an About box with version info, contact methods, CCP disclaimer, etc.
+* Add a Building Edit view for each building.
+  - Allow user to level up a command center. Adjust cpu/pg appropriately.
+  - Allow user to assign schematics to industry facilities.
+* Allow user to add extractor heads to a specific extractor.
+* Prevent user from adding buildings to a planet that the planet doesn't support.
+* Allow user to load and save PI configurations (XML? YAML? HAML?).
+* Add Commodities and associated storage.
+
+User Interface Improvements
+---------------------------
+* Add a small building stats box that shows # of launchpads, extractors, silos, and factories on a planet at-a-glance.
+  - Like FIDS in Endless Space.
+  - Put in both System and Planet views.
+* Take screenshots of various planet types in EVE.
+* Change the image associated with a planet when its type changes.
+* Create SVGs/screenshots of individual building types.
+* Change the image associated with a building when it's shown.
+* Fix all the weird-looking views when the window gets resized.
+
+Code Cleanup
+------------
+* Unify the editing dialogs for planets.
+* Unify the stats boxes for planets.
+
+Packaging & Release
+-------------------
+* Source Code
+  - Set up GitHub repo.
+* Linux
+  - List requirements (Ruby 1.9.1, ruby-gtk gem)
+* Windows
+  - Automate Ocra script with .zip packaging for user download.
+  - Research why the EXE is so huge.
+  - Test.
+* Mac
+  - ?
+* Create a script for Windows that will give me an EXE.
+* Research why the Windows EXE is so huge.
+* Package up .exe releases for user download (.zip?).
+* Test on multiple Windows boxen.
