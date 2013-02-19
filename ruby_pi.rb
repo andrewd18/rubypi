@@ -22,12 +22,12 @@ class RubyPI < Gtk::Window
 	#end
 	
 	# HACK for testing.
-	# (planet_type, planet_name = nil, planet_alias = nil, colonized = false, planet_buildings = Array.new, pi_configuration = nil)
-	@pi_configuration.add_planet(Planet.new("Barren", "J100820 I", "Factory", true))
-	@pi_configuration.add_planet(Planet.new("Lava", "J100820 III", "Chiral & Silicon", true))
-	@pi_configuration.add_planet(Planet.new("Lava", "J100820 VII", "Metals", true))
-	@pi_configuration.add_planet(Planet.new("Oceanic", "J100820 VIII", "Microorganisms", true))
-	@pi_configuration.add_planet(Planet.new("Temperate", "J100820 IX", "Infected Sheep", true))
+	# (planet_type, planet_name = nil, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
+	@pi_configuration.add_planet(Planet.new("Barren", "J100820 I", "Factory"))
+	@pi_configuration.add_planet(Planet.new("Lava", "J100820 III", "Chiral & Silicon"))
+	@pi_configuration.add_planet(Planet.new("Lava", "J100820 VII", "Metals"))
+	@pi_configuration.add_planet(Planet.new("Oceanic", "J100820 VIII", "Microorganisms"))
+	@pi_configuration.add_planet(Planet.new("Temperate", "J100820 IX", "Infected Sheep"))
 	@pi_configuration.add_planet(Planet.new("Uncolonized"))
 	
 	vertical_layout = Gtk::Box.new(:vertical)
@@ -50,7 +50,12 @@ class RubyPI < Gtk::Window
   end
 end
 
-app = RubyPI.new
 
-# Start the main loop for event handling.
-Gtk.main
+# If the Ocra class isn't defined, then run the app.
+# If it is defined, we're packaging it and we don't want to run the app.
+if undefined?(Ocra)
+  app = RubyPI.new
+  
+  # Start the main loop for event handling.
+  Gtk.main
+end

@@ -17,4 +17,8 @@ class Launchpad < PlanetaryBuilding
 	
 	return self
   end
+  
+  def name
+	return "Launchpad"
+  end
 end

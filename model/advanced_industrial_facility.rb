@@ -17,4 +17,8 @@ class AdvancedIndustrialFacility < PlanetaryBuilding
 	
 	return self
   end
+  
+  def name
+	return "Advanced Industrial Facility"
+  end
 end

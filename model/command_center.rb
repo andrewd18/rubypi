@@ -40,6 +40,10 @@ class CommandCenter < PlanetaryBuilding
 	return self
   end
   
+  def name 
+	return "Command Center"
+  end
+  
   def powergrid_provided
 	return LEVEL_TO_PG_TABLE["#{@upgrade_level}"]
   end

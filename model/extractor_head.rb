@@ -18,4 +18,8 @@ class ExtractorHead < PlanetaryBuilding
 	
 	return self
   end
+  
+  def name
+	return "Extractor Head"
+  end
 end

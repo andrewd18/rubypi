@@ -22,6 +22,10 @@ class Extractor < PlanetaryBuilding
 	return self
   end
   
+  def name 
+	return "Extractor"
+  end
+  
   def add_extractor_head(head)
 	if @extractor_heads.count == 8
 	  # TODO

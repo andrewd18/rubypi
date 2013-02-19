@@ -2,6 +2,7 @@
 require 'gtk3'
 
 require_relative 'planet_view_widget.rb'
+require_relative 'colonize_planet_dialog.rb'
 
 # This widget is designed to show a single planet's image, its name, and its alias.
 class SystemViewPlanetOverviewWidget < Gtk::Box
@@ -19,13 +20,13 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	@planet_image = Gtk::Image.new("view/images/extractor_icon.svg")
 	@planet_image_event_wrapper.add(@planet_image)
 	
-	if (@planet_model.colonized == false)
+	if (@planet_model.type == "Uncolonized")
 	  @planet_name_label = Gtk::Label.new("Uncolonized")
 	  @planet_alias_label = Gtk::Label.new("")
 	  @colonize_planet_button = Gtk::Button.new("Colonize")
 	else
 	  @planet_name_label = Gtk::Label.new("#{@planet_model.name}" || "")
-	  @planet_alias_label = Gtk::Label.new("#{@planet_model.planet_alias}" || "")
+	  @planet_alias_label = Gtk::Label.new("#{@planet_model.alias}" || "")
 	  @edit_planet_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
 	end
 	
@@ -45,8 +46,8 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	if (@colonize_planet_button)
 	  self.pack_start(@colonize_planet_button)
 	  @colonize_planet_button.signal_connect("clicked") do
-		# Open up the edit planet screen.
-		edit_planet
+		# Open up the colonize planet dialog.
+		colonize_planet
 	  end
 	end
 	
@@ -80,12 +81,20 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	new_window.show_all
   end
   
+  def colonize_planet
+	colonize_planet_dialog = ColonizePlanetDialog.new(@planet_model)
+	colonize_planet_dialog.run
+	
+	# Once done, edit the planet we just colonized.
+	edit_planet
+  end
+  
   private
   
   # Update image, name, and alias values from the model.
   def update_image_name_and_alias
 	# planet_image.image = planet.image
 	@planet_name_label.text = @planet_model.name || ""
-	@planet_alias_label.text = @planet_model.planet_alias || ""
+	@planet_alias_label.text = @planet_model.alias || ""
   end
 end

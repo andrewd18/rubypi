@@ -17,4 +17,8 @@ class StorageFacility < PlanetaryBuilding
 	
 	return self
   end
+  
+  def name
+	return "Storage Facility"
+  end
 end

@@ -17,10 +17,9 @@ class Planet
   
   include Observable
   
-  attr_reader :type
-  attr_reader :name
-  attr_reader :planet_alias
-  attr_accessor :colonized
+  attr_accessor :type
+  attr_accessor :name
+  attr_accessor :alias
   attr_reader :buildings
   attr_reader :cpu_usage
   attr_reader :powergrid_usage
@@ -38,7 +37,7 @@ class Planet
                   :oceanic => "Oceanic",
                   :plasma => "Plasma"}
   
-  def initialize(planet_type, planet_name = nil, planet_alias = nil, colonized = false, planet_buildings = Array.new, pi_configuration = nil)
+  def initialize(planet_type, planet_name = nil, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
 	if (PLANET_TYPES.has_value?(planet_type))
 	  @type = planet_type
 	else
@@ -48,9 +47,7 @@ class Planet
 	
 	@name = planet_name
 	
-	@planet_alias = planet_alias
-	
-	@colonized = colonized
+	@alias = planet_alias
 	
 	@buildings = planet_buildings
 	
@@ -78,13 +75,29 @@ class Planet
 	building.add_observer(self)
 	
 	# Update values.
-	update
+	total_values_from_buildings
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
   end
   
   # Convenience wrapper.
   def add_building_from_class_name(class_name)
 	building = class_name.new
 	self.add_building(building)
+  end
+  
+  def remove_building(building_to_remove)
+	building_to_remove.delete_observer(self)
+	@buildings.delete(building_to_remove)
+	
+	# Update values.
+	total_values_from_buildings
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
   end
   
   def remove_planet

@@ -10,8 +10,4 @@ class PlanetaryBuilding
   attr_reader :powergrid_provided
   attr_reader :cpu_provided
   attr_reader :isk_cost
-  
-  def name
-	return self.class.name
-  end
 end
