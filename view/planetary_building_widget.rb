@@ -41,8 +41,8 @@ class PlanetaryBuildingWidget < Gtk::Box
 	  remove_building(tree_view, path, column)
 	end
 	
-	self.pack_start(add_label)
-	self.pack_start(@tree_view)
+	self.pack_start(add_label, :expand => false, :fill => false)
+	self.pack_start(@tree_view, :expand => false, :fill => false)
 	self.show_all
 	
 	return self
