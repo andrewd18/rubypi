@@ -11,6 +11,15 @@ class PlanetStatsWidget < Gtk::Box
 	@planet_model = planet_model
 	@planet_model.add_observer(self)
 	
+	
+	# Add our up button.
+	@up_button = Gtk::Button.new(:stock_id => Gtk::Stock::GO_UP)
+	@up_button.signal_connect("pressed") do
+	  $ruby_pi_main_gtk_window.change_main_widget(SystemViewWidget.new(@planet_model.pi_configuration))
+	end
+	self.pack_start(@up_button)
+	
+	
 	# Add planet info widgets.
 	@planet_image = Gtk::Image.new(:file => "view/images/extractor_icon.svg")
 	@planet_name_label = Gtk::Label.new("#{@planet_model.name}")

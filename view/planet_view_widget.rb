@@ -23,18 +23,12 @@ class PlanetViewWidget < Gtk::Box
 	planetary_building_widget = PlanetaryBuildingWidget.new(@planet_model)
 	show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
 	
-	@up_button = Gtk::Button.new(:stock_id => Gtk::Stock::GO_UP)
-	@up_button.signal_connect("pressed") do
-	  $ruby_pi_main_gtk_window.change_main_widget(SystemViewWidget.new(@planet_model.pi_configuration))
-	end
-	
 	# Add planet data widgets to view.
 	self.pack_start(add_planetary_building_widget)
 	self.pack_start(Gtk::Separator.new(:vertical))
 	self.pack_start(planetary_building_widget)
 	self.pack_start(Gtk::Separator.new(:vertical))
 	self.pack_start(show_planet_stats_widget)
-	self.pack_start(@up_button)
 	
 	# Force a refresh.
 	# update
