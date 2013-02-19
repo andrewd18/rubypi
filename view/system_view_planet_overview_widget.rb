@@ -76,9 +76,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
   end
   
   def edit_planet
-	new_window = Gtk::Window.new(:toplevel)
-	new_window.add(PlanetViewWidget.new(@planet_model))
-	new_window.show_all
+	$ruby_pi_main_gtk_window.change_main_widget(PlanetViewWidget.new(@planet_model))
   end
   
   def colonize_planet

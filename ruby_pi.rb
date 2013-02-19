@@ -29,18 +29,25 @@ class RubyPI < Gtk::Window
 	@pi_configuration.add_planet(Planet.new("Temperate", "J100820 IX", "Infected Sheep"))
 	@pi_configuration.add_planet(Planet.new("Uncolonized"))
 	
-	vertical_layout = Gtk::Box.new(:vertical)
+	@box = Gtk::Box.new(:horizontal)
 	
-	system_view_widget = SystemViewWidget.new(@pi_configuration)
-	vertical_layout.pack_start(system_view_widget)
+	@main_widget = SystemViewWidget.new(@pi_configuration)
+	@box.pack_start(@main_widget)
 	
 	
-	self.add(vertical_layout)
+	self.add(@box)
 	
 	# Make sure all our widgets are visible.
 	self.show_all
 	
 	return self
+  end
+  
+  def change_main_widget(new_widget)
+	@main_widget.destroy
+	@main_widget = new_widget
+	@box.pack_start(@main_widget)
+	self.show_all
   end
   
   def close_application
@@ -53,7 +60,7 @@ end
 # If the Ocra class isn't defined, then run the app.
 # If it is defined, we're packaging it and we don't want to run the app.
 if not defined?(Ocra)
-  app = RubyPI.new
+  $ruby_pi_main_gtk_window = RubyPI.new
   
   # Start the main loop for event handling.
   Gtk.main
