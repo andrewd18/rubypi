@@ -89,6 +89,16 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	end
   end
   
+  def destroy
+	self.children.each do |child|
+	  child.destroy
+	end
+	
+	@planet_model.delete_observer(self)
+	
+	super
+  end
+  
   private
   
   # Update image, name, and alias values from the model.

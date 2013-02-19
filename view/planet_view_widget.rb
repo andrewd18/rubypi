@@ -47,4 +47,14 @@ class PlanetViewWidget < Gtk::Box
 	
 	
   end
+  
+  def destroy
+	self.children.each do |child|
+	  child.destroy
+	end
+	
+	@planet_model.delete_observer(self)
+	
+	super
+  end
 end

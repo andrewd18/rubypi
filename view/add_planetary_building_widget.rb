@@ -77,4 +77,12 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	# new_row.set_value(1, iter.get_value(1))
 	# new_row.set_value(2, iter.get_value(2))
   end
+  
+  def destroy
+	self.children.each do |child|
+	  child.destroy
+	end
+	
+	super
+  end
 end

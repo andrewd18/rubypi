@@ -25,4 +25,14 @@ class SystemViewWidget < Gtk::Box
   def update
 	# Let the planet views take care of themselves.
   end
+  
+  def destroy
+	self.children.each do |child|
+	  child.destroy
+	end
+	
+	@pi_configuration_model.delete_observer(self)
+	
+	super
+  end
 end

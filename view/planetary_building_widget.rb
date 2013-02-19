@@ -75,4 +75,14 @@ class PlanetaryBuildingWidget < Gtk::Box
 	  new_row.set_value(3, building.powergrid_usage)
 	end
   end
+  
+  def destroy
+	self.children.each do |child|
+	  child.destroy
+	end
+	
+	@planet_model.delete_observer(self)
+	
+	super
+  end
 end

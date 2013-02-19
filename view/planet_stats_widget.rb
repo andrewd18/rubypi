@@ -66,4 +66,14 @@ class PlanetStatsWidget < Gtk::Box
 	@cpu_used_pct_label.text = "#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}"
 	@pg_used_pct_label.text = "#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}"
   end
+  
+  def destroy
+	self.children.each do |child|
+	  child.destroy
+	end
+	
+	@planet_model.delete_observer(self)
+	
+	super
+  end
 end
