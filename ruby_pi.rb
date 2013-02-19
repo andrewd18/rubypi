@@ -53,7 +53,7 @@ end
 
 # If the Ocra class isn't defined, then run the app.
 # If it is defined, we're packaging it and we don't want to run the app.
-if undefined?(Ocra)
+if not defined?(Ocra)
   app = RubyPI.new
   
   # Start the main loop for event handling.
