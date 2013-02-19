@@ -23,7 +23,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	if (@planet_model.type == "Uncolonized")
 	  @planet_name_label = Gtk::Label.new("Uncolonized")
 	  @planet_alias_label = Gtk::Label.new("")
-	  @colonize_planet_button = Gtk::Button.new("Colonize")
+	  @colonize_planet_button = Gtk::Button.new(:label => "Colonize")
 	else
 	  @planet_name_label = Gtk::Label.new("#{@planet_model.name}" || "")
 	  @planet_alias_label = Gtk::Label.new("#{@planet_model.alias}" || "")
