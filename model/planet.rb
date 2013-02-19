@@ -139,6 +139,22 @@ class Planet
 	notify_observers() # Notify errybody.
   end
   
+  def abandon
+	@buildings.clear
+	
+	self.type = "Uncolonized"
+	self.name = nil
+	self.alias = nil
+	
+	# Update values.
+	total_values_from_buildings
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
+  end
+  
+  # TODO: Kill this function.
   def remove_planet
 	@pi_configuration.remove_planet(self)
   end
