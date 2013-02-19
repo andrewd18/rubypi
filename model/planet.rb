@@ -17,9 +17,6 @@ class Planet
   
   include Observable
   
-  attr_accessor :type
-  attr_accessor :name
-  attr_accessor :alias
   attr_reader :buildings
   attr_reader :cpu_usage
   attr_reader :powergrid_usage
@@ -38,12 +35,7 @@ class Planet
                   :plasma => "Plasma"}
   
   def initialize(planet_type, planet_name = nil, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
-	if (PLANET_TYPES.has_value?(planet_type))
-	  @type = planet_type
-	else
-	  puts "Error: #{planet_type} is not a known planet type."
-	  return nil
-	end
+	@type = planet_type
 	
 	@name = planet_name
 	
@@ -68,6 +60,53 @@ class Planet
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
 	notify_observers() # Notify errybody.
+  end
+  
+  def type
+	return @type
+  end
+  
+  def type=(new_type)
+	if (PLANET_TYPES.has_value?(new_type))
+	  @type = new_type
+	else
+	  puts "Error: #{new_type} is not a known planet type."
+	  return nil
+	end
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
+	
+	return @type
+  end
+  
+  def name
+	return @name
+  end
+  
+  def name=(new_name)
+	@name = new_name
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
+	
+	return @name
+  end
+  
+  def alias
+	return @alias
+  end
+  
+  def alias=(new_alias)
+	@alias = new_alias
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
+	
+	return @alias
   end
   
   def add_building(building)
