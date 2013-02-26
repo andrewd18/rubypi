@@ -16,7 +16,6 @@ class PlanetViewWidget < Gtk::Box
 	
 	# Hook up model data.
 	@planet_model = planet_model
-	@planet_model.add_observer(self)
 	
 	# Create planet data widgets.
 	add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
@@ -48,18 +47,10 @@ class PlanetViewWidget < Gtk::Box
 	return self
   end
   
-  def update
-	# The model data changed. Update the display.
-	
-	
-  end
-  
   def destroy
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	@planet_model.delete_observer(self)
 	
 	super
   end
