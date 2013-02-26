@@ -18,7 +18,8 @@ User Interface Improvements
   - Like FIDS in Endless Space.
   - Put in both System and Planet views.
 * Take screenshots of various planet types in EVE.
-* Change the image associated with a planet when its type changes.
+  - Remaining: Ice, Plasma.
+  - Consider brightening them. Lava, for example, just looks black.
 * Create SVGs/screenshots of individual building types.
 * Change the image associated with a building when it's shown.
 * Fix all the weird-looking views when the window gets resized.
