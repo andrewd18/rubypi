@@ -74,7 +74,11 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
   
   # Called when our planet says it's changed.
   def update
-	update_image_name_and_alias
+	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
+	unless (self.destroyed?)
+	  @planet_name_label.text = @planet_model.name || ""
+	  @planet_alias_label.text = @planet_model.alias || ""
+	end
   end
   
   def edit_planet
@@ -99,13 +103,5 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	@planet_model.delete_observer(self)
 	
 	super
-  end
-  
-  private
-  
-  # Update image, name, and alias values from the model.
-  def update_image_name_and_alias
-	@planet_name_label.text = @planet_model.name || ""
-	@planet_alias_label.text = @planet_model.alias || ""
   end
 end

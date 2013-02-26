@@ -11,7 +11,6 @@ class SystemViewWidget < Gtk::Box
 	
 	# Hook up our model data.
 	@pi_configuration_model = pi_configuration_model
-	@pi_configuration_model.add_observer(self)
 	
 	@pi_configuration_model.planets.each do |planet|
 	  widget = SystemViewPlanetOverviewWidget.new(planet)
@@ -21,17 +20,10 @@ class SystemViewWidget < Gtk::Box
 	return self
   end
   
-  # Called when the PI model changes.
-  def update
-	# Let the planet views take care of themselves.
-  end
-  
   def destroy
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	@pi_configuration_model.delete_observer(self)
 	
 	super
   end
