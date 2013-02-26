@@ -13,20 +13,29 @@ class PlanetStatsWidget < Gtk::Box
 	@planet_model = planet_model
 	@planet_model.add_observer(self)
 	
-	# Add planet info widgets.
+	# Gtk::Table Syntax
+	# table = Gtk::Table.new(rows, columns)
+	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
+	
+	# Add planet building stats widgets in a nice grid.
+	planet_stats_table = Gtk::Table.new(6, 2)
+	
+	# Planet Image Row
 	@planet_image = PlanetImage.new(@planet_model)
+	# Stick it in the top row, across all columns.
+	planet_stats_table.attach(@planet_image, 0, 2, 0, 1)
+	
+	# Planet Label Row
 	@planet_name_label = Gtk::Label.new("#{@planet_model.name}")
+	# Stick it in the second row, across all columns.
+	planet_stats_table.attach(@planet_name_label, 0, 2, 1, 2)
+	
+	# Planet Alias Row
 	@planet_alias_label = Gtk::Label.new("#{@planet_model.alias}")
+	# Stick it in the third row, across all columns.
+	planet_stats_table.attach(@planet_alias_label, 0, 2, 2, 3)
 	
-	# Add planet building stats widgets, in a nice grid below the planet itself.
-	#
-	# HACK: Since Gtk::Grid is undocumented, fake a grid using boxes.
-	# For each row, assemble a box containing that row's data and pack_start it to the row_holder.
-	row_holder = Gtk::Box.new(:vertical)
-	
-	
-	# Edit / Abandon Planet Row
-	edit_planet_row = Gtk::Box.new(:horizontal)
+	# Edit and Abandon Button Row
 	@edit_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
 	@abandon_button = Gtk::Button.new(:label => "Abandon")
 	
@@ -43,36 +52,29 @@ class PlanetStatsWidget < Gtk::Box
 	  return_to_system_view
 	end
 	
-	edit_planet_row.pack_start(@edit_button)
-	edit_planet_row.pack_start(@abandon_button)
-	row_holder.pack_start(edit_planet_row)
+	# Put the Edit button on the left and Abandon button on the right of the fourth row.
+	planet_stats_table.attach(@edit_button, 0, 1, 3, 4)
+	planet_stats_table.attach(@abandon_button, 1, 2, 3, 4)
 	
 	
 	# CPU Row.
-	cpu_row = Gtk::Box.new(:horizontal)
 	cpu_label = Gtk::Label.new("CPU:")
 	@cpu_used_pct_label = Gtk::Label.new("#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}")
-	# cpu_used_pct_progress_bar = Gtk::Label.new("0 / 0")
-	cpu_row.pack_start(cpu_label)
-	cpu_row.pack_start(@cpu_used_pct_label)
-	row_holder.pack_start(cpu_row)
+	# Put the label on the left and and the stats on the right of the fifth row.
+	planet_stats_table.attach(cpu_label, 0, 1, 4, 5)
+	planet_stats_table.attach(@cpu_used_pct_label, 1, 2, 4, 5)
+	
 	
 	# Powergrid Row.
-	pg_row = Gtk::Box.new(:horizontal)
 	pg_label = Gtk::Label.new("PG:")
 	@pg_used_pct_label = Gtk::Label.new("#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}")
-	# cpu_used_pct_progress_bar = Gtk::Label.new("0 / 0")
-	pg_row.pack_start(pg_label)
-	pg_row.pack_start(@pg_used_pct_label)
-	row_holder.pack_start(pg_row)
+	# Put the label on the left and and the stats on the right of the sixth row.
+	planet_stats_table.attach(pg_label, 0, 1, 5, 6)
+	planet_stats_table.attach(@pg_used_pct_label, 1, 2, 5, 6)
 	
 	# TODO: ISK Cost Row.
 	
-	# Pack all the pieces together.
-	self.pack_start(@planet_image)
-	self.pack_start(@planet_name_label)
-	self.pack_start(@planet_alias_label)
-	self.pack_start(row_holder)
+	self.pack_start(planet_stats_table)
 	
 	self.show_all
 	
