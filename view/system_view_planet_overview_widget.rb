@@ -3,6 +3,7 @@ require 'gtk3'
 
 require_relative 'planet_view_widget.rb'
 require_relative 'colonize_planet_dialog.rb'
+require_relative 'planet_image.rb'
 
 # TODO: This widget is really similar to the Planetary Stats Widget. I should clean that up.
 
@@ -18,8 +19,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	@planet_image_event_wrapper = Gtk::EventBox.new
 	@planet_image_event_wrapper.events = Gdk::Event::Mask::BUTTON_PRESS_MASK
 	
-	# TODO: Chage planet image based on type.
-	@planet_image = Gtk::Image.new(:file => "view/images/extractor_icon.svg")
+	@planet_image = PlanetImage.new(@planet_model)
 	@planet_image_event_wrapper.add(@planet_image)
 	
 	if (@planet_model.type == "Uncolonized")
@@ -105,7 +105,6 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
   
   # Update image, name, and alias values from the model.
   def update_image_name_and_alias
-	# planet_image.image = planet.image
 	@planet_name_label.text = @planet_model.name || ""
 	@planet_alias_label.text = @planet_model.alias || ""
   end

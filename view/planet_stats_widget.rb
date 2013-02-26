@@ -1,6 +1,7 @@
 
 require 'gtk3'
 require_relative 'edit_planet_dialog.rb'
+require_relative 'planet_image.rb'
 
 # This widget will show a planet, its buildings, and building-related stats.
 
@@ -22,7 +23,7 @@ class PlanetStatsWidget < Gtk::Box
 	
 	
 	# Add planet info widgets.
-	@planet_image = Gtk::Image.new(:file => "view/images/extractor_icon.svg")
+	@planet_image = PlanetImage.new(@planet_model)
 	@planet_name_label = Gtk::Label.new("#{@planet_model.name}")
 	@planet_alias_label = Gtk::Label.new("#{@planet_model.alias}")
 	
@@ -89,7 +90,6 @@ class PlanetStatsWidget < Gtk::Box
   
   def update
 	# The model data changed. Update the display.
-	# @planet_image = Image.new
 	@planet_name_label.text = @planet_model.name ||= ""
 	@planet_alias_label.text = @planet_model.alias ||= ""
 	
