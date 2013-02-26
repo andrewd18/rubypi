@@ -1,9 +1,6 @@
 require 'gtk3'
 require_relative '../model/planet.rb'
 
-# TODO: This class is really similar (aka I copied and pasted it) to ColonizePlanetDialog.
-# I should attempt to merge the two.
-
 class EditPlanetDialog < Gtk::Dialog
   def initialize(planet_model, parent_window = nil)
 	# Gtk::Dialog#initialize(:title => nil, :parent => nil, :flags => 0, :buttons => nil
@@ -21,26 +18,30 @@ class EditPlanetDialog < Gtk::Dialog
 	# Populate the combobox backend model.
 	@list_store_of_planet_types = Gtk::ListStore.new(String)
 	Planet::PLANET_TYPES.each_value do |value|
-	  new_row = @list_store_of_planet_types.append
-	  new_row.set_value(0, value)
+	  
+	  # Skip "Uncolonized". I want them to hit Abandon rather than set type to Uncolonized.
+	  unless (value == "Uncolonized")
+		new_row = @list_store_of_planet_types.append
+		new_row.set_value(0, value)
+	  end
 	end
 	
 	
+	# Gtk::Table Syntax
+	# table = Gtk::Table.new(rows, columns)
+	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
+	edit_planet_table = Gtk::Table.new(3, 2)
+	edit_planet_table.homogeneous = true
 	
-	# HACK: Since Gtk::Grid is undocumented, fake a grid using boxes.
-	# For each row, assemble a box containing that row's data and pack_start it to the row_holder.
-	row_holder = Gtk::Box.new(:vertical)
-	
-	# Row 1 - Planet Type.
-	row_one = Gtk::Box.new(:horizontal)
+	# Planet Type Row
 	planet_type_label = Gtk::Label.new("Planet Type:")
-	
-	# Combo box.
 	@planet_type_combo_box = Gtk::ComboBox.new(:model => @list_store_of_planet_types)
+	
 	# Set up the view for the combo box column.
 	combobox_renderer = Gtk::CellRendererText.new
 	@planet_type_combo_box.pack_start(combobox_renderer, true)
 	@planet_type_combo_box.add_attribute(combobox_renderer, "text", 0)
+	
 	# Set the current value's row active.
 	value_array = Planet::PLANET_TYPES.values
 	value_array.each_with_index do |value, index|
@@ -49,29 +50,29 @@ class EditPlanetDialog < Gtk::Dialog
 	  end
 	end
 	
-	# Finish packing Row 1.
-	row_one.pack_start(planet_type_label)
-	row_one.pack_start(@planet_type_combo_box)
-	row_holder.pack_start(row_one)
+	# Attach everything.
+	edit_planet_table.attach(planet_type_label, 0, 1, 0, 1)
+	edit_planet_table.attach(@planet_type_combo_box, 1, 2, 0, 1)
 	
-	# Row 2 - Planet Name.
-	row_two = Gtk::Box.new(:horizontal)
+	
+	# Planet Name Row
 	planet_name_label = Gtk::Label.new("Planet Name:")
 	@planet_name_text_entry = Gtk::Entry.new
-	# Load from model.
-	@planet_name_text_entry.text = @planet_model.name
-	row_two.pack_start(planet_name_label)
-	row_two.pack_start(@planet_name_text_entry)
-	row_holder.pack_start(row_two)
+	if (@planet_model.name != nil)
+	  @planet_name_text_entry.text = @planet_model.name
+	end
+	edit_planet_table.attach(planet_name_label, 0, 1, 1, 2)
+	edit_planet_table.attach(@planet_name_text_entry, 1, 2, 1, 2)
 	
-	# Row 3 - Planet Alias.
-	row_three = Gtk::Box.new(:horizontal)
+	
+	# Planet Alias Row
 	planet_alias_label = Gtk::Label.new("Planet Alias:")
 	@planet_alias_text_entry = Gtk::Entry.new
-	@planet_alias_text_entry.text = @planet_model.alias
-	row_three.pack_start(planet_alias_label)
-	row_three.pack_start(@planet_alias_text_entry)
-	row_holder.pack_start(row_three)
+	if (@planet_model.alias != nil)
+	  @planet_alias_text_entry.text = @planet_model.alias
+	end
+	edit_planet_table.attach(planet_alias_label, 0, 1, 2, 3)
+	edit_planet_table.attach(@planet_alias_text_entry, 1, 2, 2, 3)
 	
 	# Connect up all the signals.
 	self.signal_connect("response") do |dialog_box, response_id|
@@ -82,7 +83,7 @@ class EditPlanetDialog < Gtk::Dialog
 	  self.destroy
 	end
 	
-	self.child.pack_start(row_holder)
+	self.child.pack_start(edit_planet_table)
 	self.show_all
 	
 	return self
@@ -91,10 +92,8 @@ class EditPlanetDialog < Gtk::Dialog
   def on_ok_response
 	planet_type_value = @planet_type_combo_box.active_iter.get_value(0)
 	
-	if (planet_type_value != "Uncolonized")
-	  @planet_model.type = planet_type_value
-	  @planet_model.name = @planet_name_text_entry.text
-	  @planet_model.alias = @planet_alias_text_entry.text
-	end
+	@planet_model.type = planet_type_value
+	@planet_model.name = @planet_name_text_entry.text
+	@planet_model.alias = @planet_alias_text_entry.text
   end
 end

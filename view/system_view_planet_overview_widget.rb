@@ -2,7 +2,7 @@
 require 'gtk3'
 
 require_relative 'planet_view_widget.rb'
-require_relative 'colonize_planet_dialog.rb'
+require_relative 'edit_planet_dialog.rb'
 require_relative 'planet_image.rb'
 
 # TODO: This widget is really similar to the Planetary Stats Widget. I should clean that up.
@@ -86,7 +86,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
   end
   
   def colonize_planet
-	colonize_planet_dialog = ColonizePlanetDialog.new(@planet_model)
+	colonize_planet_dialog = EditPlanetDialog.new(@planet_model)
 	colonize_planet_dialog.run
 	
 	# Assuming the user colonized the planet rather than canceling, edit the planet we just colonized.
