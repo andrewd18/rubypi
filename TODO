@@ -31,10 +31,6 @@ Code Cleanup
 
 Packaging & Release
 -------------------
-* Source Code
-  - Set up GitHub repo.
-* Linux
-  - List requirements (Ruby 1.9.1, ruby-gtk gem)
 * Windows
   - Automate Ocra script with .zip packaging for user download.
   - Research why the EXE is so huge.
