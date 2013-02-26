@@ -82,12 +82,15 @@ class PlanetStatsWidget < Gtk::Box
   end
   
   def update
-	# The model data changed. Update the display.
-	@planet_name_label.text = @planet_model.name ||= ""
-	@planet_alias_label.text = @planet_model.alias ||= ""
-	
-	@cpu_used_pct_label.text = "#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}"
-	@pg_used_pct_label.text = "#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}"
+	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
+	unless (self.destroyed?)
+	  # The model data changed. Update the display.
+	  @planet_name_label.text = @planet_model.name ||= ""
+	  @planet_alias_label.text = @planet_model.alias ||= ""
+	  
+	  @cpu_used_pct_label.text = "#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}"
+	  @pg_used_pct_label.text = "#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}"
+	end
   end
   
   def destroy
@@ -98,5 +101,11 @@ class PlanetStatsWidget < Gtk::Box
 	@planet_model.delete_observer(self)
 	
 	super
+  end
+  
+  private
+  
+  def return_to_system_view
+	$ruby_pi_main_gtk_window.change_main_widget(SystemViewWidget.new(@planet_model.pi_configuration))
   end
 end
