@@ -1,7 +1,7 @@
 
 require 'gtk3'
-
 require_relative 'system_view_planet_overview_widget.rb'
+require_relative 'system_stats_widget.rb'
 
 # This widget is designed to show a system of planets, akin to the system view in Endless Space.
 # Note: The planets included in said system won't necessarily be from the same solar system.
@@ -16,6 +16,9 @@ class SystemViewWidget < Gtk::Box
 	  widget = SystemViewPlanetOverviewWidget.new(planet)
 	  self.pack_start(widget)
 	end
+	
+	@system_stats_widget = SystemStatsWidget.new(@pi_configuration_model)
+	self.pack_start(@system_stats_widget)
 	
 	return self
   end
