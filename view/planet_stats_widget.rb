@@ -2,6 +2,7 @@
 require 'gtk3'
 require_relative 'edit_planet_dialog.rb'
 require_relative 'planet_image.rb'
+require_relative 'building_count_table.rb'
 
 # This widget will show a planet, its buildings, and building-related stats.
 
@@ -12,6 +13,8 @@ class PlanetStatsWidget < Gtk::Box
 	# Hook up model data.
 	@planet_model = planet_model
 	@planet_model.add_observer(self)
+	
+	building_count_table = BuildingCountTable.new(@planet_model)
 	
 	# Gtk::Table Syntax
 	# table = Gtk::Table.new(rows, columns)
@@ -74,6 +77,7 @@ class PlanetStatsWidget < Gtk::Box
 	
 	# TODO: ISK Cost Row.
 	
+	self.pack_start(building_count_table)
 	self.pack_start(planet_stats_table)
 	
 	self.show_all

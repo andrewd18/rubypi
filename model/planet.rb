@@ -154,6 +154,57 @@ class Planet
 	notify_observers() # Notify errybody.
   end
   
+  def num_extractors
+	count = 0
+	
+	@buildings.each do |building|
+	  if (building.class == Extractor)
+		count += 1
+	  end
+	end
+	
+	return count
+  end
+  
+  def num_factories
+	count = 0
+	
+	@buildings.each do |building|
+	  if ((building.class == BasicIndustrialFacility) ||
+	      (building.class == HighTechIndustrialFacility) ||
+	      (building.class == AdvancedIndustrialFacility))
+		
+		count += 1
+	  end
+	end
+	
+	return count
+  end
+  
+  def num_launchpads
+	count = 0
+	
+	@buildings.each do |building|
+	  if (building.class == Launchpad)
+		count += 1
+	  end
+	end
+	
+	return count
+  end
+  
+  def num_storages
+	count = 0
+	
+	@buildings.each do |building|
+	  if (building.class == StorageFacility)
+		count += 1
+	  end
+	end
+	
+	return count
+  end
+  
   # TODO: Kill this function.
   def remove_planet
 	@pi_configuration.remove_planet(self)

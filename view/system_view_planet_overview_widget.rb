@@ -4,18 +4,23 @@ require 'gtk3'
 require_relative 'planet_view_widget.rb'
 require_relative 'edit_planet_dialog.rb'
 require_relative 'planet_image.rb'
+require_relative 'building_count_table.rb'
 
 # TODO: This widget is really similar to the Planetary Stats Widget. I should clean that up.
 
 # This widget is designed to show a single planet's image, its name, and its alias.
 class SystemViewPlanetOverviewWidget < Gtk::Box
-  def initialize(planet)
+  def initialize(planet_model)
 	super(:vertical)
 	
 	# Hook up our model data.
-	@planet_model = planet
+	@planet_model = planet_model
 	@planet_model.add_observer(self)
 	
+	building_count_table = BuildingCountTable.new(@planet_model)
+	
+	
+	# Planet image and event wrapper for double-click events.
 	@planet_image_event_wrapper = Gtk::EventBox.new
 	@planet_image_event_wrapper.events = Gdk::Event::Mask::BUTTON_PRESS_MASK
 	
@@ -33,6 +38,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	end
 	
 	# Pack the completed widget into ourself.
+	self.pack_start(building_count_table)
 	self.pack_start(@planet_image_event_wrapper)
 	self.pack_start(@planet_name_label)
 	self.pack_start(@planet_alias_label)

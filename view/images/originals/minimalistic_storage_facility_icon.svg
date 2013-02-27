@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32px"
+   height="32px"
+   id="svg2985"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="minimalistic_storage_facility_icon.svg"
+   inkscape:export-filename="/home/andrew/Projects/Games/RubyPI/view/images/originals/minimalistic_storage_facility_icon.png"
+   inkscape:export-xdpi="33.75"
+   inkscape:export-ydpi="33.75">
+  <defs
+     id="defs2987">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="-23.141352 : 13.976283 : 0"
+       inkscape:vp_y="-0.3316915 : 23.170382 : 0"
+       inkscape:vp_z="33.664971 : 14.729345 : 0"
+       inkscape:persp3d-origin="24.243699 : -17.550244 : 1"
+       id="perspective3009" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="10.24"
+     inkscape:cx="21.980649"
+     inkscape:cy="12.603648"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="1600"
+     inkscape:window-height="853"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata2990">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <g
+       id="g4046"
+       style="fill:none">
+      <path
+         d="M 2.3044903,7.2844651 15.816057,15.444813 30.302174,9.1067405 16.790607,0.94639294 z"
+         style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#159dc4;stroke-width:1.18400002000000004;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="path4034"
+         inkscape:connector-curvature="0" />
+      <path
+         d="M 15.816057,15.444813 16.036986,30.877867 30.523103,24.539794 30.302174,9.1067405 z"
+         style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#159dc4;stroke-width:1.18400002000000004;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="path4036"
+         inkscape:connector-curvature="0" />
+      <path
+         d="M 2.30449,7.2844651 15.816057,15.444813 16.036986,30.877867 2.525419,22.717519 z"
+         style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#159dc4;stroke-width:1.18400002000000004;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="path4038"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+</svg>

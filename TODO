@@ -14,9 +14,6 @@ Core Features
 
 User Interface Improvements
 ---------------------------
-* Add a small building stats box that shows # of launchpads, extractors, silos, and factories on a planet at-a-glance.
-  - Like FIDS in Endless Space.
-  - Put in both System and Planet views.
 * Take screenshots of various planet types in EVE.
   - Remaining: Ice, Plasma.
   - Consider brightening them. Lava, for example, just looks black.
