@@ -205,8 +205,8 @@ class Planet
 	return count
   end
   
-  # TODO: Kill this function.
   def remove_planet
+	# Lean on parent pi_configuration function.
 	@pi_configuration.remove_planet(self)
   end
   

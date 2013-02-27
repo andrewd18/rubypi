@@ -36,12 +36,31 @@ class PIConfiguration
   end
   
   def remove_planet(planet_to_remove)
+	# Stop observing the planet.
+	@planet.destroy_observer(self)
+	
 	# Lean on Array.delete.
 	@planets.delete(planet_to_remove)
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
 	notify_observers() # Notify errybody.
+  end
+  
+  def num_planets
+	return @planets.count
+  end
+  
+  def num_colonized_planets
+	count = 0
+	
+	@planets.each do |planet|
+	  if (planet.type != "Uncolonized")
+		count += 1
+	  end
+	end
+	
+	return count
   end
   
   # Part of Observer.
