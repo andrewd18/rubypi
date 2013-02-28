@@ -1,3 +1,6 @@
+# Require Bundler if we're packing up the executable. Otherwise no.
+require 'bundler/setup' unless not defined?(Ocra)
+
 require 'gtk3'
 
 require_relative 'view/system_view_widget.rb'
