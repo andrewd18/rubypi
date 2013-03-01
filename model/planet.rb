@@ -122,8 +122,8 @@ class Planet
   end
   
   # Convenience wrapper.
-  def add_building_from_class_name(class_name)
-	building = class_name.new
+  def add_building_from_class(dat_class)
+	building = dat_class.new
 	self.add_building(building)
   end
   

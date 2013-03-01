@@ -12,15 +12,15 @@ require_relative 'system_view_widget.rb'
 
 class PlanetViewWidget < Gtk::Box
   def initialize(planet_model)
-	super(:horizontal)
+	super(:vertical)
 	
 	# Hook up model data.
 	@planet_model = planet_model
 	
-	# Create planet data widgets.
-	add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
-	planetary_building_widget = PlanetaryBuildingWidget.new(@planet_model)
-	show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
+	# Create the top row.
+	top_row = Gtk::Box.new(:horizontal)
+	
+	planet_view_label = Gtk::Label.new("Planet View")
 	
 	# Add our up button.
 	@up_button = Gtk::Button.new(:stock_id => Gtk::Stock::GO_UP)
@@ -28,21 +28,25 @@ class PlanetViewWidget < Gtk::Box
 	  return_to_system_view
 	end
 	
+	top_row.pack_start(planet_view_label)
+	top_row.pack_start(@up_button)
+	self.pack_start(top_row)
+	
+	
+	# Create the bottom row.
+	bottom_row = Gtk::Box.new(:horizontal)
+	
+	# Create planet data widgets.
+	add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
+	planetary_building_widget = PlanetaryBuildingWidget.new(@planet_model)
+	show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
+	
 	
 	# Add planet data widgets to view.
-	self.pack_start(add_planetary_building_widget)
-	self.pack_start(Gtk::Separator.new(:vertical))
-	self.pack_start(planetary_building_widget)
-	
-	stats_box_with_up_button_layout = Gtk::Box.new(:vertical)
-	stats_box_with_up_button_layout.pack_start(@up_button)
-	stats_box_with_up_button_layout.pack_start(show_planet_stats_widget)
-	
-	self.pack_start(Gtk::Separator.new(:vertical))
-	self.pack_start(stats_box_with_up_button_layout)
-	
-	# Force a refresh.
-	# update
+	bottom_row.pack_start(add_planetary_building_widget)
+	bottom_row.pack_start(planetary_building_widget)
+	bottom_row.pack_start(show_planet_stats_widget)
+	self.pack_start(bottom_row)
 	
 	return self
   end
