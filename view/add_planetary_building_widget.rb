@@ -34,7 +34,7 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	buildings.each do |building|
 	  new_row = Gtk::Box.new(:horizontal)
 	  
-	  image = BuildingImage.new(building)
+	  image = BuildingImage.new(building, [32, 32])
 	  
 	  add_button = Gtk::Button.new(:stock_id => Gtk::Stock::ADD)
 	  add_button.signal_connect("clicked") do
