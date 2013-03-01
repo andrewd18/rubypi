@@ -9,16 +9,18 @@ require_relative '../model/high_tech_industrial_facility.rb'
 require_relative '../model/launchpad.rb'
 require_relative '../model/storage_facility.rb'
 
+require_relative './building_image.rb'
+
 class PlanetaryBuildingWidget < Gtk::Box
   def initialize(planet_model)
 	super(:vertical)
 	
-	add_label = Gtk::Label.new("Buildings")
+	buildings_label = Gtk::Label.new("Buildings")
 	
 	@planet_model = planet_model
 	@planet_model.add_observer(self)
 	
-	@list_store_of_buildings = Gtk::ListStore.new(Integer, String, Integer, Integer)
+	@list_store_of_buildings = Gtk::ListStore.new(Integer, Gdk::Pixbuf, String, Integer, Integer)
 	
 	# Update planet list from model.
 	update
@@ -27,11 +29,15 @@ class PlanetaryBuildingWidget < Gtk::Box
 	@tree_view = Gtk::TreeView.new(@list_store_of_buildings)
 	
 	# HACK: Ugly as hell. Ironically not as ugly as some of the other solutions.
-	renderer = Gtk::CellRendererText.new
-	name_column = Gtk::TreeViewColumn.new("Name", renderer, :text => 1)
-	cpu_usage_column = Gtk::TreeViewColumn.new("CPU Usage", renderer, :text => 2)
-	pg_usage_column = Gtk::TreeViewColumn.new("PG Usage", renderer, :text => 3)
+	text_renderer = Gtk::CellRendererText.new
+	image_renderer = Gtk::CellRendererPixbuf.new
 	
+	icon_column = Gtk::TreeViewColumn.new("Icon", image_renderer, :pixbuf => 1)
+	name_column = Gtk::TreeViewColumn.new("Name", text_renderer, :text => 2)
+	cpu_usage_column = Gtk::TreeViewColumn.new("CPU Usage", text_renderer, :text => 3)
+	pg_usage_column = Gtk::TreeViewColumn.new("PG Usage", text_renderer, :text => 4)
+	
+	@tree_view.append_column(icon_column)
 	@tree_view.append_column(name_column)
 	@tree_view.append_column(cpu_usage_column)
 	@tree_view.append_column(pg_usage_column)
@@ -41,7 +47,7 @@ class PlanetaryBuildingWidget < Gtk::Box
 	  remove_building(tree_view, path, column)
 	end
 	
-	self.pack_start(add_label, :expand => false, :fill => false)
+	self.pack_start(buildings_label, :expand => false, :fill => false)
 	self.pack_start(@tree_view, :expand => false, :fill => false)
 	self.show_all
 	
@@ -64,15 +70,19 @@ class PlanetaryBuildingWidget < Gtk::Box
   end
   
   def update
-	@list_store_of_buildings.clear
-	
-	# Update planet building list from model.
-	@planet_model.buildings.each_with_index do |building, index|
-	  new_row = @list_store_of_buildings.append
-	  new_row.set_value(0, index)
-	  new_row.set_value(1, building.name)
-	  new_row.set_value(2, building.cpu_usage)
-	  new_row.set_value(3, building.powergrid_usage)
+	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
+	unless (self.destroyed?)
+	  @list_store_of_buildings.clear
+	  
+	  # Update planet building list from model.
+	  @planet_model.buildings.each_with_index do |building, index|
+		new_row = @list_store_of_buildings.append
+		new_row.set_value(0, index)
+		new_row.set_value(1, BuildingImage.new(building, [32, 32]).pixbuf)
+		new_row.set_value(2, building.name)
+		new_row.set_value(3, building.cpu_usage)
+		new_row.set_value(4, building.powergrid_usage)
+	  end
 	end
   end
   

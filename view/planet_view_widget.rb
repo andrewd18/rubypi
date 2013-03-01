@@ -28,8 +28,8 @@ class PlanetViewWidget < Gtk::Box
 	  return_to_system_view
 	end
 	
-	top_row.pack_start(planet_view_label)
-	top_row.pack_start(@up_button)
+	top_row.pack_start(planet_view_label, :expand => true)
+	top_row.pack_start(@up_button, :expand => false)
 	self.pack_start(top_row)
 	
 	
@@ -43,9 +43,9 @@ class PlanetViewWidget < Gtk::Box
 	
 	
 	# Add planet data widgets to view.
-	bottom_row.pack_start(add_planetary_building_widget)
-	bottom_row.pack_start(planetary_building_widget)
-	bottom_row.pack_start(show_planet_stats_widget)
+	bottom_row.pack_start(add_planetary_building_widget, :expand => false)
+	bottom_row.pack_start(planetary_building_widget, :expand => true)
+	bottom_row.pack_start(show_planet_stats_widget, :expand => false)
 	self.pack_start(bottom_row)
 	
 	return self
