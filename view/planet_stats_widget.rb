@@ -77,8 +77,8 @@ class PlanetStatsWidget < Gtk::Box
 	
 	# TODO: ISK Cost Row.
 	
-	self.pack_start(building_count_table)
-	self.pack_start(planet_stats_table)
+	self.pack_start(building_count_table, :expand => false)
+	self.pack_start(planet_stats_table, :expand => false)
 	
 	self.show_all
 	

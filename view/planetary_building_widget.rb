@@ -48,7 +48,7 @@ class PlanetaryBuildingWidget < Gtk::Box
 	end
 	
 	self.pack_start(buildings_label, :expand => false, :fill => false)
-	self.pack_start(@tree_view, :expand => false, :fill => false)
+	self.pack_start(@tree_view, :expand => true, :fill => true)
 	self.show_all
 	
 	return self

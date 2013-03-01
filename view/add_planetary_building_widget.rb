@@ -17,7 +17,7 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	
 	@planet_model = planet_model
 	
-	add_label = Gtk::Label.new("Add Infrastructure")
+	add_label = Gtk::Label.new("Add Buildings")
 	self.pack_start(add_label, :expand => false)
 	
 	# One planetary building of each type.

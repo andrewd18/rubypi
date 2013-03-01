@@ -38,13 +38,13 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	end
 	
 	# Pack the completed widget into ourself.
-	self.pack_start(building_count_table)
-	self.pack_start(@planet_image_event_wrapper)
-	self.pack_start(@planet_name_label)
-	self.pack_start(@planet_alias_label)
+	self.pack_start(building_count_table, :expand => false)
+	self.pack_start(@planet_image_event_wrapper, :expand => false)
+	self.pack_start(@planet_name_label, :expand => false)
+	self.pack_start(@planet_alias_label, :expand => false)
 	
 	if (@edit_planet_button)
-	  self.pack_start(@edit_planet_button)
+	  self.pack_start(@edit_planet_button, :expand => false)
 	  @edit_planet_button.signal_connect("clicked") do
 		# Open up the edit planet screen.
 		edit_planet
@@ -52,7 +52,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	end
 	
 	if (@colonize_planet_button)
-	  self.pack_start(@colonize_planet_button)
+	  self.pack_start(@colonize_planet_button, :expand => false)
 	  @colonize_planet_button.signal_connect("clicked") do
 		# Open up the colonize planet dialog.
 		colonize_planet

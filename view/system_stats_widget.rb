@@ -35,7 +35,7 @@ class SystemStatsWidget < Gtk::Box
 	system_stats_table.attach(@num_colonized_planets, 1, 2, 2, 3)
 	
 	
-	self.pack_start(system_stats_table)
+	self.pack_start(system_stats_table, :expand => false)
 	
 	self.show_all
 	

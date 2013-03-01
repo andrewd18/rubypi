@@ -14,11 +14,11 @@ class SystemViewWidget < Gtk::Box
 	
 	@pi_configuration_model.planets.each do |planet|
 	  widget = SystemViewPlanetOverviewWidget.new(planet)
-	  self.pack_start(widget)
+	  self.pack_start(widget, :expand => true, :fill => false)
 	end
 	
 	@system_stats_widget = SystemStatsWidget.new(@pi_configuration_model)
-	self.pack_start(@system_stats_widget)
+	self.pack_start(@system_stats_widget, :expand => false)
 	
 	return self
   end

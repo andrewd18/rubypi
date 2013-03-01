@@ -30,7 +30,7 @@ class PlanetViewWidget < Gtk::Box
 	
 	top_row.pack_start(planet_view_label, :expand => true)
 	top_row.pack_start(@up_button, :expand => false)
-	self.pack_start(top_row)
+	self.pack_start(top_row, :expand => false)
 	
 	
 	# Create the bottom row.
@@ -46,7 +46,7 @@ class PlanetViewWidget < Gtk::Box
 	bottom_row.pack_start(add_planetary_building_widget, :expand => false)
 	bottom_row.pack_start(planetary_building_widget, :expand => true)
 	bottom_row.pack_start(show_planet_stats_widget, :expand => false)
-	self.pack_start(bottom_row)
+	self.pack_start(bottom_row, :expand => true)
 	
 	return self
   end
