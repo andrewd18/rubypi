@@ -37,12 +37,15 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	  
 	  image = BuildingImage.new(building, [32, 32])
 	  
+	  label = Gtk::Label.new("#{building.name}")
+	  
 	  add_button = Gtk::Button.new(:stock_id => Gtk::Stock::ADD)
 	  add_button.signal_connect("clicked") do
 		@planet_model.add_building_from_class(building.class)
 	  end
 	  
 	  new_row.pack_start(image, :expand => false)
+	  new_row.pack_start(label, :expand => true)
 	  new_row.pack_start(add_button, :expand => false)
 	  self.pack_start(new_row, :expand => false)
 	end
