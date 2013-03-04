@@ -11,7 +11,7 @@ class BuildingImage < Gtk::Image
                       "Launchpad" => "launchpad_icon.png",
                       "Basic Industrial Facility" => "industrial_facility_two_materials.png",
                       "Advanced Industrial Facility" => "industrial_facility_two_materials.png",
-                      "High Tech Industrial Facility" => "launchpad_icon.png"}
+                      "High Tech Industrial Facility" => "industrial_facility_three_materials.png"}
   
   def initialize(building_model, requested_size_array_in_px = [64, 64])
 	@building_model = building_model
