@@ -6,7 +6,7 @@ class BuildingImage < Gtk::Image
   
   # TODO - Complete images for all the buildings.
   NAME_TO_FILENAME = {"Command Center" => "command_center_icon.png",
-                      "Extractor" => "launchpad_icon.png",
+                      "Extractor" => "extractor_icon.png",
                       "Storage Facility" => "storage_facility_icon.png",
                       "Launchpad" => "launchpad_icon.png",
                       "Basic Industrial Facility" => "industrial_facility_two_materials.png",
