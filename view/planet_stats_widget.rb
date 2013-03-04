@@ -76,7 +76,7 @@ class PlanetStatsWidget < Gtk::Box
 	planet_stats_table.attach(planet_alias_label, 0, 1, 3, 4)
 	
 	@planet_alias_entry = Gtk::Entry.new
-	@planet_alias_entry.text = @planet_model.alias
+	@planet_alias_entry.text = "#{@planet_model.alias}"
 	# Stick it in the third row, across all columns.
 	planet_stats_table.attach(@planet_alias_entry, 1, 2, 3, 4)
 	

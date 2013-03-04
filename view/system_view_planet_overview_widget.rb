@@ -2,7 +2,6 @@
 require 'gtk3'
 
 require_relative 'planet_view_widget.rb'
-require_relative 'edit_planet_dialog.rb'
 require_relative 'planet_image.rb'
 require_relative 'building_count_table.rb'
 
@@ -27,15 +26,9 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	@planet_image = PlanetImage.new(@planet_model)
 	@planet_image_event_wrapper.add(@planet_image)
 	
-	if (@planet_model.type == "Uncolonized")
-	  @planet_name_label = Gtk::Label.new("Uncolonized")
-	  @planet_alias_label = Gtk::Label.new("")
-	  @colonize_planet_button = Gtk::Button.new(:label => "Colonize")
-	else
-	  @planet_name_label = Gtk::Label.new("#{@planet_model.name}" || "")
-	  @planet_alias_label = Gtk::Label.new("#{@planet_model.alias}" || "")
-	  @edit_planet_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
-	end
+	@planet_name_label = Gtk::Label.new("#{@planet_model.name}")
+	@planet_alias_label = Gtk::Label.new("#{@planet_model.alias}")
+	@edit_planet_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
 	
 	# Pack the completed widget into ourself.
 	self.pack_start(building_count_table, :expand => false)
@@ -43,20 +36,10 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	self.pack_start(@planet_name_label, :expand => false)
 	self.pack_start(@planet_alias_label, :expand => false)
 	
-	if (@edit_planet_button)
-	  self.pack_start(@edit_planet_button, :expand => false)
-	  @edit_planet_button.signal_connect("clicked") do
-		# Open up the edit planet screen.
-		edit_planet
-	  end
-	end
-	
-	if (@colonize_planet_button)
-	  self.pack_start(@colonize_planet_button, :expand => false)
-	  @colonize_planet_button.signal_connect("clicked") do
-		# Open up the colonize planet dialog.
-		colonize_planet
-	  end
+	self.pack_start(@edit_planet_button, :expand => false)
+	@edit_planet_button.signal_connect("clicked") do
+	  # Open up the edit planet screen.
+	  edit_planet
 	end
 	
 	# Connect the backend signals.
@@ -89,16 +72,6 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
   
   def edit_planet
 	$ruby_pi_main_gtk_window.change_main_widget(PlanetViewWidget.new(@planet_model))
-  end
-  
-  def colonize_planet
-	colonize_planet_dialog = EditPlanetDialog.new(@planet_model)
-	colonize_planet_dialog.run
-	
-	# Assuming the user colonized the planet rather than canceling, edit the planet we just colonized.
-	if (@planet_model.type != "Uncolonized")
-	  edit_planet
-	end
   end
   
   def destroy
