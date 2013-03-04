@@ -21,7 +21,7 @@ class PlanetStatsWidget < Gtk::Box
 	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
 	
 	# Add planet building stats widgets in a nice grid.
-	planet_stats_table = Gtk::Table.new(6, 2)
+	planet_stats_table = Gtk::Table.new(7, 2)
 	
 	# Planet Image Row
 	@planet_image = PlanetImage.new(@planet_model)
@@ -95,7 +95,12 @@ class PlanetStatsWidget < Gtk::Box
 	planet_stats_table.attach(pg_label, 0, 1, 5, 6)
 	planet_stats_table.attach(@pg_used_pct_label, 1, 2, 5, 6)
 	
-	# TODO: ISK Cost Row.
+	# ISK Cost Row.
+	isk_label = Gtk::Label.new("ISK Cost:")
+	@isk_cost_label = Gtk::Label.new("#{@planet_model.isk_cost}")
+	# Put the main label on the left and the cost on the right of the seventh row.
+	planet_stats_table.attach(isk_label, 0, 1, 6, 7)
+	planet_stats_table.attach(@isk_cost_label, 1, 2, 6, 7)
 	
 	self.pack_start(building_count_table, :expand => false)
 	self.pack_start(planet_stats_table, :expand => false)
@@ -123,6 +128,8 @@ class PlanetStatsWidget < Gtk::Box
 	  
 	  @cpu_used_pct_label.text = "#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}"
 	  @pg_used_pct_label.text = "#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}"
+	  
+	  @isk_cost_label.text = "#{@planet_model.isk_cost}"
 	end
   end
   

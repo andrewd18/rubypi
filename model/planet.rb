@@ -22,6 +22,7 @@ class Planet
   attr_reader :powergrid_usage
   attr_reader :cpu_provided
   attr_reader :powergrid_provided
+  attr_reader :isk_cost
   attr_accessor :pi_configuration
   
   PLANET_TYPES = {:uncolonized => "Uncolonized",

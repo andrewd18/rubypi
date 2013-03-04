@@ -20,7 +20,8 @@ class ListOfBuildingsWidget < Gtk::Box
 	@planet_model = planet_model
 	@planet_model.add_observer(self)
 	
-	@list_store_of_buildings = Gtk::ListStore.new(Integer, Gdk::Pixbuf, String, Integer, Integer)
+	#                                              UID,     Icon,       Name, CPU Used, PG Used. CPU Prov, PG Prov, ISK Cost
+	@list_store_of_buildings = Gtk::ListStore.new(Integer, Gdk::Pixbuf, String, Integer, Integer, Integer, Integer, Integer)
 	
 	# Update planet list from model.
 	update
@@ -28,7 +29,6 @@ class ListOfBuildingsWidget < Gtk::Box
 	# Finally, create a tree view.
 	@tree_view = Gtk::TreeView.new(@list_store_of_buildings)
 	
-	# HACK: Ugly as hell. Ironically not as ugly as some of the other solutions.
 	text_renderer = Gtk::CellRendererText.new
 	image_renderer = Gtk::CellRendererPixbuf.new
 	
@@ -36,17 +36,24 @@ class ListOfBuildingsWidget < Gtk::Box
 	name_column = Gtk::TreeViewColumn.new("Name", text_renderer, :text => 2)
 	cpu_usage_column = Gtk::TreeViewColumn.new("CPU Usage", text_renderer, :text => 3)
 	pg_usage_column = Gtk::TreeViewColumn.new("PG Usage", text_renderer, :text => 4)
+	cpu_provided_column = Gtk::TreeViewColumn.new("CPU Provided", text_renderer, :text => 5)
+	pg_provided_column = Gtk::TreeViewColumn.new("PG Provided", text_renderer, :text => 6)
+	isk_cost_column = Gtk::TreeViewColumn.new("ISK", text_renderer, :text => 7)
 	
 	@tree_view.append_column(icon_column)
 	@tree_view.append_column(name_column)
 	@tree_view.append_column(cpu_usage_column)
 	@tree_view.append_column(pg_usage_column)
+	@tree_view.append_column(cpu_provided_column)
+	@tree_view.append_column(pg_provided_column)
+	@tree_view.append_column(isk_cost_column)
 	
-	
+	# On a double-click, remove the building.
 	@tree_view.signal_connect("row-activated") do |tree_view, path, column|
 	  remove_building(tree_view, path, column)
 	end
 	
+	# Pack the label and the tree view into the box.
 	self.pack_start(buildings_label, :expand => false, :fill => false)
 	self.pack_start(@tree_view, :expand => true, :fill => true)
 	self.show_all
@@ -61,12 +68,6 @@ class ListOfBuildingsWidget < Gtk::Box
 	building_iter_value = iter.get_value(0)
 	
 	@planet_model.remove_building(@planet_model.buildings[building_iter_value])
-	
-	# WRONG!
-	# new_row = @list_store_of_buildings.append
-	# new_row.set_value(0, iter.get_value(0))
-	# new_row.set_value(1, iter.get_value(1))
-	# new_row.set_value(2, iter.get_value(2))
   end
   
   def update
@@ -82,6 +83,9 @@ class ListOfBuildingsWidget < Gtk::Box
 		new_row.set_value(2, building.name)
 		new_row.set_value(3, building.cpu_usage)
 		new_row.set_value(4, building.powergrid_usage)
+		new_row.set_value(5, building.cpu_provided)
+		new_row.set_value(6, building.powergrid_provided)
+		new_row.set_value(7, building.isk_cost)
 	  end
 	end
   end
