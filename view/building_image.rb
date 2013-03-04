@@ -9,8 +9,8 @@ class BuildingImage < Gtk::Image
                       "Extractor" => "launchpad_icon.png",
                       "Storage Facility" => "storage_facility_icon.png",
                       "Launchpad" => "launchpad_icon.png",
-                      "Basic Industrial Facility" => "launchpad_icon.png",
-                      "Advanced Industrial Facility" => "launchpad_icon.png",
+                      "Basic Industrial Facility" => "industrial_facility_two_materials.png",
+                      "Advanced Industrial Facility" => "industrial_facility_two_materials.png",
                       "High Tech Industrial Facility" => "launchpad_icon.png"}
   
   def initialize(building_model, requested_size_array_in_px = [64, 64])
