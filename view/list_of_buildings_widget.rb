@@ -11,7 +11,7 @@ require_relative '../model/storage_facility.rb'
 
 require_relative './building_image.rb'
 
-class PlanetaryBuildingWidget < Gtk::Box
+class ListOfBuildingsWidget < Gtk::Box
   def initialize(planet_model)
 	super(:vertical)
 	

@@ -2,7 +2,7 @@
 require 'gtk3'
 
 require_relative 'add_planetary_building_widget.rb'
-require_relative 'planetary_building_widget.rb'
+require_relative 'list_of_buildings_widget.rb'
 require_relative 'planet_stats_widget.rb'
 require_relative 'system_view_widget.rb'
 
@@ -38,7 +38,7 @@ class PlanetViewWidget < Gtk::Box
 	
 	# Create planet data widgets.
 	@add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
-	@planetary_building_widget = PlanetaryBuildingWidget.new(@planet_model)
+	@planetary_building_widget = ListOfBuildingsWidget.new(@planet_model)
 	@show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
 	
 	
