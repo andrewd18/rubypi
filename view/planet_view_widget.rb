@@ -37,15 +37,15 @@ class PlanetViewWidget < Gtk::Box
 	bottom_row = Gtk::Box.new(:horizontal)
 	
 	# Create planet data widgets.
-	add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
-	planetary_building_widget = PlanetaryBuildingWidget.new(@planet_model)
-	show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
+	@add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
+	@planetary_building_widget = PlanetaryBuildingWidget.new(@planet_model)
+	@show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
 	
 	
 	# Add planet data widgets to view.
-	bottom_row.pack_start(add_planetary_building_widget, :expand => false)
-	bottom_row.pack_start(planetary_building_widget, :expand => true)
-	bottom_row.pack_start(show_planet_stats_widget, :expand => false)
+	bottom_row.pack_start(@add_planetary_building_widget, :expand => false)
+	bottom_row.pack_start(@planetary_building_widget, :expand => true)
+	bottom_row.pack_start(@show_planet_stats_widget, :expand => false)
 	self.pack_start(bottom_row, :expand => true)
 	
 	return self
@@ -62,6 +62,9 @@ class PlanetViewWidget < Gtk::Box
   private
   
   def return_to_system_view
+	# Before we return, save the data to the model.
+	@show_planet_stats_widget.commit_to_model
+	
 	$ruby_pi_main_gtk_window.change_main_widget(SystemViewWidget.new(@planet_model.pi_configuration))
   end
 end

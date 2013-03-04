@@ -1,8 +1,8 @@
 
 require 'gtk3'
-require_relative 'edit_planet_dialog.rb'
 require_relative 'planet_image.rb'
 require_relative 'building_count_table.rb'
+require_relative '../model/planet.rb'
 
 # This widget will show a planet, its buildings, and building-related stats.
 
@@ -28,37 +28,57 @@ class PlanetStatsWidget < Gtk::Box
 	# Stick it in the top row, across all columns.
 	planet_stats_table.attach(@planet_image, 0, 2, 0, 1)
 	
+	# Planet Type Row
+	planet_type_label = Gtk::Label.new("Planet Type:")
+	
+	# Populate the combobox backend model.
+	@list_store_of_planet_types = Gtk::ListStore.new(String)
+	Planet::PLANET_TYPES.each_value do |value|
+	  new_row = @list_store_of_planet_types.append
+	  new_row.set_value(0, value)
+	end
+	
+	@planet_type_combo_box = Gtk::ComboBox.new(:model => @list_store_of_planet_types)
+	
+	# Set up the view for the combo box column.
+	combobox_renderer = Gtk::CellRendererText.new
+	@planet_type_combo_box.pack_start(combobox_renderer, true)
+	@planet_type_combo_box.add_attribute(combobox_renderer, "text", 0)
+	
+	# Set the current value's row active.
+	value_array = Planet::PLANET_TYPES.values
+	value_array.each_with_index do |value, index|
+	  if (value == @planet_model.type)
+		@planet_type_combo_box.active=(index)
+	  end
+	end
+	
+	@planet_type_combo_box.signal_connect("changed") do
+	  self.commit_to_model
+	end
+	
+	
+	planet_stats_table.attach(planet_type_label, 0, 1, 1, 2)
+	planet_stats_table.attach(@planet_type_combo_box, 1, 2, 1, 2)
+	
+	
 	# Planet Label Row
-	@planet_name_label = Gtk::Label.new("#{@planet_model.name}")
-	# Stick it in the second row, across all columns.
-	planet_stats_table.attach(@planet_name_label, 0, 2, 1, 2)
+	planet_name_label = Gtk::Label.new("Name:")
+	planet_stats_table.attach(planet_name_label, 0, 1, 2, 3)
+	
+	@planet_name_entry = Gtk::Entry.new
+	@planet_name_entry.text = "#{@planet_model.name}"
+	# Stick it in the second row, in second column.
+	planet_stats_table.attach(@planet_name_entry, 1, 2, 2, 3)
 	
 	# Planet Alias Row
-	@planet_alias_label = Gtk::Label.new("#{@planet_model.alias}")
+	planet_alias_label = Gtk::Label.new("Alias:")
+	planet_stats_table.attach(planet_alias_label, 0, 1, 3, 4)
+	
+	@planet_alias_entry = Gtk::Entry.new
+	@planet_alias_entry.text = @planet_model.alias
 	# Stick it in the third row, across all columns.
-	planet_stats_table.attach(@planet_alias_label, 0, 2, 2, 3)
-	
-	# Edit and Abandon Button Row
-	@edit_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
-	@abandon_button = Gtk::Button.new(:label => "Abandon")
-	
-	@edit_button.signal_connect("pressed") do
-	  edit_planet_dialog = EditPlanetDialog.new(@planet_model)
-	  edit_planet_dialog.run
-	end
-	
-	@abandon_button.signal_connect("pressed") do
-	  # Abandon all colonies! q_q
-	  @planet_model.abandon
-	  
-	  # Return to the system screen.
-	  return_to_system_view
-	end
-	
-	# Put the Edit button on the left and Abandon button on the right of the fourth row.
-	planet_stats_table.attach(@edit_button, 0, 1, 3, 4)
-	planet_stats_table.attach(@abandon_button, 1, 2, 3, 4)
-	
+	planet_stats_table.attach(@planet_alias_entry, 1, 2, 3, 4)
 	
 	# CPU Row.
 	cpu_label = Gtk::Label.new("CPU:")
@@ -89,12 +109,42 @@ class PlanetStatsWidget < Gtk::Box
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
 	  # The model data changed. Update the display.
-	  @planet_name_label.text = @planet_model.name ||= ""
-	  @planet_alias_label.text = @planet_model.alias ||= ""
+	  
+	  # Set the current value's row active.
+	  value_array = Planet::PLANET_TYPES.values
+	  value_array.each_with_index do |value, index|
+		if (value == @planet_model.type)
+		  @planet_type_combo_box.active=(index)
+		end
+	  end
+	  
+	  @planet_name_entry.text = @planet_model.name ||= ""
+	  @planet_alias_entry.text = @planet_model.alias ||= ""
 	  
 	  @cpu_used_pct_label.text = "#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}"
 	  @pg_used_pct_label.text = "#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}"
 	end
+  end
+  
+  def commit_to_model
+	# Stop observing so the values we want to set don't get overwritten on an #update.
+	@planet_model.delete_observer(self)
+	
+	planet_type_value = @planet_type_combo_box.active_iter.get_value(0)
+	
+	if (planet_type_value == "Uncolonized")
+	  @planet_model.abandon
+	  
+	  # Force an #update because we know the values have changed, and we didn't change them.
+	  self.update
+	else
+	  @planet_model.type = planet_type_value
+	  @planet_model.alias = @planet_alias_entry.text
+	  @planet_model.name = @planet_name_entry.text
+	end
+	
+	# Start observing again.
+	@planet_model.add_observer(self)
   end
   
   def destroy
