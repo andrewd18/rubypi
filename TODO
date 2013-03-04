@@ -23,7 +23,6 @@ User Interface Improvements
 
 Code Cleanup
 ------------
-* Unify the editing dialogs for planets.
 * Unify the stats boxes for planets.
 
 Packaging & Release
