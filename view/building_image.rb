@@ -4,7 +4,7 @@ class BuildingImage < Gtk::Image
   
   BASE_IMAGES_FOLDER = "view/images"
   
-  # TODO - Complete images for Ice and Plasma.
+  # TODO - Complete images for all the buildings.
   NAME_TO_FILENAME = {"Command Center" => "command_center_icon.png",
                       "Extractor" => "launchpad_icon.png",
                       "Storage Facility" => "launchpad_icon.png",
@@ -27,7 +27,7 @@ class BuildingImage < Gtk::Image
 	return self
   end
   
-  # Called when the @planet_model changes.
+  # Called when the @building_model changes.
   def update
 	# If the two types don't match, the user has changed the model type. We need to update the image.
 	if (@displayed_type != @building_model.name)
