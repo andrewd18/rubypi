@@ -5,7 +5,7 @@ class BuildingImage < Gtk::Image
   BASE_IMAGES_FOLDER = "view/images"
   
   # TODO - Complete images for Ice and Plasma.
-  NAME_TO_FILENAME = {"Command Center" => "launchpad_icon.png",
+  NAME_TO_FILENAME = {"Command Center" => "command_center_icon.png",
                       "Extractor" => "launchpad_icon.png",
                       "Storage Facility" => "launchpad_icon.png",
                       "Launchpad" => "launchpad_icon.png",
