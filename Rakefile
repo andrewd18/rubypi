@@ -14,7 +14,7 @@ Releasy::Project.new do
   files ["ruby_pi.rb",
          "model/*.rb",
          "view/*.rb",
-		 "view/images/*.png",
+         "view/images/*.png",
          "view/images/32x32/*.png",
          "view/images/64x64/*.png"]
   
