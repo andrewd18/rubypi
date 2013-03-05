@@ -6,7 +6,7 @@ require 'releasy'
 
 Releasy::Project.new do
   name "RubyPI"
-  version "0.0.1"
+  version "0.0.2"
   verbose # Can be removed if you don't want to see all build messages.
 
   executable "ruby_pi.rb"
@@ -14,7 +14,8 @@ Releasy::Project.new do
   files ["ruby_pi.rb",
          "model/*.rb",
          "view/*.rb",
-         "view/images/*.png",
+		 "view/images/*.png",
+         "view/images/32x32/*.png",
          "view/images/64x64/*.png"]
   
   exposed_files ["README.md",
