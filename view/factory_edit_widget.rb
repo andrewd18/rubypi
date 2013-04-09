@@ -84,7 +84,10 @@ class FactoryEditWidget < Gtk::Box
 	# Stop observing so the values we want to set don't get overwritten on an #update.
 	@factory_model.delete_observer(self)
 	
-	currently_selected_schematic_name = @schematic_combo_box.active_iter.get_value(0)
+	# Ignore commit unless the user picked something legit.
+	if (@schematic_combo_box.active_iter == nil)
+	  return
+	end
 	
 	@factory_model.accepted_schematics.each do |schematic|
 	  if ((schematic.name) == (currently_selected_schematic_name))

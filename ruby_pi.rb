@@ -15,13 +15,8 @@ class RubyPI < Gtk::Window
 	  close_application
 	end
 	
-	@pi_configuration = PIConfiguration.new
-	
-	# Load six uncolonized planets.
 	# TODO: Allow user to load from file.
-	#6.times do
-	  #@pi_configuration.add_planet(Planet.new("Uncolonized"))
-	#end
+	@pi_configuration = PIConfiguration.new
 	
 	# HACK for testing.
 	# (planet_type, planet_name = nil, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
