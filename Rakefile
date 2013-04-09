@@ -6,12 +6,13 @@ require 'releasy'
 
 Releasy::Project.new do
   name "RubyPI"
-  version "0.0.2"
+  version "0.0.3"
   verbose # Can be removed if you don't want to see all build messages.
 
   executable "ruby_pi.rb"
   
   files ["ruby_pi.rb",
+         "db/*.rb",
          "model/*.rb",
          "view/*.rb",
          "view/images/*.png",
