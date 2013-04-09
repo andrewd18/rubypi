@@ -2,7 +2,7 @@
 require 'gtk3'
 
 require_relative 'planet_view_widget.rb'
-require_relative 'factory_edit_widget.rb'
+require_relative 'edit_factory_widget.rb'
 
 class BuildingViewWidget < Gtk::Box
   def initialize(building_model)
@@ -51,7 +51,7 @@ class BuildingViewWidget < Gtk::Box
 	       @building_model.is_a? HighTechIndustrialFacility)
 	  
 	  # Create an EditIndustrialFacilityWidget
-	  @building_widget = FactoryEditWidget.new(@building_model)
+	  @building_widget = EditFactoryWidget.new(@building_model)
 	  
 	  
 	elsif (@building_model.is_a? Launchpad)
