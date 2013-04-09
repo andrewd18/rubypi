@@ -10,6 +10,7 @@ require_relative '../model/launchpad.rb'
 require_relative '../model/storage_facility.rb'
 
 require_relative './building_image.rb'
+require_relative './building_view_widget.rb'
 
 class ListOfBuildingsWidget < Gtk::Box
   def initialize(planet_model)
@@ -48,9 +49,14 @@ class ListOfBuildingsWidget < Gtk::Box
 	@tree_view.append_column(pg_provided_column)
 	@tree_view.append_column(isk_cost_column)
 	
-	# On a double-click, remove the building.
+	# TODO - Create another widget to remove a building.
+	#@tree_view.signal_connect("row-activated") do |tree_view, path, column|
+	  #remove_building(tree_view, path, column)
+	#end
+	
+	# On a double-click, edit the building.
 	@tree_view.signal_connect("row-activated") do |tree_view, path, column|
-	  remove_building(tree_view, path, column)
+	  edit_building(tree_view, path, column)
 	end
 	
 	# Pack the label and the tree view into the box.
@@ -68,6 +74,15 @@ class ListOfBuildingsWidget < Gtk::Box
 	building_iter_value = iter.get_value(0)
 	
 	@planet_model.remove_building(@planet_model.buildings[building_iter_value])
+  end
+  
+  def edit_building(tree_view, path, column)
+	iter = @list_store_of_buildings.get_iter(path)
+	
+	# Get the iter for the building we want to see.
+	building_iter_value = iter.get_value(0)
+	
+	$ruby_pi_main_gtk_window.change_main_widget(BuildingViewWidget.new(@planet_model.buildings[building_iter_value]))
   end
   
   def update

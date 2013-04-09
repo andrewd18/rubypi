@@ -112,6 +112,7 @@ class Planet
   
   def add_building(building)
 	@buildings << building
+	building.planet=(self)
 	building.add_observer(self)
 	
 	# Update values.

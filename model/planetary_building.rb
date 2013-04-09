@@ -5,6 +5,8 @@ class PlanetaryBuilding
   
   include Observable
   
+  attr_accessor :planet
+  
   attr_reader :powergrid_usage
   attr_reader :cpu_usage
   attr_reader :powergrid_provided
