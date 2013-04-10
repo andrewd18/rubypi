@@ -2,7 +2,6 @@
 require 'gtk3'
 
 require_relative 'add_planetary_building_widget.rb'
-# require_relative 'list_of_buildings_widget.rb'
 require_relative 'extractor_list_widget.rb'
 require_relative 'factory_list_widget.rb'
 require_relative 'storage_list_widget.rb'
