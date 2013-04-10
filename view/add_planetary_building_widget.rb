@@ -24,9 +24,9 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	buildings = Array.new
 	
 	buildings << CommandCenter.new
-	buildings << Extractor.new
 	buildings << StorageFacility.new
 	buildings << Launchpad.new
+	buildings << Extractor.new
 	buildings << BasicIndustrialFacility.new
 	buildings << AdvancedIndustrialFacility.new
 	buildings << HighTechIndustrialFacility.new

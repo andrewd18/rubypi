@@ -156,6 +156,30 @@ class Planet
 	notify_observers() # Notify errybody.
   end
   
+  def num_command_centers
+	count = 0
+	
+	@buildings.each do |building|
+	  if (building.class == CommandCenter)
+		count += 1
+	  end
+	end
+	
+	return count
+  end
+  
+  def command_centers
+	list_of_command_centers = Array.new
+	
+	@buildings.each do |building|
+	  if (building.class == CommandCenter)
+		list_of_command_centers << building
+	  end
+	end
+	
+	return list_of_command_centers
+  end
+  
   def num_extractors
 	count = 0
 	
@@ -166,6 +190,18 @@ class Planet
 	end
 	
 	return count
+  end
+  
+  def extractors
+	list_of_extractors = Array.new
+	
+	@buildings.each do |building|
+	  if (building.class == Extractor)
+		list_of_extractors << building
+	  end
+	end
+	
+	return list_of_extractors
   end
   
   def num_factories
@@ -183,6 +219,20 @@ class Planet
 	return count
   end
   
+  def factories
+	list_of_factories = Array.new
+	
+	@buildings.each do |building|
+	  if ((building.class == BasicIndustrialFacility) ||
+	      (building.class == HighTechIndustrialFacility) ||
+	      (building.class == AdvancedIndustrialFacility))
+		list_of_factories << building
+	  end
+	end
+	
+	return list_of_factories
+  end
+  
   def num_launchpads
 	count = 0
 	
@@ -195,6 +245,18 @@ class Planet
 	return count
   end
   
+  def launchpads
+	list_of_launchpads = Array.new
+	
+	@buildings.each do |building|
+	  if (building.class == Launchpad)
+		list_of_launchpads << building
+	  end
+	end
+	
+	return list_of_launchpads
+  end
+  
   def num_storages
 	count = 0
 	
@@ -205,6 +267,32 @@ class Planet
 	end
 	
 	return count
+  end
+  
+  def storages
+	list_of_storages = Array.new
+	
+	@buildings.each do |building|
+	  if (building.class == StorageFacility)
+		list_of_storages << building
+	  end
+	end
+	
+	return list_of_storages
+  end
+  
+  def aggregate_launchpads_ccs_storages
+	list_of_aggregate_storages = Array.new
+	
+	@buildings.each do |building|
+	  if ((building.class == StorageFacility) ||
+	      (building.class == CommandCenter) ||
+	      (building.class == Launchpad))
+		list_of_aggregate_storages << building
+	  end
+	end
+	
+	return list_of_aggregate_storages
   end
   
   def remove_planet
