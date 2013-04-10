@@ -3,6 +3,7 @@ require 'bundler/setup' unless not defined?(Ocra)
 
 require 'gtk3'
 
+require_relative 'view/ruby_pi_main_menu.rb'
 require_relative 'view/system_view_widget.rb'
 require_relative 'model/pi_configuration.rb'
 
@@ -14,6 +15,8 @@ class RubyPI < Gtk::Window
 	self.signal_connect("delete_event") do
 	  close_application
 	end
+	
+	@menu_bar = RubyPIMainMenu.new
 	
 	# TODO: Allow user to load from file.
 	@pi_configuration = PIConfiguration.new
@@ -27,9 +30,10 @@ class RubyPI < Gtk::Window
 	@pi_configuration.add_planet(Planet.new("Temperate", "J100820 IX", "Infected Sheep"))
 	@pi_configuration.add_planet(Planet.new("Uncolonized"))
 	
-	@box = Gtk::Box.new(:horizontal)
+	@box = Gtk::Box.new(:vertical)
 	
 	@main_widget = SystemViewWidget.new(@pi_configuration)
+	@box.pack_start(@menu_bar)
 	@box.pack_start(@main_widget)
 	
 	
