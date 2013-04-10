@@ -6,10 +6,7 @@ require_relative 'list_of_buildings_widget.rb'
 require_relative 'planet_stats_widget.rb'
 require_relative 'system_view_widget.rb'
 
-# This widget will show a planet, its buildings, and building-related stats.
-# This widget will allow the user to add and remove buildings.
-# This widget will allow the user to edit specific buildings.
-
+# This is a layout-only widget that contains other, planet-specific widgets.
 class PlanetViewWidget < Gtk::Box
   def initialize(planet_model)
 	super(:vertical)
@@ -23,6 +20,8 @@ class PlanetViewWidget < Gtk::Box
 	planet_view_label = Gtk::Label.new("Planet View")
 	
 	# Add our up button.
+	# TODO - Push this behavior out of this widget and into a "up to system view button".
+	#        "UpToSystemViewButton.new" should be the only thing I call.
 	@up_button = Gtk::Button.new(:stock_id => Gtk::Stock::GO_UP)
 	@up_button.signal_connect("pressed") do
 	  return_to_system_view
@@ -36,7 +35,7 @@ class PlanetViewWidget < Gtk::Box
 	# Create the bottom row.
 	bottom_row = Gtk::Box.new(:horizontal)
 	
-	# Create planet data widgets.
+	# Create planet data widgets. 
 	@add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
 	@planetary_building_widget = ListOfBuildingsWidget.new(@planet_model)
 	@show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)

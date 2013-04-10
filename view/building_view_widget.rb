@@ -4,6 +4,7 @@ require 'gtk3'
 require_relative 'planet_view_widget.rb'
 require_relative 'edit_factory_widget.rb'
 
+# This is a layout-only widget that contains other, building-specific widgets.
 class BuildingViewWidget < Gtk::Box
   def initialize(building_model)
 	super(:vertical)
@@ -18,6 +19,8 @@ class BuildingViewWidget < Gtk::Box
 	building_view_label = Gtk::Label.new("Building View")
 	
 	# Add our up button.
+	# TODO - Push this behavior out of this widget and into a "up to planet view button".
+	#        "UpToPlanetViewButton.new" should be the only thing I call.
 	@up_button = Gtk::Button.new(:stock_id => Gtk::Stock::GO_UP)
 	@up_button.signal_connect("pressed") do
 	  return_to_planet_view
