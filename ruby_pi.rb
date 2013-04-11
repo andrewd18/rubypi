@@ -7,6 +7,9 @@ require_relative 'view/ruby_pi_main_menu.rb'
 require_relative 'view/system_view_widget.rb'
 require_relative 'model/pi_configuration.rb'
 
+require_relative 'model/product.rb'
+require_relative 'model/schematic.rb'
+
 class RubyPI < Gtk::Window
   def initialize
 	super(Gtk::Window::Type::TOPLEVEL)
@@ -17,6 +20,19 @@ class RubyPI < Gtk::Window
 	end
 	
 	@menu_bar = RubyPIMainMenu.new
+	
+	# Load static products into memory.
+	products = Product.all
+	if (products.empty?)
+	  Product.seed_all_products
+	end
+	
+	# Load static schematics into memory.
+	schematics = Schematic.all
+	if (schematics.empty?)
+	  Schematic.seed_all_schematics
+	end
+	
 	
 	# TODO: Allow user to load from file.
 	@pi_configuration = PIConfiguration.new

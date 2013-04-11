@@ -26,7 +26,13 @@ class AdvancedIndustrialFacility < PlanetaryBuilding
   end
   
   def accepted_schematics
-	return Schematic.where(:p_level => BUILDS_P_LEVELS)
+	array_of_schematics = Array.new
+	
+	BUILDS_P_LEVELS.each do |level|
+	  array_of_schematics.concat(Schematic.find_by_p_level(level))
+	end
+	
+	return array_of_schematics
   end
   
   def schematic=(new_schematic)

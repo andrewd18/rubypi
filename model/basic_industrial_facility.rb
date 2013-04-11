@@ -26,7 +26,7 @@ class BasicIndustrialFacility < PlanetaryBuilding
   end
   
   def accepted_schematics
-	return Schematic.where(:p_level => BUILDS_P_LEVELS)
+	return Schematic.find_by_p_level(BUILDS_P_LEVELS)
   end
   
   def schematic=(new_schematic)
