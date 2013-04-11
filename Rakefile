@@ -12,7 +12,6 @@ Releasy::Project.new do
   executable "ruby_pi.rb"
   
   files ["ruby_pi.rb",
-         "db/*.rb",
          "model/*.rb",
          "view/*.rb",
          "view/images/*.png",
