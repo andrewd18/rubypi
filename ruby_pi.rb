@@ -49,8 +49,8 @@ class RubyPI < Gtk::Window
 	@box = Gtk::Box.new(:vertical)
 	
 	@main_widget = SystemViewWidget.new(@pi_configuration)
-	@box.pack_start(@menu_bar)
-	@box.pack_start(@main_widget)
+	@box.pack_start(@menu_bar, :expand => false, :fill => false)
+	@box.pack_start(@main_widget, :expand => false, :fill => false)
 	
 	
 	self.add(@box)

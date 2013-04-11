@@ -44,26 +44,42 @@ class PlanetViewWidget < Gtk::Box
 	
 	# Left Column
 	@add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
-	edit_planet_table.attach(@add_planetary_building_widget, 0, 1, 0, 3)  # rows and columns indexed from zero
+	planetary_building_widget_frame = Gtk::Frame.new
+	planetary_building_widget_frame.add(@add_planetary_building_widget)
+	
+	edit_planet_table.attach(planetary_building_widget_frame, 0, 1, 0, 3)  # rows and columns indexed from zero
 	
 	# Center Column
 	@poco_widget = Gtk::Label.new("TODO: POCO Widget")
+	poco_widget_frame = Gtk::Frame.new
+	poco_widget_frame.add(@poco_widget)
+	
 	@extractor_list_widget = ExtractorListWidget.new(@planet_model)
-	@factory_list_widget = FactoryListWidget.new(@planet_model)
+	extractor_list_widget_frame = Gtk::Frame.new
+	extractor_list_widget_frame.add(@extractor_list_widget)
+	
 	@storage_list_widget = StorageListWidget.new(@planet_model)
+	storage_list_widget_frame = Gtk::Frame.new
+	storage_list_widget_frame.add(@storage_list_widget)
+	
+	@factory_list_widget = FactoryListWidget.new(@planet_model)
+	factory_list_widget_frame = Gtk::Frame.new
+	factory_list_widget_frame.add(@factory_list_widget)
 	
 	# Stretch poco widget across columns 2 and 3
-	edit_planet_table.attach(@poco_widget, 1, 3, 0, 1)  # rows and columns indexed from zero
+	edit_planet_table.attach(poco_widget_frame, 1, 3, 0, 1)  # rows and columns indexed from zero
 	
-	edit_planet_table.attach(@storage_list_widget, 1, 2, 1, 2)  # rows and columns indexed from zero
-	edit_planet_table.attach(@extractor_list_widget, 1, 2, 2, 3)  # rows and columns indexed from zero
-	edit_planet_table.attach(@factory_list_widget, 2, 3, 1, 3)  # rows and columns indexed from zero
+	edit_planet_table.attach(extractor_list_widget_frame, 1, 2, 1, 2)  # rows and columns indexed from zero
+	edit_planet_table.attach(storage_list_widget_frame, 1, 2, 2, 3)  # rows and columns indexed from zero
+	edit_planet_table.attach(factory_list_widget_frame, 2, 3, 1, 3)  # rows and columns indexed from zero
 	
 	
 	# Right Column
 	@show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
+	planet_stats_widget_frame = Gtk::Frame.new
+	planet_stats_widget_frame.add(@show_planet_stats_widget)
 	
-	edit_planet_table.attach(@show_planet_stats_widget, 3, 4, 0, 3)  # rows and columns indexed from zero
+	edit_planet_table.attach(planet_stats_widget_frame, 3, 4, 0, 3)  # rows and columns indexed from zero
 	
 	
 	# Add the "edit_planet_table" to the bottom portion of self's box.

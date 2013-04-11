@@ -14,7 +14,9 @@ class SystemViewWidget < Gtk::Box
 	
 	@pi_configuration_model.planets.each do |planet|
 	  widget = SystemViewPlanetOverviewWidget.new(planet)
-	  self.pack_start(widget, :expand => true, :fill => false)
+	  frame = Gtk::Frame.new
+	  frame.add(widget)
+	  self.pack_start(frame, :expand => true, :fill => false)
 	end
 	
 	@system_stats_widget = SystemStatsWidget.new(@pi_configuration_model)
