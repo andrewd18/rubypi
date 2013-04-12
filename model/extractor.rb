@@ -27,7 +27,7 @@ class Extractor < PlanetaryBuilding
   end
   
   def add_extractor_head(head)
-	if @extractor_heads.count == 8
+	if @extractor_heads.count == 10
 	  # TODO
 	  # Error and shit.
 	else
@@ -42,8 +42,17 @@ class Extractor < PlanetaryBuilding
 	# TODO
 	# Lean on Array.remove?
 	#
-	#changed
-	#notify_observers()
+	@extractor_heads.remove(head)
+	
+	changed
+	notify_observers()
+  end
+  
+  def remove_all_heads
+	@extractor_heads.clear
+	
+	changed
+	notify_observers()
   end
   
   # Override powergrid_usage accessors.

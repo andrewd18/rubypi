@@ -14,7 +14,7 @@ class ExtractorListWidget < Gtk::Box
 	
 	extractor_list_widget_label = Gtk::Label.new("Extractors")
 	
-	@extractor_list_store = Gtk::ListStore.new(Integer,			# UID
+	@extractor_tree_store = Gtk::TreeStore.new(Integer,			# UID
 											   Gdk::Pixbuf,		# Icon
 											   String,			# Name
 	                                           Integer,			# PG Used
@@ -25,7 +25,7 @@ class ExtractorListWidget < Gtk::Box
 	self.update
 	
 	# Create a tree view.
-	@tree_view = Gtk::TreeView.new(@extractor_list_store)
+	@tree_view = Gtk::TreeView.new(@extractor_tree_store)
 	
 	# Create cell renderers.
 	text_renderer = Gtk::CellRendererText.new
@@ -85,17 +85,27 @@ class ExtractorListWidget < Gtk::Box
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
-	  @extractor_list_store.clear
+	  @extractor_tree_store.clear
 	  
 	  # Update planet building list from model.
-	  @planet_model.extractors.each_with_index do |building, index|
-		new_row = @extractor_list_store.append
-		new_row.set_value(0, index)
-		new_row.set_value(1, BuildingImage.new(building, [32, 32]).pixbuf)
-		new_row.set_value(2, building.name)
-		new_row.set_value(3, building.powergrid_usage)
-		new_row.set_value(4, building.cpu_usage)
-		new_row.set_value(5, building.isk_cost)
+	  @planet_model.extractors.each_with_index do |extractor, index|
+		extractor_row = @extractor_tree_store.append(nil)
+		extractor_row.set_value(0, index)
+		extractor_row.set_value(1, BuildingImage.new(extractor, [32, 32]).pixbuf)
+		extractor_row.set_value(2, extractor.name)
+		extractor_row.set_value(3, extractor.powergrid_usage)
+		extractor_row.set_value(4, extractor.cpu_usage)
+		extractor_row.set_value(5, extractor.isk_cost)
+		
+		extractor.extractor_heads.each do |head|
+		  head_row = @extractor_tree_store.append(extractor_row)
+		  head_row.set_value(0, index)
+		  head_row.set_value(1, BuildingImage.new(head, [32, 32]).pixbuf)
+		  head_row.set_value(2, head.name)
+		  head_row.set_value(3, head.powergrid_usage)
+		  head_row.set_value(4, head.cpu_usage)
+		  head_row.set_value(5, head.isk_cost)
+		end
 	  end
 	end
   end
