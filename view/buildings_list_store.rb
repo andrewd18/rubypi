@@ -1,4 +1,7 @@
-class BuildingsTreeStore < Gtk::TreeStore
+class BuildingsListStore < Gtk::ListStore
+  
+  # TODO - Implement a "resort by order in @planet_model.buildings" function.
+  
   def initialize(planet_model)
 	
 	@planet_model = planet_model
@@ -20,9 +23,9 @@ class BuildingsTreeStore < Gtk::TreeStore
 	return self
   end
   
-  def delete_building(tree_iter)
+  def delete_building(list_iter)
 	# Get the iter for the building we want dead.
-	building_iter_value = tree_iter.get_value(0)
+	building_iter_value = list_iter.get_value(0)
 	
 	# TODO - Delete specific building ID rather than relying on these iters matching.
 	@planet_model.remove_building(@planet_model.buildings[building_iter_value])
@@ -36,7 +39,7 @@ class BuildingsTreeStore < Gtk::TreeStore
 	  
 	  # Update planet building list from model.
 	  @planet_model.buildings.each_with_index do |building, index|
-		new_row = self.append(nil)
+		new_row = self.append
 		new_row.set_value(0, index)
 		new_row.set_value(1, BuildingImage.new(building, [32, 32]).pixbuf)
 		new_row.set_value(2, building.name)

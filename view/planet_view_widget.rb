@@ -1,7 +1,7 @@
 require 'gtk3'
 
 require_relative 'add_planetary_building_widget.rb'
-require_relative 'buildings_tree_store.rb'
+require_relative 'buildings_list_store.rb'
 require_relative 'buildings_tree_view.rb'
 require_relative 'planet_stats_widget.rb'
 require_relative 'building_view_widget.rb'
@@ -44,8 +44,8 @@ class PlanetViewWidget < Gtk::Box
 	
 	
 	# Center Column
-	@buildings_tree_store = BuildingsTreeStore.new(@planet_model)
-	@buildings_tree_view = BuildingsTreeView.new(@buildings_tree_store)
+	@buildings_list_store = BuildingsListStore.new(@planet_model)
+	@buildings_tree_view = BuildingsTreeView.new(@buildings_list_store)
 	
 	
 	@edit_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
@@ -53,16 +53,35 @@ class PlanetViewWidget < Gtk::Box
 	  # Get the iter for the building we want to edit.
 	  current_tree_selection = @buildings_tree_view.selection
 	  selected_row_iter = current_tree_selection.selected
-	  building_iter = selected_row_iter.get_value(0)
 	  
-	  # TODO - Edit specific factory ID rather than relying on these iters matching.
-	  $ruby_pi_main_gtk_window.change_main_widget(BuildingViewWidget.new(@planet_model.buildings[building_iter]))
+	  # Verify the user has something highlighted.
+	  if (selected_row_iter != nil)
+		# Get the value of the iter.
+		building_iter = selected_row_iter.get_value(0)
+		
+		# TODO - Edit specific factory ID rather than relying on these iters matching.
+		# Change to the BuildingViewWidget.
+		$ruby_pi_main_gtk_window.change_main_widget(BuildingViewWidget.new(@planet_model.buildings[building_iter]))
+	  end
 	end
 	
+	@clear_sort_button = Gtk::Button.new(:label => "Clear Sort")
+	@clear_sort_button.signal_connect("clicked") do
+	  # BUG - Once clicked, this prevents you from drag-and-dropping stuff around in the view
+	  #       until the view is completely reloaded.
+	  # TODO - Implement a "resort by order in @planet_model.buildings" function.
+	  @buildings_list_store.set_sort_column_id(0)
+	end
+	
+	# TODO - Ugly. Convert to table or generally clean up.
 	vertical_box = Gtk::Box.new(:vertical)
 	vertical_box.pack_start(@buildings_tree_view, :expand => true, :fill => true)
-	vertical_box.pack_start(@edit_button, :expand => false, :fill => false)
 	
+	button_row = Gtk::Box.new(:horizontal)
+	button_row.pack_end(@clear_sort_button, :expand => false, :fill => false)
+	button_row.pack_end(@edit_button, :expand => false, :fill => false)
+	
+	vertical_box.pack_start(button_row, :expand => false, :fill => false)
 	vertical_box_frame = Gtk::Frame.new
 	vertical_box_frame.add(vertical_box)
 	
@@ -89,9 +108,9 @@ class PlanetViewWidget < Gtk::Box
 	  child.destroy
 	end
 	
-	# Manually destroy @buildings_tree_store because it's not packed into a widget,
+	# Manually destroy @buildings_list_store because it's not packed into a widget,
 	# and therefore doesn't get killed with child#destroy.
-	@buildings_tree_store.destroy
+	@buildings_list_store.destroy
 	
 	super
   end

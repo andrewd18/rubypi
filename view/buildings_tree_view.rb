@@ -1,20 +1,19 @@
+require_relative 'icon_column.rb'
+require_relative 'text_column.rb'
+
 class BuildingsTreeView < Gtk::TreeView
   def initialize(tree_or_list_model)
 	@tree_or_list_model = tree_or_list_model
 	
 	super(@tree_or_list_model)
 	
-	# Create cell renderers.
-	text_renderer = Gtk::CellRendererText.new
-	image_renderer = Gtk::CellRendererPixbuf.new
-	
 	# Create columns for the tree view.
-	icon_column = Gtk::TreeViewColumn.new("Icon", image_renderer, :pixbuf => 1)
-	name_column = Gtk::TreeViewColumn.new("Name", text_renderer, :text => 2)
-	schematic_name_column = Gtk::TreeViewColumn.new("Schematic", text_renderer, :text => 3)
-	pg_used_column = Gtk::TreeViewColumn.new("PG Used", text_renderer, :text => 4)
-	cpu_used_column = Gtk::TreeViewColumn.new("CPU Used", text_renderer, :text => 5)
-	isk_cost_column = Gtk::TreeViewColumn.new("ISK Cost", text_renderer, :text => 6)
+	icon_column = IconColumn.new("Icon", 1)
+	name_column = TextColumn.new("Name", 2)
+	schematic_name_column = TextColumn.new("Schematic", 3)
+	pg_used_column = TextColumn.new("PG Used", 4)
+	cpu_used_column = TextColumn.new("CPU Used", 5)
+	isk_cost_column = TextColumn.new("ISK Cost", 6)
 	
 	# Pack columns in tree view, left-to-right.
 	self.append_column(icon_column)
@@ -32,6 +31,9 @@ class BuildingsTreeView < Gtk::TreeView
 	  
 	  @tree_or_list_model.delete_building(tree_iter)
 	end
+	
+	# Tree View settings.
+	self.reorderable = true
 	
 	return self
   end
