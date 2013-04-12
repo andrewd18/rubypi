@@ -14,9 +14,13 @@ class FactoryListWidget < Gtk::Box
 	
 	factory_list_widget_label = Gtk::Label.new("Factories")
 	
-	@factory_list_store = Gtk::ListStore.new(Integer,        # UID
-											 Gdk::Pixbuf,    # Icon
-											 String)         # Name
+	@factory_list_store = Gtk::ListStore.new(Integer,		# UID
+											 Gdk::Pixbuf,	# Icon
+											 String,		# Name
+	                                         String,		# Schematic Name
+	                                         Integer,		# PG Used
+	                                         Integer,		# CPU Used
+	                                         Integer)		# ISK Cost
 	
 	# Refresh factory_list_store with model data.
 	self.update
@@ -31,10 +35,19 @@ class FactoryListWidget < Gtk::Box
 	# Create columns for the tree view.
 	icon_column = Gtk::TreeViewColumn.new("Icon", image_renderer, :pixbuf => 1)
 	name_column = Gtk::TreeViewColumn.new("Name", text_renderer, :text => 2)
+	schematic_name_column = Gtk::TreeViewColumn.new("Schematic", text_renderer, :text => 3)
+	pg_used_column = Gtk::TreeViewColumn.new("PG Used", text_renderer, :text => 4)
+	cpu_used_column = Gtk::TreeViewColumn.new("CPU Used", text_renderer, :text => 5)
+	isk_cost_column = Gtk::TreeViewColumn.new("ISK Cost", text_renderer, :text => 6)
 	
 	# Pack columns in tree view, left-to-right.
 	@tree_view.append_column(icon_column)
 	@tree_view.append_column(name_column)
+	@tree_view.append_column(schematic_name_column)
+	@tree_view.append_column(pg_used_column)
+	@tree_view.append_column(cpu_used_column)
+	@tree_view.append_column(isk_cost_column)
+	
 	
 	# Create add/edit/remove buttons.
 	row_of_buttons = Gtk::Box.new(:horizontal)
@@ -84,6 +97,16 @@ class FactoryListWidget < Gtk::Box
 		new_row.set_value(0, index)
 		new_row.set_value(1, BuildingImage.new(building, [32, 32]).pixbuf)
 		new_row.set_value(2, building.name)
+		
+		if (building.schematic == nil)
+		  new_row.set_value(3, "")
+		else
+		  new_row.set_value(3, building.schematic.name)
+		end
+		
+		new_row.set_value(4, building.powergrid_usage)
+		new_row.set_value(5, building.cpu_usage)
+		new_row.set_value(6, building.isk_cost)
 	  end
 	end
   end
