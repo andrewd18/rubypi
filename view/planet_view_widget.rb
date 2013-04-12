@@ -1,11 +1,10 @@
-
 require 'gtk3'
 
 require_relative 'add_planetary_building_widget.rb'
-require_relative 'extractor_list_widget.rb'
-require_relative 'factory_list_widget.rb'
-require_relative 'storage_list_widget.rb'
+require_relative 'buildings_tree_store.rb'
+require_relative 'buildings_tree_view.rb'
 require_relative 'planet_stats_widget.rb'
+require_relative 'building_view_widget.rb'
 require_relative 'system_view_widget.rb'
 
 # This is a layout-only widget that contains other, planet-specific widgets.
@@ -34,56 +33,50 @@ class PlanetViewWidget < Gtk::Box
 	self.pack_start(menu_and_up_button_row, :expand => false)
 	
 	
-	# Create the widget bottom portion of the screen, which is a giant table.
-	#
-	# Gtk::Table Syntax
-	# table = Gtk::Table.new(rows, columns)
-	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
-	
-	edit_planet_table = Gtk::Table.new(3, 4)
+	# Create the Bottom Row
+	bottom_row = Gtk::Box.new(:horizontal)
 	
 	# Left Column
 	@add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
 	planetary_building_widget_frame = Gtk::Frame.new
 	planetary_building_widget_frame.add(@add_planetary_building_widget)
+	bottom_row.pack_start(planetary_building_widget_frame, :expand => false)
 	
-	edit_planet_table.attach(planetary_building_widget_frame, 0, 1, 0, 3)  # rows and columns indexed from zero
 	
 	# Center Column
-	@poco_widget = Gtk::Label.new("TODO: POCO Widget")
-	poco_widget_frame = Gtk::Frame.new
-	poco_widget_frame.add(@poco_widget)
+	@buildings_tree_store = BuildingsTreeStore.new(@planet_model)
+	@buildings_tree_view = BuildingsTreeView.new(@buildings_tree_store)
 	
-	@extractor_list_widget = ExtractorListWidget.new(@planet_model)
-	extractor_list_widget_frame = Gtk::Frame.new
-	extractor_list_widget_frame.add(@extractor_list_widget)
 	
-	@storage_list_widget = StorageListWidget.new(@planet_model)
-	storage_list_widget_frame = Gtk::Frame.new
-	storage_list_widget_frame.add(@storage_list_widget)
+	@edit_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
+	@edit_button.signal_connect("clicked") do
+	  # Get the iter for the building we want to edit.
+	  current_tree_selection = @buildings_tree_view.selection
+	  selected_row_iter = current_tree_selection.selected
+	  building_iter = selected_row_iter.get_value(0)
+	  
+	  # TODO - Edit specific factory ID rather than relying on these iters matching.
+	  $ruby_pi_main_gtk_window.change_main_widget(BuildingViewWidget.new(@planet_model.buildings[building_iter]))
+	end
 	
-	@factory_list_widget = FactoryListWidget.new(@planet_model)
-	factory_list_widget_frame = Gtk::Frame.new
-	factory_list_widget_frame.add(@factory_list_widget)
+	vertical_box = Gtk::Box.new(:vertical)
+	vertical_box.pack_start(@buildings_tree_view, :expand => true, :fill => true)
+	vertical_box.pack_start(@edit_button, :expand => false, :fill => false)
 	
-	# Stretch poco widget across columns 2 and 3
-	edit_planet_table.attach(poco_widget_frame, 1, 3, 0, 1)  # rows and columns indexed from zero
+	vertical_box_frame = Gtk::Frame.new
+	vertical_box_frame.add(vertical_box)
 	
-	edit_planet_table.attach(extractor_list_widget_frame, 1, 2, 1, 2)  # rows and columns indexed from zero
-	edit_planet_table.attach(storage_list_widget_frame, 1, 2, 2, 3)  # rows and columns indexed from zero
-	edit_planet_table.attach(factory_list_widget_frame, 2, 3, 1, 3)  # rows and columns indexed from zero
-	
+	bottom_row.pack_start(vertical_box_frame, :expand => true, :fill => true)
 	
 	# Right Column
 	@show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
 	planet_stats_widget_frame = Gtk::Frame.new
 	planet_stats_widget_frame.add(@show_planet_stats_widget)
-	
-	edit_planet_table.attach(planet_stats_widget_frame, 3, 4, 0, 3)  # rows and columns indexed from zero
+	bottom_row.pack_start(planet_stats_widget_frame, :expand => false)
 	
 	
 	# Add the "edit_planet_table" to the bottom portion of self's box.
-	self.pack_start(edit_planet_table, :expand => true)
+	self.pack_start(bottom_row, :expand => true)
 	
 	# Show everything.
 	self.show_all
@@ -95,6 +88,10 @@ class PlanetViewWidget < Gtk::Box
 	self.children.each do |child|
 	  child.destroy
 	end
+	
+	# Manually destroy @buildings_tree_store because it's not packed into a widget,
+	# and therefore doesn't get killed with child#destroy.
+	@buildings_tree_store.destroy
 	
 	super
   end
