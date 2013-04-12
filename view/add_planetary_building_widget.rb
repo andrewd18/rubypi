@@ -31,28 +31,60 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	buildings << AdvancedIndustrialFacility.new
 	buildings << HighTechIndustrialFacility.new
 	
+	@building_list_store = Gtk::ListStore.new(Integer,			# UID
+	                                          Gdk::Pixbuf,		# Icon
+	                                          Class,			# Class Name
+	                                          String)			# Name
 	
-	buildings.each do |building|
-	  new_row = Gtk::Box.new(:horizontal)
-	  
-	  image = BuildingImage.new(building, [32, 32])
-	  
-	  label = Gtk::Label.new("#{building.name}")
-	  
-	  add_button = Gtk::Button.new(:stock_id => Gtk::Stock::ADD)
-	  add_button.signal_connect("clicked") do
-		@planet_model.add_building_from_class(building.class)
-	  end
-	  
-	  new_row.pack_start(image, :expand => false)
-	  new_row.pack_start(label, :expand => true)
-	  new_row.pack_start(add_button, :expand => false)
-	  self.pack_start(new_row, :expand => false)
+	buildings.each_with_index do |building, index|
+	  # Create a new row, attached to the top of the tree.
+	  new_row = @building_list_store.append
+	  new_row.set_value(0, index)
+	  new_row.set_value(1, BuildingImage.new(building, [32, 32]).pixbuf)
+	  new_row.set_value(2, building.class)
+	  new_row.set_value(3, building.name)
 	end
+	
+	# Create the tree view.
+	@tree_view = Gtk::TreeView.new(@building_list_store)
+	
+	# Create cell renderers.
+	text_renderer = Gtk::CellRendererText.new
+	image_renderer = Gtk::CellRendererPixbuf.new
+	
+	# Create columns for the tree view.
+	icon_column = Gtk::TreeViewColumn.new("Icon", image_renderer, :pixbuf => 1)
+	# Don't bother showing the class.
+	name_column = Gtk::TreeViewColumn.new("Name", text_renderer, :text => 3)
+	
+	# Pack columns in tree view, left-to-right.
+	@tree_view.append_column(icon_column)
+	@tree_view.append_column(name_column)
+	
+	@tree_view.headers_visible = false
+	
+	# When a row is double-clicked, add the building.
+	@tree_view.signal_connect("row-activated") do |tree_view, path, column|
+	  add_building(tree_view, path, column)
+	end
+	
+	# When the widget loses focus, deselect the row.
+	@tree_view.signal_connect("focus-out-event") do |tree_view, event|
+	  tree_view.selection.unselect_all
+	end
+	
+	self.pack_start(@tree_view)
 	
 	self.show_all
 	
 	return self
+  end
+  
+  def add_building(tree_view, path, column)
+	iter = @building_list_store.get_iter(path)
+	building_class = iter.get_value(2)
+	
+	@planet_model.add_building_from_class(building_class)
   end
   
   def destroy

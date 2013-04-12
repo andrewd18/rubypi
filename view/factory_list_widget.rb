@@ -72,6 +72,11 @@ class FactoryListWidget < Gtk::Box
 	  end
 	end
 	
+	# When the widget loses focus, deselect the row.
+	@tree_view.signal_connect("focus-out-event") do |tree_view, event|
+	  tree_view.selection.unselect_all
+	end
+	
 	row_of_buttons.pack_start(edit_button)
 	row_of_buttons.pack_start(delete_button)
 	
