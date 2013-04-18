@@ -183,6 +183,22 @@ class Product
 	return self
   end
   
+  def set_p_level(level)
+	if (level.between?(0, 4))
+	  # Ok, it's a valid level.
+	  # Let's make sure we're not setting something we already have.
+	  if (level == @p_level)
+		# No change in the value.
+		return
+	  end
+	  
+	  @p_level = level
+	else
+	  # Invalid level passed.
+	  raise ArgumentError, "Passed in level must be between 0 and 5."
+	end
+  end
+  
   def volume
 	return P_LEVEL_TO_VOLUME[@p_level]
   end
