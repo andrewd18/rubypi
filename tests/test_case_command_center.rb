@@ -3,13 +3,22 @@ require "test/unit"
 require_relative "../model/command_center.rb"
 
 class TestCaseCommandCenter < Test::Unit::TestCase
+  # Run once.
+  def self.startup
+  end
+  
+  # Run once after all tests.
+  def self.shutdown
+  end
+  
+  # Run before every test.
   def setup
 	@building = CommandCenter.new
 	@was_notified_of_change = false
   end
   
+  # Run after every test.
   def teardown
-	# nada
   end
   
   def test_default_level_is_zero

@@ -3,12 +3,21 @@ require "test/unit"
 require_relative "../model/storage_facility.rb"
 
 class TestCaseStorageFacility < Test::Unit::TestCase
+  # Run once.
+  def self.startup
+  end
+  
+  # Run once after all tests.
+  def self.shutdown
+  end
+  
+  # Run before every test.
   def setup
 	@building = StorageFacility.new
   end
   
+  # Run after every test.
   def teardown
-	# nada
   end
   
   def test_powergrid_usage_value

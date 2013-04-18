@@ -3,13 +3,22 @@ require "test/unit"
 require_relative "../model/basic_industrial_facility.rb"
 
 class TestCaseBasicIndustrialFacility < Test::Unit::TestCase
+  # Run once.
+  def self.startup
+  end
+  
+  # Run once after all tests.
+  def self.shutdown
+  end
+  
+  # Run before every test.
   def setup
 	@building = BasicIndustrialFacility.new
 	@was_notified_of_change = false
   end
   
+  # Run after every test.
   def teardown
-	# nada
   end
   
   def test_powergrid_usage_value

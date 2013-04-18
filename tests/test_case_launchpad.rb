@@ -3,12 +3,21 @@ require "test/unit"
 require_relative "../model/launchpad.rb"
 
 class TestCaseLaunchpad < Test::Unit::TestCase
+  # Run once.
+  def self.startup
+  end
+  
+  # Run once after all tests.
+  def self.shutdown
+  end
+  
+  # Run before every test.
   def setup
 	@building = Launchpad.new
   end
   
+  # Run once after every test.
   def teardown
-	# nada
   end
   
   def test_powergrid_usage_value
