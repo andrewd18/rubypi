@@ -48,26 +48,12 @@ class CommandCenter < PlanetaryBuilding
 	return LEVEL_TO_PG_TABLE["#{@upgrade_level}"]
   end
   
-  def powergrid_provided=(value)
-	# do nothing
-  end
-  
-  
   def cpu_provided
 	return LEVEL_TO_CPU_TABLE["#{@upgrade_level}"]
   end
   
-  def cpu_provided=(value)
-	# do nothing
-  end
-  
-  
   def isk_cost
 	return LEVEL_TO_ISK_TABLE["#{@upgrade_level}"]
-  end
-  
-  def isk_cost=(value)
-	# do nothing
   end
   
   def increase_level
@@ -92,13 +78,20 @@ class CommandCenter < PlanetaryBuilding
   end
   
   def set_level(level)
-	if level.between?(0, 5)
+	if (level.between?(0, 5))
+	  # Ok, it's a valid level.
+	  # Let's make sure we're not setting something we already have.
+	  if (level == @upgrade_level)
+		# No change in the value.
+		return
+	  end
+	  
 	  @upgrade_level = level
 	  changed # Set observeable state to "changed".
 	  notify_observers() # Notify errybody.
 	else
-	  # Do nothing.
-	  # TODO: Error.
+	  # Invalid level passed.
+	  raise ArgumentError, "Passed in level must be between 0 and 5."
 	end
   end
 end

@@ -28,19 +28,41 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	assert_equal(0, @cc.upgrade_level, "Decreasing a command center level did not work.")
   end
   
+  def test_level_can_be_set
+	@cc.set_level(3)
+	assert_equal(3, @cc.upgrade_level, "Setting a command center level did not work.")
+  end
+  
   def test_level_cannot_be_increased_above_five
-	@cc.increase_level # 1
-	@cc.increase_level # 2
-	@cc.increase_level # 3
-	@cc.increase_level # 4
-	@cc.increase_level # 5
-	@cc.increase_level # 6!
+	@cc.set_level(5)
+	
+	# Attempt to increase to 6.
+	@cc.increase_level
 	assert_equal(5, @cc.upgrade_level, "Increasing upgrade level 6 times does not max out at level 5.")
   end
   
   def test_level_cannot_be_decreased_below_zero
 	@cc.decrease_level
 	assert_equal(0, @cc.upgrade_level, "Decreasing the upgrade level from zero does not stop at zero.")
+  end
+  
+  def test_level_cannot_be_set_below_zero
+	# Make sure the class raises an argument error.
+	assert_raise ArgumentError do
+	  @cc.set_level(-8)
+	end
+	
+	# Make sure the value didn't change.
+	assert_equal(0, @cc.upgrade_level, "Level should not be able to be set below zero.")
+  end
+  
+  def test_level_cannot_be_set_above_five
+	# Make sure the class raises an argument error.
+	assert_raise ArgumentError do
+	  @cc.set_level(8)
+	end
+	
+	assert_equal(0, @cc.upgrade_level, "Level should not be able to be set above five.")
   end
   
   def test_powergrid_provided_scales_with_level
@@ -115,6 +137,10 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	assert_equal("Command Center", @cc.name)
   end
   
+  # 
+  # "Observable" tests
+  # 
+  
   def test_command_center_is_observable
 	assert(@cc.is_a?(Observable), "CC did not include Observable.")
   end
@@ -133,16 +159,56 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	@cc.delete_observer(self)
   end
   
-  def test_command_center_notifies_observers_on_level_decrease
-	# Have to increase before we decrease.
-	@cc.increase_level
-	assert_equal(false, @was_notified_of_change, "You're observing @cc before you should be. Bad tester.")
+  def test_command_center_does_not_notify_observers_if_level_increase_fails
+	@cc.set_level(5)
 	
-	# Start watching @cc. If we do it before this we get false positives.
+	# Start watching @cc.
+	@cc.add_observer(self)
+	
+	@cc.increase_level
+	assert_equal(false, @was_notified_of_change, "CC called notify_observers when its state did not change.")
+	
+	@cc.delete_observer(self)
+  end
+  
+  def test_command_center_notifies_observers_on_level_decrease
+	# Have to be at an above-zero level to decrease properly.
+	@cc.set_level(3)
+	
+	# Start watching @cc.
 	@cc.add_observer(self)
 	
 	@cc.decrease_level
 	assert(@was_notified_of_change, "CC did not call notify_observers or its state did not change.")
+	
+	@cc.delete_observer(self)
+  end
+  
+  def test_command_center_does_not_notify_observers_if_level_decrease_fails
+	@cc.add_observer(self)
+	
+	@cc.decrease_level
+	assert_equal(false, @was_notified_of_change, "CC called notify_observers when its state did not change.")
+	
+	@cc.delete_observer(self)
+  end
+  
+  def test_command_center_notifies_observers_on_level_set
+	@cc.add_observer(self)
+	
+	@cc.set_level(3)
+	assert(@was_notified_of_change, "CC did not call notify_observers or its state did not change.")
+	
+	@cc.delete_observer(self)
+  end
+  
+  def test_command_center_does_not_notify_observers_if_level_set_fails
+	@cc.set_level(3)
+	
+	@cc.add_observer(self)
+	
+	@cc.set_level(3)
+	assert_equal(false, @was_notified_of_change, "CC called notify_observers when its state did not change.")
 	
 	@cc.delete_observer(self)
   end
