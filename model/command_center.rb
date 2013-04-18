@@ -77,7 +77,7 @@ class CommandCenter < PlanetaryBuilding
 	  @upgrade_level += 1
 	  
 	  changed # Set observeable state to "changed".
-	  notify_observers(@upgrade_level) # Notify errybody.
+	  notify_observers() # Notify errybody.
 	end
   end
   
@@ -87,7 +87,7 @@ class CommandCenter < PlanetaryBuilding
 	else
 	  @upgrade_level -= 1
 	  changed # Set observeable state to "changed".
-	  notify_observers(@upgrade_level) # Notify errybody.
+	  notify_observers() # Notify errybody.
 	end
   end
   
@@ -95,7 +95,7 @@ class CommandCenter < PlanetaryBuilding
 	if level.between?(0, 5)
 	  @upgrade_level = level
 	  changed # Set observeable state to "changed".
-	  notify_observers(@upgrade_level) # Notify errybody.
+	  notify_observers() # Notify errybody.
 	else
 	  # Do nothing.
 	  # TODO: Error.
