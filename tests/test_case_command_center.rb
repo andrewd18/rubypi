@@ -58,7 +58,15 @@ class TestCaseCommandCenter < Test::Unit::TestCase
   def test_level_cannot_be_set_below_zero
 	# Make sure the class raises an argument error.
 	assert_raise ArgumentError do
-	  @building.set_level(-8)
+	  @building.set_level(-1)
+	end
+	
+	assert_raise ArgumentError do
+	  @building.set_level(-12)
+	end
+	
+	assert_raise ArgumentError do
+	  @building.set_level(-1236423254)
 	end
 	
 	# Make sure the value didn't change.
@@ -68,7 +76,15 @@ class TestCaseCommandCenter < Test::Unit::TestCase
   def test_level_cannot_be_set_above_five
 	# Make sure the class raises an argument error.
 	assert_raise ArgumentError do
-	  @building.set_level(8)
+	  @building.set_level(6)
+	end
+	
+	assert_raise ArgumentError do
+	  @building.set_level(12)
+	end
+	
+	assert_raise ArgumentError do
+	  @building.set_level(1236423254)
 	end
 	
 	assert_equal(0, @building.upgrade_level, "Level should not be able to be set above five.")
