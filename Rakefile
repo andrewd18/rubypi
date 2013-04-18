@@ -1,7 +1,30 @@
+# Get rubygems.
 require 'rubygems'
+
+# Get bundler.
 require 'bundler'
 Bundler.require :development
 
+#
+# UNIT TEST TASKS
+#
+
+# Load unit test framework. Error if it's not there.
+gem 'test-unit'
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.libs << "tests"
+  t.test_files = FileList['tests/test_suite*.rb']
+end
+
+
+#
+# RELEASE TASKS
+#
+
+
+# Get releasy.
 require 'releasy'
 
 Releasy::Project.new do
