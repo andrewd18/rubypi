@@ -1,7 +1,4 @@
-
 require 'gtk3'
-require_relative '../model/extractor_head.rb'
-
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditExtractorWidget < Gtk::Box
@@ -59,7 +56,7 @@ class EditExtractorWidget < Gtk::Box
 	num_heads_int = @number_of_heads_spin_button.value.to_i
 	
 	num_heads_int.times do
-	  @extractor_model.add_extractor_head(ExtractorHead.new)
+	  @extractor_model.add_extractor_head
 	end
 	
 	# Start observing again.

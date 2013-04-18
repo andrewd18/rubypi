@@ -142,14 +142,13 @@ class Planet
   end
   
   def abandon
-	@buildings.clear
+	@buildings.each do |building|
+	  self.remove_building(building)
+	end
 	
 	self.type = "Uncolonized"
 	self.name = nil
 	self.alias = nil
-	
-	# Update values.
-	total_values_from_buildings
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".

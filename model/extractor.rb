@@ -1,4 +1,5 @@
 require_relative 'planetary_building.rb'
+require_relative 'extractor_head.rb'
 
 class Extractor < PlanetaryBuilding
   
@@ -26,12 +27,13 @@ class Extractor < PlanetaryBuilding
 	return "Extractor"
   end
   
-  def add_extractor_head(head)
+  def add_extractor_head
 	if @extractor_heads.count == 10
 	  # TODO
 	  # Error and shit.
 	else
-	  @extractor_heads << head
+	  @extractor_heads << ExtractorHead.new
+	  
 	  changed
 	  notify_observers()
 	end
@@ -39,9 +41,7 @@ class Extractor < PlanetaryBuilding
   end
   
   def remove_extractor_head(head)
-	# TODO
-	# Lean on Array.remove?
-	#
+	# Lean on array.remove.
 	@extractor_heads.remove(head)
 	
 	changed
