@@ -142,7 +142,7 @@ class TestCaseCommandCenter < Test::Unit::TestCase
   # 
   
   def test_command_center_is_observable
-	assert(@cc.is_a?(Observable), "CC did not include Observable.")
+	assert_true(@cc.is_a?(Observable), "CC did not include Observable.")
   end
   
   # Update method for testing observer.
@@ -154,7 +154,7 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	@cc.add_observer(self)
 	
 	@cc.increase_level
-	assert(@was_notified_of_change, "CC did not call notify_observers or its state did not change.")
+	assert_true(@was_notified_of_change, "CC did not call notify_observers or its state did not change.")
 	
 	@cc.delete_observer(self)
   end
@@ -166,7 +166,7 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	@cc.add_observer(self)
 	
 	@cc.increase_level
-	assert_equal(false, @was_notified_of_change, "CC called notify_observers when its state did not change.")
+	assert_false(@was_notified_of_change, "CC called notify_observers when its state did not change.")
 	
 	@cc.delete_observer(self)
   end
@@ -179,7 +179,7 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	@cc.add_observer(self)
 	
 	@cc.decrease_level
-	assert(@was_notified_of_change, "CC did not call notify_observers or its state did not change.")
+	assert_true(@was_notified_of_change, "CC did not call notify_observers or its state did not change.")
 	
 	@cc.delete_observer(self)
   end
@@ -188,7 +188,7 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	@cc.add_observer(self)
 	
 	@cc.decrease_level
-	assert_equal(false, @was_notified_of_change, "CC called notify_observers when its state did not change.")
+	assert_false(@was_notified_of_change, "CC called notify_observers when its state did not change.")
 	
 	@cc.delete_observer(self)
   end
@@ -197,7 +197,7 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	@cc.add_observer(self)
 	
 	@cc.set_level(3)
-	assert(@was_notified_of_change, "CC did not call notify_observers or its state did not change.")
+	assert_true(@was_notified_of_change, "CC did not call notify_observers or its state did not change.")
 	
 	@cc.delete_observer(self)
   end
@@ -208,7 +208,7 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	@cc.add_observer(self)
 	
 	@cc.set_level(3)
-	assert_equal(false, @was_notified_of_change, "CC called notify_observers when its state did not change.")
+	assert_false(@was_notified_of_change, "CC called notify_observers when its state did not change.")
 	
 	@cc.delete_observer(self)
   end
