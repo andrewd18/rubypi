@@ -16,9 +16,13 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	assert_equal(0, @cc.upgrade_level, "Default command center level is not zero.")
   end
   
-  def test_level_can_be_increased_and_decreased
+  def test_level_can_be_increased
 	@cc.increase_level
 	assert_equal(1, @cc.upgrade_level, "Increasing a command center level did not work.")
+  end
+  
+  def test_level_can_be_decreased
+	@cc.increase_level # 1
 	
 	@cc.decrease_level
 	assert_equal(0, @cc.upgrade_level, "Decreasing a command center level did not work.")
@@ -77,6 +81,38 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	
 	@cc.increase_level # 5
 	assert_equal(25415, @cc.cpu_provided, "Level 5 CC cpu is not accurate.")
+  end
+  
+  def test_powergrid_usage_value
+	assert_equal(0, @cc.powergrid_usage)
+  end
+  
+  def test_cpu_usage_value
+	assert_equal(0, @cc.cpu_usage)
+  end
+  
+  def test_isk_cost_scales_with_level
+	# CC Level 0
+	assert_equal(90000.00, @cc.isk_cost, "Level 0 CC isk cost is not accurate.")
+	
+	@cc.increase_level # 1
+	assert_equal(670000.00, @cc.isk_cost, "Level 1 CC isk cost is not accurate.")
+	
+	@cc.increase_level # 2
+	assert_equal(1600000.00, @cc.isk_cost, "Level 2 CC isk cost is not accurate.")
+	
+	@cc.increase_level # 3
+	assert_equal(2800000.00, @cc.isk_cost, "Level 3 CC isk cost is not accurate.")
+	
+	@cc.increase_level # 4
+	assert_equal(4300000.00, @cc.isk_cost, "Level 4 CC isk cost is not accurate.")
+	
+	@cc.increase_level # 5
+	assert_equal(6400000, @cc.isk_cost, "Level 5 CC isk cost is not accurate.")
+  end
+  
+  def test_name
+	assert_equal("Command Center", @cc.name)
   end
   
   def test_command_center_is_observable
