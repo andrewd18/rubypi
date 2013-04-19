@@ -22,16 +22,16 @@ class Product
 	return @@product_instances
   end
   
-  def self.find_product_by_name(searched_name)
+  def self.find_by_name(searched_name)
 	@@product_instances.find {|instance| instance.name == searched_name}
   end
   
-  def self.find_products_by_p_level(searched_p_level)
+  def self.find_by_p_level(searched_p_level)
 	@@product_instances.select {|instance| instance.p_level == searched_p_level}
   end
   
   def self.find_or_create(name, p_level)
-	product_searched_for = self.find_product_by_name(name)
+	product_searched_for = self.find_by_name(name)
 	
 	if (product_searched_for == nil)
 	  # Doesn't exist yet. Create and return a new one.
@@ -65,7 +65,7 @@ class Product
   end
 
   def initialize(name, p_level)
-	existing_product_with_same_name = self.class.find_product_by_name(name)
+	existing_product_with_same_name = self.class.find_by_name(name)
 	raise ArgumentError, "A product with the name \"#{name}\" already exists." unless existing_product_with_same_name.nil?
 	
 	# Ok it's a valid name.
