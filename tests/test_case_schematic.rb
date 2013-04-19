@@ -6,15 +6,15 @@ require_relative "../model/product.rb"
 class TestCaseSchematic < Test::Unit::TestCase
   # Run once.
   def self.startup
-	@@snip = Product.new("Snip", 0)
-	@@snail = Product.new("Snail", 0)
-	@@puppy_dog_tail = Product.new("Puppy Dog Tail", 0)
-	@@boy = Product.new("Boy", 1)
+	@@snip = Product.find_or_create("Snip", 0)
+	@@snail = Product.find_or_create("Snail", 0)
+	@@puppy_dog_tail = Product.find_or_create("Puppy Dog Tail", 0)
+	@@boy = Product.find_or_create("Boy", 1)
 	
-	@@sugar = Product.new("Sugar", 0)
-	@@spice = Product.new("Spice", 0)
-	@@everything_nice = Product.new("Everything Nice", 0)
-	@@girl = Product.new("Girl", 1)
+	@@sugar = Product.find_or_create("Sugar", 0)
+	@@spice = Product.find_or_create("Spice", 0)
+	@@everything_nice = Product.find_or_create("Everything Nice", 0)
+	@@girl = Product.find_or_create("Girl", 1)
 	
 	@@boy_schematic = Schematic.new(@@boy, 1, {@@snip => 100, @@snail => 100, @@puppy_dog_tail => 100})
 	@@girl_schematic = Schematic.new(@@girl, 1, {@@sugar => 100, @@spice => 100, @@everything_nice => 100})
