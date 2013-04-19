@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Product
   attr_reader :name
   attr_reader :p_level
@@ -40,149 +42,28 @@ class Product
 	end
   end
   
-  def self.seed_all_products
-	self.seed_p_zero_products
-	self.seed_p_one_products
-	self.seed_p_two_products
-	self.seed_p_three_products
-	self.seed_p_four_products
-	
-	return true
-  end
-  
-  def self.seed_p_zero_products
-	# P0 Products.
-	p_zero_products = ["Aqueous Liquids",
-					   "Autotrophs",
-					   "Base Metals",
-					   "Carbon Compounds",
-					   "Complex Organisms",
-					   "Felsic Magma",
-					   "Heavy Metals",
-					   "Ionic Solutions",
-					   "Microorganisms",
-					   "Noble Gas",
-					   "Noble Metals",
-					   "Non-CS Crystals",
-					   "Planktic Colonies",
-					   "Reactive Gas",
-					   "Suspended Plasma"]
+  def self.save_to_yaml
+	abs_filepath = File.expand_path("Products.yml", __FILE__)
+	yaml_file = File.open(abs_filepath, "w")
 
-	p_zero_products.each do |product_name|
-	  Product.new(product_name, 0)
-	end
-	
-	return true
-  end
-  
-  def self.seed_p_one_products
-	# P1 Products
-	p_one_products = ["Bacteria",
-					  "Biofuels",
-					  "Biomass",
-					  "Chiral Structures",
-					  "Electrolytes",
-					  "Industrial Fibers",
-					  "Oxidizing Compound",
-					  "Oxygen",
-					  "Plasmoids",
-					  "Precious Metals",
-					  "Proteins",
-					  "Reactive Metals",
-					  "Silicon",
-					  "Toxic Metals",
-					  "Water"]
+	yaml_file.write(YAML::dump(@@product_instances))
 
-	p_one_products.each do |product_name|
-	  Product.new(product_name, 1)
-	end
+	yaml_file.close
 	
 	return true
   end
   
-  def self.seed_p_two_products
-	# P2 Products
-	p_two_products = ["Biocells",
-					  "Construction Blocks",
-					  "Consumer Electronics",
-					  "Coolant",
-					  "Enriched Uranium",
-					  "Fertilizer",
-					  "Genetically Enhanced Livestock",
-					  "Livestock",
-					  "Mechanical Parts",
-					  "Microfiber Shielding",
-					  "Miniature Electronics",
-					  "Nanites",
-					  "Oxides",
-					  "Polyaramids",
-					  "Polytextiles",
-					  "Rocket Fuel",
-					  "Silicate Glass",
-					  "Superconductors",
-					  "Supertensile Plastics",
-					  "Synthetic Oil",
-					  "Test Cultures",
-					  "Transmitter",
-					  "Viral Agent",
-					  "Water-Cooled CPU"]
+  def self.load_from_yaml
+	abs_filepath = File.expand_path("Products.yml", __FILE__)
+	yaml_file = File.open(abs_filepath, "r")
 
-	p_two_products.each do |product_name|
-	  Product.new(product_name, 2)
-	end
-	
-	return true
-  end
-  
-  def self.seed_p_three_products
-	# P3 Products
-	p_three_products = ["Biotech Research Reports",
-						"Camera Drones",
-						"Condensates",
-						"Cryoprotectant Solution",
-						"Data Chips",
-						"Gel-Matrix Biopaste",
-						"Guidance Systems",
-						"Hazmat Detection Systems",
-						"Hermetic Membranes",
-						"High-Tech Transmitters",
-						"Industrial Explosives",
-						"Neocoms",
-						"Nuclear Reactors",
-						"Planetary Vehicles",
-						"Robotics",
-						"Smartfab Units",
-						"Supercomputers",
-						"Synthetic Synapses",
-						"Transcranial Microcontrollers",
-						"Ukomi Superconductors",
-						"Vaccines"]
+	self.instances = YAML::load(yaml_file)
 
-	p_three_products.each do |product_name|
-	  Product.new(product_name, 3)
-	end
+	yaml_file.close
 	
-	return true
+	return @@product_instances
   end
-  
-  def self.seed_p_four_products
-	# P4 Products
-	p_four_products = ["Broadcast Node",
-					  "Integrity Response Drones",
-					  "Nano-Factory",
-					  "Organic Mortar Applicators",
-					  "Recursive Computing Module",
-					  "Self-Harmonizing Power Core",
-					  "Sterile Conduits",
-					  "Wetware Mainframe"]
 
-	p_four_products.each do |product_name|
-	  Product.new(product_name, 4)
-	end
-	
-	return true
-  end
-  
   def initialize(name, p_level)
 	existing_product_with_same_name = self.class.find_product_by_name(name)
 	raise ArgumentError, "A product with the name \"#{name}\" already exists." unless existing_product_with_same_name.nil?

@@ -1,0 +1,250 @@
+---
+- !ruby/object:Product
+  name: Aqueous Liquids
+  p_level: 0
+- !ruby/object:Product
+  name: Autotrophs
+  p_level: 0
+- !ruby/object:Product
+  name: Base Metals
+  p_level: 0
+- !ruby/object:Product
+  name: Carbon Compounds
+  p_level: 0
+- !ruby/object:Product
+  name: Complex Organisms
+  p_level: 0
+- !ruby/object:Product
+  name: Felsic Magma
+  p_level: 0
+- !ruby/object:Product
+  name: Heavy Metals
+  p_level: 0
+- !ruby/object:Product
+  name: Ionic Solutions
+  p_level: 0
+- !ruby/object:Product
+  name: Microorganisms
+  p_level: 0
+- !ruby/object:Product
+  name: Noble Gas
+  p_level: 0
+- !ruby/object:Product
+  name: Noble Metals
+  p_level: 0
+- !ruby/object:Product
+  name: Non-CS Crystals
+  p_level: 0
+- !ruby/object:Product
+  name: Planktic Colonies
+  p_level: 0
+- !ruby/object:Product
+  name: Reactive Gas
+  p_level: 0
+- !ruby/object:Product
+  name: Suspended Plasma
+  p_level: 0
+- !ruby/object:Product
+  name: Bacteria
+  p_level: 1
+- !ruby/object:Product
+  name: Biofuels
+  p_level: 1
+- !ruby/object:Product
+  name: Biomass
+  p_level: 1
+- !ruby/object:Product
+  name: Chiral Structures
+  p_level: 1
+- !ruby/object:Product
+  name: Electrolytes
+  p_level: 1
+- !ruby/object:Product
+  name: Industrial Fibers
+  p_level: 1
+- !ruby/object:Product
+  name: Oxidizing Compound
+  p_level: 1
+- !ruby/object:Product
+  name: Oxygen
+  p_level: 1
+- !ruby/object:Product
+  name: Plasmoids
+  p_level: 1
+- !ruby/object:Product
+  name: Precious Metals
+  p_level: 1
+- !ruby/object:Product
+  name: Proteins
+  p_level: 1
+- !ruby/object:Product
+  name: Reactive Metals
+  p_level: 1
+- !ruby/object:Product
+  name: Silicon
+  p_level: 1
+- !ruby/object:Product
+  name: Toxic Metals
+  p_level: 1
+- !ruby/object:Product
+  name: Water
+  p_level: 1
+- !ruby/object:Product
+  name: Biocells
+  p_level: 2
+- !ruby/object:Product
+  name: Construction Blocks
+  p_level: 2
+- !ruby/object:Product
+  name: Consumer Electronics
+  p_level: 2
+- !ruby/object:Product
+  name: Coolant
+  p_level: 2
+- !ruby/object:Product
+  name: Enriched Uranium
+  p_level: 2
+- !ruby/object:Product
+  name: Fertilizer
+  p_level: 2
+- !ruby/object:Product
+  name: Genetically Enhanced Livestock
+  p_level: 2
+- !ruby/object:Product
+  name: Livestock
+  p_level: 2
+- !ruby/object:Product
+  name: Mechanical Parts
+  p_level: 2
+- !ruby/object:Product
+  name: Microfiber Shielding
+  p_level: 2
+- !ruby/object:Product
+  name: Miniature Electronics
+  p_level: 2
+- !ruby/object:Product
+  name: Nanites
+  p_level: 2
+- !ruby/object:Product
+  name: Oxides
+  p_level: 2
+- !ruby/object:Product
+  name: Polyaramids
+  p_level: 2
+- !ruby/object:Product
+  name: Polytextiles
+  p_level: 2
+- !ruby/object:Product
+  name: Rocket Fuel
+  p_level: 2
+- !ruby/object:Product
+  name: Silicate Glass
+  p_level: 2
+- !ruby/object:Product
+  name: Superconductors
+  p_level: 2
+- !ruby/object:Product
+  name: Supertensile Plastics
+  p_level: 2
+- !ruby/object:Product
+  name: Synthetic Oil
+  p_level: 2
+- !ruby/object:Product
+  name: Test Cultures
+  p_level: 2
+- !ruby/object:Product
+  name: Transmitter
+  p_level: 2
+- !ruby/object:Product
+  name: Viral Agent
+  p_level: 2
+- !ruby/object:Product
+  name: Water-Cooled CPU
+  p_level: 2
+- !ruby/object:Product
+  name: Biotech Research Reports
+  p_level: 3
+- !ruby/object:Product
+  name: Camera Drones
+  p_level: 3
+- !ruby/object:Product
+  name: Condensates
+  p_level: 3
+- !ruby/object:Product
+  name: Cryoprotectant Solution
+  p_level: 3
+- !ruby/object:Product
+  name: Data Chips
+  p_level: 3
+- !ruby/object:Product
+  name: Gel-Matrix Biopaste
+  p_level: 3
+- !ruby/object:Product
+  name: Guidance Systems
+  p_level: 3
+- !ruby/object:Product
+  name: Hazmat Detection Systems
+  p_level: 3
+- !ruby/object:Product
+  name: Hermetic Membranes
+  p_level: 3
+- !ruby/object:Product
+  name: High-Tech Transmitters
+  p_level: 3
+- !ruby/object:Product
+  name: Industrial Explosives
+  p_level: 3
+- !ruby/object:Product
+  name: Neocoms
+  p_level: 3
+- !ruby/object:Product
+  name: Nuclear Reactors
+  p_level: 3
+- !ruby/object:Product
+  name: Planetary Vehicles
+  p_level: 3
+- !ruby/object:Product
+  name: Robotics
+  p_level: 3
+- !ruby/object:Product
+  name: Smartfab Units
+  p_level: 3
+- !ruby/object:Product
+  name: Supercomputers
+  p_level: 3
+- !ruby/object:Product
+  name: Synthetic Synapses
+  p_level: 3
+- !ruby/object:Product
+  name: Transcranial Microcontrollers
+  p_level: 3
+- !ruby/object:Product
+  name: Ukomi Superconductors
+  p_level: 3
+- !ruby/object:Product
+  name: Vaccines
+  p_level: 3
+- !ruby/object:Product
+  name: Broadcast Node
+  p_level: 4
+- !ruby/object:Product
+  name: Integrity Response Drones
+  p_level: 4
+- !ruby/object:Product
+  name: Nano-Factory
+  p_level: 4
+- !ruby/object:Product
+  name: Organic Mortar Applicators
+  p_level: 4
+- !ruby/object:Product
+  name: Recursive Computing Module
+  p_level: 4
+- !ruby/object:Product
+  name: Self-Harmonizing Power Core
+  p_level: 4
+- !ruby/object:Product
+  name: Sterile Conduits
+  p_level: 4
+- !ruby/object:Product
+  name: Wetware Mainframe
+  p_level: 4
