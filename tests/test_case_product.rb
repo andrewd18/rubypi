@@ -5,10 +5,10 @@ require_relative "../model/product.rb"
 class TestCaseProduct < Test::Unit::TestCase
   # Run once.
   def self.startup
-	@@snip = Product.new("Snip", 0)
-	@@snail = Product.new("Snail", 0)
-	@@puppy_dog_tail = Product.new("Puppy Dog Tail", 0)
-	@@boy = Product.new("Boy", 1)
+	@@snip = Product.find_or_create("Snip", 0)
+	@@snail = Product.find_or_create("Snail", 0)
+	@@puppy_dog_tail = Product.find_or_create("Puppy Dog Tail", 0)
+	@@boy = Product.find_or_create("Boy", 1)
   end
   
   # Run once after all tests.
@@ -86,7 +86,7 @@ class TestCaseProduct < Test::Unit::TestCase
   end
   
   def test_can_search_for_products_by_name
-	found_snip_product = Product.find_product_by_name("Snip")
+	found_snip_product = Product.find_by_name("Snip")
 	
 	# Should return @@snip.
 	assert_equal(@@snip, found_snip_product)
@@ -94,7 +94,7 @@ class TestCaseProduct < Test::Unit::TestCase
   
   def test_can_search_for_products_by_p_level
 	# P0
-	list_of_p_zero_products = Product.find_products_by_p_level(0)
+	list_of_p_zero_products = Product.find_by_p_level(0)
 	
 	# Should have all the p_zero objects we created during self.setup.
 	assert_true(list_of_p_zero_products.include?(@@snip))
@@ -105,7 +105,7 @@ class TestCaseProduct < Test::Unit::TestCase
 	assert_equal(3, list_of_p_zero_products.count)
 	
 	# P1
-	list_of_p_one_products = Product.find_products_by_p_level(1)
+	list_of_p_one_products = Product.find_by_p_level(1)
 	
 	# Should have all the objects we created during self.setup.
 	assert_true(list_of_p_one_products.include?(@@boy))
