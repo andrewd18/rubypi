@@ -20,11 +20,11 @@ class Product
 	return @@product_instances
   end
   
-  def self.find_by_name(searched_name)
-	@@product_instances.select {|instance| instance.name == searched_name}
+  def self.find_product_by_name(searched_name)
+	@@product_instances.find {|instance| instance.name == searched_name}
   end
   
-  def self.find_by_p_level(searched_p_level)
+  def self.find_products_by_p_level(searched_p_level)
 	@@product_instances.select {|instance| instance.p_level == searched_p_level}
   end
   
@@ -172,10 +172,15 @@ class Product
   end
   
   def initialize(name, p_level)
-	array_of_instances_with_same_name = self.class.find_by_name(name)
-	raise "A product with the name \"#{name}\" already exists." unless array_of_instances_with_same_name.empty?
+	existing_product_with_same_name = self.class.find_product_by_name(name)
+	raise ArgumentError, "A product with the name \"#{name}\" already exists." unless existing_product_with_same_name.nil?
 	
+	# Ok it's a valid name.
 	@name = name
+	
+	raise ArgumentError, "Product p_level must be between 0 and 4." unless (p_level.between?(0, 4))
+	
+	# Ok, it's a valid level.
 	@p_level = p_level
 	
 	@@product_instances << self
