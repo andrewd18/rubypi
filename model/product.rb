@@ -28,6 +28,18 @@ class Product
 	@@product_instances.select {|instance| instance.p_level == searched_p_level}
   end
   
+  def self.find_or_create(name, p_level)
+	product_searched_for = self.find_product_by_name(name)
+	
+	if (product_searched_for == nil)
+	  # Doesn't exist yet. Create and return a new one.
+	  return self.new(name, p_level)
+	else
+	  # It already exists. Return it.
+	  return product_searched_for
+	end
+  end
+  
   def self.seed_all_products
 	self.seed_p_zero_products
 	self.seed_p_one_products
