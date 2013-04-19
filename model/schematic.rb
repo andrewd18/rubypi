@@ -3,8 +3,8 @@ require_relative 'product.rb'
 # A Schematic defines a series of build requirements for a given product.
 class Schematic
   
-  attr_accessor :output_product_name
-  attr_accessor :output_quantity
+  attr_reader :output_product
+  attr_reader :output_quantity
   
   @@schematic_instances = Array.new
   
@@ -12,11 +12,11 @@ class Schematic
 	return @@schematic_instances
   end
   
-  def self.find_by_name(searched_name)
-	@@schematic_instances.select {|instance| instance.name == searched_name}
+  def self.find_schematic_by_name(searched_name)
+	@@schematic_instances.find {|instance| instance.name == searched_name}
   end
   
-  def self.find_by_p_level(searched_p_level)
+  def self.find_schematics_by_p_level(searched_p_level)
 	@@schematic_instances.select {|instance| instance.p_level == searched_p_level}
   end
   
@@ -121,8 +121,8 @@ class Schematic
 	return true
   end
   
-  def initialize(output_product_name = nil, output_quantity = nil, inputs_hash = {})
-	@output_product_name = output_product_name
+  def initialize(output_product = nil, output_quantity = nil, inputs_hash = {})
+	@output_product = output_product
 	@output_quantity = output_quantity
 	@inputs_hash = inputs_hash
 	
@@ -132,25 +132,32 @@ class Schematic
   end
   
   def name
-	return @output_product_name
+	return @output_product.name
   end
   
   def p_level
-	product_instances = Product.find_by_name(@output_product_name)
-	
-	raise "More than 1 product found. Wut." unless (product_instances.size == 1)
-	
-	instance = product_instances.first
-	return instance.p_level
+	return @output_product.p_level
   end
   
   def add_input(product_name_to_quantity_hash)
-	raise ArgumentError, "Argument must be a hash of {\"product_name\" => quantity}." unless product_name_to_quantity_hash.is_a?(Hash)
+	raise ArgumentError, "Argument is not a Hash." unless product_name_to_quantity_hash.is_a?(Hash)
+	
+	product_name_to_quantity_hash.each_pair do |key, value|
+	  raise ArgumentError, "#{key} is not a Product." unless key.is_a?(Product)
+	  raise ArgumentError, "#{value} is not a Numeric." unless value.is_a?(Numeric)
+	  
+	  # Error if we already have this input.
+	  raise ArgumentError, "#{key} is already an input." if @inputs_hash.has_key?(key)
+	end
+	
+	# Input params are ok. Merge in.
 	@inputs_hash.merge!(product_name_to_quantity_hash)
+	
+	return @inputs_hash
   end
   
-  def remove_input(product_name)
-	@inputs_hash.delete(product_name)
+  def remove_input(product_instance)
+	@inputs_hash.delete(product_instance)
   end
   
   def inputs
