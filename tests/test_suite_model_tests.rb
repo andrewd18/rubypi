@@ -10,3 +10,4 @@ require_relative './test_case_storage_facility.rb'
 
 # Products, Schematics, Etc.
 require_relative './test_case_product.rb'
+require_relative './test_case_schematic.rb'
