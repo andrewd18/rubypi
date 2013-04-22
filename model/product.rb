@@ -49,7 +49,7 @@ class Product
   end
   
   def self.save_to_yaml
-	abs_filepath = File.expand_path("Products.yml", __FILE__)
+	abs_filepath = File.expand_path("Products.yml", File.dirname(__FILE__))
 	yaml_file = File.open(abs_filepath, "w")
 
 	yaml_file.write(YAML::dump(@@product_instances))
@@ -60,10 +60,10 @@ class Product
   end
   
   def self.load_from_yaml
-	abs_filepath = File.expand_path("Products.yml", __FILE__)
+	abs_filepath = File.expand_path("Products.yml", File.dirname(__FILE__))
 	yaml_file = File.open(abs_filepath, "r")
 
-	self.instances = YAML::load(yaml_file)
+	@@product_instances = YAML::load(yaml_file)
 
 	yaml_file.close
 	
