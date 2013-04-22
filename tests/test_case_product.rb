@@ -5,10 +5,10 @@ require_relative "../model/product.rb"
 class TestCaseProduct < Test::Unit::TestCase
   # Run once.
   def self.startup
-	@@snip = Product.find_or_create("Snip", 0)
-	@@snail = Product.find_or_create("Snail", 0)
-	@@puppy_dog_tail = Product.find_or_create("Puppy Dog Tail", 0)
-	@@boy = Product.find_or_create("Boy", 1)
+	@@snip = Product.new("Snip", 0)
+	@@snail = Product.new("Snail", 0)
+	@@puppy_dog_tail = Product.new("Puppy Dog Tail", 0)
+	@@boy = Product.new("Boy", 1)
   end
   
   # Run once after all tests.
@@ -73,16 +73,64 @@ class TestCaseProduct < Test::Unit::TestCase
   end
   
   def test_creating_a_product_only_adds_one_product_to_instances
-	list_of_product_instances = Product.all
-	
 	# Should have all the objects we created during self.setup.
-	assert_true(list_of_product_instances.include?(@@snip))
-	assert_true(list_of_product_instances.include?(@@snail))
-	assert_true(list_of_product_instances.include?(@@puppy_dog_tail))
-	assert_true(list_of_product_instances.include?(@@boy))
+	assert_true(Product.all.include?(@@snip))
+	assert_true(Product.all.include?(@@snail))
+	assert_true(Product.all.include?(@@puppy_dog_tail))
+	assert_true(Product.all.include?(@@boy))
 	
 	# Should have no more than the objects we created during self.setup.
-	assert_equal(4, list_of_product_instances.count)
+	assert_equal(4, Product.all.count)
+  end
+  
+  def test_can_delete_products
+	# At this point we should have no more than the objects we created during self.setup.
+	assert_equal(4, Product.all.count)
+	
+	# Create the product.
+	sneakers = Product.new("Sneakers", 0)
+	
+	# At this point we should have one extra product.
+	assert_equal(5, Product.all.count)
+	assert_true(Product.all.include?(sneakers))
+	
+	# Delete the product.
+	Product.delete(sneakers)
+	
+	assert_false(Product.all.include?(sneakers))
+	assert_equal(4, Product.all.count)
+  end
+  
+  def test_find_or_create
+	# If a product exists, make sure we find it.
+	assert_equal(@@snip, Product.find_or_create("Snip", 0))
+	assert_equal(@@snail, Product.find_or_create("Snail", 0))
+	assert_equal(@@puppy_dog_tail, Product.find_or_create("Puppy Dog Tail", 0))
+	
+	# At this point we should have no more than the objects we created during self.setup.
+	assert_equal(4, Product.all.count)
+	
+	# If a product doesn't exist, make sure we create it.
+	sneakers = Product.find_or_create("Sneakers", 0)
+	
+	assert_true(sneakers.is_a?(Product))
+	assert_equal("Sneakers", sneakers.name)
+	assert_equal(0, sneakers.p_level)
+	
+	# At this point we should one extra product.
+	assert_equal(5, Product.all.count)
+	assert_true(Product.all.include?(sneakers))
+	
+	# Make sure we can find the new product.
+	found_sneakers = Product.find_or_create("Sneakers", 0)
+	assert_equal(sneakers, found_sneakers)
+	
+	# Clean up after ourselves.
+	Product.delete(sneakers)
+	
+	# At this point we should have no more than the objects we created during self.setup.
+	assert_equal(4, Product.all.count)
+	assert_false(Product.all.include?(sneakers))
   end
   
   def test_can_search_for_products_by_name

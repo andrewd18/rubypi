@@ -42,6 +42,12 @@ class Product
 	end
   end
   
+  def self.delete(product_instance)
+	raise ArgumentError, "Not a Product." unless product_instance.is_a?(Product)
+	
+	return @@product_instances.delete(product_instance)
+  end
+  
   def self.save_to_yaml
 	abs_filepath = File.expand_path("Products.yml", __FILE__)
 	yaml_file = File.open(abs_filepath, "w")
