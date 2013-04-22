@@ -69,7 +69,18 @@ class TestCaseSchematic < Test::Unit::TestCase
   end
   
   def test_can_add_input
+	# Make sure it is what we expect.
+	boy_inputs_hash = {@@snip => 100, @@snail => 100, @@puppy_dog_tail => 100}
+	assert_equal(@@boy_schematic.inputs, boy_inputs_hash)
 	
+	@@boy_schematic.add_input({@@everything_nice => 100})
+	
+	boy_inputs_hash_with_everything_nice = {@@snip => 100, @@snail => 100, @@puppy_dog_tail => 100, @@everything_nice => 100}
+	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_with_everything_nice)
+	
+	# Reset for other parallelized tests.
+	@@boy_schematic.remove_input(@@everything_nice)
+	assert_equal(@@boy_schematic.inputs, boy_inputs_hash)
   end
   
   def test_error_if_input_is_wrong_format
