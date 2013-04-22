@@ -33,14 +33,39 @@ class TestCaseSchematic < Test::Unit::TestCase
   end
   
   def test_creating_a_schematic_only_adds_one_schematic_to_instances
-	list_of_schematic_instances = Schematic.all
-	
 	# Should have all the objects we created during self.setup.
-	assert_true(list_of_schematic_instances.include?(@@boy_schematic))
-	assert_true(list_of_schematic_instances.include?(@@girl_schematic))
+	assert_true(Schematic.all.include?(@@boy_schematic))
+	assert_true(Schematic.all.include?(@@girl_schematic))
 	
 	# Should have no more than the objects we created during self.setup.
-	assert_equal(2, list_of_schematic_instances.count)
+	assert_equal(2, Schematic.all.count)
+  end
+  
+  def test_can_delete_schematic
+	# At this point we should have no more than the objects we created during self.setup.
+	assert_equal(2, Schematic.all.count)
+	
+	# Create the products for our new schematic.
+	stick = Product.find_or_create("Stick", 0)
+	stone = Product.find_or_create("Stone", 0)
+	bonebreaker = Product.find_or_create("Bonebreaker", 1)
+	
+	bonebreaker_schematic = Schematic.new(bonebreaker, 1, {stick => 100, stone => 100})
+	
+	# At this point we should have one extra product.
+	assert_equal(3, Schematic.all.count)
+	assert_true(Schematic.all.include?(bonebreaker_schematic))
+	
+	# Delete the product.
+	Schematic.delete(bonebreaker_schematic)
+	
+	assert_false(Schematic.all.include?(bonebreaker_schematic))
+	assert_equal(2, Schematic.all.count)
+	
+	# Clean up our temporary products.
+	Product.delete(stick)
+	Product.delete(stone)
+	Product.delete(bonebreaker)
   end
   
   def test_can_search_for_schematics_by_name

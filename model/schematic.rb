@@ -20,6 +20,12 @@ class Schematic
 	@@schematic_instances.select {|instance| instance.p_level == searched_p_level}
   end
   
+  def self.delete(schematic_instance)
+	raise ArgumentError, "Not a Schematic." unless schematic_instance.is_a?(Schematic)
+	
+	return @@schematic_instances.delete(schematic_instance)
+  end
+  
   def self.seed_all_schematics
 	self.seed_p_one_schematics
 	self.seed_p_two_schematics
