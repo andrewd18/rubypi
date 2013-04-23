@@ -1,3 +1,5 @@
+require 'yaml'
+
 require_relative 'product.rb'
 
 # A Schematic defines a series of build requirements for a given product.
@@ -144,6 +146,10 @@ class Schematic
   def p_level
 	product_instance = Product.find_by_name(@output_product_name)
 	return product_instance.p_level
+  end
+  
+  def output_product
+	return Product.find_by_name(@output_product_name)
   end
   
   def add_input(product_name_to_quantity_hash)
