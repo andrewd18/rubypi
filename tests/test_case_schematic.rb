@@ -89,23 +89,27 @@ class TestCaseSchematic < Test::Unit::TestCase
 	assert_equal(2, schematics_that_produce_p_ones.count)
   end
   
+  def test_output_product_refers_to_product_singleton
+	assert_equal(@@boy.object_id, @@boy_schematic.output_product.object_id)
+  end
+  
   def test_p_level_matches_output_product_p_level
-	assert_equal(@@boy_schematic.p_level, @@boy.p_level)
+	assert_equal(@@boy.p_level, @@boy_schematic.p_level)
   end
   
   def test_can_add_input
 	# Make sure it is what we expect.
 	boy_inputs_hash = {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100}
-	assert_equal(@@boy_schematic.inputs, boy_inputs_hash)
+	assert_equal(boy_inputs_hash, @@boy_schematic.inputs)
 	
 	@@boy_schematic.add_input({"Everything Nice" => 100})
 	
 	boy_inputs_hash_with_everything_nice = {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100, "Everything Nice" => 100}
-	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_with_everything_nice)
+	assert_equal(boy_inputs_hash_with_everything_nice, @@boy_schematic.inputs)
 	
 	# Reset for other parallelized tests.
 	@@boy_schematic.remove_input("Everything Nice")
-	assert_equal(@@boy_schematic.inputs, boy_inputs_hash)
+	assert_equal(boy_inputs_hash, @@boy_schematic.inputs)
   end
   
   def test_error_if_input_is_wrong_format
@@ -131,20 +135,20 @@ class TestCaseSchematic < Test::Unit::TestCase
 	
 	# Make sure inputs haven't changed.
 	boy_inputs_hash = {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100}
-	assert_equal(@@boy_schematic.inputs, boy_inputs_hash)
+	assert_equal(boy_inputs_hash, @@boy_schematic.inputs)
   end
   
   def test_can_remove_input
 	boy_inputs_hash_with_snip = {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100}
-	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_with_snip)
+	assert_equal(boy_inputs_hash_with_snip, @@boy_schematic.inputs)
 	
 	@@boy_schematic.remove_input("Snip")
 	
 	boy_inputs_hash_without_snip = {"Snail" => 100, "Puppy Dog Tail" => 100}
-	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_without_snip)
+	assert_equal(boy_inputs_hash_without_snip, @@boy_schematic.inputs)
 	
 	# Reset for other parallelized tests.
 	@@boy_schematic.add_input("Snip" => 100)
-	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_with_snip)
+	assert_equal(boy_inputs_hash_with_snip, @@boy_schematic.inputs)
   end
 end
