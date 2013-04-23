@@ -3,7 +3,7 @@ require_relative 'product.rb'
 # A Schematic defines a series of build requirements for a given product.
 class Schematic
   
-  attr_reader :output_product
+  attr_reader :output_product_name
   attr_reader :output_quantity
   
   @@schematic_instances = Array.new
@@ -12,11 +12,11 @@ class Schematic
 	return @@schematic_instances
   end
   
-  def self.find_schematic_by_name(searched_name)
+  def self.find_by_name(searched_name)
 	@@schematic_instances.find {|instance| instance.name == searched_name}
   end
   
-  def self.find_schematics_by_p_level(searched_p_level)
+  def self.find_by_p_level(searched_p_level)
 	@@schematic_instances.select {|instance| instance.p_level == searched_p_level}
   end
   
@@ -127,8 +127,8 @@ class Schematic
 	return true
   end
   
-  def initialize(output_product = nil, output_quantity = nil, inputs_hash = {})
-	@output_product = output_product
+  def initialize(output_product_name = nil, output_quantity = nil, inputs_hash = {})
+	@output_product_name = output_product_name
 	@output_quantity = output_quantity
 	@inputs_hash = inputs_hash
 	
@@ -138,18 +138,19 @@ class Schematic
   end
   
   def name
-	return @output_product.name
+	return @output_product_name
   end
   
   def p_level
-	return @output_product.p_level
+	product_instance = Product.find_by_name(@output_product_name)
+	return product_instance.p_level
   end
   
   def add_input(product_name_to_quantity_hash)
 	raise ArgumentError, "Argument is not a Hash." unless product_name_to_quantity_hash.is_a?(Hash)
 	
 	product_name_to_quantity_hash.each_pair do |key, value|
-	  raise ArgumentError, "#{key} is not a Product." unless key.is_a?(Product)
+	  raise ArgumentError, "#{key} is not a String." unless key.is_a?(String)
 	  raise ArgumentError, "#{value} is not a Numeric." unless value.is_a?(Numeric)
 	  
 	  # Error if we already have this input.
@@ -162,8 +163,8 @@ class Schematic
 	return @inputs_hash
   end
   
-  def remove_input(product_instance)
-	@inputs_hash.delete(product_instance)
+  def remove_input(product_name)
+	@inputs_hash.delete(product_name)
   end
   
   def inputs

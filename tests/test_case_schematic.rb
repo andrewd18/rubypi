@@ -16,8 +16,8 @@ class TestCaseSchematic < Test::Unit::TestCase
 	@@everything_nice = Product.find_or_create("Everything Nice", 0)
 	@@girl = Product.find_or_create("Girl", 1)
 	
-	@@boy_schematic = Schematic.new(@@boy, 1, {@@snip => 100, @@snail => 100, @@puppy_dog_tail => 100})
-	@@girl_schematic = Schematic.new(@@girl, 1, {@@sugar => 100, @@spice => 100, @@everything_nice => 100})
+	@@boy_schematic = Schematic.new("Boy", 1, {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100})
+	@@girl_schematic = Schematic.new("Girl", 1, {"Sugar" => 100, "Spice" => 100, "Everything Nice" => 100})
   end
   
   # Run once after all tests.
@@ -50,7 +50,7 @@ class TestCaseSchematic < Test::Unit::TestCase
 	stone = Product.find_or_create("Stone", 0)
 	bonebreaker = Product.find_or_create("Bonebreaker", 1)
 	
-	bonebreaker_schematic = Schematic.new(bonebreaker, 1, {stick => 100, stone => 100})
+	bonebreaker_schematic = Schematic.new("Bonebreaker", 1, {"Stick" => 100, "Stone" => 100})
 	
 	# At this point we should have one extra product.
 	assert_equal(3, Schematic.all.count)
@@ -69,8 +69,8 @@ class TestCaseSchematic < Test::Unit::TestCase
   end
   
   def test_can_search_for_schematics_by_name
-	found_boy_schematic = Schematic.find_schematic_by_name("Boy")
-	found_girl_schematic = Schematic.find_schematic_by_name("Girl")
+	found_boy_schematic = Schematic.find_by_name("Boy")
+	found_girl_schematic = Schematic.find_by_name("Girl")
 	
 	# Should return @@snip.
 	assert_equal(@@boy_schematic, found_boy_schematic)
@@ -79,7 +79,7 @@ class TestCaseSchematic < Test::Unit::TestCase
   
   def test_can_search_for_schematics_by_p_level
 	# P1
-	schematics_that_produce_p_ones = Schematic.find_schematics_by_p_level(1)
+	schematics_that_produce_p_ones = Schematic.find_by_p_level(1)
 	
 	# Should have all the objects we created during self.setup.
 	assert_true(schematics_that_produce_p_ones.include?(@@boy_schematic))
@@ -95,16 +95,16 @@ class TestCaseSchematic < Test::Unit::TestCase
   
   def test_can_add_input
 	# Make sure it is what we expect.
-	boy_inputs_hash = {@@snip => 100, @@snail => 100, @@puppy_dog_tail => 100}
+	boy_inputs_hash = {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100}
 	assert_equal(@@boy_schematic.inputs, boy_inputs_hash)
 	
-	@@boy_schematic.add_input({@@everything_nice => 100})
+	@@boy_schematic.add_input({"Everything Nice" => 100})
 	
-	boy_inputs_hash_with_everything_nice = {@@snip => 100, @@snail => 100, @@puppy_dog_tail => 100, @@everything_nice => 100}
+	boy_inputs_hash_with_everything_nice = {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100, "Everything Nice" => 100}
 	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_with_everything_nice)
 	
 	# Reset for other parallelized tests.
-	@@boy_schematic.remove_input(@@everything_nice)
+	@@boy_schematic.remove_input("Everything Nice")
 	assert_equal(@@boy_schematic.inputs, boy_inputs_hash)
   end
   
@@ -114,37 +114,37 @@ class TestCaseSchematic < Test::Unit::TestCase
 	  @@boy_schematic.add_input("faaaail")
 	end
 	
-	# Fail if key isn't a product.
+	# Fail if key isn't a string.
 	assert_raise ArgumentError do
-	  @@boy_schematic.add_input("faaaail" => 100)
+	  @@boy_schematic.add_input(1234 => 100)
 	end
 	
 	# Fail if value isn't a number.
 	assert_raise ArgumentError do
-	  @@boy_schematic.add_input(@@snip => "faaaail")
+	  @@boy_schematic.add_input("faaaail" => "faaaail")
 	end
 	
 	# Fail if input already exists.
 	assert_raise ArgumentError do
-	  @@boy_schematic.add_input(@@snip => 100)
+	  @@boy_schematic.add_input("Snip" => 100)
 	end
 	
 	# Make sure inputs haven't changed.
-	boy_inputs_hash = {@@snip => 100, @@snail => 100, @@puppy_dog_tail => 100}
+	boy_inputs_hash = {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100}
 	assert_equal(@@boy_schematic.inputs, boy_inputs_hash)
   end
   
   def test_can_remove_input
-	boy_inputs_hash_with_snip = {@@snip => 100, @@snail => 100, @@puppy_dog_tail => 100}
+	boy_inputs_hash_with_snip = {"Snip" => 100, "Snail" => 100, "Puppy Dog Tail" => 100}
 	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_with_snip)
 	
-	@@boy_schematic.remove_input(@@snip)
+	@@boy_schematic.remove_input("Snip")
 	
-	boy_inputs_hash_without_snip = {@@snail => 100, @@puppy_dog_tail => 100}
+	boy_inputs_hash_without_snip = {"Snail" => 100, "Puppy Dog Tail" => 100}
 	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_without_snip)
 	
 	# Reset for other parallelized tests.
-	@@boy_schematic.add_input(@@snip => 100)
+	@@boy_schematic.add_input("Snip" => 100)
 	assert_equal(@@boy_schematic.inputs, boy_inputs_hash_with_snip)
   end
 end
