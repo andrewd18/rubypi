@@ -141,7 +141,7 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
   # "Observable" tests
   # 
   
-  def test_basic_industrial_facility_is_observable
+  def test_facility_is_observable
 	assert_true(@building.is_a?(Observable), "Advanced Industrial Facility did not include Observable.")
   end
   
@@ -182,6 +182,13 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
 	# Should fail is name is not a valid Schematic.
 	assert_raise ArgumentError do
 	  @building.schematic_name = ("faaaaaaail")
+	end
+	assert_false(@was_notified_of_change, "Advanced Industrial Facility called notify_observers when its state did not change.")
+	
+	# Should fail if the p_level doesn't match.
+	# AKA Basic facilities can only build P1s, Advanced can build 2 and 3, etc.
+	assert_raise ArgumentError do
+	  @building.schematic_name = ("Outer Rim")
 	end
 	assert_false(@was_notified_of_change, "Advanced Industrial Facility called notify_observers when its state did not change.")
 	

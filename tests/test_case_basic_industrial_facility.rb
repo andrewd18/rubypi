@@ -120,7 +120,7 @@ class TestCaseBasicIndustrialFacility < Test::Unit::TestCase
   # "Observable" tests
   # 
   
-  def test_basic_industrial_facility_is_observable
+  def test_facility_is_observable
 	assert_true(@building.is_a?(Observable), "Basic Industrial Facility did not include Observable.")
   end
   
