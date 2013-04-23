@@ -28,28 +28,6 @@ class Schematic
 	return @@schematic_instances.delete(schematic_instance)
   end
   
-  def self.save_to_yaml
-	abs_filepath = File.expand_path("Schematics.yml", File.dirname(__FILE__))
-	yaml_file = File.open(abs_filepath, "w")
-
-	yaml_file.write(YAML::dump(@@schematic_instances))
-
-	yaml_file.close
-	
-	return true
-  end
-  
-  def self.load_from_yaml
-	abs_filepath = File.expand_path("Schematics.yml", File.dirname(__FILE__))
-	yaml_file = File.open(abs_filepath, "r")
-
-	@@schematic_instances = YAML::load(yaml_file)
-
-	yaml_file.close
-	
-	return @@schematic_instances
-  end
-  
   def self.seed_all_schematics
 	self.seed_p_one_schematics
 	self.seed_p_two_schematics

@@ -24,7 +24,7 @@ class RubyPI < Gtk::Window
 	# Load static products into memory.
 	products = Product.all
 	if (products.empty?)
-	  Product.load_from_yaml
+	  Product.seed_all_products
 	end
 	
 	# Load static schematics into memory.
