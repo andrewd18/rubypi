@@ -86,6 +86,12 @@ class TestCaseBasicIndustrialFacility < Test::Unit::TestCase
 	  @building.schematic_name = ("faaaaaaail")
 	end
 	
+	# Should fail if the p_level doesn't match.
+	# AKA Basic facilities can only build P1s, Advanced can build 2 and 3, etc.
+	assert_raise ArgumentError do
+	  @building.schematic_name = ("Bonebreaker Beatstick")
+	end
+	
 	# Make sure it wasn't set.
 	assert_equal(nil, @building.schematic_name)
   end

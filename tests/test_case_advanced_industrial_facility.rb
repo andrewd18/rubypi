@@ -102,9 +102,15 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
 	  @building.schematic_name = (1236423254)
 	end
 	
-	# Should fail is name is not a valid Schematic.
+	# Should fail if name is not a valid Schematic.
 	assert_raise ArgumentError do
 	  @building.schematic_name = ("faaaaaaail")
+	end
+	
+	# Should fail if the p_level doesn't match.
+	# AKA Basic facilities can only build P1s, Advanced can build 2 and 3, etc.
+	assert_raise ArgumentError do
+	  @building.schematic_name = ("Outer Rim")
 	end
 	
 	# Make sure it wasn't set.
