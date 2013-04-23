@@ -105,6 +105,11 @@ class TestCaseBasicIndustrialFacility < Test::Unit::TestCase
 	assert_equal(nil, @building.schematic)
   end
   
+  def test_schematic_refers_to_schematic_singleton
+	@building.schematic_name = "Beatstick"
+	assert_equal(@building.schematic.object_id, @@beatstick_schematic.object_id)
+  end
+  
   # 
   # "Observable" tests
   # 
