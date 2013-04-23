@@ -3,14 +3,13 @@ Ruby PI TODO:
 
 Core Features
 -------------
-* Add an About box with version info, contact methods, CCP disclaimer, etc.
+* Add CCP disclaimer, etc. to About box.
 * Add a Building Edit view for each building.
   - Allow user to level up a command center. Adjust cpu/pg appropriately.
-  - Allow user to assign schematics to industry facilities.
-* Allow user to add extractor heads to a specific extractor.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
 * Allow user to load and save PI configurations (XML? YAML? HAML?).
-* Add Commodities and associated storage.
+* Add storage.
+* Add links.
 
 User Interface Improvements
 ---------------------------
@@ -20,20 +19,18 @@ User Interface Improvements
 * Create SVGs/screenshots of individual building types.
 * Change the image associated with a building when it's shown.
 * Fix all the weird-looking views when the window gets resized.
+* User should be able to see extractor heads in the edit extractor window.
+* Add images for every product. Show them where appropriate.
 
 Code Cleanup
 ------------
 * Unify the stats boxes for planets.
+* Complete the model unit tests.
 
 Packaging & Release
 -------------------
 * Windows
-  - Automate Ocra script with .zip packaging for user download.
   - Research why the EXE is so huge.
-  - Test.
 * Mac
-  - ?
-* Create a script for Windows that will give me an EXE.
-* Research why the Windows EXE is so huge.
-* Package up .exe releases for user download (.zip?).
-* Test on multiple Windows boxen.
+  - Lure in some Mac beta testers. Cookies? Apple fritters?
+
