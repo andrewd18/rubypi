@@ -11,38 +11,89 @@ class AdvancedIndustrialFacility < PlanetaryBuilding
   
   BUILDS_P_LEVELS = [2, 3]
   
-  attr_reader :schematic
+  attr_reader :schematic_name
   
-  def initialize(schematic = nil)
+  def initialize(schematic_name = nil)
 	@powergrid_usage = POWERGRID_USAGE
 	@cpu_usage = CPU_USAGE
 	@powergrid_provided = POWERGRID_PROVIDED
 	@cpu_provided = CPU_PROVIDED
 	@isk_cost = ISK_COST
 	
-	@schematic = schematic
+	@schematic_name = schematic_name
 	
 	return self
   end
-  
-  def accepted_schematics
-	array_of_schematics = Array.new
+
+  def accepted_schematic_names
+	list_of_schematic_instances = Array.new
 	
 	BUILDS_P_LEVELS.each do |level|
-	  array_of_schematics.concat(Schematic.find_by_p_level(level))
+	  list_of_schematic_instances.concat(Schematic.find_by_p_level(level))
 	end
 	
-	return array_of_schematics
+	list_of_names = Array.new
+	
+	list_of_schematic_instances.each do |instance|
+	  list_of_names << instance.name
+	end
+	
+	return list_of_names
   end
   
-  def schematic=(new_schematic)
-	@schematic = new_schematic
+  def schematic_name=(new_schematic_name)
 	
-	# Tell my observers I've changed.
-	changed # Set observeable state to "changed".
-	notify_observers() # Notify errybody.
+	# Is it the same value?
+	if (new_schematic_name == @schematic_name)
+	  # Leave immediately but don't call our observers and don't error.
+	  return @schematic_name
+	  
+	  
+	# Is it nil?
+	elsif (new_schematic_name == nil)
+	  @schematic_name = nil
+	  
+	  # Notify our observers that we've changed.
+	  changed
+	  notify_observers
+	  
+	  return @schematic_name
 	
-	return @schematic
+	
+	# Okay, so it's not what we already have and it's not nil.
+	# Is it a String?
+	elsif (new_schematic_name.is_a?(String))
+	  schematic_instance = Schematic.find_by_name(new_schematic_name)
+	  
+	  # Check to see if this Schematic exists.
+	  if (schematic_instance == nil)
+		raise ArgumentError, "A Schematic for #{new_schematic_name} does not exist."
+	  end
+	  
+	  # Schematic exists. Check it for P-level.
+	  unless (BUILDS_P_LEVELS.include?(schematic_instance.p_level))
+		raise ArgumentError, "The #{new_schematic_name} Schematic is not in the P-level range of #{BUILDS_P_LEVELS}."
+	  end
+	  
+	  # Whew. Okay, set it.
+	  @schematic_name = new_schematic_name
+	  
+	  # Notify our observers that we've changed.
+	  changed
+	  notify_observers
+	  
+	  return @schematic_name
+	  
+	  
+	# Something else?
+	else
+	  # Well, I don't want it so go away.
+	  raise ArgumentError
+	end
+  end
+  
+  def schematic
+	return Schematic.find_by_name(@schematic_name)
   end
   
   def name
