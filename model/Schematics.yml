@@ -1,0 +1,408 @@
+---
+- !ruby/object:Schematic
+  output_product_name: Bacteria
+  output_quantity: 20
+  inputs_hash:
+    Microorganisms: 3000
+- !ruby/object:Schematic
+  output_product_name: Biofuels
+  output_quantity: 20
+  inputs_hash:
+    Carbon Compounds: 3000
+- !ruby/object:Schematic
+  output_product_name: Biomass
+  output_quantity: 20
+  inputs_hash:
+    Planktic Colonies: 3000
+- !ruby/object:Schematic
+  output_product_name: Chiral Structures
+  output_quantity: 20
+  inputs_hash:
+    Non-CS Crystals: 3000
+- !ruby/object:Schematic
+  output_product_name: Electrolytes
+  output_quantity: 20
+  inputs_hash:
+    Ionic Solutions: 3000
+- !ruby/object:Schematic
+  output_product_name: Industrial Fibers
+  output_quantity: 20
+  inputs_hash:
+    Autotrophs: 3000
+- !ruby/object:Schematic
+  output_product_name: Oxidizing Compound
+  output_quantity: 20
+  inputs_hash:
+    Reactive Gas: 3000
+- !ruby/object:Schematic
+  output_product_name: Oxygen
+  output_quantity: 20
+  inputs_hash:
+    Noble Gas: 3000
+- !ruby/object:Schematic
+  output_product_name: Plasmoids
+  output_quantity: 20
+  inputs_hash:
+    Suspended Plasma: 3000
+- !ruby/object:Schematic
+  output_product_name: Precious Metals
+  output_quantity: 20
+  inputs_hash:
+    Noble Metals: 3000
+- !ruby/object:Schematic
+  output_product_name: Proteins
+  output_quantity: 20
+  inputs_hash:
+    Complex Organisms: 3000
+- !ruby/object:Schematic
+  output_product_name: Reactive Metals
+  output_quantity: 20
+  inputs_hash:
+    Base Metals: 3000
+- !ruby/object:Schematic
+  output_product_name: Silicon
+  output_quantity: 20
+  inputs_hash:
+    Felsic Magma: 3000
+- !ruby/object:Schematic
+  output_product_name: Toxic Metals
+  output_quantity: 20
+  inputs_hash:
+    Heavy Metals: 3000
+- !ruby/object:Schematic
+  output_product_name: Water
+  output_quantity: 20
+  inputs_hash:
+    Aqueous Liquids: 3000
+- !ruby/object:Schematic
+  output_product_name: Biocells
+  output_quantity: 5
+  inputs_hash:
+    Biofuels: 40
+    Precious Metals: 40
+- !ruby/object:Schematic
+  output_product_name: Construction Blocks
+  output_quantity: 5
+  inputs_hash:
+    Reactive Metals: 40
+    Toxic Metals: 40
+- !ruby/object:Schematic
+  output_product_name: Consumer Electronics
+  output_quantity: 5
+  inputs_hash:
+    Toxic Metals: 40
+    Chiral Structures: 40
+- !ruby/object:Schematic
+  output_product_name: Coolant
+  output_quantity: 5
+  inputs_hash:
+    Electrolytes: 40
+    Water: 40
+- !ruby/object:Schematic
+  output_product_name: Enriched Uranium
+  output_quantity: 5
+  inputs_hash:
+    Precious Metals: 40
+    Toxic Metals: 40
+- !ruby/object:Schematic
+  output_product_name: Fertilizer
+  output_quantity: 5
+  inputs_hash:
+    Bacteria: 40
+    Proteins: 40
+- !ruby/object:Schematic
+  output_product_name: Genetically Enhanced Livestock
+  output_quantity: 5
+  inputs_hash:
+    Proteins: 40
+    Biomass: 40
+- !ruby/object:Schematic
+  output_product_name: Livestock
+  output_quantity: 5
+  inputs_hash:
+    Proteins: 40
+    Biofuels: 40
+- !ruby/object:Schematic
+  output_product_name: Mechanical Parts
+  output_quantity: 5
+  inputs_hash:
+    Reactive Metals: 40
+    Precious Metals: 40
+- !ruby/object:Schematic
+  output_product_name: Microfiber Shielding
+  output_quantity: 5
+  inputs_hash:
+    Industrial Fibers: 40
+    Silicon: 40
+- !ruby/object:Schematic
+  output_product_name: Miniature Electronics
+  output_quantity: 5
+  inputs_hash:
+    Chiral Structures: 40
+    Silicon: 40
+- !ruby/object:Schematic
+  output_product_name: Nanites
+  output_quantity: 5
+  inputs_hash:
+    Bacteria: 40
+    Reactive Metals: 40
+- !ruby/object:Schematic
+  output_product_name: Oxides
+  output_quantity: 5
+  inputs_hash:
+    Oxidizing Compound: 40
+    Oxygen: 40
+- !ruby/object:Schematic
+  output_product_name: Polyaramids
+  output_quantity: 5
+  inputs_hash:
+    Oxidizing Compound: 40
+    Industrial Fibers: 40
+- !ruby/object:Schematic
+  output_product_name: Polytextiles
+  output_quantity: 5
+  inputs_hash:
+    Biofuels: 40
+    Industrial Fibers: 40
+- !ruby/object:Schematic
+  output_product_name: Rocket Fuel
+  output_quantity: 5
+  inputs_hash:
+    Plasmoids: 40
+    Electrolytes: 40
+- !ruby/object:Schematic
+  output_product_name: Silicate Glass
+  output_quantity: 5
+  inputs_hash:
+    Oxidizing Compound: 40
+    Silicon: 40
+- !ruby/object:Schematic
+  output_product_name: Superconductors
+  output_quantity: 5
+  inputs_hash:
+    Plasmoids: 40
+    Water: 40
+- !ruby/object:Schematic
+  output_product_name: Supertensile Plastics
+  output_quantity: 5
+  inputs_hash:
+    Oxygen: 40
+    Biomass: 40
+- !ruby/object:Schematic
+  output_product_name: Synthetic Oil
+  output_quantity: 5
+  inputs_hash:
+    Electrolytes: 40
+    Oxygen: 40
+- !ruby/object:Schematic
+  output_product_name: Test Cultures
+  output_quantity: 5
+  inputs_hash:
+    Bacteria: 40
+    Water: 40
+- !ruby/object:Schematic
+  output_product_name: Transmitter
+  output_quantity: 5
+  inputs_hash:
+    Plasmoids: 40
+    Chiral Structures: 40
+- !ruby/object:Schematic
+  output_product_name: Viral Agent
+  output_quantity: 5
+  inputs_hash:
+    Bacteria: 40
+    Biomass: 40
+- !ruby/object:Schematic
+  output_product_name: Water-Cooled CPU
+  output_quantity: 5
+  inputs_hash:
+    Reactive Metals: 40
+    Water: 40
+- !ruby/object:Schematic
+  output_product_name: Biotech Research Reports
+  output_quantity: 3
+  inputs_hash:
+    Nanites: 10
+    Livestock: 10
+    Construction Blocks: 10
+- !ruby/object:Schematic
+  output_product_name: Camera Drones
+  output_quantity: 3
+  inputs_hash:
+    Silicate Glass: 10
+    Rocket Fuel: 10
+- !ruby/object:Schematic
+  output_product_name: Condensates
+  output_quantity: 3
+  inputs_hash:
+    Oxides: 10
+    Coolant: 10
+- !ruby/object:Schematic
+  output_product_name: Cryoprotectant Solution
+  output_quantity: 3
+  inputs_hash:
+    Test Cultures: 10
+    Synthetic Oil: 10
+    Fertilizer: 10
+- !ruby/object:Schematic
+  output_product_name: Data Chips
+  output_quantity: 3
+  inputs_hash:
+    Supertensile Plastics: 10
+    Microfiber Shielding: 10
+- !ruby/object:Schematic
+  output_product_name: Gel-Matrix Biopaste
+  output_quantity: 3
+  inputs_hash:
+    Oxides: 10
+    Biocells: 10
+    Superconductors: 10
+- !ruby/object:Schematic
+  output_product_name: Guidance Systems
+  output_quantity: 3
+  inputs_hash:
+    Water-Cooled CPU: 10
+    Transmitter: 10
+- !ruby/object:Schematic
+  output_product_name: Hazmat Detection Systems
+  output_quantity: 3
+  inputs_hash:
+    Polytextiles: 10
+    Viral Agent: 10
+    Transmitter: 10
+- !ruby/object:Schematic
+  output_product_name: Hermetic Membranes
+  output_quantity: 3
+  inputs_hash:
+    Polyaramids: 10
+    Genetically Enhanced Livestock: 10
+- !ruby/object:Schematic
+  output_product_name: High-Tech Transmitters
+  output_quantity: 3
+  inputs_hash:
+    Polyaramids: 10
+    Transmitter: 10
+- !ruby/object:Schematic
+  output_product_name: Industrial Explosives
+  output_quantity: 3
+  inputs_hash:
+    Fertilizer: 10
+    Polytextiles: 10
+- !ruby/object:Schematic
+  output_product_name: Neocoms
+  output_quantity: 3
+  inputs_hash:
+    Biocells: 10
+    Silicate Glass: 10
+- !ruby/object:Schematic
+  output_product_name: Nuclear Reactors
+  output_quantity: 3
+  inputs_hash:
+    Enriched Uranium: 10
+    Microfiber Shielding: 10
+- !ruby/object:Schematic
+  output_product_name: Planetary Vehicles
+  output_quantity: 3
+  inputs_hash:
+    Supertensile Plastics: 10
+    Mechanical Parts: 10
+    Miniature Electronics: 10
+- !ruby/object:Schematic
+  output_product_name: Robotics
+  output_quantity: 3
+  inputs_hash:
+    Mechanical Parts: 10
+    Consumer Electronics: 10
+- !ruby/object:Schematic
+  output_product_name: Smartfab Units
+  output_quantity: 3
+  inputs_hash:
+    Construction Blocks: 10
+    Miniature Electronics: 10
+- !ruby/object:Schematic
+  output_product_name: Supercomputers
+  output_quantity: 3
+  inputs_hash:
+    Water-Cooled CPU: 10
+    Coolant: 10
+    Consumer Electronics: 10
+- !ruby/object:Schematic
+  output_product_name: Synthetic Synapses
+  output_quantity: 3
+  inputs_hash:
+    Supertensile Plastics: 10
+    Test Cultures: 10
+- !ruby/object:Schematic
+  output_product_name: Transcranial Microcontrollers
+  output_quantity: 3
+  inputs_hash:
+    Biocells: 10
+    Nanites: 10
+- !ruby/object:Schematic
+  output_product_name: Ukomi Superconductors
+  output_quantity: 3
+  inputs_hash:
+    Synthetic Oil: 10
+    Superconductors: 10
+- !ruby/object:Schematic
+  output_product_name: Vaccines
+  output_quantity: 3
+  inputs_hash:
+    Livestock: 10
+    Viral Agent: 10
+- !ruby/object:Schematic
+  output_product_name: Broadcast Node
+  output_quantity: 3
+  inputs_hash:
+    Neocoms: 6
+    Data Chips: 6
+    High-Tech Transmitters: 6
+- !ruby/object:Schematic
+  output_product_name: Integrity Response Drones
+  output_quantity: 3
+  inputs_hash:
+    Gel-Matrix Biopaste: 6
+    Hazmat Detection Systems: 6
+    Planetary Vehicles: 6
+- !ruby/object:Schematic
+  output_product_name: Nano-Factory
+  output_quantity: 3
+  inputs_hash:
+    Industrial Explosives: 6
+    Reactive Metals: 40
+    Ukomi Superconductors: 6
+- !ruby/object:Schematic
+  output_product_name: Organic Mortar Applicators
+  output_quantity: 3
+  inputs_hash:
+    Condensates: 6
+    Bacteria: 40
+    Robotics: 6
+- !ruby/object:Schematic
+  output_product_name: Recursive Computing Module
+  output_quantity: 3
+  inputs_hash:
+    Synthetic Synapses: 6
+    Guidance Systems: 6
+    Transcranial Microcontrollers: 6
+- !ruby/object:Schematic
+  output_product_name: Self-Harmonizing Power Core
+  output_quantity: 3
+  inputs_hash:
+    Camera Drones: 6
+    Nuclear Reactors: 6
+    Hermetic Membranes: 6
+- !ruby/object:Schematic
+  output_product_name: Sterile Conduits
+  output_quantity: 3
+  inputs_hash:
+    Smartfab Units: 6
+    Water: 40
+    Vaccines: 6
+- !ruby/object:Schematic
+  output_product_name: Wetware Mainframe
+  output_quantity: 3
+  inputs_hash:
+    Supercomputers: 6
+    Biotech Research Reports: 6
+    Cryoprotectant Solution: 6
