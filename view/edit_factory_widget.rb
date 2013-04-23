@@ -22,15 +22,15 @@ class EditFactoryWidget < Gtk::Box
 	schematic_label = Gtk::Label.new("Schematic:")
 	
 	# Populate the combobox backend model.
-	@list_store_of_schematics = Gtk::ListStore.new(String)
+	@list_store_of_schematic_names = Gtk::ListStore.new(String)
 	
 	# Populate the list store with the schematics this factory can accept.
-	@factory_model.accepted_schematics.each do |schematic|
-	  new_row = @list_store_of_schematics.append
-	  new_row.set_value(0, schematic.name)
+	@factory_model.accepted_schematic_names.each do |name|
+	  new_row = @list_store_of_schematic_names.append
+	  new_row.set_value(0, name)
 	end
 	
-	@schematic_combo_box = Gtk::ComboBox.new(:model => @list_store_of_schematics)
+	@schematic_combo_box = Gtk::ComboBox.new(:model => @list_store_of_schematic_names)
 	
 	# Set up the view for the combo box column.
 	combobox_renderer = Gtk::CellRendererText.new
@@ -58,12 +58,12 @@ class EditFactoryWidget < Gtk::Box
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
 	  # Set the active schematic combo box iterator to the model's schematic.
-	  if (@factory_model.schematic == nil)
+	  if (@factory_model.schematic_name == nil)
 		@schematic_combo_box.active_iter=(nil)
 	  else
 		# Find the iter that corresponds to the model's schematic.
-		@list_store_of_schematics.each do |model, path, iter|
-		  if (@factory_model.schematic.name == iter.get_value(0))
+		@list_store_of_schematic_names.each do |model, path, iter|
+		  if (@factory_model.schematic_name == iter.get_value(0))
 			@schematic_combo_box.active_iter=(iter)
 		  end
 		end
@@ -82,9 +82,9 @@ class EditFactoryWidget < Gtk::Box
 	  currently_selected_schematic_name = @schematic_combo_box.active_iter.get_value(0)
 	  
 	  # Find the schematic that corresponds to the active iterator.
-	  @factory_model.accepted_schematics.each do |schematic|
-		if ((schematic.name) == (currently_selected_schematic_name))
-		  @factory_model.schematic = schematic
+	  @factory_model.accepted_schematic_names.each do |name|
+		if (name == currently_selected_schematic_name)
+		  @factory_model.schematic_name = name
 		end
 	  end
 	end
