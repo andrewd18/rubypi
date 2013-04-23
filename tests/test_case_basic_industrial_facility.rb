@@ -1,14 +1,36 @@
 require "test/unit"
 
 require_relative "../model/basic_industrial_facility.rb"
+require_relative "../model/schematic.rb"
 
 class TestCaseBasicIndustrialFacility < Test::Unit::TestCase
   # Run once.
   def self.startup
+	# Create some products and schematics for them.
+	@@stick = Product.new("Stick", 0)
+	@@stone = Product.new("Stone", 0)
+	@@plank = Product.new("Plank", 0)
+	@@beatstick = Product.new("Beatstick", 1)
+	@@bonebreaker = Product.new("Bonebreaker", 1)
+	@@bonebreaker_beatstick = Product.new("Bonebreaker Beatstick", 2)
+	
+	@@beatstick_schematic = Schematic.new("Beatstick", 1, {"Plank" => 10, "Stone" => 10})
+	@@bonebreaker_schematic = Schematic.new("Bonebreaker", 1, {"Stick" => 100, "Stone" => 100})
+	@@bonebreaker_beatstick_schematic = Schematic.new("Bonebreaker Beatstick", 1, {"Bonebreaker" => 1, "Beatstick" => 1})
   end
   
   # Run once after all tests.
   def self.shutdown
+	Product.delete(@@stick)
+	Product.delete(@@stone)
+	Product.delete(@@plank)
+	Product.delete(@@beatstick)
+	Product.delete(@@bonebreaker)
+	Product.delete(@@bonebreaker_beatstick)
+	
+	Schematic.delete(@@beatstick_schematic)
+	Schematic.delete(@@bonebreaker_schematic)
+	Schematic.delete(@@bonebreaker_beatstick_schematic)
   end
   
   # Run before every test.
@@ -46,23 +68,41 @@ class TestCaseBasicIndustrialFacility < Test::Unit::TestCase
   end
   
   def test_set_schematic
-	# TODO
-	pend("Write test to make sure you can set a schematic.")
+	@building.schematic_name = "Bonebreaker"
+	assert_equal("Bonebreaker", @building.schematic_name)
+	assert_equal(@@bonebreaker_schematic, @building.schematic)
   end
   
   def test_facility_errors_if_schematic_is_not_acceptable
-	# TODO
-	pend("Write test to make sure setting an invalid schematic errors.")
+	assert_equal(nil, @building.schematic_name)
+	
+	# Should fail if name is not a String.
+	assert_raise ArgumentError do
+	  @building.schematic_name = (1236423254)
+	end
+	
+	# Should fail is name is not a valid Schematic.
+	assert_raise ArgumentError do
+	  @building.schematic_name = ("faaaaaaail")
+	end
+	
+	# Make sure it wasn't set.
+	assert_equal(nil, @building.schematic_name)
   end
   
-  def test_accepted_schematics
-	# TODO
-	pend("Write test to make sure accepted_schematics provides the right list.")
+  def test_accepted_schematic_names
+	# We should only accept schematics which have a p-level of 1.
+	assert_equal(["Beatstick", "Bonebreaker"], @building.accepted_schematic_names)
   end
   
   def test_remove_schematic
-	# TODO
-	pend("Write test to make sure you can remove a schematic.")
+	@building.schematic_name = "Bonebreaker"
+	assert_equal("Bonebreaker", @building.schematic_name)
+	assert_equal(@@bonebreaker_schematic, @building.schematic)
+	
+	@building.schematic_name = nil
+	assert_equal(nil, @building.schematic_name)
+	assert_equal(nil, @building.schematic)
   end
   
   # 
@@ -79,17 +119,53 @@ class TestCaseBasicIndustrialFacility < Test::Unit::TestCase
   end
   
   def test_facility_notifies_observers_on_schematic_set
-	# TODO
-	pend("Write test to verify that observers know when a schematic has been added.")
+	@building.add_observer(self)
+	
+	@building.schematic_name = "Bonebreaker"
+	
+	assert_true(@was_notified_of_change, "Basic Industrial Facility did not call notify_observers or its state did not change.")
+	
+	@building.delete_observer(self)
+  end
+  
+  def test_facility_notifies_observers_on_schematic_set_to_nil
+	@building.schematic_name = "Bonebreaker"
+	
+	@building.add_observer(self)
+	
+	@building.schematic_name = nil
+	
+	assert_true(@was_notified_of_change, "Basic Industrial Facility did not call notify_observers or its state did not change.")
+	
+	@building.delete_observer(self)
   end
   
   def test_facility_does_not_notify_observers_on_schematic_set_failure
-	# TODO
-	pend("Write test to verify that observers do not get notified when a schematic set fails.")
+	# Should fail if name is not a String.
+	assert_raise ArgumentError do
+	  @building.schematic_name = (1236423254)
+	end
+	assert_false(@was_notified_of_change, "Basic Industrial Facility called notify_observers when its state did not change.")
+	
+	# Should fail is name is not a valid Schematic.
+	assert_raise ArgumentError do
+	  @building.schematic_name = ("faaaaaaail")
+	end
+	assert_false(@was_notified_of_change, "Basic Industrial Facility called notify_observers when its state did not change.")
+	
+	# Make sure it wasn't set.
+	assert_equal(nil, @building.schematic_name)
   end
   
-  def test_facility_notifies_observers_on_schematic_removal
-	# TODO
-	pend("Write test to verify that observers know when a schematic has been removed.")
+  def test_facility_does_not_notify_observers_if_schematic_doesnt_change
+	@building.schematic_name = "Bonebreaker"
+	
+	@building.add_observer(self)
+	
+	@building.schematic_name = "Bonebreaker"
+	
+	assert_false(@was_notified_of_change, "Basic Industrial Facility called notify_observers when its state did not change.")
+	
+	@building.delete_observer(self)
   end
 end
