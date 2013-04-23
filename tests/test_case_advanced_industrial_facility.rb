@@ -142,7 +142,7 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
   # 
   
   def test_basic_industrial_facility_is_observable
-	assert_true(@building.is_a?(Observable), "Basic Industrial Facility did not include Observable.")
+	assert_true(@building.is_a?(Observable), "Advanced Industrial Facility did not include Observable.")
   end
   
   # Update method for testing observer.
@@ -155,7 +155,7 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
 	
 	@building.schematic_name = "Tattooine"
 	
-	assert_true(@was_notified_of_change, "Basic Industrial Facility did not call notify_observers or its state did not change.")
+	assert_true(@was_notified_of_change, "Advanced Industrial Facility did not call notify_observers or its state did not change.")
 	
 	@building.delete_observer(self)
   end
@@ -167,7 +167,7 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
 	
 	@building.schematic_name = nil
 	
-	assert_true(@was_notified_of_change, "Basic Industrial Facility did not call notify_observers or its state did not change.")
+	assert_true(@was_notified_of_change, "Advanced Industrial Facility did not call notify_observers or its state did not change.")
 	
 	@building.delete_observer(self)
   end
@@ -177,13 +177,13 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
 	assert_raise ArgumentError do
 	  @building.schematic_name = (1236423254)
 	end
-	assert_false(@was_notified_of_change, "Basic Industrial Facility called notify_observers when its state did not change.")
+	assert_false(@was_notified_of_change, "Advanced Industrial Facility called notify_observers when its state did not change.")
 	
 	# Should fail is name is not a valid Schematic.
 	assert_raise ArgumentError do
 	  @building.schematic_name = ("faaaaaaail")
 	end
-	assert_false(@was_notified_of_change, "Basic Industrial Facility called notify_observers when its state did not change.")
+	assert_false(@was_notified_of_change, "Advanced Industrial Facility called notify_observers when its state did not change.")
 	
 	# Make sure it wasn't set.
 	assert_equal(nil, @building.schematic_name)
@@ -196,7 +196,7 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
 	
 	@building.schematic_name = "Tattooine"
 	
-	assert_false(@was_notified_of_change, "Basic Industrial Facility called notify_observers when its state did not change.")
+	assert_false(@was_notified_of_change, "Advanced Industrial Facility called notify_observers when its state did not change.")
 	
 	@building.delete_observer(self)
   end
