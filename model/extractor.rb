@@ -27,25 +27,34 @@ class Extractor < PlanetaryBuilding
 	return "Extractor"
   end
   
+  def number_of_heads
+	return @extractor_heads.count
+  end
+  
   def add_extractor_head
-	if @extractor_heads.count == 10
-	  # TODO
-	  # Error and shit.
+	if self.number_of_heads == 10
+	  raise "Extractor already has 10 heads."
 	else
-	  @extractor_heads << ExtractorHead.new
+	  extractor_head_instance = ExtractorHead.new
+	  @extractor_heads << extractor_head_instance
 	  
 	  changed
 	  notify_observers()
+	  
+	  return extractor_head_instance
 	end
-	
   end
   
   def remove_extractor_head(head)
-	# Lean on array.remove.
-	@extractor_heads.remove(head)
-	
-	changed
-	notify_observers()
+	if (@extractor_heads.include?(head))
+	  # Lean on array.delete.
+	  @extractor_heads.delete(head)
+	  
+	  changed
+	  notify_observers()
+	else
+	  raise "Extractor Head instance #{head} does not belong to this Extractor."
+	end
   end
   
   def remove_all_heads
