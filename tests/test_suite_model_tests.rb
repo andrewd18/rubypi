@@ -2,6 +2,9 @@ require 'test/unit'
 
 # All model/ tests.
 
+# Planet
+require_relative './test_case_planet.rb'
+
 # Buildings
 require_relative './test_case_command_center.rb'
 require_relative './test_case_basic_industrial_facility.rb'

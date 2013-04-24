@@ -71,8 +71,7 @@ class Planet
 	if (PLANET_TYPES.has_value?(new_type))
 	  @type = new_type
 	else
-	  puts "Error: #{new_type} is not a known planet type."
-	  return nil
+	  raise ArgumentError, "Error: #{new_type} is not a known planet type."
 	end
 	
 	# Tell my observers I've changed.
@@ -87,6 +86,8 @@ class Planet
   end
   
   def name=(new_name)
+	raise ArgumentError, "#{new_name} is not a String." unless new_name.is_a?(String)
+	
 	@name = new_name
 	
 	# Tell my observers I've changed.
@@ -101,6 +102,8 @@ class Planet
   end
   
   def alias=(new_alias)
+	raise ArgumentError, "#{new_alias} is not a String." unless new_alias.is_a?(String)
+	
 	@alias = new_alias
 	
 	# Tell my observers I've changed.
@@ -131,6 +134,7 @@ class Planet
   
   def remove_building(building_to_remove)
 	building_to_remove.delete_observer(self)
+	building_to_remove.planet = nil
 	@buildings.delete(building_to_remove)
 	
 	# Update values.
@@ -141,10 +145,24 @@ class Planet
 	notify_observers() # Notify errybody.
   end
   
-  def abandon
+  def remove_all_buildings
 	@buildings.each do |building|
-	  self.remove_building(building)
+	  building.delete_observer(self)
+	  building.planet = nil
 	end
+	
+	@buildings.clear
+	
+	# Update values.
+	total_values_from_buildings
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
+  end
+  
+  def abandon
+	self.remove_all_buildings
 	
 	self.type = "Uncolonized"
 	self.name = nil
@@ -153,6 +171,10 @@ class Planet
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
 	notify_observers() # Notify errybody.
+  end
+  
+  def num_buildings
+	return @buildings.count
   end
   
   def num_command_centers
