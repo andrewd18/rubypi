@@ -5,10 +5,14 @@ require_relative "../model/extractor.rb"
 class TestCaseExtractor < Test::Unit::TestCase
   # Run once.
   def self.startup
+	@@carebear_tears = Product.new("Carebear Tears", 0)
+	@@pirate_tears = Product.new("Pirate Tears", 1)
   end
   
   # Run once after all tests.
   def self.shutdown
+	Product.delete(@@carebear_tears)
+	Product.delete(@@pirate_tears)
   end
   
   # Run before every test.
@@ -157,6 +161,70 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(45000.00, @building.isk_cost)
   end
   
+  def test_extractor_can_tell_us_acceptable_products
+	# We should only accept schematics which have a p-level of 0.
+	assert_equal(["Carebear Tears"], @building.accepted_product_names)
+  end
+  
+  def test_extractor_can_set_a_product_name_to_extract_and_product_ref_updates
+	assert_equal(nil, @building.product_name)
+	
+	@building.product_name = "Carebear Tears"
+	
+	assert_equal("Carebear Tears", @building.product_name)
+	assert_equal(@@carebear_tears, @building.product)
+  end
+  
+  def test_extractor_can_set_a_product_name_to_extract_to_nil_and_product_ref_updates
+	@building.product_name = "Carebear Tears"
+	
+	assert_equal("Carebear Tears", @building.product_name)
+	
+	@building.product_name = nil
+	
+	assert_equal(nil, @building.product_name)
+	assert_equal(nil, @building.product)
+  end
+  
+  def test_extractor_errors_if_a_p_level_one_or_above_product_is_chosen
+	# Can't extract a p-level 1 product.
+	assert_raise ArgumentError do
+	  @building.product_name = "Pirate Tears"
+	end
+	
+	# Make sure it didn't change.
+	assert_equal(nil, @building.product_name)
+	assert_equal(nil, @building.product)
+  end
+  
+  def test_extractor_errors_if_a_nonexistant_product_is_chosen
+	# Can't extract a p-level 1 product.
+	assert_raise ArgumentError do
+	  @building.product_name = "Wormhole Tears" # Wormholes don't cry.
+	end
+	
+	# Make sure it didn't change.
+	assert_equal(nil, @building.product_name)
+	assert_equal(nil, @building.product)
+  end
+  
+  def test_extractor_errors_if_not_given_a_string
+	# Can't extract a number.
+	assert_raise ArgumentError do
+	  @building.product_name = 1236423254
+	end
+	
+	# Make sure it didn't change.
+	assert_equal(nil, @building.product_name)
+	assert_equal(nil, @building.product)
+  end
+  
+  def test_product_refers_to_product_singleton
+	@building.product_name = "Carebear Tears"
+	
+	assert_equal(@@carebear_tears.object_id, @building.product.object_id)
+  end
+  
   # 
   # "Observable" tests
   # 
@@ -218,6 +286,67 @@ class TestCaseExtractor < Test::Unit::TestCase
 	  @building.remove_extractor_head(unrelated_extractor_head_instance)
 	end
 	
+	assert_false(@was_notified_of_change, "Extractor called notify_observers when its state did not change.")
+	
+	@building.delete_observer(self)
+  end
+  
+  def test_extractor_notifies_observers_when_its_product_changes
+	@building.add_observer(self)
+	
+	@building.product_name = "Carebear Tears"
+	
+	assert_true(@was_notified_of_change, "Extractor did not call notify_observers or its state did not change.")
+	
+	@building.delete_observer(self)
+  end
+  
+  def test_extractor_notifies_observers_when_its_product_is_set_to_nil
+	@building.product_name = "Carebear Tears"
+	
+	@building.add_observer(self)
+	
+	@building.product_name = nil
+	
+	assert_true(@was_notified_of_change, "Extractor did not call notify_observers or its state did not change.")
+	
+	@building.delete_observer(self)
+  end
+  
+  def test_extractor_does_not_notify_observers_when_its_product_is_set_but_fails
+	@building.add_observer(self)
+	
+	# Should fail because Pirate Tears are P1s.
+	assert_raise ArgumentError do
+	  @building.product_name = "Pirate Tears"
+	end
+	assert_false(@was_notified_of_change, "Extractor called notify_observers when its state did not change.")
+	
+	# Should fail because Wormholes don't cry. And this product doesn't exist.
+	assert_raise ArgumentError do
+	  @building.product_name = "Wormhole Tears"
+	end
+	assert_false(@was_notified_of_change, "Extractor called notify_observers when its state did not change.")
+	
+	# Should fail because it isn't a valid name.
+	assert_raise ArgumentError do
+	  @building.product_name = 1236423254
+	end
+	assert_false(@was_notified_of_change, "Extractor called notify_observers when its state did not change.")
+	
+	assert_equal(nil, @building.product_name)
+	
+	@building.delete_observer(self)
+  end
+  
+  def test_extractor_does_not_notify_observers_when_its_product_is_set_but_doesnt_change
+	assert_equal(nil, @building.product_name)
+	
+	@building.add_observer(self)
+	
+	@building.product_name = nil
+	
+	assert_equal(nil, @building.product_name)
 	assert_false(@was_notified_of_change, "Extractor called notify_observers when its state did not change.")
 	
 	@building.delete_observer(self)
