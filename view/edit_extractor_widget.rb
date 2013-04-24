@@ -28,21 +28,10 @@ class EditExtractorWidget < Gtk::Box
 	# Extract Product Row
 	extract_label = Gtk::Label.new("Extract:")
 	
-	# Populate the combobox backend model.
-	@list_store_of_extractable_products = Gtk::ListStore.new(String)
-	
-	# Populate the list store with the products this extractor can extract.
+	@product_combo_box = Gtk::ComboBoxText.new
 	@extractor_model.accepted_product_names.each do |name|
-	  new_row = @list_store_of_extractable_products.append
-	  new_row.set_value(0, name)
+	  @product_combo_box.append_text(name)
 	end
-	
-	@product_combo_box = Gtk::ComboBox.new(:model => @list_store_of_extractable_products)
-	
-	# Set up the view for the combo box column.
-	combobox_renderer = Gtk::CellRendererText.new
-	@product_combo_box.pack_start(combobox_renderer, true)
-	@product_combo_box.add_attribute(combobox_renderer, "text", 0)
 	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
@@ -72,7 +61,7 @@ class EditExtractorWidget < Gtk::Box
 		@product_combo_box.active_iter=(nil)
 	  else
 		# Find the iter that corresponds to the model's product.
-		@list_store_of_extractable_products.each do |model, path, iter|
+		@product_combo_box.model.each do |model, path, iter|
 		  if (@extractor_model.product_name == iter.get_value(0))
 			@product_combo_box.active_iter=(iter)
 		  end

@@ -21,21 +21,11 @@ class EditFactoryWidget < Gtk::Box
 	# Schematic Row
 	schematic_label = Gtk::Label.new("Schematic:")
 	
-	# Populate the combobox backend model.
-	@list_store_of_schematic_names = Gtk::ListStore.new(String)
-	
-	# Populate the list store with the schematics this factory can accept.
+	# Populate the combo box with the schematics this factory can accept.
+	@schematic_combo_box = Gtk::ComboBoxText.new
 	@factory_model.accepted_schematic_names.each do |name|
-	  new_row = @list_store_of_schematic_names.append
-	  new_row.set_value(0, name)
+	  @schematic_combo_box.append_text(name)
 	end
-	
-	@schematic_combo_box = Gtk::ComboBox.new(:model => @list_store_of_schematic_names)
-	
-	# Set up the view for the combo box column.
-	combobox_renderer = Gtk::CellRendererText.new
-	@schematic_combo_box.pack_start(combobox_renderer, true)
-	@schematic_combo_box.add_attribute(combobox_renderer, "text", 0)
 	
 	
 	# Set the active iterater from the model data.
@@ -62,7 +52,7 @@ class EditFactoryWidget < Gtk::Box
 		@schematic_combo_box.active_iter=(nil)
 	  else
 		# Find the iter that corresponds to the model's schematic.
-		@list_store_of_schematic_names.each do |model, path, iter|
+		@schematic_combo_box.model.each do |model, path, iter|
 		  if (@factory_model.schematic_name == iter.get_value(0))
 			@schematic_combo_box.active_iter=(iter)
 		  end
