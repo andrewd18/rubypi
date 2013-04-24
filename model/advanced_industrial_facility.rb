@@ -96,6 +96,11 @@ class AdvancedIndustrialFacility < PlanetaryBuilding
 	return Schematic.find_by_name(@schematic_name)
   end
   
+  # Quick alias for tree view.
+  def produces_product_name
+	return @schematic_name
+  end
+  
   def name
 	return "Advanced Industrial Facility"
   end

@@ -158,4 +158,8 @@ class Extractor < PlanetaryBuilding
   def product
 	Product.find_by_name(@product_name)
   end
+  
+  def produces_product_name
+	return @product_name
+  end
 end

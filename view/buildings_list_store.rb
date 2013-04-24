@@ -11,7 +11,7 @@ class BuildingsListStore < Gtk::ListStore
 	super(Integer,		# UID
 	      Gdk::Pixbuf,	# Icon
 	      String,		# Name
-	      String,		# Schematic Name
+	      String,		# Produces (Product Name)
 	      Integer,		# PG Used
 	      Integer,		# CPU Used
 	      Integer		# ISK Cost
@@ -44,12 +44,10 @@ class BuildingsListStore < Gtk::ListStore
 		new_row.set_value(1, BuildingImage.new(building, [32, 32]).pixbuf)
 		new_row.set_value(2, building.name)
 		
-		if ((building.respond_to?(:schematic) == false) or
-			(building.schematic == nil))
-		  
-		  new_row.set_value(3, "")
+		if (building.respond_to?(:produces_product_name))
+		  new_row.set_value(3, building.produces_product_name)
 		else
-		  new_row.set_value(3, building.schematic.name)
+		  new_row.set_value(3, "")
 		end
 		
 		new_row.set_value(4, building.powergrid_usage)

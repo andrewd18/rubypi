@@ -188,6 +188,12 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(@@carebear_tears, @building.product)
   end
   
+  def test_set_product_shows_right_produces_product_name
+	@building.product_name = "Carebear Tears"
+	
+	assert_equal("Carebear Tears", @building.produces_product_name)
+  end
+  
   def test_extractor_can_set_a_product_name_to_extract_to_nil_and_product_ref_updates
 	@building.product_name = "Carebear Tears"
 	

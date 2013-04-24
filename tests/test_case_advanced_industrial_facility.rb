@@ -117,6 +117,12 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
 	assert_equal(nil, @building.schematic_name)
   end
   
+  def test_set_schematic_shows_right_produces_product_name
+	@building.schematic_name = "Mos Eisley"
+	
+	assert_equal("Mos Eisley", @building.produces_product_name)
+  end
+  
   def test_accepted_schematic_names
 	# We should only accept schematics which have a p-level of 2 or 3.
 	assert_equal(["Mos Eisley", "Tosche Station", "Tattooine"], @building.accepted_schematic_names)

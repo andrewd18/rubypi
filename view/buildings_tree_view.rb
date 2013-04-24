@@ -10,7 +10,7 @@ class BuildingsTreeView < Gtk::TreeView
 	# Create columns for the tree view.
 	icon_column = IconColumn.new("Icon", 1)
 	name_column = TextColumn.new("Name", 2)
-	schematic_name_column = TextColumn.new("Schematic", 3)
+	produces_column = TextColumn.new("Produces", 3)
 	pg_used_column = TextColumn.new("PG Used", 4)
 	cpu_used_column = TextColumn.new("CPU Used", 5)
 	isk_cost_column = TextColumn.new("ISK Cost", 6)
@@ -18,7 +18,7 @@ class BuildingsTreeView < Gtk::TreeView
 	# Pack columns in tree view, left-to-right.
 	self.append_column(icon_column)
 	self.append_column(name_column)
-	self.append_column(schematic_name_column)
+	self.append_column(produces_column)
 	self.append_column(pg_used_column)
 	self.append_column(cpu_used_column)
 	self.append_column(isk_cost_column)

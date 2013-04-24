@@ -97,6 +97,12 @@ class TestCaseHighTechIndustrialFacility < Test::Unit::TestCase
 	assert_equal(nil, @building.schematic_name)
   end
   
+  def test_set_schematic_shows_right_produces_product_name
+	@building.schematic_name = "Galactic Core"
+	
+	assert_equal("Galactic Core", @building.produces_product_name)
+  end
+  
   def test_accepted_schematic_names
 	# We should only accept schematics which have a p-level of 4.
 	assert_equal(["Galactic Core"], @building.accepted_schematic_names)
