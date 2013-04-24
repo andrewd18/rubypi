@@ -102,6 +102,19 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_true(@building.extractor_heads.include?(head_four))
   end
   
+  def test_extractor_can_remove_all_heads
+	head_one = @building.add_extractor_head
+	head_two = @building.add_extractor_head
+	head_three = @building.add_extractor_head
+	head_four = @building.add_extractor_head
+	
+	assert_equal(4, @building.number_of_heads)
+	
+	@building.remove_all_heads
+	
+	assert_equal(0, @building.number_of_heads)
+  end
+  
   def test_extractor_cannot_remove_a_head_it_doesnt_have
 	unrelated_extractor_head_instance = ExtractorHead.new
 	
@@ -287,6 +300,25 @@ class TestCaseExtractor < Test::Unit::TestCase
 	end
 	
 	assert_false(@was_notified_of_change, "Extractor called notify_observers when its state did not change.")
+	
+	@building.delete_observer(self)
+  end
+  
+  def test_extractor_notifies_observers_when_all_heads_are_removed
+	head_one = @building.add_extractor_head
+	head_two = @building.add_extractor_head
+	head_three = @building.add_extractor_head
+	head_four = @building.add_extractor_head
+	
+	assert_equal(4, @building.number_of_heads)
+	
+	@building.add_observer(self)
+	
+	@building.remove_all_heads
+	
+	assert_true(@was_notified_of_change, "Extractor did not call notify_observers or its state did not change.")
+	
+	assert_equal(0, @building.number_of_heads)
 	
 	@building.delete_observer(self)
   end
