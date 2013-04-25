@@ -114,16 +114,23 @@ class Planet
   end
   
   def add_building(building)
-	@buildings << building
-	building.planet=(self)
-	building.add_observer(self)
-	
-	# Update values.
-	total_values_from_buildings
-	
-	# Tell my observers I've changed.
-	changed # Set observeable state to "changed".
-	notify_observers() # Notify errybody.
+	if (building.is_a?(CommandCenter) and
+	    self.num_command_centers == 1)
+	  raise ArgumentError, "A planet can only have one CommandCenter."
+	else
+	  @buildings << building
+	  building.planet=(self)
+	  building.add_observer(self)
+	  
+	  # Update values.
+	  total_values_from_buildings
+	  
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
+	  
+	  return building
+	end
   end
   
   # Convenience wrapper.
@@ -300,6 +307,21 @@ class Planet
 	end
 	
 	return list_of_storages
+  end
+  
+  def num_aggregate_launchpads_ccs_storages
+	count = 0
+	
+	@buildings.each do |building|
+	  if ((building.class == StorageFacility) ||
+	      (building.class == CommandCenter) ||
+	      (building.class == Launchpad))
+		
+		count += 1
+	  end
+	end
+	
+	return count
   end
   
   def aggregate_launchpads_ccs_storages

@@ -109,6 +109,46 @@ class TestCasePlanet < Test::Unit::TestCase
 	end
   end
   
+  def test_cannot_add_more_than_one_command_center
+	# Test it with the add_building method.
+	first_command_center = CommandCenter.new
+	second_command_center = CommandCenter.new
+	
+	@planet.add_building(first_command_center)
+	
+	assert_raise ArgumentError do
+	  @planet.add_building(second_command_center)
+	end
+	
+	@planet.remove_building(first_command_center)
+	
+	# Make sure we don't have any buildings at this point.
+	assert_equal(0, @planet.buildings.count)
+	assert_equal(0, @planet.num_buildings)
+	
+	
+	
+	
+	# Now, test it with the add_building_from_class method.
+	third_command_center = @planet.add_building_from_class(CommandCenter)
+	
+	assert_raise ArgumentError do
+	  @planet.add_building_from_class(CommandCenter)
+	end
+	
+	@planet.remove_building(third_command_center)
+	
+	# Make sure we don't have any buildings at this point.
+	assert_equal(0, @planet.buildings.count)
+	assert_equal(0, @planet.num_buildings)
+  end
+  
+  def test_adding_planet_from_class_name_returns_instance
+	test_building = @planet.add_building_from_class(CommandCenter)
+	
+	assert_true(test_building.is_a?(CommandCenter))
+  end
+  
   def test_building_planet_ref_is_set_when_building_is_added
 	command_center = CommandCenter.new
 	
@@ -167,47 +207,364 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_powergrid_usage_scales_with_number_of_buildings
-	pend()
+	# 0 # Command Center
+	# 700 # Storage Facility
+	# 700 # Launchpad
+	# 2600 # Extractor
+	# 550 # Extractor Head
+	# 800 # Basic Industrial Facility
+	# 700 # Advanced Industrial Facility
+	# 400 # High Tech Industrial Facility
+	
+	assert_equal(0, @planet.powergrid_usage)
+	
+	@planet.add_building_from_class(CommandCenter)
+	
+	assert_equal(0, @planet.powergrid_usage)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(700, @planet.powergrid_usage)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(1400, @planet.powergrid_usage)
+	
+	extractor = @planet.add_building_from_class(Extractor)
+	
+	assert_equal(4000, @planet.powergrid_usage)
+	
+	extractor.add_extractor_head
+	
+	assert_equal(4550, @planet.powergrid_usage)
+	
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	
+	assert_equal(5350, @planet.powergrid_usage)
+	
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	
+	assert_equal(6050, @planet.powergrid_usage)
+	
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	
+	assert_equal(6450, @planet.powergrid_usage)
   end
   
   def test_cpu_usage_scales_with_number_of_buildings
-	pend()
+	# 0 # Command Center
+	# 500 # Storage Facility
+	# 3600 # Launchpad
+	# 400 # Extractor
+	# 110 # Extractor Head
+	# 200 # Basic Industrial Facility
+	# 500 # Advanced Industrial Facility
+	# 1100 # High Tech Industrial Facility
+	
+	assert_equal(0, @planet.cpu_usage)
+	
+	@planet.add_building_from_class(CommandCenter)
+	
+	assert_equal(0, @planet.cpu_usage)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(500, @planet.cpu_usage)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(4100, @planet.cpu_usage)
+	
+	extractor = @planet.add_building_from_class(Extractor)
+	
+	assert_equal(4500, @planet.cpu_usage)
+	
+	extractor.add_extractor_head
+	
+	assert_equal(4610, @planet.cpu_usage)
+	
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	
+	assert_equal(4810, @planet.cpu_usage)
+	
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	
+	assert_equal(5310, @planet.cpu_usage)
+	
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	
+	assert_equal(6410, @planet.cpu_usage)
   end
   
   def test_powergrid_provided_scales_with_number_of_buildings
-	pend()
+	# 6000 # Command Center
+	# 0 # Storage Facility
+	# 0 # Launchpad
+	# 0 # Extractor
+	# 0 # Extractor Head
+	# 0 # Basic Industrial Facility
+	# 0 # Advanced Industrial Facility
+	# 0 # High Tech Industrial Facility
+	
+	assert_equal(0, @planet.powergrid_provided)
+	
+	@planet.add_building_from_class(CommandCenter)
+	
+	assert_equal(6000, @planet.powergrid_provided)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(6000, @planet.powergrid_provided)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(6000, @planet.powergrid_provided)
+	
+	extractor = @planet.add_building_from_class(Extractor)
+	
+	assert_equal(6000, @planet.powergrid_provided)
+	
+	extractor.add_extractor_head
+	
+	assert_equal(6000, @planet.powergrid_provided)
+	
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	
+	assert_equal(6000, @planet.powergrid_provided)
+	
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	
+	assert_equal(6000, @planet.powergrid_provided)
+	
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	
+	assert_equal(6000, @planet.powergrid_provided)
   end
   
   def test_cpu_provided_scales_with_number_of_buildings
-	pend()
+	# 1675 # Command Center
+	# 0 # Storage Facility
+	# 0 # Launchpad
+	# 0 # Extractor
+	# 0 # Extractor Head
+	# 0 # Basic Industrial Facility
+	# 0 # Advanced Industrial Facility
+	# 0 # High Tech Industrial Facility
+	
+	assert_equal(0, @planet.cpu_provided)
+	
+	@planet.add_building_from_class(CommandCenter)
+	
+	assert_equal(1675, @planet.cpu_provided)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(1675, @planet.cpu_provided)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(1675, @planet.cpu_provided)
+	
+	extractor = @planet.add_building_from_class(Extractor)
+	
+	assert_equal(1675, @planet.cpu_provided)
+	
+	extractor.add_extractor_head
+	
+	assert_equal(1675, @planet.cpu_provided)
+	
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	
+	assert_equal(1675, @planet.cpu_provided)
+	
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	
+	assert_equal(1675, @planet.cpu_provided)
+	
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	
+	assert_equal(1675, @planet.cpu_provided)
   end
   
   def test_isk_cost_scales_with_number_of_buildings
-	pend()
+	# 90000.00 # Command Center
+	# 250000.00 # Storage Facility
+	# 900000.00 # Launchpad
+	# 45000.00 # Extractor
+	# 0 # Extractor Head
+	# 75000.00 # Basic Industrial Facility
+	# 250000.00 # Advanced Industrial Facility
+	# 525000.00 # High Tech Industrial Facility
+	
+	assert_equal(0, @planet.isk_cost)
+	
+	@planet.add_building_from_class(CommandCenter)
+	
+	assert_equal(90000.00, @planet.isk_cost)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(340000.00, @planet.isk_cost)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(1240000.00, @planet.isk_cost)
+	
+	extractor = @planet.add_building_from_class(Extractor)
+	
+	assert_equal(1285000.00, @planet.isk_cost)
+	
+	extractor.add_extractor_head
+	
+	assert_equal(1285000.00, @planet.isk_cost)
+	
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	
+	assert_equal(1360000.00, @planet.isk_cost)
+	
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	
+	assert_equal(1610000.00, @planet.isk_cost)
+	
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	
+	assert_equal(2135000.00, @planet.isk_cost)
   end
   
   def test_number_of_command_centers_scales_with_number_of_command_centers
-	pend()
-  end
-  
-  def test_number_of_factories_scales_with_number_of_command_centers
-	pend()
+	assert_equal(0, @planet.num_command_centers)
+	
+	@planet.add_building_from_class(CommandCenter)
+	
+	assert_equal(1, @planet.num_command_centers)
+	
+	assert_raise ArgumentError do
+	  @planet.add_building_from_class(CommandCenter)
+	end
+	
+	assert_equal(1, @planet.num_command_centers)
+	
+	# These types should not change the value.
+	@planet.add_building_from_class(Launchpad)
+	@planet.add_building_from_class(StorageFacility)
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	@planet.add_building_from_class(Extractor)
+	
+	assert_equal(1, @planet.num_command_centers)
   end
   
   def test_number_of_factories_scales_with_number_of_factories
-	pend()
+	assert_equal(0, @planet.num_factories)
+	
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	
+	assert_equal(1, @planet.num_factories)
+	
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	
+	assert_equal(2, @planet.num_factories)
+	
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	
+	assert_equal(3, @planet.num_factories)
+	
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	
+	assert_equal(4, @planet.num_factories)
+	
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	
+	assert_equal(5, @planet.num_factories)
+	
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	
+	assert_equal(6, @planet.num_factories)
+	
+	# These types should not change the value.
+	@planet.add_building_from_class(CommandCenter)
+	@planet.add_building_from_class(StorageFacility)
+	@planet.add_building_from_class(Launchpad)
+	@planet.add_building_from_class(Extractor)
+	
+	assert_equal(6, @planet.num_factories)
   end
   
   def test_number_of_launchpads_scales_with_number_of_launchpads
-	pend()
+	assert_equal(0, @planet.num_launchpads)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(1, @planet.num_launchpads)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(2, @planet.num_launchpads)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(3, @planet.num_launchpads)
+	
+	# These types should not change the value.
+	@planet.add_building_from_class(CommandCenter)
+	@planet.add_building_from_class(StorageFacility)
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	@planet.add_building_from_class(Extractor)
+	
+	assert_equal(3, @planet.num_launchpads)
   end
   
   def test_number_of_storage_facilities_scales_with_number_of_storage_facilities
-	pend()
+	assert_equal(0, @planet.num_storages)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(1, @planet.num_storages)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(2, @planet.num_storages)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(3, @planet.num_storages)
+	
+	# These types should not change the value.
+	@planet.add_building_from_class(CommandCenter)
+	@planet.add_building_from_class(Launchpad)
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	@planet.add_building_from_class(Extractor)
+	
+	assert_equal(3, @planet.num_storages)
   end
   
   def test_aggregate_launchpads_ccs_storages_scales_with_launchpads_ccs_and_storages
-	pend()
+	assert_equal(0, @planet.num_aggregate_launchpads_ccs_storages)
+	
+	@planet.add_building_from_class(Launchpad)
+	
+	assert_equal(1, @planet.num_aggregate_launchpads_ccs_storages)
+	
+	@planet.add_building_from_class(CommandCenter)
+	
+	assert_equal(2, @planet.num_aggregate_launchpads_ccs_storages)
+	
+	@planet.add_building_from_class(StorageFacility)
+	
+	assert_equal(3, @planet.num_aggregate_launchpads_ccs_storages)
+	
+	# These types should not change the value.
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	@planet.add_building_from_class(Extractor)
+	
+	assert_equal(3, @planet.num_aggregate_launchpads_ccs_storages)
   end
   
   #

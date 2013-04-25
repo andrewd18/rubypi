@@ -84,7 +84,13 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	iter = @building_list_store.get_iter(path)
 	building_class = iter.get_value(2)
 	
-	@planet_model.add_building_from_class(building_class)
+	begin
+	  @planet_model.add_building_from_class(building_class)
+	rescue ArgumentError => error
+	  # TODO - Tell the user what happened nicely.
+	  # For now, spit it out to the command line.
+	  puts error
+	end
   end
   
   def destroy
