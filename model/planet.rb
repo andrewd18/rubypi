@@ -25,15 +25,15 @@ class Planet
   attr_reader :isk_cost
   attr_accessor :pi_configuration
   
-  PLANET_TYPES = {:uncolonized => "Uncolonized",
-                  :gas => "Gas",
-                  :ice => "Ice",
-                  :storm => "Storm",
-                  :barren => "Barren",
-                  :temperate => "Temperate",
-                  :lava => "Lava",
-                  :oceanic => "Oceanic",
-                  :plasma => "Plasma"}
+  PLANET_TYPES = ["Uncolonized",
+                  "Gas",
+                  "Ice",
+                  "Storm",
+                  "Barren",
+                  "Temperate",
+                  "Lava",
+                  "Oceanic",
+                  "Plasma"]
   
   def initialize(planet_type, planet_name = nil, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
 	@type = planet_type
@@ -68,7 +68,7 @@ class Planet
   end
   
   def type=(new_type)
-	raise ArgumentError, "Error: #{new_type} is not a known planet type." unless (PLANET_TYPES.has_value?(new_type))
+	raise ArgumentError, "Error: #{new_type} is not a known planet type." unless (PLANET_TYPES.include?(new_type))
 	
 	# Only set it and announce if the type actually changed.
 	if (@type != new_type)
@@ -178,9 +178,9 @@ class Planet
   def abandon
 	self.remove_all_buildings
 	
-	self.type = "Uncolonized"
-	self.name = nil
-	self.alias = nil
+	@type = "Uncolonized"
+	@name = nil
+	@alias = nil
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".

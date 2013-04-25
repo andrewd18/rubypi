@@ -31,28 +31,15 @@ class PlanetStatsWidget < Gtk::Box
 	# Planet Type Row
 	planet_type_label = Gtk::Label.new("Planet Type:")
 	
-	# Populate the combobox backend model.
-	@list_store_of_planet_types = Gtk::ListStore.new(String)
-	Planet::PLANET_TYPES.each_value do |value|
-	  new_row = @list_store_of_planet_types.append
-	  new_row.set_value(0, value)
+	
+	
+	# Populate the combo box with the schematics this factory can accept.
+	@planet_type_combo_box = Gtk::ComboBoxText.new
+	Planet::PLANET_TYPES.each do |type|
+	  @planet_type_combo_box.append_text(type)
 	end
 	
-	@planet_type_combo_box = Gtk::ComboBox.new(:model => @list_store_of_planet_types)
-	
-	# Set up the view for the combo box column.
-	combobox_renderer = Gtk::CellRendererText.new
-	@planet_type_combo_box.pack_start(combobox_renderer, true)
-	@planet_type_combo_box.add_attribute(combobox_renderer, "text", 0)
-	
-	# Set the current value's row active.
-	value_array = Planet::PLANET_TYPES.values
-	value_array.each_with_index do |value, index|
-	  if (value == @planet_model.type)
-		@planet_type_combo_box.active=(index)
-	  end
-	end
-	
+	# Set up immediate commit on change.
 	@planet_type_combo_box.signal_connect("changed") do
 	  self.commit_to_model
 	end
@@ -105,6 +92,10 @@ class PlanetStatsWidget < Gtk::Box
 	self.pack_start(building_count_table, :expand => false)
 	self.pack_start(planet_stats_table, :expand => false)
 	
+	# Finally, update all the values.
+	# Since #update does this, call #update.
+	self.update
+	
 	self.show_all
 	
 	return self
@@ -116,7 +107,7 @@ class PlanetStatsWidget < Gtk::Box
 	  # The model data changed. Update the display.
 	  
 	  # Set the current value's row active.
-	  value_array = Planet::PLANET_TYPES.values
+	  value_array = Planet::PLANET_TYPES
 	  value_array.each_with_index do |value, index|
 		if (value == @planet_model.type)
 		  @planet_type_combo_box.active=(index)
