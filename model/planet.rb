@@ -68,15 +68,16 @@ class Planet
   end
   
   def type=(new_type)
-	if (PLANET_TYPES.has_value?(new_type))
-	  @type = new_type
-	else
-	  raise ArgumentError, "Error: #{new_type} is not a known planet type."
-	end
+	raise ArgumentError, "Error: #{new_type} is not a known planet type." unless (PLANET_TYPES.has_value?(new_type))
 	
-	# Tell my observers I've changed.
-	changed # Set observeable state to "changed".
-	notify_observers() # Notify errybody.
+	# Only set it and announce if the type actually changed.
+	if (@type != new_type)
+	  @type = new_type
+	  
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
+	end
 	
 	return @type
   end
@@ -88,11 +89,14 @@ class Planet
   def name=(new_name)
 	raise ArgumentError, "#{new_name} is not a String." unless new_name.is_a?(String)
 	
-	@name = new_name
-	
-	# Tell my observers I've changed.
-	changed # Set observeable state to "changed".
-	notify_observers() # Notify errybody.
+	# Only set it and announce if the name actually changed.
+	if (@name != new_name)
+	  @name = new_name
+	  
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
+	end
 	
 	return @name
   end
@@ -104,11 +108,14 @@ class Planet
   def alias=(new_alias)
 	raise ArgumentError, "#{new_alias} is not a String." unless new_alias.is_a?(String)
 	
-	@alias = new_alias
+	# Only set it and announce if the alias actually changed.
+	if (@alias != new_alias)
+	  @alias = new_alias
 	
-	# Tell my observers I've changed.
-	changed # Set observeable state to "changed".
-	notify_observers() # Notify errybody.
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
+	end
 	
 	return @alias
   end

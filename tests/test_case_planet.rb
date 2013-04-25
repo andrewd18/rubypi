@@ -581,38 +581,114 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_planet_notifies_observers_when_its_type_changes
-	pend()
+	@planet.add_observer(self)
+	
+	@planet.type = "Lava"
+	
+	assert_true(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
   
   def test_planet_does_not_notify_observers_when_its_type_is_set_to_identical_value
-	pend()
+	@planet.type = "Lava"
+	
+	@planet.add_observer(self)
+	
+	@planet.type = "Lava"
+	
+	assert_false(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
   
   def test_planet_notifies_observers_when_its_name_changes
-	pend()
+	@planet.add_observer(self)
+	
+	@planet.name = "J100820 - III"
+	
+	assert_true(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
   
   def test_planet_does_not_notify_observers_when_its_name_is_set_to_identical_value
-	pend()
+	@planet.name = "J100820 - III"
+	
+	@planet.add_observer(self)
+	
+	@planet.name = "J100820 - III"
+	
+	assert_false(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
   
   def test_planet_notifies_observers_when_its_alias_changes
-	pend()
+	@planet.add_observer(self)
+	
+	@planet.alias = "Zim's Playground"
+	
+	assert_true(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
   
   def test_planet_does_not_notify_observers_when_its_alias_is_set_to_identical_value
-	pend()
+	@planet.alias = "Zim's Playground"
+	
+	@planet.add_observer(self)
+	
+	@planet.alias = "Zim's Playground"
+	
+	assert_false(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
   
   def test_planet_notifies_observers_when_it_adds_a_building
-	pend()
+	@planet.add_observer(self)
+	
+	first_extractor = Extractor.new
+	@planet.add_building(first_extractor)
+	
+	assert_true(@was_notified_of_change)
+	
+	# Reset
+	@was_notified_of_change = false
+	
+	@planet.add_building_from_class(Extractor)
+	
+	assert_true(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
   
   def test_planet_notifies_observers_when_it_removes_a_building
-	pend()
+	first_extractor = Extractor.new
+	@planet.add_building(first_extractor)
+	
+	@planet.add_observer(self)
+	
+	@planet.remove_building(first_extractor)
+	
+	assert_true(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
   
   def test_planet_notifies_observers_when_it_removes_all_buildings
-	pend()
+	first_extractor = Extractor.new
+	first_command_center = CommandCenter.new
+	@planet.add_building(first_extractor)
+	@planet.add_building(first_command_center)
+	
+	@planet.add_observer(self)
+	
+	@planet.remove_all_buildings
+	
+	assert_true(@was_notified_of_change)
+	
+	@planet.delete_observer(self)
   end
 end
