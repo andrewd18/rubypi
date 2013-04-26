@@ -18,13 +18,80 @@ class RubyPIMainMenu < Gtk::MenuBar
 	# File ->
 	file_submenu = Gtk::Menu.new
 	
+	file_submenu_save = Gtk::MenuItem.new("Save")
+	file_submenu_load = Gtk::MenuItem.new("Load")
 	file_submenu_quit = Gtk::MenuItem.new("Quit")
+	
+	# TODO - Should probably move these into a subclass.
+	# Signal connection for File -> Save
+	file_submenu_save.signal_connect("activate") do
+	  dialog = Gtk::FileChooserDialog.new(:title => "Save File",
+	                                      :parent => $ruby_pi_main_gtk_window,
+	                                      :action => Gtk::FileChooser::Action::SAVE,
+	                                      :buttons => [
+	                                                   [Gtk::Stock::CANCEL, Gtk::ResponseType::CANCEL],
+	                                                   [Gtk::Stock::SAVE, Gtk::ResponseType::ACCEPT]
+	                                                  ]
+	                                     )
+	  
+	  # Set up dialog options.
+	  ruby_pi_folder = File.expand_path("..", File.dirname(__FILE__))
+	  dialog.current_folder=(ruby_pi_folder)
+	  
+	  # Filter by file type.
+	  yaml_filter = Gtk::FileFilter.new
+	  yaml_filter.add_pattern("*.yml")
+	  
+	  dialog.add_filter(yaml_filter)
+	  
+	  # Run the dialog.
+	  if dialog.run == Gtk::ResponseType::ACCEPT
+		$ruby_pi_main_gtk_window.save_pi_config_to_yaml(dialog.filename)
+	  end
+	  
+	  dialog.destroy
+	end
+	
+	
+	# TODO - Should probably move these into a subclass.
+	# Signal connection for File -> Load
+	file_submenu_load.signal_connect("activate") do
+	  dialog = Gtk::FileChooserDialog.new(:title => "Save File",
+	                                      :parent => $ruby_pi_main_gtk_window,
+	                                      :action => Gtk::FileChooser::Action::OPEN,
+	                                      :buttons => [
+	                                                   [Gtk::Stock::CANCEL, Gtk::ResponseType::CANCEL],
+	                                                   [Gtk::Stock::OPEN, Gtk::ResponseType::ACCEPT]
+	                                                  ]
+	                                     )
+	  
+	  # Set up dialog options.
+	  ruby_pi_folder = File.expand_path("..", File.dirname(__FILE__))
+	  dialog.current_folder=(ruby_pi_folder)
+	  
+	  # Filter by file type.
+	  yaml_filter = Gtk::FileFilter.new
+	  yaml_filter.add_pattern("*.yml")
+	  
+	  dialog.add_filter(yaml_filter)
+	  
+	  # Run the dialog.
+	  if dialog.run == Gtk::ResponseType::ACCEPT
+		$ruby_pi_main_gtk_window.load_pi_config_from_yaml(dialog.filename)
+	  end
+	  
+	  dialog.destroy
+	end
+	
 	
 	# Signal connection for File -> Quit.
 	file_submenu_quit.signal_connect("activate") do
 	  $ruby_pi_main_gtk_window.close_application
 	end
 	
+	
+	file_submenu.append(file_submenu_save)
+	file_submenu.append(file_submenu_load)
 	file_submenu.append(file_submenu_quit)
 	
 	# Assign File -> to File
