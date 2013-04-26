@@ -18,11 +18,6 @@ class Planet
   include Observable
   
   attr_reader :buildings
-  attr_reader :cpu_usage
-  attr_reader :powergrid_usage
-  attr_reader :cpu_provided
-  attr_reader :powergrid_provided
-  attr_reader :isk_cost
   attr_accessor :pi_configuration
   
   PLANET_TYPES = ["Uncolonized",
@@ -44,8 +39,6 @@ class Planet
 	
 	@buildings = planet_buildings
 	
-	total_values_from_buildings
-	
 	@pi_configuration = pi_configuration
 	
 	return self
@@ -55,8 +48,6 @@ class Planet
   # Called when an observed object sends "changed".
   def update
 	# One of my planetary buildings changed.
-	# Update values.
-	total_values_from_buildings
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
@@ -120,6 +111,71 @@ class Planet
 	return @alias
   end
   
+  def powergrid_usage
+	total = 0
+	
+	# Update values from buildings.
+	@buildings.each do |building|
+	
+	  # Update overall powergrid usage.
+	  total += building.powergrid_usage
+	end
+	
+	return total
+  end
+  
+  def cpu_usage
+	total = 0
+	
+	# Update values from buildings.
+	@buildings.each do |building|
+	
+	  # Update overall powergrid usage.
+	  total += building.cpu_usage
+	end
+	
+	return total
+  end
+  
+  def powergrid_provided
+	total = 0
+	
+	# Update values from buildings.
+	@buildings.each do |building|
+	
+	  # Update overall powergrid usage.
+	  total += building.powergrid_provided
+	end
+	
+	return total
+  end
+  
+  def cpu_provided
+	total = 0
+	
+	# Update values from buildings.
+	@buildings.each do |building|
+	
+	  # Update overall powergrid usage.
+	  total += building.cpu_provided
+	end
+	
+	return total
+  end
+  
+  def isk_cost
+	total = 0
+	
+	# Update values from buildings.
+	@buildings.each do |building|
+	
+	  # Update overall powergrid usage.
+	  total += building.isk_cost
+	end
+	
+	return total
+  end
+  
   def add_building(building)
 	if (building.is_a?(CommandCenter) and
 	    self.num_command_centers == 1)
@@ -128,9 +184,6 @@ class Planet
 	  @buildings << building
 	  building.planet=(self)
 	  building.add_observer(self)
-	  
-	  # Update values.
-	  total_values_from_buildings
 	  
 	  # Tell my observers I've changed.
 	  changed # Set observeable state to "changed".
@@ -151,9 +204,6 @@ class Planet
 	building_to_remove.planet = nil
 	@buildings.delete(building_to_remove)
 	
-	# Update values.
-	total_values_from_buildings
-	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
 	notify_observers() # Notify errybody.
@@ -166,9 +216,6 @@ class Planet
 	end
 	
 	@buildings.clear
-	
-	# Update values.
-	total_values_from_buildings
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
@@ -348,35 +395,5 @@ class Planet
   def remove_planet
 	# Lean on parent pi_configuration function.
 	@pi_configuration.remove_planet(self)
-  end
-  
-  private
-  
-  def total_values_from_buildings
-	# Reset all values.
-	@powergrid_usage = 0
-	@cpu_usage = 0
-	@powergrid_provided = 0
-	@cpu_provided = 0
-	@isk_cost = 0
-	
-	# Update values from buildings.
-	@buildings.each do |building|
-	
-	  # Update overall powergrid usage.
-	  @powergrid_usage += building.powergrid_usage
-	  
-	  # Update overall powergrid provided.
-	  @powergrid_provided += building.powergrid_provided
-	  
-	  # Update overall cpu usage.
-	  @cpu_usage += building.cpu_usage
-	  
-	  # Update overall cpu provided.
-	  @cpu_provided += building.cpu_provided
-	  
-	  # Update overall isk cost.
-	  @isk_cost += building.isk_cost
-	end
   end
 end
