@@ -46,7 +46,7 @@ class RubyPIMainMenu < Gtk::MenuBar
 	  
 	  # Run the dialog.
 	  if dialog.run == Gtk::ResponseType::ACCEPT
-		$ruby_pi_main_gtk_window.save_pi_config_to_yaml(dialog.filename)
+		PIConfiguration.save_to_yaml($ruby_pi_main_gtk_window.pi_configuration, dialog.filename)
 	  end
 	  
 	  dialog.destroy
@@ -77,7 +77,8 @@ class RubyPIMainMenu < Gtk::MenuBar
 	  
 	  # Run the dialog.
 	  if dialog.run == Gtk::ResponseType::ACCEPT
-		$ruby_pi_main_gtk_window.load_pi_config_from_yaml(dialog.filename)
+		loaded_pi_configuration = PIConfiguration.load_from_yaml(dialog.filename)
+		$ruby_pi_main_gtk_window.pi_configuration = loaded_pi_configuration
 	  end
 	  
 	  dialog.destroy

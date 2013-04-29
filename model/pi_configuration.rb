@@ -10,6 +10,28 @@ class PIConfiguration
   attr_reader :planets
   attr_reader :product
   
+  def self.save_to_yaml(pi_configuration, filename)
+	abs_filepath = File.expand_path(filename, File.dirname(__FILE__))
+	yaml_file = File.open(abs_filepath, "w")
+	
+	yaml_file.write(YAML::dump(pi_configuration))
+	
+	yaml_file.close
+	
+	return true
+  end
+  
+  def self.load_from_yaml(filename)
+	abs_filepath = File.expand_path(filename, File.dirname(__FILE__))
+	yaml_file = File.open(abs_filepath, "r")
+	
+	pi_configuration = YAML::load(yaml_file)
+	
+	yaml_file.close
+	
+	return pi_configuration
+  end
+  
   def initialize(planets = nil, product = nil)
 	if (planets != nil)
 	  planets.each do |planet|

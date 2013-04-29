@@ -61,26 +61,20 @@ class RubyPI < Gtk::Window
 	return self
   end
   
-  def save_pi_config_to_yaml(filename)
-	abs_filepath = File.expand_path(filename, File.dirname(__FILE__))
-	yaml_file = File.open(abs_filepath, "w")
-	
-	yaml_file.write(YAML::dump(@pi_configuration))
-	
-	yaml_file.close
-	
-	return true
+  def pi_configuration
+	return @pi_configuration
   end
   
-  def load_pi_config_from_yaml(filename)
-	abs_filepath = File.expand_path(filename, File.dirname(__FILE__))
-	yaml_file = File.open(abs_filepath, "r")
-	
-	@pi_configuration = YAML::load(yaml_file)
-	
-	yaml_file.close
-	
-	return @pi_configuration
+  def pi_configuration=(new_pi_configuration)
+	@pi_configuration = new_pi_configuration
+  end
+  
+  def main_widget
+	return @main_widget
+  end
+  
+  def menu_bar
+	return @menu_bar
   end
   
   def change_main_widget(new_widget)
