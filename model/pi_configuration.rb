@@ -37,10 +37,22 @@ class PIConfiguration
   
   def remove_planet(planet_to_remove)
 	# Stop observing the planet.
-	@planet.destroy_observer(self)
+	planet_to_remove.delete_observer(self)
 	
 	# Lean on Array.delete.
 	@planets.delete(planet_to_remove)
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
+  end
+  
+  def remove_all_planets
+	@planets.each do |planet|
+	  planet.delete_observer(self)
+	end
+	
+	@planets.clear
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".

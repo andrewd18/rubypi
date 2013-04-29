@@ -2,6 +2,9 @@ require 'test/unit'
 
 # All model/ tests.
 
+# PI Configuration
+require_relative './test_case_pi_configuration.rb'
+
 # Planet
 require_relative './test_case_planet.rb'
 
