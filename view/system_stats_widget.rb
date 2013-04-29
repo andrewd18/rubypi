@@ -4,12 +4,14 @@ require 'gtk3'
 # This widget will show a planet, its buildings, and building-related stats.
 
 class SystemStatsWidget < Gtk::Box
+  
+  attr_accessor :pi_configuration_model
+  
   def initialize(pi_configuration_model)
 	super(:vertical)
 	
 	# Hook up model data.
 	@pi_configuration_model = pi_configuration_model
-	@pi_configuration_model.add_observer(self)
 	
 	# Gtk::Table Syntax
 	# table = Gtk::Table.new(rows, columns)
@@ -42,6 +44,14 @@ class SystemStatsWidget < Gtk::Box
 	return self
   end
   
+  def start_observing_model
+	@pi_configuration_model.add_observer(self)
+  end
+  
+  def stop_observing_model
+	@pi_configuration_model.delete_observer(self)
+  end
+  
   # Called when the PI Configuration changes.
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
@@ -51,11 +61,11 @@ class SystemStatsWidget < Gtk::Box
   end
   
   def destroy
+	self.stop_observing_model
+	
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	@pi_configuration_model.delete_observer(self)
 	
 	super
   end

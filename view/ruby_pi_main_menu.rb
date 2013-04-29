@@ -46,7 +46,11 @@ class RubyPIMainMenu < Gtk::MenuBar
 	  
 	  # Run the dialog.
 	  if dialog.run == Gtk::ResponseType::ACCEPT
+		$ruby_pi_main_gtk_window.main_widget.stop_observing_model
+		
 		PIConfiguration.save_to_yaml($ruby_pi_main_gtk_window.pi_configuration, dialog.filename)
+		
+		$ruby_pi_main_gtk_window.main_widget.start_observing_model
 	  end
 	  
 	  dialog.destroy

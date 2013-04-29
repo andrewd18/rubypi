@@ -2,6 +2,8 @@
 
 class PlanetImage < Gtk::Image
   
+  attr_accessor :planet_model
+  
   BASE_IMAGES_FOLDER = "view/images"
   
   # TODO - Complete images for Ice and Plasma.
@@ -17,7 +19,6 @@ class PlanetImage < Gtk::Image
   
   def initialize(planet_model, requested_size_array_in_px = [64, 64])
 	@planet_model = planet_model
-	@planet_model.add_observer(self)
 	
 	@displayed_type = @planet_model.type
 	
@@ -27,6 +28,14 @@ class PlanetImage < Gtk::Image
 	super(:file => calculate_filename)
 	
 	return self
+  end
+  
+  def start_observing_model
+	@planet_model.add_observer(self)
+  end
+  
+  def stop_observing_model
+	@planet_model.delete_observer(self)
   end
   
   # Called when the @planet_model changes.
@@ -43,7 +52,7 @@ class PlanetImage < Gtk::Image
   end
   
   def destroy
-	@planet_model.delete_observer(self)
+	self.stop_observing_model
 	
 	super
   end

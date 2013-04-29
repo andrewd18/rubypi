@@ -1,10 +1,12 @@
 class BuildingCountTable < Gtk::Table
+  
+  attr_accessor :planet_model
+  
   def initialize(planet_model)
 	super(2, 2)
 	
 	# Hook up model data.
 	@planet_model = planet_model
-	@planet_model.add_observer(self)
 	
 	# Building stats box like FIDS in Endless Space.
 	# Gtk::Table Syntax
@@ -52,6 +54,14 @@ class BuildingCountTable < Gtk::Table
 	return self
   end
   
+  def start_observing_model
+	@planet_model.add_observer(self)
+  end
+  
+  def stop_observing_model
+	@planet_model.delete_observer(self)
+  end
+  
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
@@ -63,11 +73,11 @@ class BuildingCountTable < Gtk::Table
   end
   
   def destroy
+	self.stop_observing_model
+	
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	@planet_model.delete_observer(self)
 	
 	super
   end

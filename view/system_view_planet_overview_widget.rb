@@ -14,9 +14,8 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	
 	# Hook up our model data.
 	@planet_model = planet_model
-	@planet_model.add_observer(self)
 	
-	building_count_table = BuildingCountTable.new(@planet_model)
+	@building_count_table = BuildingCountTable.new(@planet_model)
 	
 	
 	# Planet image and event wrapper for double-click events.
@@ -31,7 +30,7 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	@edit_planet_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
 	
 	# Pack the completed widget into ourself.
-	self.pack_start(building_count_table, :expand => false)
+	self.pack_start(@building_count_table, :expand => false)
 	self.pack_start(@planet_image_event_wrapper, :expand => false)
 	self.pack_start(@planet_name_label, :expand => false)
 	self.pack_start(@planet_alias_label, :expand => false)
@@ -61,6 +60,34 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	end
   end
   
+  def planet_model
+	return @planet_model
+  end
+  
+  def planet_model=(new_planet_model)
+	@planet_model = new_planet_model
+	
+	# Pass along to the children.
+	@planet_image.planet_model = (@planet_model)
+	@building_count_table.planet_model = (@planet_model)
+  end
+  
+  def start_observing_model
+	@planet_model.add_observer(self)
+	
+	# Pass along to the children.
+	@planet_image.start_observing_model
+	@building_count_table.start_observing_model
+  end
+  
+  def stop_observing_model
+	@planet_model.delete_observer(self)
+	
+	# Pass along to the children.
+	@planet_image.stop_observing_model
+	@building_count_table.stop_observing_model
+  end
+  
   # Called when our planet says it's changed.
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
@@ -75,11 +102,11 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
   end
   
   def destroy
+	self.stop_observing_model
+	
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	@planet_model.delete_observer(self)
 	
 	super
   end

@@ -66,7 +66,16 @@ class RubyPI < Gtk::Window
   end
   
   def pi_configuration=(new_pi_configuration)
+	# Unhook existing widget observers.
+	@main_widget.stop_observing_model
+	
 	@pi_configuration = new_pi_configuration
+	
+	# Pass new model along to child widgets.
+	@main_widget.pi_configuration_model = (@pi_configuration)
+	
+	# Reattach existing widget observers.
+	@main_widget.start_observing_model
   end
   
   def main_widget

@@ -12,8 +12,13 @@ class SystemViewWidget < Gtk::Box
 	# Hook up our model data.
 	@pi_configuration_model = pi_configuration_model
 	
+	@planet_overview_widgets = Array.new
+	
 	@pi_configuration_model.planets.each do |planet|
 	  widget = SystemViewPlanetOverviewWidget.new(planet)
+	  
+	  @planet_overview_widgets << widget
+	  
 	  frame = Gtk::Frame.new
 	  frame.add(widget)
 	  self.pack_start(frame, :expand => true, :fill => false)
@@ -25,7 +30,55 @@ class SystemViewWidget < Gtk::Box
 	return self
   end
   
+  def pi_configuration_model
+	return @pi_configuration_model
+  end
+  
+  def pi_configuration_model=(new_pi_configuration)
+	# Set new PI configuration model.
+	@pi_configuration_model = new_pi_configuration
+	
+	# Give the new model to the children.
+	@pi_configuration_model.planets.each_with_index do |planet, index|
+	  @planet_overview_widgets[index].planet_model = planet
+	end
+	
+	@system_stats_widget.pi_configuration_model=(@pi_configuration_model)
+  end
+  
+  def start_observing_model
+	# Start observing.
+	@pi_configuration_model.add_observer(self)
+	
+	# Tell children to start observing.
+	@planet_overview_widgets.each do |widget|
+	  widget.start_observing_model
+	end
+	
+	@system_stats_widget.start_observing_model
+  end
+  
+  def stop_observing_model
+	# Stop observing.
+	@pi_configuration_model.delete_observer(self)
+	
+	# Tell children to stop observing.
+	@planet_overview_widgets.each do |widget|
+	  widget.stop_observing_model
+	end
+	
+	@system_stats_widget.stop_observing_model
+  end
+  
+  def update
+	# Do nothing.
+  end
+  
   def destroy
+	self.stop_observing_model
+	
+	@planet_overview_widgets.clear
+	
 	self.children.each do |child|
 	  child.destroy
 	end
