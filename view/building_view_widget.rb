@@ -7,6 +7,9 @@ require_relative 'edit_extractor_widget.rb'
 
 # This is a layout-only widget that contains other, building-specific widgets.
 class BuildingViewWidget < Gtk::Box
+  
+  attr_reader :building_widget
+  
   def initialize(building_model)
 	super(:vertical)
 	
@@ -82,7 +85,44 @@ class BuildingViewWidget < Gtk::Box
 	return self
   end
   
+  def building_model
+	return @building_model
+  end
+  
+  def building_model=(new_building_model)
+	@building_model = new_building_model
+	
+	# Pass along to children.
+	unless (@building_widget.is_a?(Gtk::Label))
+	  @building_widget.building_model = @building_model
+	end
+  end
+  
+  def start_observing_model
+	@building_model.add_observer(self)
+	
+	# Tell children to start observing.
+	unless (@building_widget.is_a?(Gtk::Label))
+	  @building_widget.start_observing_model
+	end
+  end
+  
+  def stop_observing_model
+	@building_model.delete_observer(self)
+	
+	# Tell children to stop observing.
+	unless (@building_widget.is_a?(Gtk::Label))
+	  @building_widget.stop_observing_model
+	end
+  end
+  
+  def update
+	# Do nothing.
+  end
+  
   def destroy
+	self.stop_observing_model
+	
 	self.children.each do |child|
 	  child.destroy
 	end

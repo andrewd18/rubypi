@@ -58,10 +58,19 @@ class TestCaseEditFactoryWidget < Test::Unit::TestCase
   end
   
   def test_can_be_assigned_new_model_object
+	# Assign advanced.
 	@edit_factory_widget.building_model = @advanced_industrial_facility
 	
 	assert_false(@edit_factory_widget.building_model == @basic_industrial_facility)
+	assert_false(@edit_factory_widget.building_model == @high_tech_industrial_facility)
 	assert_equal(@advanced_industrial_facility, @edit_factory_widget.building_model)
+	
+	# Assign high tech.
+	@edit_factory_widget.building_model = @high_tech_industrial_facility
+	
+	assert_false(@edit_factory_widget.building_model == @basic_industrial_facility)
+	assert_false(@edit_factory_widget.building_model == @advanced_industrial_facility)
+	assert_equal(@high_tech_industrial_facility, @edit_factory_widget.building_model)
   end
   
   def test_when_destroyed_unhooks_observers
