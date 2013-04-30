@@ -45,7 +45,8 @@ Releasy::Project.new do
   exposed_files ["README.md",
                  "LICENSE",
                  "COPYING",
-                 "TODO"]
+                 "TODO",
+                 "CHANGELOG.md"]
   
   add_link "http://www.github.com/andrewd18/rubypi", "RubyPI Github"
   exclude_encoding # Applications that don't use advanced encoding (e.g. Japanese characters) can save build size with this.
