@@ -67,6 +67,8 @@ class TestCaseBuildingViewWidget < Test::Unit::TestCase
 	assert_equal(0, @building_view_widget.building_model.count_observers)
   end
   
+  # TODO
+  # This test probably needs to be complemented with a test that will switch out the building-specific sub-widget on the fly.
   def test_can_be_assigned_new_model_object
 	# Assign advanced.
 	@building_view_widget.building_model = @advanced_industrial_facility
