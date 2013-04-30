@@ -2,8 +2,9 @@
 require 'gtk3'
 
 require_relative 'planet_view_widget.rb'
-require_relative 'edit_factory_widget.rb'
+require_relative 'edit_command_center_widget.rb'
 require_relative 'edit_extractor_widget.rb'
+require_relative 'edit_factory_widget.rb'
 
 # This is a layout-only widget that contains other, building-specific widgets.
 class BuildingViewWidget < Gtk::Box
@@ -43,7 +44,7 @@ class BuildingViewWidget < Gtk::Box
 	  
 	  # TODO
 	  # Create an EditCommandCenterWidget.
-	  @building_widget = Gtk::Label.new("TODO: EditCommandCenterWidget")
+	  @building_widget = EditCommandCenterWidget.new(@building_model)
 	  
 	  
 	elsif (@building_model.is_a? Extractor)
