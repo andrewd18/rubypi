@@ -1,6 +1,7 @@
 require 'gtk3'
 
 require_relative 'ruby_pi_about_dialog.rb'
+require_relative 'system_view_widget.rb'
 
 class RubyPIMainMenu < Gtk::MenuBar
   def initialize
@@ -94,6 +95,16 @@ class RubyPIMainMenu < Gtk::MenuBar
 	  if dialog.run == Gtk::ResponseType::ACCEPT
 		loaded_pi_configuration = PIConfiguration.load_from_yaml(dialog.filename)
 		$ruby_pi_main_gtk_window.pi_configuration = loaded_pi_configuration
+		
+		# Reset to System View Widget.
+		# 
+		# I do this because System View Widget is the only view that accepts a top-level pi_configuration model object,
+		# instead of a specific sub-object, like a planet or building.
+		#
+		# Also it makes a certain amount of sense; if you load a PI config, you should be able to see it at-a-glance.
+		# Changing all the values of the planet you're looking at, for example, without an at-a-glance overview
+		# might be disorienting.
+		$ruby_pi_main_gtk_window.change_main_widget(SystemViewWidget.new($ruby_pi_main_gtk_window.pi_configuration))
 	  end
 	  
 	  dialog.destroy
