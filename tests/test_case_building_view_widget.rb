@@ -1,7 +1,6 @@
 require "test/unit"
 
 require_relative "../view/building_view_widget.rb"
-# require_relative "../model/basic_industrial_facility.rb"
 
 class TestCaseBuildingViewWidget < Test::Unit::TestCase
   # Run once.

@@ -1,6 +1,10 @@
+require 'gtk3'
+
 # Changes the image of the building based off of its model type.
 
 class BuildingImage < Gtk::Image
+  
+  attr_accessor :building_model
   
   BASE_IMAGES_FOLDER = "view/images"
   
@@ -15,7 +19,6 @@ class BuildingImage < Gtk::Image
   
   def initialize(building_model, requested_size_array_in_px = [64, 64])
 	@building_model = building_model
-	@building_model.add_observer(self)
 	
 	@displayed_type = @building_model.name
 	
@@ -40,8 +43,16 @@ class BuildingImage < Gtk::Image
 	end
   end
   
-  def destroy
+  def start_observing_model
+	@building_model.add_observer(self)
+  end
+  
+  def stop_observing_model
 	@building_model.delete_observer(self)
+  end
+  
+  def destroy
+	self.stop_observing_model
 	
 	super
   end
