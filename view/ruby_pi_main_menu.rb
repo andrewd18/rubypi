@@ -70,7 +70,7 @@ class RubyPIMainMenu < Gtk::MenuBar
 	# TODO - Should probably move these into a subclass.
 	# Signal connection for File -> Load
 	file_submenu_load.signal_connect("activate") do
-	  dialog = Gtk::FileChooserDialog.new(:title => "Save File",
+	  dialog = Gtk::FileChooserDialog.new(:title => "Load File",
 	                                      :parent => $ruby_pi_main_gtk_window,
 	                                      :action => Gtk::FileChooser::Action::OPEN,
 	                                      :buttons => [
