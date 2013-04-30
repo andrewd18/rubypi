@@ -71,11 +71,15 @@ class RubyPI < Gtk::Window
 	
 	@pi_configuration = new_pi_configuration
 	
-	# Pass new model along to child widgets.
-	@main_widget.pi_configuration_model = (@pi_configuration)
-	
-	# Reattach existing widget observers.
-	@main_widget.start_observing_model
+	# Reset to System View Widget.
+	# 
+	# I do this because System View Widget is the only view that accepts a top-level pi_configuration model object,
+	# instead of a specific sub-object, like a planet or building.
+	#
+	# Also it makes a certain amount of sense; if you load a PI config, you should be able to see it at-a-glance.
+	# Changing all the values of the planet you're looking at, for example, without an at-a-glance overview
+	# might be disorienting.
+	self.change_main_widget(SystemViewWidget.new(@pi_configuration))
   end
   
   def main_widget
