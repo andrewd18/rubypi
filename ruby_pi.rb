@@ -22,8 +22,7 @@ class RubyPI < Gtk::Window
 	  close_application
 	end
 	
-	@menu_bar = RubyPIMainMenu.new
-	
+	# Setup the models.
 	# Load static products into memory.
 	products = Product.all
 	if (products.empty?)
@@ -36,18 +35,15 @@ class RubyPI < Gtk::Window
 	  Schematic.load_from_yaml
 	end
 	
-	
-	# TODO: Allow user to load from file.
+	# Create a blank PI Configuration with 6 planets. User can load a different one if they feel like it.
 	@pi_configuration = PIConfiguration.new
 	
-	# HACK for testing.
-	# (planet_type, planet_name = nil, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
-	@pi_configuration.add_planet(Planet.new("Barren", "J100820 I", "Factory"))
-	@pi_configuration.add_planet(Planet.new("Lava", "J100820 III", "Chiral & Silicon"))
-	@pi_configuration.add_planet(Planet.new("Lava", "J100820 VII", "Metals"))
-	@pi_configuration.add_planet(Planet.new("Oceanic", "J100820 VIII", "Microorganisms"))
-	@pi_configuration.add_planet(Planet.new("Temperate", "J100820 IX", "Infected Sheep"))
-	@pi_configuration.add_planet(Planet.new("Uncolonized"))
+	6.times do
+	  @pi_configuration.add_planet(Planet.new("Uncolonized"))
+	end
+	
+	# Setup the view.
+	@menu_bar = RubyPIMainMenu.new
 	
 	@box = Gtk::Box.new(:vertical)
 	
