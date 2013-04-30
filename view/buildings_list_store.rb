@@ -1,11 +1,14 @@
+require 'gtk3'
+
 class BuildingsListStore < Gtk::ListStore
+  
+  attr_accessor :planet_model
   
   # TODO - Implement a "resort by order in @planet_model.buildings" function.
   
   def initialize(planet_model)
 	
 	@planet_model = planet_model
-	@planet_model.add_observer(self)
 	
 	# Set up columns.
 	super(Integer,		# UID
@@ -29,6 +32,14 @@ class BuildingsListStore < Gtk::ListStore
 	
 	# TODO - Delete specific building ID rather than relying on these iters matching.
 	@planet_model.remove_building(@planet_model.buildings[building_iter_value])
+  end
+  
+  def start_observing_model
+	@planet_model.add_observer(self)
+  end
+  
+  def stop_observing_model
+	@planet_model.delete_observer(self)
   end
   
   # Called when the planet says it changes.
@@ -58,6 +69,6 @@ class BuildingsListStore < Gtk::ListStore
   end
   
   def destroy
-	@planet_model.delete_observer(self)
+	self.stop_observing_model
   end
 end
