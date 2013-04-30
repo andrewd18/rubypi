@@ -10,6 +10,9 @@ require_relative './test_case_system_stats_widget.rb'
 
 
 # Planet View Widget and subwidgets.
+require_relative './test_case_planet_view_widget.rb'
+require_relative './test_case_planet_stats_widget.rb'
+require_relative './test_case_planet_image.rb'
 
 # Building View Widget and subwidgets.
 

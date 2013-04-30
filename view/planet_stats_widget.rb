@@ -12,9 +12,8 @@ class PlanetStatsWidget < Gtk::Box
 	
 	# Hook up model data.
 	@planet_model = planet_model
-	@planet_model.add_observer(self)
 	
-	building_count_table = BuildingCountTable.new(@planet_model)
+	@building_count_table = BuildingCountTable.new(@planet_model)
 	
 	# Gtk::Table Syntax
 	# table = Gtk::Table.new(rows, columns)
@@ -89,7 +88,7 @@ class PlanetStatsWidget < Gtk::Box
 	planet_stats_table.attach(isk_label, 0, 1, 6, 7)
 	planet_stats_table.attach(@isk_cost_label, 1, 2, 6, 7)
 	
-	self.pack_start(building_count_table, :expand => false)
+	self.pack_start(@building_count_table, :expand => false)
 	self.pack_start(planet_stats_table, :expand => false)
 	
 	# Finally, update all the values.
@@ -99,6 +98,34 @@ class PlanetStatsWidget < Gtk::Box
 	self.show_all
 	
 	return self
+  end
+  
+  def planet_model
+	return @planet_model
+  end
+  
+  def planet_model=(new_planet_model)
+	@planet_model = new_planet_model
+	
+	# Pass along to children.
+	@building_count_table.planet_model = new_planet_model
+	@planet_image.planet_model = new_planet_model
+  end
+  
+  def start_observing_model
+	@planet_model.add_observer(self)
+	
+	# Inform children.
+	@building_count_table.start_observing_model
+	@planet_image.start_observing_model
+  end
+  
+  def stop_observing_model
+	@planet_model.delete_observer(self)
+	
+	# Inform children.
+	@building_count_table.stop_observing_model
+	@planet_image.stop_observing_model
   end
   
   def update
@@ -146,11 +173,11 @@ class PlanetStatsWidget < Gtk::Box
   end
   
   def destroy
+	self.stop_observing_model
+	
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	@planet_model.delete_observer(self)
 	
 	super
   end

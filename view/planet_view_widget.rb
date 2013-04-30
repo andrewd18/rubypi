@@ -88,9 +88,9 @@ class PlanetViewWidget < Gtk::Box
 	bottom_row.pack_start(vertical_box_frame, :expand => true, :fill => true)
 	
 	# Right Column
-	@show_planet_stats_widget = PlanetStatsWidget.new(@planet_model)
+	@planet_stats_widget = PlanetStatsWidget.new(@planet_model)
 	planet_stats_widget_frame = Gtk::Frame.new
-	planet_stats_widget_frame.add(@show_planet_stats_widget)
+	planet_stats_widget_frame.add(@planet_stats_widget)
 	bottom_row.pack_start(planet_stats_widget_frame, :expand => false)
 	
 	
@@ -103,7 +103,41 @@ class PlanetViewWidget < Gtk::Box
 	return self
   end
   
+  def planet_model
+	return @planet_model
+  end
+  
+  def planet_model=(new_planet_model)
+	@planet_model = new_planet_model
+	
+	# Pass new @planet_model along to children.
+	@buildings_list_store.planet_model = (@planet_model)
+	@planet_stats_widget.planet_model = (@planet_model)
+  end
+  
+  def start_observing_model
+	@planet_model.add_observer(self)
+	
+	# Tell children to start observing.
+	@buildings_list_store.start_observing_model
+	@planet_stats_widget.start_observing_model
+  end
+  
+  def stop_observing_model
+	@planet_model.delete_observer(self)
+	
+	# Tell children to stop observing.
+	@buildings_list_store.stop_observing_model
+	@planet_stats_widget.stop_observing_model
+  end
+  
+  def update
+	# Do nothing.
+  end
+  
   def destroy
+	self.stop_observing_model
+	
 	self.children.each do |child|
 	  child.destroy
 	end
@@ -119,7 +153,7 @@ class PlanetViewWidget < Gtk::Box
   
   def return_to_system_view
 	# Before we return, save the data to the model.
-	@show_planet_stats_widget.commit_to_model
+	@planet_stats_widget.commit_to_model
 	
 	$ruby_pi_main_gtk_window.change_main_widget(SystemViewWidget.new(@planet_model.pi_configuration))
   end

@@ -1,3 +1,5 @@
+require 'gtk3'
+
 # Changes the image of the planet based off of its model type.
 
 class PlanetImage < Gtk::Image
