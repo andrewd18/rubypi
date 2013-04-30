@@ -153,7 +153,7 @@ class PlanetStatsWidget < Gtk::Box
   
   def commit_to_model
 	# Stop observing so the values we want to set don't get overwritten on an #update.
-	@planet_model.delete_observer(self)
+	self.stop_observing_model
 	
 	planet_type_value = @planet_type_combo_box.active_iter.get_value(0)
 	
@@ -169,7 +169,7 @@ class PlanetStatsWidget < Gtk::Box
 	end
 	
 	# Start observing again.
-	@planet_model.add_observer(self)
+	self.start_observing_model
   end
   
   def destroy
