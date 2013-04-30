@@ -37,18 +37,28 @@ class RubyPIMainMenu < Gtk::MenuBar
 	  # Set up dialog options.
 	  ruby_pi_folder = File.expand_path("..", File.dirname(__FILE__))
 	  dialog.current_folder=(ruby_pi_folder)
+	  dialog.do_overwrite_confirmation = true
 	  
 	  # Filter by file type.
 	  yaml_filter = Gtk::FileFilter.new
 	  yaml_filter.add_pattern("*.yml")
+	  yaml_filter.name=("YAML")
 	  
 	  dialog.add_filter(yaml_filter)
 	  
 	  # Run the dialog.
 	  if dialog.run == Gtk::ResponseType::ACCEPT
+		# Get the filename the user gave us.
+		user_set_filename = dialog.filename
+		
+		# Append .yml to it, if necessary.
+		unless (user_set_filename.end_with?(".yml"))
+		  user_set_filename += ".yml"
+		end
+		
 		$ruby_pi_main_gtk_window.main_widget.stop_observing_model
 		
-		PIConfiguration.save_to_yaml($ruby_pi_main_gtk_window.pi_configuration, dialog.filename)
+		PIConfiguration.save_to_yaml($ruby_pi_main_gtk_window.pi_configuration, user_set_filename)
 		
 		$ruby_pi_main_gtk_window.main_widget.start_observing_model
 	  end
@@ -76,6 +86,7 @@ class RubyPIMainMenu < Gtk::MenuBar
 	  # Filter by file type.
 	  yaml_filter = Gtk::FileFilter.new
 	  yaml_filter.add_pattern("*.yml")
+	  yaml_filter.name=("YAML")
 	  
 	  dialog.add_filter(yaml_filter)
 	  
