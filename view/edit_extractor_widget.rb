@@ -2,12 +2,14 @@ require 'gtk3'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditExtractorWidget < Gtk::Box
-  def initialize(extractor_model)
+  
+  attr_accessor :building_model
+  
+  def initialize(building_model)
 	super(:vertical)
 	
 	# Hook up model data.
-	@extractor_model = extractor_model
-	@extractor_model.add_observer(self)
+	@building_model = building_model
 	
 	# Gtk::Table Syntax
 	# table = Gtk::Table.new(rows, columns)
@@ -29,7 +31,7 @@ class EditExtractorWidget < Gtk::Box
 	extract_label = Gtk::Label.new("Extract:")
 	
 	@product_combo_box = Gtk::ComboBoxText.new
-	@extractor_model.accepted_product_names.each do |name|
+	@building_model.accepted_product_names.each do |name|
 	  @product_combo_box.append_text(name)
 	end
 	
@@ -50,19 +52,27 @@ class EditExtractorWidget < Gtk::Box
 	return self
   end
   
+  def start_observing_model
+	@building_model.add_observer(self)
+  end
+  
+  def stop_observing_model
+	@building_model.delete_observer(self)
+  end
+  
   # Called when the factory_model changes.
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
-	  @number_of_heads_spin_button.value = @extractor_model.extractor_heads.count
+	  @number_of_heads_spin_button.value = @building_model.extractor_heads.count
 	  
 	  # Set the active product combo box iterator to the model's product name.
-	  if (@extractor_model.product_name == nil)
+	  if (@building_model.product_name == nil)
 		@product_combo_box.active_iter=(nil)
 	  else
 		# Find the iter that corresponds to the model's product.
 		@product_combo_box.model.each do |model, path, iter|
-		  if (@extractor_model.product_name == iter.get_value(0))
+		  if (@building_model.product_name == iter.get_value(0))
 			@product_combo_box.active_iter=(iter)
 		  end
 		end
@@ -71,14 +81,13 @@ class EditExtractorWidget < Gtk::Box
   end
   
   def commit_to_model
-	# Stop observing so the values we want to set don't get overwritten on an #update.
-	@extractor_model.delete_observer(self)
+	self.stop_observing_model
 	
-	@extractor_model.remove_all_heads
+	@building_model.remove_all_heads
 	
 	num_heads_int = @number_of_heads_spin_button.value.to_i
 	num_heads_int.times do
-	  @extractor_model.add_extractor_head
+	  @building_model.add_extractor_head
 	end
 	
 	# Ignore commit unless the user picked something legit.
@@ -88,23 +97,23 @@ class EditExtractorWidget < Gtk::Box
 	  currently_selected_product_name = @product_combo_box.active_iter.get_value(0)
 	  
 	  # Find the product that corresponds to the active iterator.
-	  @extractor_model.accepted_product_names.each do |name|
+	  @building_model.accepted_product_names.each do |name|
 		if (name == currently_selected_product_name)
-		  @extractor_model.product_name = name
+		  @building_model.product_name = name
 		end
 	  end
 	end
 	
 	# Start observing again.
-	@extractor_model.add_observer(self)
+	self.start_observing_model
   end
   
   def destroy
+	self.stop_observing_model
+	
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	@extractor_model.delete_observer(self)
 	
 	super
   end
