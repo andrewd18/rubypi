@@ -1,3 +1,5 @@
+require 'gtk3'
+
 class BuildingCountTable < Gtk::Table
   
   attr_accessor :planet_model
