@@ -95,6 +95,9 @@ class RubyPI < Gtk::Window
 	# This is a standin method until I get all the UI widgets to resize nicely to any size.
 	self.resize(1,1)
 	self.show_all
+	
+	# Finally, tell the widget it can begin observing the model.
+	@main_widget.start_observing_model
   end
   
   def close_application
