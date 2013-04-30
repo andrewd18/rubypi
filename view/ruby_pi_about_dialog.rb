@@ -6,7 +6,7 @@ class RubyPIAboutDialog < Gtk::AboutDialog
 	
 	self.name = "About RubyPI"
 	self.program_name = "RubyPI"
-	self.version = "0.0.3"
+	self.version = "0.0.4"
 	self.copyright = "Copyright (C) 2013, Andrew Dorney <andrewd18@gmail.com>"
 
 	gplv3 = "This program is free software: you can redistribute it and/or modify "

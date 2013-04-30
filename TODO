@@ -7,7 +7,6 @@ Core Features
 * Add a Building Edit view for each building.
   - Allow user to level up a command center. Adjust cpu/pg appropriately.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
-* Allow user to load and save PI configurations (XML? YAML? HAML?).
 * Add storage.
 * Add links.
 
