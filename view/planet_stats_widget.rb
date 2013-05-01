@@ -149,13 +149,9 @@ class PlanetStatsWidget < Gtk::Box
   end
   
   def commit_to_model
-	if (@planet_type_combo_box.selected_item == "Uncolonized")
-	  @planet_model.abandon
-	else
-	  @planet_model.type = @planet_type_combo_box.selected_item
-	  @planet_model.alias = @planet_alias_entry.text
-	  @planet_model.name = @planet_name_entry.text
-	end
+	@planet_model.type = @planet_type_combo_box.selected_item
+	@planet_model.alias = @planet_alias_entry.text
+	@planet_model.name = @planet_name_entry.text
   end
   
   def destroy
