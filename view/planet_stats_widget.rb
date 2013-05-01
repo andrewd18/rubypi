@@ -153,9 +153,6 @@ class PlanetStatsWidget < Gtk::Box
 	
 	if (@planet_type_combo_box.selected_item == "Uncolonized")
 	  @planet_model.abandon
-	  
-	  # Force an #update because we know the values have changed, and we didn't change them.
-	  self.update
 	else
 	  @planet_model.type = @planet_type_combo_box.selected_item
 	  @planet_model.alias = @planet_alias_entry.text
@@ -164,6 +161,9 @@ class PlanetStatsWidget < Gtk::Box
 	
 	# Start observing again.
 	self.start_observing_model
+	
+	# Force an update.
+	self.update
   end
   
   def destroy
