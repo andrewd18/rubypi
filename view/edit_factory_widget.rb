@@ -1,5 +1,6 @@
 
 require 'gtk3'
+require_relative 'simple_combo_box.rb'
 require_relative '../model/schematic.rb'
 
 # This widget provides all the options necessary to edit a BasicIndustrialFacility, AdvancedIndustrialFacility, or HighTechIndustrialFacility.
@@ -24,11 +25,7 @@ class EditFactoryWidget < Gtk::Box
 	schematic_label = Gtk::Label.new("Schematic:")
 	
 	# Populate the combo box with the schematics this factory can accept.
-	@schematic_combo_box = Gtk::ComboBoxText.new
-	@building_model.accepted_schematic_names.each do |name|
-	  @schematic_combo_box.append_text(name)
-	end
-	
+	@schematic_combo_box = SimpleComboBox.new(@building_model.accepted_schematic_names)
 	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
@@ -57,17 +54,8 @@ class EditFactoryWidget < Gtk::Box
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
-	  # Set the active schematic combo box iterator to the model's schematic.
-	  if (@building_model.schematic_name == nil)
-		@schematic_combo_box.active_iter=(nil)
-	  else
-		# Find the iter that corresponds to the model's schematic.
-		@schematic_combo_box.model.each do |model, path, iter|
-		  if (@building_model.schematic_name == iter.get_value(0))
-			@schematic_combo_box.active_iter=(iter)
-		  end
-		end
-	  end
+	  # Set the value in the combo box to the value from the model.
+	  @schematic_combo_box.selected_item = @building_model.schematic_name
 	end
   end
   
@@ -76,18 +64,7 @@ class EditFactoryWidget < Gtk::Box
 	self.stop_observing_model
 	
 	# Ignore commit unless the user picked something legit.
-	if (@schematic_combo_box.active_iter == nil)
-	  return
-	else
-	  currently_selected_schematic_name = @schematic_combo_box.active_iter.get_value(0)
-	  
-	  # Find the schematic that corresponds to the active iterator.
-	  @building_model.accepted_schematic_names.each do |name|
-		if (name == currently_selected_schematic_name)
-		  @building_model.schematic_name = name
-		end
-	  end
-	end
+	@building_model.schematic_name = @schematic_combo_box.selected_item
 	
 	# Start observing again.
 	self.start_observing_model
