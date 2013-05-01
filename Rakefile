@@ -45,7 +45,7 @@ Releasy::Project.new do
   exposed_files ["README.md",
                  "LICENSE",
                  "COPYING",
-                 "TODO",
+                 "TODO.md",
                  "CHANGELOG.md"]
   
   add_link "http://www.github.com/andrewd18/rubypi", "RubyPI Github"
