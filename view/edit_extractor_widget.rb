@@ -1,4 +1,5 @@
 require 'gtk3'
+require_relative 'simple_combo_box.rb'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditExtractorWidget < Gtk::Box
@@ -30,10 +31,7 @@ class EditExtractorWidget < Gtk::Box
 	# Extract Product Row
 	extract_label = Gtk::Label.new("Extract:")
 	
-	@product_combo_box = Gtk::ComboBoxText.new
-	@building_model.accepted_product_names.each do |name|
-	  @product_combo_box.append_text(name)
-	end
+	@product_combo_box = SimpleComboBox.new(@building_model.accepted_product_names)
 	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
@@ -66,17 +64,8 @@ class EditExtractorWidget < Gtk::Box
 	unless (self.destroyed?)
 	  @number_of_heads_spin_button.value = @building_model.extractor_heads.count
 	  
-	  # Set the active product combo box iterator to the model's product name.
-	  if (@building_model.product_name == nil)
-		@product_combo_box.active_iter=(nil)
-	  else
-		# Find the iter that corresponds to the model's product.
-		@product_combo_box.model.each do |model, path, iter|
-		  if (@building_model.product_name == iter.get_value(0))
-			@product_combo_box.active_iter=(iter)
-		  end
-		end
-	  end
+	  # Set the value in the combo box to the value from the model.
+	  @product_combo_box.selected_item = @building_model.product_name
 	end
   end
   
@@ -90,19 +79,8 @@ class EditExtractorWidget < Gtk::Box
 	  @building_model.add_extractor_head
 	end
 	
-	# Ignore commit unless the user picked something legit.
-	if (@product_combo_box.active_iter == nil)
-	  return
-	else
-	  currently_selected_product_name = @product_combo_box.active_iter.get_value(0)
-	  
-	  # Find the product that corresponds to the active iterator.
-	  @building_model.accepted_product_names.each do |name|
-		if (name == currently_selected_product_name)
-		  @building_model.product_name = name
-		end
-	  end
-	end
+	# Set the model to the value of the combo box.
+	@building_model.product_name = @product_combo_box.selected_item
 	
 	# Start observing again.
 	self.start_observing_model
