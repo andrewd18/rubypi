@@ -68,8 +68,6 @@ class SimpleComboBox < Gtk::ComboBox
 	  new_list_of_items.each do |item|
 		self.add_item(item)
 	  end
-	  
-	  self.active_iter = nil
 	rescue ArgumentError
 	  # Something went wrong. Restore old @items.
 	  self.items=(backup_of_items_list)
@@ -78,7 +76,7 @@ class SimpleComboBox < Gtk::ComboBox
   end
   
   def selected_item
-	# Ask the view what its active iter is.
+	# Ask the view what its active iter is. View will return nil if there is none or the path is invalid.
 	selected_tree_iter = self.active_iter
 	
 	if (selected_tree_iter == nil)
