@@ -2,6 +2,7 @@
 require 'gtk3'
 require_relative 'planet_image.rb'
 require_relative 'building_count_table.rb'
+require_relative 'simple_combo_box.rb'
 require_relative '../model/planet.rb'
 
 # This widget will show a planet, its buildings, and building-related stats.
@@ -36,10 +37,7 @@ class PlanetStatsWidget < Gtk::Box
 	
 	
 	# Populate the combo box with the schematics this factory can accept.
-	@planet_type_combo_box = Gtk::ComboBoxText.new
-	Planet::PLANET_TYPES.each do |type|
-	  @planet_type_combo_box.append_text(type)
-	end
+	@planet_type_combo_box = SimpleComboBox.new(Planet::PLANET_TYPES)
 	
 	# Set up immediate commit on change.
 	@planet_type_combo_box.signal_connect("changed") do
@@ -136,14 +134,8 @@ class PlanetStatsWidget < Gtk::Box
 	unless (self.destroyed?)
 	  # The model data changed. Update the display.
 	  
-	  # TODO - Make this not rely on having PLANET_TYPES iter match the combo box iter.
 	  # Set the current value's row active.
-	  value_array = Planet::PLANET_TYPES
-	  value_array.each_with_index do |value, index|
-		if (value == @planet_model.type)
-		  @planet_type_combo_box.active=(index)
-		end
-	  end
+	  @planet_type_combo_box.selected_item = @planet_model.type
 	  
 	  @planet_name_entry.text = @planet_model.name ||= ""
 	  @planet_alias_entry.text = @planet_model.alias ||= ""
@@ -159,15 +151,13 @@ class PlanetStatsWidget < Gtk::Box
 	# Stop observing so the values we want to set don't get overwritten on an #update.
 	self.stop_observing_model
 	
-	planet_type_value = @planet_type_combo_box.active_iter.get_value(0)
-	
-	if (planet_type_value == "Uncolonized")
+	if (@planet_type_combo_box.selected_item == "Uncolonized")
 	  @planet_model.abandon
 	  
 	  # Force an #update because we know the values have changed, and we didn't change them.
 	  self.update
 	else
-	  @planet_model.type = planet_type_value
+	  @planet_model.type = @planet_type_combo_box.selected_item
 	  @planet_model.alias = @planet_alias_entry.text
 	  @planet_model.name = @planet_name_entry.text
 	end
