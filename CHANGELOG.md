@@ -1,3 +1,11 @@
+
+* You can now edit a Command Center and upgrade it.
+* Fixed an issue where loading a PI config from anywhere but the System View would crash RubyPI.
+* Fixed a series of missing-reference crashes.
+* Fixed an issue where RubyPI ignored your planet type, name, and alias settings.
+* Added this Changelog.
+
+
 Version 0.0.4
 =============
 
