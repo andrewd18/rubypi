@@ -4,11 +4,23 @@ require 'gtk3'
 # Replaces (and simplifies) Gtk::ComboBoxText.
 
 class SimpleComboBox < Gtk::ComboBox
+  
+  attr_accessor :cell_renderer
+  
   def initialize(list_of_items = [])
+	# Set up the combo box model.
 	@items_list_store = Gtk::ListStore.new(String)
-	
 	super(:model => @items_list_store)
 	
+	
+	# Set up the combo box view.
+	@cell_renderer = Gtk::CellRendererText.new
+	self.pack_start(@cell_renderer, false)
+	# Tell the CellRendererText to pull its :text value from column 0.
+	self.set_attributes(@cell_renderer, :text => 0)
+	
+	
+	# Finally, fill the model with data.
 	self.items=(list_of_items)
   end
   

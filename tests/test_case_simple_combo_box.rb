@@ -28,6 +28,10 @@ class TestCaseSimpleComboBox < Test::Unit::TestCase
 	assert_true(@simple_combo_box.model.is_a?(Gtk::ListStore))
   end
   
+  def test_has_a_valid_gtk_cell_renderer
+	assert_true(@simple_combo_box.cell_renderer.is_a?(Gtk::CellRenderer))
+  end
+  
   def test_starts_with_no_combo_box_items
 	assert_equal(Array.new, @simple_combo_box.items)
   end
