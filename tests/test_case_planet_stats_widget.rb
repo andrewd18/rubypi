@@ -74,7 +74,7 @@ class TestCasePlanetStatsWidget < Test::Unit::TestCase
   end
   
   def test_can_access_planet_type_combo_box
-	assert_true(@planet_stats_widget.planet_type_combo_box.is_a?(Gtk::ComboBox))
+	assert_true(@planet_stats_widget.planet_type_combo_box.is_a?(SimpleComboBox))
   end
 
   def test_commits_to_model_when_destroyed
@@ -82,17 +82,13 @@ class TestCasePlanetStatsWidget < Test::Unit::TestCase
 	
 	combo_box = @planet_stats_widget.planet_type_combo_box
 	
-	assert_equal("Lava", combo_box.active_text)
+	assert_equal("Lava", combo_box.selected_item)
 	assert_equal("Lava", @default_planet_model.type)
 	
 	# Set the value to "Oceanic".
-	combo_box.model.each do |model, path, iter|
-	  if (iter.get_value(0) == "Oceanic")
-		combo_box.active_iter=(iter)
-	  end
-	end
+	combo_box.selected_item=("Oceanic")
 	
-	assert_equal("Oceanic", combo_box.active_text)
+	assert_equal("Oceanic", combo_box.selected_item)
 	
 	@planet_stats_widget.destroy
 	

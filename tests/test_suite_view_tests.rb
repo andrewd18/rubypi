@@ -20,3 +20,6 @@ require_relative './test_case_edit_command_center_widget.rb'
 require_relative './test_case_edit_extractor_widget.rb'
 require_relative './test_case_edit_factory_widget.rb'
 require_relative './test_case_building_image.rb'
+
+# Custom widgets.
+require_relative './test_case_simple_combo_box.rb'
