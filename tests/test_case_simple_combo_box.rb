@@ -121,7 +121,7 @@ class TestCaseSimpleComboBox < Test::Unit::TestCase
 	assert_equal(Array.new, @simple_combo_box.items)
   end
   
-  def test_when_setting_all_list_items_first_item_is_auto_selected
+  def test_when_setting_all_list_items_the_selected_item_is_forced_to_nil
 	assert_equal(Array.new, @simple_combo_box.items)
 	
 	nintendo_consoles = ["NES", "SNES", "N64", "Gamecube", "Wii", "WiiU"]
@@ -129,7 +129,16 @@ class TestCaseSimpleComboBox < Test::Unit::TestCase
 	@simple_combo_box.items=(nintendo_consoles)
 	
 	assert_equal(nintendo_consoles, @simple_combo_box.items)
-	assert_equal("NES", @simple_combo_box.selected_item)
+	assert_equal(nil, @simple_combo_box.selected_item)
+	
+	# Set to NES
+	@simple_combo_box.selected_item="NES"
+	
+	# Re-set items.
+	@simple_combo_box.items=(nintendo_consoles)
+	
+	# Should be reset to nil.
+	assert_equal(nil, @simple_combo_box.selected_item)
   end
   
   def test_can_set_currently_selected_item
@@ -137,11 +146,27 @@ class TestCaseSimpleComboBox < Test::Unit::TestCase
 	
 	@simple_combo_box.items=(nintendo_consoles)
 	
-	assert_equal("NES", @simple_combo_box.selected_item)
+	assert_equal(nil, @simple_combo_box.selected_item)
 	
 	@simple_combo_box.selected_item=("Gamecube")
 	
 	assert_equal("Gamecube", @simple_combo_box.selected_item)
+  end
+  
+  def test_can_set_currently_selected_item_to_nil
+	nintendo_consoles = ["NES", "SNES", "N64", "Gamecube", "Wii", "WiiU"]
+	
+	@simple_combo_box.items=(nintendo_consoles)
+	
+	assert_equal(nil, @simple_combo_box.selected_item)
+	
+	@simple_combo_box.selected_item=("Gamecube")
+	
+	assert_equal("Gamecube", @simple_combo_box.selected_item)
+	
+	@simple_combo_box.selected_item=(nil)
+	
+	assert_equal(nil, @simple_combo_box.selected_item)
   end
   
   def test_when_setting_item_error_occurs_if_item_isnt_in_list
@@ -149,13 +174,13 @@ class TestCaseSimpleComboBox < Test::Unit::TestCase
 	
 	@simple_combo_box.items=(nintendo_consoles)
 	
-	assert_equal("NES", @simple_combo_box.selected_item)
+	assert_equal(nil, @simple_combo_box.selected_item)
 	
 	assert_raise do
 	  @simple_combo_box.selected_item=("PS3")
 	end
 	
-	assert_equal("NES", @simple_combo_box.selected_item)
+	assert_equal(nil, @simple_combo_box.selected_item)
   end
   
   def test_can_ask_if_items_contain_a_given_string

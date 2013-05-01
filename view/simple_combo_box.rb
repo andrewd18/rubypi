@@ -69,7 +69,7 @@ class SimpleComboBox < Gtk::ComboBox
 		self.add_item(item)
 	  end
 	  
-	  self.active_iter = @items_list_store.iter_first
+	  self.active_iter = nil
 	rescue ArgumentError
 	  # Something went wrong. Restore old @items.
 	  self.items=(backup_of_items_list)
@@ -81,19 +81,27 @@ class SimpleComboBox < Gtk::ComboBox
 	# Ask the view what its active iter is.
 	selected_tree_iter = self.active_iter
 	
-	# Get its value and return it.
-	return selected_tree_iter.get_value(0)
+	if (selected_tree_iter == nil)
+	  return nil
+	else
+	  # Get its value and return it.
+	  return selected_tree_iter.get_value(0)
+	end
   end
   
   def selected_item=(text)
-	raise ArgumentError, "#{text} is not an item in this SimpleComboBox." unless self.contains_item?(text)
-	
-	# Hunt through the model to find the iter that corresponds to the passed in text.
-	@items_list_store.each do |model, path, iter|
-	  if (iter.get_value(0) == text)
-		
-		# If we find it, set the view to that iter value.
-		self.active_iter=iter
+	if (text.nil?)
+	  self.active_iter = nil
+	else	
+	  raise ArgumentError, "#{text} is not an item in this SimpleComboBox." unless self.contains_item?(text)
+	  
+	  # Hunt through the model to find the iter that corresponds to the passed in text.
+	  @items_list_store.each do |model, path, iter|
+		if (iter.get_value(0) == text)
+		  
+		  # If we find it, set the view to that iter value.
+		  self.active_iter=iter
+		end
 	  end
 	end
   end
