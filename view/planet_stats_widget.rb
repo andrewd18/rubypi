@@ -134,23 +134,21 @@ class PlanetStatsWidget < Gtk::Box
 	unless (self.destroyed?)
 	  # The model data changed. Update the display.
 	  
-	  # Set the current value's row active.
+	  # Set the current combo box value.
 	  @planet_type_combo_box.selected_item = @planet_model.type
 	  
-	  @planet_name_entry.text = @planet_model.name ||= ""
-	  @planet_alias_entry.text = @planet_model.alias ||= ""
+	  # Ignore the alias and name. Whatever the user has in that box now is fine.
 	  
+	  # Set the CPU used and PG used values.
 	  @cpu_used_pct_label.text = "#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}"
 	  @pg_used_pct_label.text = "#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}"
 	  
+	  # Set the isk cost.
 	  @isk_cost_label.text = "#{@planet_model.isk_cost}"
 	end
   end
   
   def commit_to_model
-	# Stop observing so the values we want to set don't get overwritten on an #update.
-	self.stop_observing_model
-	
 	if (@planet_type_combo_box.selected_item == "Uncolonized")
 	  @planet_model.abandon
 	else
@@ -158,12 +156,6 @@ class PlanetStatsWidget < Gtk::Box
 	  @planet_model.alias = @planet_alias_entry.text
 	  @planet_model.name = @planet_name_entry.text
 	end
-	
-	# Start observing again.
-	self.start_observing_model
-	
-	# Force an update.
-	self.update
   end
   
   def destroy
