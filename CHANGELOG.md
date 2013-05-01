@@ -1,3 +1,5 @@
+Staged For Next Release
+=======================
 
 * You can now edit a Command Center and upgrade it.
 * Fixed an issue where loading a PI config from anywhere but the System View would crash RubyPI.
