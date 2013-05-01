@@ -7,6 +7,9 @@ require_relative '../model/planet.rb'
 # This widget will show a planet, its buildings, and building-related stats.
 
 class PlanetStatsWidget < Gtk::Box
+  
+  attr_accessor :planet_type_combo_box
+  
   def initialize(planet_model)
 	super(:vertical)
 	
@@ -133,6 +136,7 @@ class PlanetStatsWidget < Gtk::Box
 	unless (self.destroyed?)
 	  # The model data changed. Update the display.
 	  
+	  # TODO - Make this not rely on having PLANET_TYPES iter match the combo box iter.
 	  # Set the current value's row active.
 	  value_array = Planet::PLANET_TYPES
 	  value_array.each_with_index do |value, index|
@@ -173,6 +177,8 @@ class PlanetStatsWidget < Gtk::Box
   end
   
   def destroy
+	self.commit_to_model
+	
 	self.stop_observing_model
 	
 	self.children.each do |child|
