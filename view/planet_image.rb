@@ -11,13 +11,13 @@ class PlanetImage < Gtk::Image
   # TODO - Complete images for Ice and Plasma.
   TYPE_TO_FILENAME = {"Uncolonized" => "uncolonized_planet.png",
                       "Gas" => "gas_planet.png",
-                      "Ice" => "uncolonized_planet.png",
+                      "Ice" => "ice_planet.png",
                       "Storm" => "storm_planet.png",
                       "Barren" => "barren_planet.png",
                       "Temperate" => "temperate_planet.png",
                       "Lava" => "lava_planet.png",
                       "Oceanic" => "oceanic_planet.png",
-                      "Plasma" => "uncolonized_planet.png"}
+                      "Plasma" => "plasma_planet.png"}
   
   def initialize(planet_model, requested_size_array_in_px = [64, 64])
 	@planet_model = planet_model

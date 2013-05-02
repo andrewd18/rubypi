@@ -21,8 +21,6 @@ User Interface Improvements
 ===========================
 
 * Images
-  - Missing Ice planet.
-  - Missing Plasma planet.
   - Brighten the planet screenshots across the board. Lava, for example, just looks black.
 * User should be able to see extractor heads in the edit extractor window.
 * Add images for every product. Show them where appropriate.
