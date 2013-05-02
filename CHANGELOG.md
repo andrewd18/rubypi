@@ -1,6 +1,9 @@
 Staged For Next Release
 =======================
 
+Version 0.0.5
+=============
+
 * You can now edit a Command Center and upgrade it.
 * Added the missing ice and plasma planet images.
 * Fixed an issue where loading a PI config from anywhere but the System View would crash RubyPI.
