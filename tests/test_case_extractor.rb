@@ -244,6 +244,221 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(@@carebear_tears.object_id, @building.product.object_id)
   end
   
+  #
+  # Extraction Time
+  #
+  
+  def test_default_extraction_time_is_nil
+	assert_equal(nil, @building.extraction_time)
+  end
+  
+  def test_extractor_does_not_let_user_set_extraction_time_below_sixty_minutes
+	# Attempt to set extraction time to 0.5 hours.
+	@building.extraction_time = 0.5
+	
+	# Should set it to the min of 1 hour.
+	assert_equal(1.0, @building.extraction_time)
+  end
+  
+  def test_extractor_does_not_let_user_set_extraction_time_above_fourteen_days
+	# Attempt to set extraction time to 1000 hours.
+	@building.extraction_time = 1000
+	
+	# Should set it to the max of 14 days (336 hours).
+	assert_equal(336.0, @building.extraction_time)
+  end
+  
+  def test_extractor_set_extraction_time_rounds_up_to_fifteen_minute_intervals_between_sixty_minutes_and_twenty_four_and_a_half_hours
+	# Attempt to set extraction time to 1.33333 hours.
+	@building.extraction_time = 1.33333
+	
+	# Should round 1.33333 up to 1.5.
+	assert_equal(1.5, @building.extraction_time)
+	
+	# Attempt to set extraction time to 1.66666 hours.
+	@building.extraction_time = 1.66666
+	
+	# Should round 1.66666 up to 1.75.
+	assert_equal(1.75, @building.extraction_time)
+	
+	# Attempt to set extraction time to 1.88888 hours.
+	@building.extraction_time = 1.88888
+	
+	# Should round 1.88888 up to 2.0.
+	assert_equal(2.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 24.5 hours.
+	@building.extraction_time = 24.5
+	
+	# Should accept 24.5.
+	assert_equal(24.5, @building.extraction_time)
+	
+	# Attempt to set extraction time to 24.88888 hours.
+	@building.extraction_time = 24.88888
+	
+	# Should round up to 25 hours.
+	assert_equal(25.0, @building.extraction_time)
+  end
+  
+  def test_extractor_set_extraction_time_rounds_up_to_thirty_minute_intervals_between_twenty_five_hours_and_fourty_five_and_a_half_hours
+	# Attempt to set extraction time to 25.33333 hours.
+	@building.extraction_time = 25.33333
+	
+	# Should round 25.33333 up to 25.5.
+	assert_equal(25.5, @building.extraction_time)
+	
+	# Attempt to set extraction time to 25.66666 hours.
+	@building.extraction_time = 25.66666
+	
+	# Should round 25.66666 up to 26.
+	assert_equal(26.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 27.25 hours.
+	@building.extraction_time = 27.25
+	
+	# Should round 27.25 up to 27.5.
+	assert_equal(27.5, @building.extraction_time)
+	
+	# Attempt to set extraction time to 45.75 hours.
+	@building.extraction_time = 45.75
+	
+	# Should round 45.75 up to 50.0.
+	assert_equal(50.0, @building.extraction_time)
+  end
+  
+  def test_extractor_set_extraction_time_rounds_up_to_one_hour_intervals_between_fifty_hours_and_ninety_nine_and_a_half_hours
+	# Attempt to set extraction time to 50.33333 hours.
+	@building.extraction_time = 50.33333
+	
+	# Should round 50.33333 up to 51.
+	assert_equal(51.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 50.5 hours.
+	@building.extraction_time = 50.5
+	
+	# Should round 50.5 up to 51.
+	assert_equal(51.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 50.66666 hours.
+	@building.extraction_time = 50.66666
+	
+	# Should round 50.66666 up to 51.
+	assert_equal(51.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 99.5 hours.
+	@building.extraction_time = 99.5
+	
+	# Should round 99.5 up to 100.
+	assert_equal(100.0, @building.extraction_time)
+  end
+  
+  def test_extractor_set_extraction_time_rounds_up_to_two_hour_intervals_between_one_hundred_hours_and_one_hundred_ninety_nine_and_a_half_hours
+	# Attempt to set extraction time to 100.5 hours.
+	@building.extraction_time = 100.5
+	
+	# Should round 100.5 up to 102.
+	assert_equal(102.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 101 hours.
+	@building.extraction_time = 101.0
+	
+	# Should round 101.0 up to 102.
+	assert_equal(102.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 198.1 hours.
+	@building.extraction_time = 198.1
+	
+	# Should round 198.1 up to 200.
+	assert_equal(200.0, @building.extraction_time)
+  end
+  
+  def test_extractor_set_extraction_time_rounds_up_to_four_hour_intervals_between_two_hundred_hours_and_fourteen_days
+	# Attempt to set extraction time to 202.0 hours.
+	@building.extraction_time = 202.0
+	
+	# Should round 202.0 up to 204.
+	assert_equal(204.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 203 hours.
+	@building.extraction_time = 203.0
+	
+	# Should round 203.0 up to 204.
+	assert_equal(204.0, @building.extraction_time)
+	
+	# Attempt to set extraction time to 332.1 hours.
+	@building.extraction_time = 332.1
+	
+	# Should round 332.1 up to 336.
+	assert_equal(336.0, @building.extraction_time)
+  end
+  
+  #
+  # Cycle Time
+  #
+  
+  def test_extractor_default_cycle_time_is_nil
+	assert_equal(nil, @building.cycle_time)
+  end
+  
+  def test_extractor_can_give_us_a_cycle_time_in_minutes
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(20160.0, @building.cycle_time_in_minutes)
+  end
+  
+  def test_extractor_can_give_us_a_cycle_time_in_hours
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(336.0, @building.cycle_time_in_hours)
+  end
+  
+  def test_extractor_stores_default_cycle_time_in_hours
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(336.0, @building.cycle_time)
+  end
+  
+  def test_extractor_can_give_us_a_cycle_time_in_days
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(14, @building.cycle_time_in_days)
+  end
+  
+  def test_extractor_does_not_let_user_change_cycle_time
+	assert_false(@building.respond_to?(:cycle_time=))
+  end
+  
+  def test_extractor_cycle_time_scales_with_extraction_time
+	# If extraction time is > 60 minutes and < 25 hours
+	# Cycle time should be 15 minutes.
+	@building.extraction_time = 12.0
+	assert_equal(0.25, @building.cycle_time)
+	
+	# If extraction time is > 25 hours and < 50 hours
+	# Cycle time should be 30 minutes.
+	@building.extraction_time = 40.0
+	assert_equal(0.5, @building.cycle_time)
+	
+	# If extraction time is > 50 hours and < 100 hours
+	# Cycle time should be 1 hour.
+	@building.extraction_time = 75.0
+	assert_equal(1.0, @building.cycle_time)
+	
+	# If extraction time is > 100 hours and < 200 hours
+	# Cycle time should be 2 hours.
+	@building.extraction_time = 150.0
+	assert_equal(2.0, @building.cycle_time)
+	
+	# If extraction time is > 200 hours
+	# Cycle time should be 4 hours.
+	@building.extraction_time = 250.0
+	assert_equal(4.0, @building.cycle_time)
+  end
+  
   # 
   # "Observable" tests
   # 
