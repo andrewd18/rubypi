@@ -8,7 +8,6 @@ class PlanetImage < Gtk::Image
   
   BASE_IMAGES_FOLDER = "view/images"
   
-  # TODO - Complete images for Ice and Plasma.
   TYPE_TO_FILENAME = {"Uncolonized" => "uncolonized_planet.png",
                       "Gas" => "gas_planet.png",
                       "Ice" => "ice_planet.png",
