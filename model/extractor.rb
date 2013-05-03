@@ -55,6 +55,14 @@ class Extractor < PlanetaryBuilding
 	end
   end
   
+  def self.min_extraction_time
+	return MIN_EXTRACTION_TIME_IN_HOURS
+  end
+  
+  def self.max_extraction_time
+	return MAX_EXTRACTION_TIME_IN_HOURS
+  end
+  
   
   attr_accessor :extractor_heads
   attr_reader :product_name
@@ -222,20 +230,12 @@ class Extractor < PlanetaryBuilding
 	return @extraction_time
   end
   
-  def min_extraction_time
-	return MIN_EXTRACTION_TIME_IN_HOURS
-  end
-  
-  def max_extraction_time
-	return MAX_EXTRACTION_TIME_IN_HOURS
-  end
-  
   def extraction_time=(new_extraction_time)
-	if (new_extraction_time < self.min_extraction_time)
-	  @extraction_time = self.min_extraction_time
+	if (new_extraction_time < self.class.min_extraction_time)
+	  @extraction_time = self.class.min_extraction_time
 	
-	elsif (new_extraction_time > self.max_extraction_time)
-	  @extraction_time = self.max_extraction_time
+	elsif (new_extraction_time > self.class.max_extraction_time)
+	  @extraction_time = self.class.max_extraction_time
 	  
 	else
 	  @extraction_time = self.class.nearest_valid_extraction_time(new_extraction_time)

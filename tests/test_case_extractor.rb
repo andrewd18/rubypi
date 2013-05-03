@@ -301,8 +301,8 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(14, @building.extraction_time_in_days)
   end
   
-  def test_can_ask_extractor_for_min_extraction_time
-	assert_equal(1.0, @building.min_extraction_time)
+  def test_can_ask_class_for_min_extraction_time
+	assert_equal(1.0, Extractor.min_extraction_time)
   end
   
   def test_extractor_does_not_let_user_set_extraction_time_below_sixty_minutes
@@ -313,8 +313,8 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(1.0, @building.extraction_time)
   end
   
-  def test_can_ask_extractor_for_max_extraction_time
-	assert_equal(336.0, @building.max_extraction_time)
+  def test_can_ask_class_for_max_extraction_time
+	assert_equal(336.0, Extractor.max_extraction_time)
   end
   
   def test_extractor_does_not_let_user_set_extraction_time_above_fourteen_days
