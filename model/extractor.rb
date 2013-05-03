@@ -23,6 +23,7 @@ class Extractor < PlanetaryBuilding
 	@cpu_provided = CPU_PROVIDED
 	@isk_cost = ISK_COST
 	@product_name = product_name
+	@extraction_time = nil
 	
 	@extractor_heads = Array.new
 	
@@ -161,5 +162,96 @@ class Extractor < PlanetaryBuilding
   
   def produces_product_name
 	return @product_name
+  end
+  
+  def extraction_time
+	return @extraction_time
+  end
+  
+  def extraction_time=(new_extraction_time)
+	if (new_extraction_time < 1.0)
+	  @extraction_time = 1.0
+	  
+	elsif (new_extraction_time > 336.0)
+	  @extraction_time = 336.0
+	  
+	else
+	  @extraction_time = new_extraction_time
+	end
+	
+	return @extraction_time
+  end
+  
+  def extraction_time_in_minutes
+	return (@extraction_time * 60.0)
+  end
+  
+  def extraction_time_in_minutes=(new_extraction_time)
+	new_extraction_time_in_hours = (new_extraction_time / 60.0)
+	self.extraction_time=(new_extraction_time_in_hours)
+  end
+  
+  def extraction_time_in_hours
+	self.extraction_time
+  end
+  
+  def extraction_time_in_hours=(new_extraction_time)
+	self.extraction_time=(new_extraction_time)
+  end
+  
+  def extraction_time_in_days
+	return (@extraction_time / 24.0)
+  end
+  
+  def extraction_time_in_days=(new_extraction_time)
+	new_extraction_time_in_hours = (new_extraction_time * 24.0)
+	self.extraction_time=(new_extraction_time_in_hours)
+  end
+  
+  def cycle_time
+	case @extraction_time
+	  
+	# If extraction time is > 60 minutes and < 25 hours
+	# Cycle time should be 15 minutes.
+	when (1.0...25.0)
+	  return 0.25
+	  
+	# If extraction time is > 25 hours and < 50 hours
+	# Cycle time should be 30 minutes.
+	when (25.0...50.0)
+	  return 0.5
+	  
+	# If extraction time is > 50 hours and < 100 hours
+	# Cycle time should be 1 hour.
+	when (50.0...100.0)
+	  return 1.0
+	  
+	# If extraction time is > 100 hours and < 200 hours
+	# Cycle time should be 2 hours.
+	when (100.0...200.0)
+	  return 2.0
+	  
+	# If extraction time is > 200 hours up to and including 336.0
+	# Cycle time should be 4 hours.
+	when (200.0..336.0)
+	  return 4.0
+	  
+	else
+	  return nil
+	end
+  end
+  
+  def cycle_time_in_minutes
+	time_in_hours = self.cycle_time
+	return (time_in_hours * 60)
+  end
+  
+  def cycle_time_in_hours
+	return self.cycle_time
+  end
+  
+  def cycle_time_in_days
+	time_in_hours = self.cycle_time
+	return (time_in_hours / 24)
   end
 end
