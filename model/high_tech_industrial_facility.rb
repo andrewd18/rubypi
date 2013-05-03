@@ -8,6 +8,7 @@ class HighTechIndustrialFacility < PlanetaryBuilding
   POWERGRID_PROVIDED = 0
   CPU_PROVIDED = 0
   ISK_COST = 525000.00
+  CYCLE_TIME_IN_MINS = 60
   
   BUILDS_P_LEVELS = 4
   
@@ -99,5 +100,21 @@ class HighTechIndustrialFacility < PlanetaryBuilding
   
   def name
 	return "High Tech Industrial Facility"
+  end
+  
+  def cycle_time
+	return CYCLE_TIME_IN_MINS
+  end
+  
+  def cycle_time_in_minutes
+	return CYCLE_TIME_IN_MINS
+  end
+  
+  def cycle_time_in_hours
+	return (CYCLE_TIME_IN_MINS / 60)
+  end
+  
+  def cycle_time_in_days
+	return (self.cycle_time_in_hours / 24.0)
   end
 end
