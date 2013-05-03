@@ -1,5 +1,6 @@
 require 'gtk3'
 require_relative 'simple_combo_box.rb'
+require_relative 'set_extraction_time_slider.rb'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditExtractorWidget < Gtk::Box
@@ -33,6 +34,12 @@ class EditExtractorWidget < Gtk::Box
 	
 	@product_combo_box = SimpleComboBox.new(@building_model.accepted_product_names)
 	
+	
+	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
+	extraction_time_label_autoadjust_warning = Gtk::Label.new("(May be auto-adjusted)")
+	@extraction_time_scale = SetExtractionTimeSlider.new(@building_model)
+	
+	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
 	update
@@ -42,6 +49,10 @@ class EditExtractorWidget < Gtk::Box
 	
 	extractor_stats_table.attach(number_of_heads_label, 0, 1, 1, 2)
 	extractor_stats_table.attach(@number_of_heads_spin_button, 1, 2, 1, 2)
+	
+	extractor_stats_table.attach(extraction_time_label, 0, 1, 2, 3)
+	extractor_stats_table.attach(extraction_time_label_autoadjust_warning, 0, 1, 3, 4)
+	extractor_stats_table.attach(@extraction_time_scale, 1, 2, 2, 4)
 	
 	self.pack_start(extractor_stats_table, :expand => false)
 	
@@ -66,6 +77,13 @@ class EditExtractorWidget < Gtk::Box
 	  
 	  # Set the value in the combo box to the value from the model.
 	  @product_combo_box.selected_item = @building_model.product_name
+	  
+	  # Set the slider to the value from the model.
+	  if (@building_model.extraction_time_in_hours == nil)
+		@extraction_time_scale.value = 1.0
+	  else
+		@extraction_time_scale.value = @building_model.extraction_time_in_hours
+	  end
 	end
   end
   
@@ -81,6 +99,9 @@ class EditExtractorWidget < Gtk::Box
 	
 	# Set the model to the value of the combo box.
 	@building_model.product_name = @product_combo_box.selected_item
+	
+	# Set the extraction time to the value of the slider.
+	@building_model.extraction_time_in_hours = @extraction_time_scale.value
 	
 	# Start observing again.
 	self.start_observing_model
