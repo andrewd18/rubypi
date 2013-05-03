@@ -349,7 +349,7 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(25.0, @building.extraction_time)
   end
   
-  def test_extractor_set_extraction_time_rounds_up_to_thirty_minute_intervals_between_twenty_five_hours_and_fourty_five_and_a_half_hours
+  def test_extractor_set_extraction_time_rounds_up_to_thirty_minute_intervals_between_twenty_five_hours_and_fourty_nine_and_a_half_hours
 	# Attempt to set extraction time to 25.33333 hours.
 	@building.extraction_time = 25.33333
 	
@@ -368,10 +368,10 @@ class TestCaseExtractor < Test::Unit::TestCase
 	# Should round 27.25 up to 27.5.
 	assert_equal(27.5, @building.extraction_time)
 	
-	# Attempt to set extraction time to 45.75 hours.
-	@building.extraction_time = 45.75
+	# Attempt to set extraction time to 49.75 hours.
+	@building.extraction_time = 49.75
 	
-	# Should round 45.75 up to 50.0.
+	# Should round 49.75 up to 50.0.
 	assert_equal(50.0, @building.extraction_time)
   end
   
