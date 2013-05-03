@@ -168,6 +168,14 @@ class Extractor < PlanetaryBuilding
 	return @extraction_time
   end
   
+  def min_extraction_time
+	return 1.0
+  end
+  
+  def max_extraction_time
+	return 336.0
+  end
+  
   def extraction_time=(new_extraction_time)
 	one_hour_up_to_twenty_five_hours = (1.0...25.0)
 	twenty_five_hours_up_to_fifty_hours = (25.0...50.0)
