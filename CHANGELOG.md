@@ -1,6 +1,10 @@
 Staged For Next Release
 =======================
 
+* You can now tell an extractor how long it should operate for. This should act identically to the EVE slider. Huzzah!
+* Added extraction time to extractor model.
+* Added cycle time to factory and extractor models.
+
 Version 0.0.5
 =============
 
