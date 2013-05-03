@@ -252,6 +252,55 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(nil, @building.extraction_time)
   end
   
+  def test_can_set_extraction_time_in_minutes
+	# Set extraction time to MAX.
+	@building.extraction_time_in_minutes = 20160.0
+	
+	assert_equal(336.0, @building.extraction_time)
+  end
+  
+  def test_extractor_can_give_us_an_extraction_time_in_minutes
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(20160.0, @building.extraction_time_in_minutes)
+  end
+  
+  def test_can_set_extraction_time_in_hours
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(336.0, @building.extraction_time)
+  end
+  
+  def test_extractor_can_give_us_an_extraction_time_in_hours
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(336.0, @building.extraction_time_in_hours)
+  end
+  
+  def test_extractor_stores_default_extraction_time_in_hours
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(336.0, @building.extraction_time)
+  end
+  
+  def test_can_set_extraction_time_in_days
+	# Set extraction time to MAX.
+	@building.extraction_time_in_days = 14.0
+	
+	assert_equal(336.0, @building.extraction_time)
+  end
+  
+  def test_extractor_can_give_us_an_extraction_time_in_days
+	# Set extraction time to MAX.
+	@building.extraction_time = 336.0
+	
+	assert_equal(14, @building.extraction_time_in_days)
+  end
+  
   def test_extractor_does_not_let_user_set_extraction_time_below_sixty_minutes
 	# Attempt to set extraction time to 0.5 hours.
 	@building.extraction_time = 0.5
@@ -404,28 +453,32 @@ class TestCaseExtractor < Test::Unit::TestCase
 	# Set extraction time to MAX.
 	@building.extraction_time = 336.0
 	
-	assert_equal(20160.0, @building.cycle_time_in_minutes)
+	# 4 hours * 60 minutes = 240.
+	assert_equal(240.0, @building.cycle_time_in_minutes)
   end
   
   def test_extractor_can_give_us_a_cycle_time_in_hours
 	# Set extraction time to MAX.
 	@building.extraction_time = 336.0
 	
-	assert_equal(336.0, @building.cycle_time_in_hours)
+	# 4 hours * 1 hour = 4.
+	assert_equal(4.0, @building.cycle_time_in_hours)
   end
   
   def test_extractor_stores_default_cycle_time_in_hours
 	# Set extraction time to MAX.
 	@building.extraction_time = 336.0
 	
-	assert_equal(336.0, @building.cycle_time)
+	# 4 hours * 60 minutes = 240.
+	assert_equal(4.0, @building.cycle_time)
   end
   
   def test_extractor_can_give_us_a_cycle_time_in_days
 	# Set extraction time to MAX.
 	@building.extraction_time = 336.0
 	
-	assert_equal(14, @building.cycle_time_in_days)
+	# 4 hours / 24 hours = 0.16666666666666666.
+	assert_equal(0.16666666666666666, @building.cycle_time_in_days)
   end
   
   def test_extractor_does_not_let_user_change_cycle_time
