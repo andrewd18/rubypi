@@ -169,14 +169,38 @@ class Extractor < PlanetaryBuilding
   end
   
   def extraction_time=(new_extraction_time)
+	one_hour_up_to_twenty_five_hours = (1.0...25.0)
+	twenty_five_hours_up_to_fifty_hours = (25.0...50.0)
+	fifty_hours_up_to_one_hundred_hours = (50.0...100.0)
+	one_hundred_hours_up_to_two_hundred_hours = (100.0...200.0)
+	two_hundred_hours_up_to_and_including_max = (200.0..336.0)
+	
+	
 	if (new_extraction_time < 1.0)
 	  @extraction_time = 1.0
 	  
+	elsif (one_hour_up_to_twenty_five_hours.include?(new_extraction_time))
+	  interval = 0.25
+	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
+	  
+	elsif (twenty_five_hours_up_to_fifty_hours.include?(new_extraction_time))
+	  interval = 0.5
+	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
+	  
+	elsif (fifty_hours_up_to_one_hundred_hours.include?(new_extraction_time))
+	  interval = 1.0
+	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
+	  
+	elsif (one_hundred_hours_up_to_two_hundred_hours.include?(new_extraction_time))
+	  interval = 2.0
+	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
+	  
+	elsif (two_hundred_hours_up_to_and_including_max.include?(new_extraction_time))
+	  interval = 4.0
+	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
+	  
 	elsif (new_extraction_time > 336.0)
 	  @extraction_time = 336.0
-	  
-	else
-	  @extraction_time = new_extraction_time
 	end
 	
 	return @extraction_time
@@ -253,5 +277,22 @@ class Extractor < PlanetaryBuilding
   def cycle_time_in_days
 	time_in_hours = self.cycle_time
 	return (time_in_hours / 24)
+  end
+  
+  private
+  
+  def nearest_higher_number_at_interval(starting_number, interval)
+	# Return the next highest value that is divisible by interval.
+	# e.g. - with an interval of 0.25, 1.666 turns into 1.75, 1.888 turns into 2.0.
+	# 
+	# Thank you to http://stackoverflow.com/questions/4874943/rounding-up-a-number-so-that-it-is-divisible-by-5
+	
+	number_divided_by_interval = (starting_number / interval)
+	
+	nearest_higher_integer = number_divided_by_interval.ceil
+	
+	return_value = (nearest_higher_integer * interval)
+	
+	return return_value
   end
 end
