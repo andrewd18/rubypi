@@ -5,6 +5,57 @@ require_relative 'product.rb'
 
 class Extractor < PlanetaryBuilding
   
+  def self.nearest_valid_extraction_time(given_extraction_time_in_hours)
+	# Return the next highest value that is divisible by interval.
+	# e.g. - with an interval of 0.25, 1.666 turns into 1.75, 1.888 turns into 2.0.
+	# 
+	# Thank you to http://stackoverflow.com/questions/4874943/rounding-up-a-number-so-that-it-is-divisible-by-5
+	
+	cycle_time = self.cycle_time_given_extraction_time(given_extraction_time_in_hours)
+	
+	extraction_time_divided_by_cycle_time = (given_extraction_time_in_hours / cycle_time)
+	
+	nearest_higher_integer = extraction_time_divided_by_cycle_time.ceil
+	
+	return_value = (nearest_higher_integer * cycle_time)
+	
+	return return_value
+  end
+  
+  def self.cycle_time_given_extraction_time(given_extraction_time_in_hours)
+	case given_extraction_time_in_hours
+	  
+	# If extraction time is > 60 minutes and < 25 hours
+	# Cycle time should be 15 minutes.
+	when (1.0...25.0)
+	  return 0.25
+	  
+	# If extraction time is > 25 hours and < 50 hours
+	# Cycle time should be 30 minutes.
+	when (25.0...50.0)
+	  return 0.5
+	  
+	# If extraction time is > 50 hours and < 100 hours
+	# Cycle time should be 1 hour.
+	when (50.0...100.0)
+	  return 1.0
+	  
+	# If extraction time is > 100 hours and < 200 hours
+	# Cycle time should be 2 hours.
+	when (100.0...200.0)
+	  return 2.0
+	  
+	# If extraction time is > 200 hours up to and including 336.0
+	# Cycle time should be 4 hours.
+	when (200.0..336.0)
+	  return 4.0
+	  
+	else
+	  return nil
+	end
+  end
+  
+  
   attr_accessor :extractor_heads
   attr_reader :product_name
   
@@ -13,6 +64,9 @@ class Extractor < PlanetaryBuilding
   POWERGRID_PROVIDED = 0
   CPU_PROVIDED = 0
   ISK_COST = 45000.00
+  
+  MIN_EXTRACTION_TIME_IN_HOURS = 1.0
+  MAX_EXTRACTION_TIME_IN_HOURS = 336.0
   
   EXTRACTS_P_LEVEL = 0
   
@@ -169,46 +223,22 @@ class Extractor < PlanetaryBuilding
   end
   
   def min_extraction_time
-	return 1.0
+	return MIN_EXTRACTION_TIME_IN_HOURS
   end
   
   def max_extraction_time
-	return 336.0
+	return MAX_EXTRACTION_TIME_IN_HOURS
   end
   
   def extraction_time=(new_extraction_time)
-	one_hour_up_to_twenty_five_hours = (1.0...25.0)
-	twenty_five_hours_up_to_fifty_hours = (25.0...50.0)
-	fifty_hours_up_to_one_hundred_hours = (50.0...100.0)
-	one_hundred_hours_up_to_two_hundred_hours = (100.0...200.0)
-	two_hundred_hours_up_to_and_including_max = (200.0..336.0)
+	if (new_extraction_time < self.min_extraction_time)
+	  @extraction_time = self.min_extraction_time
 	
-	
-	if (new_extraction_time < 1.0)
-	  @extraction_time = 1.0
+	elsif (new_extraction_time > self.max_extraction_time)
+	  @extraction_time = self.max_extraction_time
 	  
-	elsif (one_hour_up_to_twenty_five_hours.include?(new_extraction_time))
-	  interval = 0.25
-	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
-	  
-	elsif (twenty_five_hours_up_to_fifty_hours.include?(new_extraction_time))
-	  interval = 0.5
-	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
-	  
-	elsif (fifty_hours_up_to_one_hundred_hours.include?(new_extraction_time))
-	  interval = 1.0
-	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
-	  
-	elsif (one_hundred_hours_up_to_two_hundred_hours.include?(new_extraction_time))
-	  interval = 2.0
-	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
-	  
-	elsif (two_hundred_hours_up_to_and_including_max.include?(new_extraction_time))
-	  interval = 4.0
-	  @extraction_time = nearest_higher_number_at_interval(new_extraction_time, interval)
-	  
-	elsif (new_extraction_time > 336.0)
-	  @extraction_time = 336.0
+	else
+	  @extraction_time = self.class.nearest_valid_extraction_time(new_extraction_time)
 	end
 	
 	return @extraction_time
@@ -241,36 +271,7 @@ class Extractor < PlanetaryBuilding
   end
   
   def cycle_time
-	case @extraction_time
-	  
-	# If extraction time is > 60 minutes and < 25 hours
-	# Cycle time should be 15 minutes.
-	when (1.0...25.0)
-	  return 0.25
-	  
-	# If extraction time is > 25 hours and < 50 hours
-	# Cycle time should be 30 minutes.
-	when (25.0...50.0)
-	  return 0.5
-	  
-	# If extraction time is > 50 hours and < 100 hours
-	# Cycle time should be 1 hour.
-	when (50.0...100.0)
-	  return 1.0
-	  
-	# If extraction time is > 100 hours and < 200 hours
-	# Cycle time should be 2 hours.
-	when (100.0...200.0)
-	  return 2.0
-	  
-	# If extraction time is > 200 hours up to and including 336.0
-	# Cycle time should be 4 hours.
-	when (200.0..336.0)
-	  return 4.0
-	  
-	else
-	  return nil
-	end
+	self.class.cycle_time_given_extraction_time(@extraction_time)
   end
   
   def cycle_time_in_minutes
@@ -285,22 +286,5 @@ class Extractor < PlanetaryBuilding
   def cycle_time_in_days
 	time_in_hours = self.cycle_time
 	return (time_in_hours / 24)
-  end
-  
-  private
-  
-  def nearest_higher_number_at_interval(starting_number, interval)
-	# Return the next highest value that is divisible by interval.
-	# e.g. - with an interval of 0.25, 1.666 turns into 1.75, 1.888 turns into 2.0.
-	# 
-	# Thank you to http://stackoverflow.com/questions/4874943/rounding-up-a-number-so-that-it-is-divisible-by-5
-	
-	number_divided_by_interval = (starting_number / interval)
-	
-	nearest_higher_integer = number_divided_by_interval.ceil
-	
-	return_value = (nearest_higher_integer * interval)
-	
-	return return_value
   end
 end
