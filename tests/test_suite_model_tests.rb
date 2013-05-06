@@ -21,3 +21,6 @@ require_relative './test_case_extractor_head.rb'
 # Products, Schematics, Etc.
 require_relative './test_case_product.rb'
 require_relative './test_case_schematic.rb'
+
+# Helper Modules
+require_relative './test_case_unrestricted_storage.rb'
