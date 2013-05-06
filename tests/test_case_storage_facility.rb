@@ -288,4 +288,38 @@ class TestCaseStorageFacility < Test::Unit::TestCase
 	@building.store_product("Ancient Beast", 1)
 	assert_equal(0.39, @building.volume_used)
   end
+  
+  # Storage / Observer tests.
+  
+  def test_storage_facility_notifies_observers_on_store_product
+	pend
+  end
+  
+  def test_storage_facility_does_not_notify_observers_if_store_product_fails
+	pend
+  end
+  
+  def test_storage_facility_notifies_observers_on_store_product_instance
+	pend
+  end
+  
+  def test_storage_facility_does_not_notify_observers_if_store_product_instance_fails
+	pend
+  end
+  
+  def test_storage_facility_notifies_observers_on_product_remove_all
+	pend
+  end
+  
+  def test_storage_facility_does_not_notify_observers_if_product_remove_all_fails
+	pend
+  end
+  
+  def test_storage_facility_notifies_observers_on_product_remove_quantity
+	pend
+  end
+  
+  def test_storage_facility_does_not_notify_observers_if_product_remove_quantity_fails
+	pend
+  end
 end

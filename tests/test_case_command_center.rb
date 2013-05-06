@@ -493,4 +493,38 @@ class TestCaseCommandCenter < Test::Unit::TestCase
   def test_default_num_observers_is_zero
 	assert_equal(0, @building.count_observers)
   end
+  
+  # Storage / Observer tests.
+  
+  def test_command_center_notifies_observers_on_store_product
+	pend
+  end
+  
+  def test_command_center_does_not_notify_observers_if_store_product_fails
+	pend
+  end
+  
+  def test_command_center_notifies_observers_on_store_product_instance
+	pend
+  end
+  
+  def test_command_center_does_not_notify_observers_if_store_product_instance_fails
+	pend
+  end
+  
+  def test_command_center_notifies_observers_on_product_remove_all
+	pend
+  end
+  
+  def test_command_center_does_not_notify_observers_if_product_remove_all_fails
+	pend
+  end
+  
+  def test_command_center_notifies_observers_on_product_remove_quantity
+	pend
+  end
+  
+  def test_command_center_does_not_notify_observers_if_product_remove_quantity_fails
+	pend
+  end
 end
