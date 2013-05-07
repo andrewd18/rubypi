@@ -40,6 +40,8 @@ module UnrestrictedStorage
 	else
 	  stored_products.store(product_name, quantity)
 	end
+	
+	notify_observers_if_observable
   end
   
   def store_product_instance(product_instance, quantity)
@@ -52,6 +54,8 @@ module UnrestrictedStorage
 	raise ArgumentError, "Named product is not stored here." unless stored_products.has_key?(product_name)
 	
 	stored_products.delete(product_name)
+	
+	notify_observers_if_observable
   end
   
   def remove_qty_of_product(product_name, quantity_to_remove)
@@ -66,6 +70,8 @@ module UnrestrictedStorage
 	  # Subtract the quantity requested.
 	  stored_products[product_name] -= quantity_to_remove
 	end
+	
+	notify_observers_if_observable
 	
 	return stored_products[product_name]
   end
@@ -88,5 +94,13 @@ module UnrestrictedStorage
 	end
 	
 	return total_volume_used
+  end
+  
+  def notify_observers_if_observable
+  	# Interact with Observable mixin, if used.
+	if self.is_a?(Observable)
+	  self.changed
+	  self.notify_observers
+	end
   end
 end

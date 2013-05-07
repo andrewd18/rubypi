@@ -1,9 +1,19 @@
 # test_case_unrestricted_storage
 
 require "test/unit"
+require "observer"
 require_relative "../model/unrestricted_storage.rb"
 
 class UnrestrictedStorageMock
+  include Observable
+  include UnrestrictedStorage
+  
+  def storage_volume
+	return 500.0
+  end
+end
+
+class NotObservableUnrestrictedStorageMock
   include UnrestrictedStorage
   
   def storage_volume
@@ -27,6 +37,7 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
   # Run before every test.
   def setup
 	@building_mock = UnrestrictedStorageMock.new
+	@was_notified_of_change = false
   end
   
   # Run after every test.
@@ -273,5 +284,162 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	# P-level 1 products should take up 0.38 per unit.
 	@building_mock.store_product("Ancient Beast", 1)
 	assert_equal(0.39, @building_mock.volume_used)
+  end
+    
+  
+  # Observer interaction tests.
+  
+  def test_unrestricted_storage_mock_is_observable
+	assert_true(@building_mock.is_a?(Observable), "UnrestrictedStorageMock did not include Observable.")
+  end
+  
+  def test_non_observable_unrestricted_storage_mock_is_not_observable
+	@building_mock = NotObservableUnrestrictedStorageMock.new
+	assert_false(@building_mock.is_a?(Observable), "NotObservableUnrestrictedStorageMock did include Observable.")
+  end
+  
+  # Update method for testing observer.
+  def update
+	@was_notified_of_change = true
+  end
+  
+  def test_building_notifies_observers_on_store_product
+	assert_false(@was_notified_of_change)
+	@building_mock.add_observer(self)
+	
+	@building_mock.store_product("Dwarf", 1)
+	assert_true(@was_notified_of_change)
+	
+	@building_mock.delete_observer(self)
+  end
+  
+  def test_building_does_not_notify_observers_if_store_product_fails
+	assert_false(@was_notified_of_change)
+	@building_mock.add_observer(self)
+	
+	# Invalid product name.
+	assert_raise do
+	  @building_mock.store_product(@@dwarf, 1)
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Invalid quantity.
+	assert_raise do
+	  @building_mock.store_product("Dwarf", "Fail")
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Too many products.
+	assert_raise do
+	  @building_mock.store_product("Dwarf", 99999999999999999)
+	end
+	assert_false(@was_notified_of_change)
+	
+	@building_mock.delete_observer(self)
+  end
+  
+  def test_building_notifies_observers_on_store_product_instance
+	assert_false(@was_notified_of_change)
+	@building_mock.add_observer(self)
+	
+	@building_mock.store_product_instance(@@dwarf, 1)
+	assert_true(@was_notified_of_change)
+	
+	@building_mock.delete_observer(self)
+  end
+  
+  def test_building_does_not_notify_observers_if_store_product_instance_fails
+	assert_false(@was_notified_of_change)
+	@building_mock.add_observer(self)
+	
+	# Invalid product instance.
+	assert_raise do
+	  @building_mock.store_product_instance("Dwarf", 1)
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Invalid quantity.
+	assert_raise do
+	  @building_mock.store_product_instance(@@dwarf, "Fail")
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Too many products.
+	assert_raise do
+	  @building_mock.store_product_instance(@@dwarf, 99999999999999999)
+	end
+	assert_false(@was_notified_of_change)
+	
+	@building_mock.delete_observer(self)
+  end
+  
+  def test_building_notifies_observers_on_product_remove_all
+	assert_false(@was_notified_of_change)
+	@building_mock.store_product("Dwarf", 10)
+	
+	@building_mock.add_observer(self)
+	
+	@building_mock.remove_all_of_product("Dwarf")
+	assert_true(@was_notified_of_change)
+	
+	@building_mock.delete_observer(self)
+  end
+  
+  def test_building_does_not_notify_observers_if_product_remove_all_fails
+	assert_false(@was_notified_of_change)
+	@building_mock.store_product("Dwarf", 10)
+	
+	@building_mock.add_observer(self)
+	
+	assert_raise do
+	  @building_mock.remove_all_of_product("Ancient Beast")
+	end
+	assert_false(@was_notified_of_change)
+	
+	@building_mock.delete_observer(self)
+  end
+  
+  def test_building_notifies_observers_on_product_remove_quantity
+	assert_false(@was_notified_of_change)
+	@building_mock.store_product("Dwarf", 10)
+	
+	@building_mock.add_observer(self)
+	
+	@building_mock.remove_qty_of_product("Dwarf", 5)
+	assert_true(@was_notified_of_change)
+	
+	@building_mock.delete_observer(self)
+  end
+  
+  def test_building_does_not_notify_observers_if_product_remove_quantity_fails
+	assert_false(@was_notified_of_change)
+	@building_mock.store_product("Dwarf", 10)
+	
+	@building_mock.add_observer(self)
+	
+	assert_raise do
+	  @building_mock.remove_qty_of_product("Ancient Beast", 5)
+	end
+	assert_false(@was_notified_of_change)
+	
+	@building_mock.delete_observer(self)
+  end
+  
+  def test_building_that_is_not_observable_can_still_add_and_remove_products_without_error
+	@building_mock = NotObservableUnrestrictedStorageMock.new
+	
+	assert_equal(0.0, @building_mock.volume_used)
+	
+	@building_mock.store_product("Dwarf", 1)
+	assert_equal(0.01, @building_mock.volume_used)
+	
+	@building_mock.store_product("Ancient Beast", 1)
+	assert_equal(0.39, @building_mock.volume_used)
+	
+	@building_mock.remove_all_of_product("Dwarf")
+	assert_equal(0.38, @building_mock.volume_used)
+	
+	@building_mock.remove_qty_of_product("Ancient Beast", 1)
+	assert_equal(0.0, @building_mock.volume_used)
   end
 end

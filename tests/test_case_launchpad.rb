@@ -47,39 +47,4 @@ class TestCaseLaunchpad < Test::Unit::TestCase
   def test_storage_volume
 	assert_equal(10000.0, @building.storage_volume)
   end
-  
-  
-  # Storage / Observer tests.
-  
-  def test_launchpad_notifies_observers_on_store_product
-	pend
-  end
-  
-  def test_launchpad_does_not_notify_observers_if_store_product_fails
-	pend
-  end
-  
-  def test_launchpad_notifies_observers_on_store_product_instance
-	pend
-  end
-  
-  def test_launchpad_does_not_notify_observers_if_store_product_instance_fails
-	pend
-  end
-  
-  def test_launchpad_notifies_observers_on_product_remove_all
-	pend
-  end
-  
-  def test_launchpad_does_not_notify_observers_if_product_remove_all_fails
-	pend
-  end
-  
-  def test_launchpad_notifies_observers_on_product_remove_quantity
-	pend
-  end
-  
-  def test_launchpad_does_not_notify_observers_if_product_remove_quantity_fails
-	pend
-  end
 end
