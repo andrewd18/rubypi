@@ -3,7 +3,7 @@
 require "test/unit"
 require_relative "../model/unrestricted_storage.rb"
 
-class BuildingMock
+class UnrestrictedStorageMock
   include UnrestrictedStorage
   
   def storage_volume
@@ -26,7 +26,7 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 
   # Run before every test.
   def setup
-	@building_mock = BuildingMock.new
+	@building_mock = UnrestrictedStorageMock.new
   end
   
   # Run after every test.
