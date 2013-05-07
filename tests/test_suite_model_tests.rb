@@ -24,3 +24,4 @@ require_relative './test_case_schematic.rb'
 
 # Helper Modules
 require_relative './test_case_unrestricted_storage.rb'
+require_relative './test_case_industrial_facility_storage.rb'

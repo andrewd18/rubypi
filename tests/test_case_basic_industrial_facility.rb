@@ -142,6 +142,25 @@ class TestCaseBasicIndustrialFacility < Test::Unit::TestCase
 	assert_false(@building.respond_to?(:cycle_time=))
   end
   
+  #
+  # Industrial Facility Storage behavior tests.
+  #
+  
+  def test_set_schematic_name_from_nil_to_a_valid_schematic
+	pend
+	# Make sure we call industrial_facility_storage_schematic_changed
+  end
+  
+  def test_set_schematic_name_from_one_schematic_to_another
+	pend
+	# Make sure we call industrial_facility_storage_schematic_changed
+  end
+  
+  def test_set_schematic_name_from_one_schematic_to_nil
+	pend
+	# Make sure we call industrial_facility_storage_schematic_changed
+  end
+  
   # 
   # "Observable" tests
   # 
