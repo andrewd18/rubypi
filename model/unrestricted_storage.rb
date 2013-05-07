@@ -26,7 +26,7 @@ module UnrestrictedStorage
 	volume_needed_for_product = (product_instance.volume * quantity)
 	
 	if (volume_needed_for_product > volume_available)
-	  raise ArgumentError, "Adding this product would overflow the storage silo."
+	  raise ArgumentError, "Adding this product would overflow the storage location."
 	end
 	
 	# Ready to add!
