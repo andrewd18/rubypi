@@ -39,7 +39,12 @@ class TestCaseIndustrialFacilityStorage < Test::Unit::TestCase
 	Product.delete(@@silicon)
 	Product.delete(@@miniature_electronics)
 	
+	Product.delete(@@mechanical_parts)
+	Product.delete(@@supertensile_plastics)
+	Product.delete(@@planetary_vehicles)
+	
 	Schematic.delete(@@miniature_electronics_schematic)
+	Schematic.delete(@@planetary_vehicles_schematic)
   end
 
   # Run before every test.
