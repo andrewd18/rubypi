@@ -15,12 +15,14 @@ class TestCaseHighTechIndustrialFacility < Test::Unit::TestCase
 	
 	# Level 4 Products
 	@@galactic_core = Product.new("Galactic Core", 4)
+	@@outer_rim = Product.new("Outer Rim", 4)
 	
 	# Level 3 Schematics
 	@@kuat_schematic = Schematic.new("Kuat", 1, {"Drive Yards" => 1, "Planet" => 1})
 	
 	# Level 4 Schematics
 	@@galactic_core_schematic = Schematic.new("Galactic Core", 1, {"Coruscant" => 1, "Alderaan" => 1, "Kuat" => 1})
+	@@outer_rim_schematic = Schematic.new("Outer Rim", 1, {"Tattooine" => 1, "Dantooine" => 1})
   end
   
   # Run once after all tests.
@@ -29,8 +31,10 @@ class TestCaseHighTechIndustrialFacility < Test::Unit::TestCase
 	Product.delete(@@alderaan)
 	Product.delete(@@kuat)
 	Product.delete(@@galactic_core)
+	Product.delete(@@outer_rim)
 	
 	Schematic.delete(@@galactic_core_schematic)
+	Schematic.delete(@@outer_rim_schematic)
 	Schematic.delete(@@kuat_schematic)
   end
   
@@ -105,7 +109,7 @@ class TestCaseHighTechIndustrialFacility < Test::Unit::TestCase
   
   def test_accepted_schematic_names
 	# We should only accept schematics which have a p-level of 4.
-	assert_equal(["Galactic Core"], @building.accepted_schematic_names)
+	assert_equal(["Galactic Core", "Outer Rim"], @building.accepted_schematic_names)
   end
   
   def test_remove_schematic
@@ -147,19 +151,56 @@ class TestCaseHighTechIndustrialFacility < Test::Unit::TestCase
   # Industrial Facility Storage behavior tests.
   #
   
+  def test_facility_included_industrial_facility_storage_module
+	assert_true(@building.is_a?(IndustrialFacilityStorage))
+  end
+  
+  # Make sure we call industrial_facility_storage_schematic_changed
   def test_set_schematic_name_from_nil_to_a_valid_schematic
-	pend
+	empty_storage_hash = {}
+	galactic_core_storage_hash = {"Coruscant" => 0, "Alderaan" => 0, "Kuat" => 0}
+	
+	assert_equal(empty_storage_hash, @building.stored_products)
+	
+	@building.schematic_name = "Galactic Core"
+	
 	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(galactic_core_storage_hash, @building.stored_products)
   end
   
+  # Make sure we call industrial_facility_storage_schematic_changed
   def test_set_schematic_name_from_one_schematic_to_another
-	pend
+	empty_storage_hash = {}
+	galactic_core_storage_hash = {"Coruscant" => 0, "Alderaan" => 0, "Kuat" => 0}
+	outer_rim_storage_hash = {"Tattooine" => 0, "Dantooine" => 0}
+	
+	assert_equal(empty_storage_hash, @building.stored_products)
+	
+	@building.schematic_name = "Galactic Core"
+	
 	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(galactic_core_storage_hash, @building.stored_products)
+	
+	@building.schematic_name = "Outer Rim"
+	
+	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(outer_rim_storage_hash, @building.stored_products)
   end
   
+  # Make sure we call industrial_facility_storage_schematic_changed
   def test_set_schematic_name_from_one_schematic_to_nil
-	pend
+	empty_storage_hash = {}
+	galactic_core_storage_hash = {"Coruscant" => 0, "Alderaan" => 0, "Kuat" => 0}
+	
+	@building.schematic_name = "Galactic Core"
+	
 	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(galactic_core_storage_hash, @building.stored_products)
+	
+	@building.schematic_name = nil
+	
+	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(empty_storage_hash, @building.stored_products)
   end
   
   # 

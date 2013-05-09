@@ -167,19 +167,56 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
   # Industrial Facility Storage behavior tests.
   #
   
+  def test_facility_included_industrial_facility_storage_module
+	assert_true(@building.is_a?(IndustrialFacilityStorage))
+  end
+  
+  # Make sure we call industrial_facility_storage_schematic_changed
   def test_set_schematic_name_from_nil_to_a_valid_schematic
-	pend
+	empty_storage_hash = {}
+	mos_eisley_storage_hash = {"Scum" => 0, "Villany" => 0}
+	
+	assert_equal(empty_storage_hash, @building.stored_products)
+	
+	@building.schematic_name = "Mos Eisley"
+	
 	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(mos_eisley_storage_hash, @building.stored_products)
   end
   
+  # Make sure we call industrial_facility_storage_schematic_changed
   def test_set_schematic_name_from_one_schematic_to_another
-	pend
+	empty_storage_hash = {}
+	mos_eisley_storage_hash = {"Scum" => 0, "Villany" => 0}
+	tosche_station_storage_hash = {"Friends" => 0, "Power Converters" => 0}
+	
+	assert_equal(empty_storage_hash, @building.stored_products)
+	
+	@building.schematic_name = "Mos Eisley"
+	
 	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(mos_eisley_storage_hash, @building.stored_products)
+	
+	@building.schematic_name = "Tosche Station"
+	
+	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(tosche_station_storage_hash, @building.stored_products)
   end
   
+  # Make sure we call industrial_facility_storage_schematic_changed
   def test_set_schematic_name_from_one_schematic_to_nil
-	pend
+	empty_storage_hash = {}
+	mos_eisley_storage_hash = {"Scum" => 0, "Villany" => 0}
+	
+	@building.schematic_name = "Mos Eisley"
+	
 	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(mos_eisley_storage_hash, @building.stored_products)
+	
+	@building.schematic_name = nil
+	
+	# Make sure we call industrial_facility_storage_schematic_changed
+	assert_equal(empty_storage_hash, @building.stored_products)
   end
   
   # 

@@ -1,7 +1,10 @@
 require_relative 'planetary_building.rb'
 require_relative 'schematic.rb'
+require_relative 'industrial_facility_storage.rb'
 
 class HighTechIndustrialFacility < PlanetaryBuilding
+  
+  include IndustrialFacilityStorage
   
   POWERGRID_USAGE = 400
   CPU_USAGE = 1100
@@ -42,6 +45,9 @@ class HighTechIndustrialFacility < PlanetaryBuilding
 	  changed
 	  notify_observers
 	  
+	  # Update IndustrialFacilityStorage.
+	  industrial_facility_storage_schematic_changed
+	  
 	  return @schematic_name
 	
 	
@@ -66,6 +72,9 @@ class HighTechIndustrialFacility < PlanetaryBuilding
 	  # Notify our observers that we've changed.
 	  changed
 	  notify_observers
+	  
+	  # Update IndustrialFacilityStorage.
+	  industrial_facility_storage_schematic_changed
 	  
 	  return @schematic_name
 	  
