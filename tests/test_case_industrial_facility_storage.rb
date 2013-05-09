@@ -18,17 +18,17 @@ end
 class TestCaseIndustrialFacilityStorage < Test::Unit::TestCase
   # Run once.
   def self.startup
-	@@chiral_structures = Product.find_or_create("Chiral Structures", 0)
-	@@silicon = Product.find_or_create("Silicon", 0)
-	@@miniature_electronics = Product.find_or_create("Miniature Electronics", 1)
+	@@chiral_structures = Product.find_or_create("Chiral Structures", 1)
+	@@silicon = Product.find_or_create("Silicon", 1)
+	@@miniature_electronics = Product.find_or_create("Miniature Electronics", 2)
 	
 	@@miniature_electronics_schematic = Schematic.new("Miniature Electronics", 5, {"Chiral Structures" => 40, "Silicon" => 40})
 	
-	@@mechanical_parts = Product.find_or_create("Mechanical Parts", 1)
-	@@supertensile_plastics = Product.find_or_create("Supertensile Plastics", 1)
+	@@mechanical_parts = Product.find_or_create("Mechanical Parts", 2)
+	@@supertensile_plastics = Product.find_or_create("Supertensile Plastics", 2)
 	# @@miniature_electronics already created
 	
-	@@planetary_vehicles = Product.find_or_create("Planetary Vehicles", 2)
+	@@planetary_vehicles = Product.find_or_create("Planetary Vehicles", 3)
 	
 	@@planetary_vehicles_schematic = Schematic.new("Planetary Vehicles", 3, {"Supertensile Plastics" => 10, "Mechanical Parts" => 10, "Miniature Electronics" => 10})
   end
