@@ -14,6 +14,7 @@ class BuildingsListStore < Gtk::ListStore
 	super(Integer,		# UID
 	      Gdk::Pixbuf,	# Icon
 	      String,		# Name
+	      String,		# Stored Products
 	      String,		# Produces (Product Name)
 	      Integer,		# PG Used
 	      Integer,		# CPU Used
@@ -55,15 +56,35 @@ class BuildingsListStore < Gtk::ListStore
 		new_row.set_value(1, BuildingImage.new(building, [32, 32]).pixbuf)
 		new_row.set_value(2, building.name)
 		
-		if (building.respond_to?(:produces_product_name))
-		  new_row.set_value(3, building.produces_product_name)
+		# Stored Products
+		if (building.respond_to?(:stored_products))
+		  stored_products_string_for_display = ""
+		  
+		  building.stored_products.each_pair do |product_name, quantity_stored|
+			# Product Name: Qty Stored
+			stored_products_string_for_display.concat("#{product_name}")
+			stored_products_string_for_display.concat(": ")
+			stored_products_string_for_display.concat("#{quantity_stored}")
+			# New line
+			stored_products_string_for_display.concat("\n")
+		  end
+		  
+		  new_row.set_value(3, "#{stored_products_string_for_display}")
+		  
 		else
 		  new_row.set_value(3, "")
 		end
 		
-		new_row.set_value(4, building.powergrid_usage)
-		new_row.set_value(5, building.cpu_usage)
-		new_row.set_value(6, building.isk_cost)
+		# Product Name
+		if (building.respond_to?(:produces_product_name))
+		  new_row.set_value(4, building.produces_product_name)
+		else
+		  new_row.set_value(4, "")
+		end
+		
+		new_row.set_value(5, building.powergrid_usage)
+		new_row.set_value(6, building.cpu_usage)
+		new_row.set_value(7, building.isk_cost)
 	  end
 	end
   end
