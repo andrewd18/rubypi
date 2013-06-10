@@ -22,7 +22,7 @@ class EditFactoryWidget < Gtk::Box
 	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
 	
 	# Add planet building stats widgets in a nice grid.
-	factory_stats_table = Gtk::Table.new(7, 2)
+	@factory_stats_table = Gtk::Table.new(7, 2)
 	
 	# Schematic Row
 	schematic_label = Gtk::Label.new("Schematic:")
@@ -41,16 +41,13 @@ class EditFactoryWidget < Gtk::Box
 	# Stored Products Row
 	stored_products_label = Gtk::Label.new("Stored Products:")
 	
-	# Table of stored products.
-	@stored_products_store = StoredProductsListStore.new(@building_model)
-	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
+	@factory_stats_table.attach(schematic_label, 0, 1, 0, 1)
+	@factory_stats_table.attach(@schematic_combo_box, 1, 2, 0, 1)
+	@factory_stats_table.attach(stored_products_label, 0, 1, 1, 2)
 	
-	factory_stats_table.attach(schematic_label, 0, 1, 0, 1)
-	factory_stats_table.attach(@schematic_combo_box, 1, 2, 0, 1)
-	factory_stats_table.attach(stored_products_label, 0, 1, 1, 2)
-	factory_stats_table.attach(@stored_products_list_view, 1, 2, 1, 2)
+	rebuild_stored_product_table
 	
-	self.pack_start(factory_stats_table, :expand => false)
+	self.pack_start(@factory_stats_table, :expand => false)
 	
 	self.show_all
 	
@@ -60,25 +57,63 @@ class EditFactoryWidget < Gtk::Box
   def start_observing_model
 	@building_model.add_observer(self)
 	
-	@stored_products_store.start_observing_model
+	#@stored_products_store.start_observing_model
   end
   
   def stop_observing_model
 	@building_model.delete_observer(self)
 	
-	@stored_products_store.stop_observing_model
+	#@stored_products_store.stop_observing_model
   end
   
   # Called when the building_model changes.
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
-	# unless (self.destroyed?)
-	# end
+	unless (self.destroyed?)
+	  rebuild_stored_product_table
+	end
+  end
+  
+  def rebuild_stored_product_table
+	if (@stored_product_table)
+	  @stored_product_table.destroy
+	  # This automatically cleans up any packed children, namely the scales of @scales_hash.
+	end
+	
+	# Clear out the keys of the scales hash since values are dead.
+	if (@scales_hash)
+	  @scales_hash.clear
+	end
+	
+	# Table of stored products.
+	@stored_product_table = Gtk::Box.new(:horizontal)
+	@scales_hash = Hash.new
+	
+	@building_model.stored_products.each_pair do |product_name, quantity|
+	  product_name_label = Gtk::Label.new("#{product_name}")
+	  
+	  max_allowed_storage_for_this_product = @building_model.schematic.inputs[product_name]
+	  product_quantity_scale = Gtk::Scale.new(:horizontal, 0, max_allowed_storage_for_this_product, 1)
+	  product_quantity_scale.value = quantity
+	  
+	  @scales_hash[product_name] = product_quantity_scale
+	  
+	  @stored_product_table.pack_start(product_name_label)
+	  @stored_product_table.pack_start(product_quantity_scale)
+	end
+	
+	@factory_stats_table.attach(@stored_product_table, 1, 2, 1, 2)
+	@factory_stats_table.show_all
   end
   
   def commit_to_model
 	# Set the model schematic to the selected value.
 	@building_model.schematic_name = @schematic_combo_box.selected_item
+	
+	# Set the stored products to the selected value.
+	@scales_hash.each_pair do |product_name, scale|
+	  @building_model.stored_products[product_name] = scale.value
+	end
   end
   
   def destroy
@@ -89,7 +124,7 @@ class EditFactoryWidget < Gtk::Box
 	end
 	
 	# StoredProductsListStore is not packed so it's not auto-destroyed.
-	@stored_products_store.destroy
+	#@stored_products_store.destroy
 	
 	super
   end

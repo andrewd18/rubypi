@@ -40,8 +40,8 @@ class TestCaseEditFactoryWidget < Test::Unit::TestCase
 	
 	@edit_factory_widget.start_observing_model
 	
-	# One observer for self, one observer for stored products list store.
-	assert_equal(2, @edit_factory_widget.building_model.count_observers)
+	# One observer for self.
+	assert_equal(1, @edit_factory_widget.building_model.count_observers)
   end
   
   def test_can_be_told_to_stop_observing_model_object
@@ -49,8 +49,8 @@ class TestCaseEditFactoryWidget < Test::Unit::TestCase
 	
 	@edit_factory_widget.start_observing_model
 	
-	# One observer for self, one observer for stored products list store.
-	assert_equal(2, @edit_factory_widget.building_model.count_observers)
+	# One observer for self.
+	assert_equal(1, @edit_factory_widget.building_model.count_observers)
 	
 	@edit_factory_widget.stop_observing_model
 	
@@ -76,8 +76,8 @@ class TestCaseEditFactoryWidget < Test::Unit::TestCase
   def test_when_destroyed_unhooks_observers
 	@edit_factory_widget.start_observing_model
 	
-	# One observer for self, one observer for stored products list store.
-	assert_equal(2, @basic_industrial_facility.count_observers)
+	# One observer for self.
+	assert_equal(1, @basic_industrial_facility.count_observers)
 	
 	@edit_factory_widget.destroy
 	
