@@ -41,12 +41,12 @@ class BasicIndustrialFacility < PlanetaryBuilding
 	elsif (new_schematic_name == nil)
 	  @schematic_name = nil
 	  
+	  # Update IndustrialFacilityStorage.
+	  industrial_facility_storage_schematic_changed
+	  
 	  # Notify our observers that we've changed.
 	  changed
 	  notify_observers
-	  
-	  # Update IndustrialFacilityStorage.
-	  industrial_facility_storage_schematic_changed
 	  
 	  return @schematic_name
 	
@@ -69,12 +69,12 @@ class BasicIndustrialFacility < PlanetaryBuilding
 	  # Whew. Okay, set it.
 	  @schematic_name = new_schematic_name
 	  
+	  # Update IndustrialFacilityStorage.
+	  industrial_facility_storage_schematic_changed
+	  
 	  # Notify our observers that we've changed.
 	  changed
 	  notify_observers
-	  
-	  # Update IndustrialFacilityStorage.
-	  industrial_facility_storage_schematic_changed
 	  
 	  return @schematic_name
 	  
