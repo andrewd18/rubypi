@@ -43,8 +43,8 @@ class TestCaseBuildingViewWidget < Test::Unit::TestCase
 	  # One observer for self.
 	  assert_equal(1, @building_view_widget.building_model.count_observers)
 	else
-	  # One observer for self, one for its @building_widget.
-	  assert_equal(2, @building_view_widget.building_model.count_observers)
+	  # One observer for self, two for its @building_widget.
+	  assert_equal(3, @building_view_widget.building_model.count_observers)
 	end
   end
   
@@ -57,8 +57,8 @@ class TestCaseBuildingViewWidget < Test::Unit::TestCase
 	  # One observer for self.
 	  assert_equal(1, @building_view_widget.building_model.count_observers)
 	else
-	  # One observer for self, one for its @building_widget.
-	  assert_equal(2, @building_view_widget.building_model.count_observers)
+	  # One observer for self, two for its @building_widget.
+	  assert_equal(3, @building_view_widget.building_model.count_observers)
 	end
 	
 	@building_view_widget.stop_observing_model
@@ -101,8 +101,8 @@ class TestCaseBuildingViewWidget < Test::Unit::TestCase
 	  # One observer for self.
 	  assert_equal(1, @building_view_widget.building_model.count_observers)
 	else
-	  # One observer for self, one for its @building_widget.
-	  assert_equal(2, @building_view_widget.building_model.count_observers)
+	  # One observer for self, two for its @building_widget.
+	  assert_equal(3, @building_view_widget.building_model.count_observers)
 	end
 	
 	@building_view_widget.destroy

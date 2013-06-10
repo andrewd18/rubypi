@@ -43,7 +43,6 @@ class EditFactoryWidget < Gtk::Box
 	
 	# Table of stored products.
 	@stored_products_store = StoredProductsListStore.new(@building_model)
-	@stored_products_store.start_observing_model
 	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
 	
 	factory_stats_table.attach(schematic_label, 0, 1, 0, 1)
@@ -60,10 +59,14 @@ class EditFactoryWidget < Gtk::Box
   
   def start_observing_model
 	@building_model.add_observer(self)
+	
+	@stored_products_store.start_observing_model
   end
   
   def stop_observing_model
 	@building_model.delete_observer(self)
+	
+	@stored_products_store.stop_observing_model
   end
   
   # Called when the building_model changes.
