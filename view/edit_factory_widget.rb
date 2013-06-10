@@ -86,7 +86,7 @@ class EditFactoryWidget < Gtk::Box
 	end
 	
 	# Table of stored products.
-	@stored_product_table = Gtk::Box.new(:horizontal)
+	@stored_product_table = Gtk::Box.new(:vertical)
 	@scales_hash = Hash.new
 	
 	@building_model.stored_products.each_pair do |product_name, quantity|
@@ -98,8 +98,11 @@ class EditFactoryWidget < Gtk::Box
 	  
 	  @scales_hash[product_name] = product_quantity_scale
 	  
-	  @stored_product_table.pack_start(product_name_label)
-	  @stored_product_table.pack_start(product_quantity_scale)
+	  new_row = Gtk::Box.new(:horizontal)
+	  new_row.pack_start(product_name_label)
+	  new_row.pack_start(product_quantity_scale)
+	  
+	  @stored_product_table.pack_start(new_row)
 	end
 	
 	@factory_stats_table.attach(@stored_product_table, 1, 2, 1, 2)
