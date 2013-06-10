@@ -3,10 +3,10 @@ Core Features
 
 * Add CCP disclaimer, etc. to About box.
 * Building View
-  - Add view for Storage Facility.
   - Add view for Launchpad.
+  - Add "expedited transfer" button for storage locations.
+  - Add "set destination" button for extractors/factories.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
-* Add storage spaces to every building.
 * Add links.
   - Auto-populate?
 * Add cycle times to all buildings.
@@ -37,6 +37,8 @@ Code Cleanup
 * Unit Tests
   - Figure out how to test event hooks in unit tests so I can fully test views.
   - Keep adding more!
+* Do my own serialization of @pi_configuration that doesn't rely on a straight YAML dump.
+* Refactor out Observer to make serialization easier and the data more database-like?
 
 
 Packaging & Release
