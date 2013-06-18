@@ -1,6 +1,7 @@
 
 require 'gtk3'
 
+require_relative 'expedited_transfer_button.rb'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditLaunchpadWidget < Gtk::Box
@@ -28,6 +29,8 @@ class EditLaunchpadWidget < Gtk::Box
 	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
 	
 	
+	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
+	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
 	update
@@ -35,6 +38,8 @@ class EditLaunchpadWidget < Gtk::Box
 	
 	launchpad_table.attach(stored_products_label, 0, 1, 0, 1)
 	launchpad_table.attach(@stored_products_list_view, 1, 2, 0, 1)
+	
+	launchpad_table.attach(expedited_transfer_button, 1, 2, 1, 2)
 	
 	self.pack_start(launchpad_table, :expand => false)
 	
