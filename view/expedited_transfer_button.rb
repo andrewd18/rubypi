@@ -23,13 +23,16 @@ class ExpeditedTransferButton < Gtk::Button
 	dialog.run do |response|
 	  case response
 	  when Gtk::ResponseType::ACCEPT
-		puts "accepted"
+		dialog.hash_to_transfer.each_pair do |product_name, quantity_to_transfer|
+		  
+		  @building_model.remove_qty_of_product(product_name, quantity_to_transfer)
+		  
+		  dialog.destination.store_product(product_name, quantity_to_transfer)
+		end
+		
 		# TODO
-		# 1. Get dialog.products
-		# 2. Get dialog.quantities
-		# 3. Get dialog.destination
-		# 4. Add/remove the appropriate values from the model.
-		# 5. Show exception if necessary.
+		# 1. Show exception if necessary.
+		
 	  else
 		puts "canceled"
 	  end
