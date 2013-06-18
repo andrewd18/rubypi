@@ -3,6 +3,8 @@ require 'gtk3'
 
 require_relative 'planet_view_widget.rb'
 require_relative 'edit_command_center_widget.rb'
+require_relative 'edit_launchpad_widget.rb'
+require_relative 'edit_storage_facility_widget.rb'
 require_relative 'edit_extractor_widget.rb'
 require_relative 'edit_factory_widget.rb'
 
@@ -65,13 +67,13 @@ class BuildingViewWidget < Gtk::Box
 	elsif (@building_model.is_a? Launchpad)
 	  
 	  # Create an EditIndustrialFacilityWidget
-	  @building_widget = Gtk::Label.new("TODO: EditLaunchpadWidget")
+	  @building_widget = EditLaunchpadWidget.new(@building_model)
 	  
 	  
 	elsif (@building_model.is_a? StorageFacility)
 	  
 	  # Create an EditIndustrialFacilityWidget
-	  @building_widget = Gtk::Label.new("TODO: EditStorageFacilityWidget")
+	  @building_widget = EditStorageFacilityWidget.new(@building_model)
 	  
 	  
 	else
