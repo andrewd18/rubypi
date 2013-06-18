@@ -1,6 +1,7 @@
 
 require 'gtk3'
 
+require_relative 'expedited_transfer_button.rb'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditCommandCenterWidget < Gtk::Box
@@ -35,6 +36,7 @@ class EditCommandCenterWidget < Gtk::Box
 	@stored_products_store = StoredProductsListStore.new(@building_model)
 	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
 	
+	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
 	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
@@ -43,8 +45,11 @@ class EditCommandCenterWidget < Gtk::Box
 	
 	command_center_table.attach(upgrade_level_label, 0, 1, 0, 1)
 	command_center_table.attach(@upgrade_level_spin_button, 1, 2, 0, 1)
+	
 	command_center_table.attach(stored_products_label, 0, 1, 1, 2)
 	command_center_table.attach(@stored_products_list_view, 1, 2, 1, 2)
+	
+	command_center_table.attach(expedited_transfer_button, 1, 2, 2, 3)
 	
 	self.pack_start(command_center_table, :expand => false)
 	
