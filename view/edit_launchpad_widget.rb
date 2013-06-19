@@ -17,7 +17,7 @@ class EditLaunchpadWidget < Gtk::Box
 	
 	# Create widgets.
 	add_products_label = Gtk::Label.new("Add Products:")
-	@add_products_widget = AddProductsWidget.new
+	@add_products_widget = AddProductsWidget.new(@building_model)
 	
 	stored_products_label = Gtk::Label.new("Stored Products:")
 	@stored_products_store = StoredProductsListStore.new(@building_model)
