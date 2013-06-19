@@ -2,6 +2,7 @@
 require 'gtk3'
 
 require_relative 'expedited_transfer_button.rb'
+require_relative 'add_products_widget.rb'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditCommandCenterWidget < Gtk::Box
@@ -9,49 +10,64 @@ class EditCommandCenterWidget < Gtk::Box
   attr_accessor :building_model
   
   def initialize(building_model)
-	super(:vertical)
+	super(:horizontal)
 	
 	# Hook up model data.
 	@building_model = building_model
 	
-	# Gtk::Table Syntax
-	# table = Gtk::Table.new(rows, columns)
-	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
+	# Create widgets.
+	# Left column.
+	add_products_label = Gtk::Label.new("Add Products:")
+	@add_products_widget = AddProductsWidget.new(@building_model)
 	
-	# Add planet building stats widgets in a nice grid.
-	command_center_table = Gtk::Table.new(7, 2)
 	
-	# Upgrade Level Row
+	# Center column.
+	stored_products_label = Gtk::Label.new("Stored Products:")
+	@stored_products_store = StoredProductsListStore.new(@building_model)
+	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
+	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
+	
+	
+	# Right column.
 	upgrade_level_label = Gtk::Label.new("Upgrade Level:")
-	
-	# Create the spin button.						# min, max, step
+	# Upgrade level spin button.						# min, max, step
 	@upgrade_level_spin_button = Gtk::SpinButton.new(0, 5, 1)
 	@upgrade_level_spin_button.numeric = true
 	
 	
-	# Stored Products Row
-	stored_products_label = Gtk::Label.new("Stored Products:")
+	# Pack widgets into columns, left to right.
+	# Left column.
+	left_column = Gtk::Box.new(:vertical)
+	left_column.pack_start(add_products_label, :expand => false)
+	left_column.pack_start(@add_products_widget, :expand => true)
 	
-	# Table of stored products.
-	@stored_products_store = StoredProductsListStore.new(@building_model)
-	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
+	self.pack_start(left_column)
 	
-	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
+	
+	# Center column.
+	center_column = Gtk::Box.new(:vertical)
+	center_column.pack_start(stored_products_label, :expand => false)
+	center_column.pack_start(@stored_products_list_view, :expand => true)
+	center_column.pack_start(expedited_transfer_button, :expand => false)
+	
+	self.pack_start(center_column)
+	
+	
+	# Right column.
+	# Top row.
+	right_column_top_row = Gtk::Box.new(:horizontal)
+	right_column_top_row.pack_start(upgrade_level_label)
+	right_column_top_row.pack_start(@upgrade_level_spin_button)
+	
+	right_column = Gtk::Box.new(:vertical)
+	right_column.pack_start(right_column_top_row)
+	
+	self.pack_start(right_column)
+
 	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
 	update
-	
-	
-	command_center_table.attach(upgrade_level_label, 0, 1, 0, 1)
-	command_center_table.attach(@upgrade_level_spin_button, 1, 2, 0, 1)
-	
-	command_center_table.attach(stored_products_label, 0, 1, 1, 2)
-	command_center_table.attach(@stored_products_list_view, 1, 2, 1, 2)
-	
-	command_center_table.attach(expedited_transfer_button, 1, 2, 2, 3)
-	
-	self.pack_start(command_center_table, :expand => false)
 	
 	self.show_all
 	
