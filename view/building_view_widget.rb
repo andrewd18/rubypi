@@ -82,7 +82,7 @@ class BuildingViewWidget < Gtk::Box
 	end
 	
 	
-	bottom_row.pack_start(@building_widget, :expand => false)
+	bottom_row.pack_start(@building_widget, :expand => true)
 	self.pack_start(bottom_row, :expand => true)
 	
 	return self
