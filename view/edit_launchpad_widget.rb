@@ -2,46 +2,45 @@
 require 'gtk3'
 
 require_relative 'expedited_transfer_button.rb'
+require_relative 'add_products_widget.rb'
 
-# This widget provides all the options necessary to edit an Extractor.
+# This widget provides all the options necessary to edit a Launchpad.
 class EditLaunchpadWidget < Gtk::Box
   
   attr_accessor :building_model
   
   def initialize(building_model)
-	super(:vertical)
+	super(:horizontal)
 	
 	# Hook up model data.
 	@building_model = building_model
 	
-	# Gtk::Table Syntax
-	# table = Gtk::Table.new(rows, columns)
-	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
+	# Create widgets.
+	add_products_label = Gtk::Label.new("Add Products:")
+	@add_products_widget = AddProductsWidget.new
 	
-	# Add planet building stats widgets in a nice grid.
-	launchpad_table = Gtk::Table.new(7, 2)
-	
-	# Stored Products Row
 	stored_products_label = Gtk::Label.new("Stored Products:")
-	
-	# Table of stored products.
 	@stored_products_store = StoredProductsListStore.new(@building_model)
 	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
-	
-	
 	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
+	
+	# Add pack widgets into columns, then pack columns left to right.
+	# Left Column.
+	add_products_column = Gtk::Box.new(:vertical)
+	add_products_column.pack_start(add_products_label, :expand => false)
+	add_products_column.pack_start(@add_products_widget, :expand => true)
+	self.pack_start(add_products_column)
+	
+	# Right column.
+	stored_products_column = Gtk::Box.new(:vertical)
+	stored_products_column.pack_start(stored_products_label, :expand => false)
+	stored_products_column.pack_start(@stored_products_list_view , :expand => true)
+	stored_products_column.pack_start(expedited_transfer_button, :expand => false)
+	self.pack_start(stored_products_column)
 	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
 	update
-	
-	
-	launchpad_table.attach(stored_products_label, 0, 1, 0, 1)
-	launchpad_table.attach(@stored_products_list_view, 1, 2, 0, 1)
-	
-	launchpad_table.attach(expedited_transfer_button, 1, 2, 1, 2)
-	
-	self.pack_start(launchpad_table, :expand => false)
 	
 	self.show_all
 	
