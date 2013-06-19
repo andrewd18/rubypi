@@ -2,6 +2,7 @@
 require 'gtk3'
 
 require_relative 'expedited_transfer_button.rb'
+require_relative 'add_products_widget.rb'
 
 
 # This widget provides all the options necessary to edit an Extractor.
@@ -10,39 +11,50 @@ class EditStorageFacilityWidget < Gtk::Box
   attr_accessor :building_model
   
   def initialize(building_model)
-	super(:vertical)
+	super(:horizontal)
 	
 	# Hook up model data.
 	@building_model = building_model
 	
-	# Gtk::Table Syntax
-	# table = Gtk::Table.new(rows, columns)
-	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
+	# Create widgets.
+	# Left column.
+	add_products_label = Gtk::Label.new("Add Products:")
+	@add_products_widget = AddProductsWidget.new(@building_model)
 	
-	# Add planet building stats widgets in a nice grid.
-	storage_facility_table = Gtk::Table.new(7, 2)
 	
-	# Stored Products Row
+	# Center column.
 	stored_products_label = Gtk::Label.new("Stored Products:")
-	
-	# Table of stored products.
 	@stored_products_store = StoredProductsListStore.new(@building_model)
 	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
-	
 	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
 	
 	
-	# Set the active iterater from the model data.
-	# Since #update does this, call #update.
-	update
+	# Right column.
+	# None.
+	
+	# Pack widgets into columns, left to right.
+	# Left column.
+	left_column = Gtk::Box.new(:vertical)
+	left_column.pack_start(add_products_label, :expand => false)
+	left_column.pack_start(@add_products_widget, :expand => true)
+	
+	self.pack_start(left_column)
 	
 	
-	storage_facility_table.attach(stored_products_label, 0, 1, 0, 1)
-	storage_facility_table.attach(@stored_products_list_view, 1, 2, 0, 1)
+	# Center column.
+	center_column = Gtk::Box.new(:vertical)
+	center_column.pack_start(stored_products_label, :expand => false)
+	center_column.pack_start(@stored_products_list_view, :expand => true)
+	center_column.pack_start(expedited_transfer_button, :expand => false)
 	
-	storage_facility_table.attach(expedited_transfer_button, 1, 2, 1, 2)
+	self.pack_start(center_column)
 	
-	self.pack_start(storage_facility_table, :expand => false)
+	
+	# Right column.
+	# Top row.
+	right_column = Gtk::Box.new(:vertical)
+	
+	self.pack_start(right_column)
 	
 	self.show_all
 	
