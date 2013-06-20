@@ -14,28 +14,47 @@ class SystemViewWidget < Gtk::Box
 	@pi_configuration_model = pi_configuration_model
 	
 	# Left column.
+	# Create widgets.
+	add_planets_label = Gtk::Label.new("Add Planets:")
 	add_planets_widget = AddPlanetsWidget.new(@pi_configuration_model)
-	self.pack_start(add_planets_widget)
+	
+	# Pack top to bottom.
+	left_column = Gtk::Box.new(:vertical)
+	left_column.pack_start(add_planets_label)
+	left_column.pack_start(add_planets_widget)
 	
 	
-	
-	
-	
-	
+	# Center column.
+	# Create widgets.
 	@planet_overview_widgets = Array.new
-	
 	@pi_configuration_model.planets.each do |planet|
 	  widget = SystemViewPlanetOverviewWidget.new(planet)
 	  
 	  @planet_overview_widgets << widget
-	  
-	  frame = Gtk::Frame.new
-	  frame.add(widget)
-	  self.pack_start(frame)
 	end
 	
+	# Pack left to right.
+	center_column = Gtk::Box.new(:horizontal)
+	@planet_overview_widgets.each do |widget|
+	  frame = Gtk::Frame.new
+	  frame.add(widget)
+	  center_column.pack_start(frame)
+	end
+	
+	
+	# Right Column.
+	# Create widgets.
 	@system_stats_widget = SystemStatsWidget.new(@pi_configuration_model)
-	self.pack_start(@system_stats_widget)
+	
+	# Pack top to bottom.
+	right_column = Gtk::Box.new(:vertical)
+	right_column.pack_start(@system_stats_widget)
+	
+	
+	# Pack columns left to right.
+	self.pack_start(left_column)
+	self.pack_start(center_column)
+	self.pack_start(right_column)
 	
 	return self
   end
