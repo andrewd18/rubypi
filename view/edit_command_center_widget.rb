@@ -28,6 +28,8 @@ class EditCommandCenterWidget < Gtk::Box
 	
 	
 	# Right column.
+	building_image = BuildingImage.new(@building_model)
+	
 	upgrade_level_label = Gtk::Label.new("Upgrade Level:")
 	# Upgrade level spin button.						# min, max, step
 	@upgrade_level_spin_button = Gtk::SpinButton.new(0, 5, 1)
@@ -52,13 +54,15 @@ class EditCommandCenterWidget < Gtk::Box
 	
 	
 	# Right column.
-	# Top row.
-	right_column_top_row = Gtk::Box.new(:horizontal)
-	right_column_top_row.pack_start(upgrade_level_label, :expand => false)
-	right_column_top_row.pack_start(@upgrade_level_spin_button, :expand => false)
+	
+	# Second row.
+	right_column_upgrade_row = Gtk::Box.new(:horizontal)
+	right_column_upgrade_row.pack_start(upgrade_level_label, :expand => false)
+	right_column_upgrade_row.pack_start(@upgrade_level_spin_button, :expand => false)
 	
 	right_column = Gtk::Box.new(:vertical)
-	right_column.pack_start(right_column_top_row)
+	right_column.pack_start(building_image)
+	right_column.pack_start(right_column_upgrade_row)
 	
 	self.pack_start(right_column)
 

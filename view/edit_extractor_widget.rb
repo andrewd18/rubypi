@@ -1,6 +1,7 @@
 require 'gtk3'
 require_relative 'simple_combo_box.rb'
 require_relative 'set_extraction_time_slider.rb'
+require_relative 'building_image.rb'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditExtractorWidget < Gtk::Box
@@ -18,7 +19,7 @@ class EditExtractorWidget < Gtk::Box
 	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
 	
 	# Add planet building stats widgets in a nice grid.
-	extractor_stats_table = Gtk::Table.new(7, 2)
+	extractor_stats_table = Gtk::Table.new(7, 3)
 	
 	# Number of Heads Row
 	number_of_heads_label = Gtk::Label.new("Number of Heads:")
@@ -40,6 +41,9 @@ class EditExtractorWidget < Gtk::Box
 	@extraction_time_scale = SetExtractionTimeSlider.new(@building_model)
 	
 	
+	building_image = BuildingImage.new(@building_model)
+	
+	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
 	update
@@ -53,6 +57,8 @@ class EditExtractorWidget < Gtk::Box
 	extractor_stats_table.attach(extraction_time_label, 0, 1, 2, 3)
 	extractor_stats_table.attach(extraction_time_label_autoadjust_warning, 0, 1, 3, 4)
 	extractor_stats_table.attach(@extraction_time_scale, 1, 2, 2, 4)
+	
+	extractor_stats_table.attach(building_image, 2, 3, 0, 1)
 	
 	self.pack_start(extractor_stats_table, :expand => false)
 	

@@ -3,6 +3,7 @@ require 'gtk3'
 
 require_relative 'expedited_transfer_button.rb'
 require_relative 'add_products_widget.rb'
+require_relative 'building_image.rb'
 
 
 # This widget provides all the options necessary to edit an Extractor.
@@ -28,7 +29,9 @@ class EditStorageFacilityWidget < Gtk::Box
 	
 	
 	# Right column.
-	# None.
+	building_image = BuildingImage.new(@building_model)
+	
+	
 	
 	# Pack widgets into columns, left to right.
 	# Left column.
@@ -48,8 +51,8 @@ class EditStorageFacilityWidget < Gtk::Box
 	
 	
 	# Right column.
-	# Top row.
 	right_column = Gtk::Box.new(:vertical)
+	right_column.pack_start(building_image)
 	
 	self.pack_start(right_column)
 	

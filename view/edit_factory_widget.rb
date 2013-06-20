@@ -6,6 +6,8 @@ require_relative '../model/schematic.rb'
 require_relative 'stored_products_list_store.rb'
 require_relative 'stored_products_tree_view.rb'
 
+require_relative 'building_image.rb'
+
 # This widget provides all the options necessary to edit a BasicIndustrialFacility, AdvancedIndustrialFacility, or HighTechIndustrialFacility.
 class EditFactoryWidget < Gtk::Box
   
@@ -22,7 +24,7 @@ class EditFactoryWidget < Gtk::Box
 	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
 	
 	# Add planet building stats widgets in a nice grid.
-	@factory_stats_table = Gtk::Table.new(7, 2)
+	@factory_stats_table = Gtk::Table.new(7, 3)
 	
 	# Schematic Row
 	schematic_label = Gtk::Label.new("Schematic:")
@@ -38,12 +40,15 @@ class EditFactoryWidget < Gtk::Box
 	  commit_to_model
 	end
 	
+	building_image = BuildingImage.new(@building_model)
+	
 	# Stored Products Row
 	stored_products_label = Gtk::Label.new("Stored Products:")
 	
 	@factory_stats_table.attach(schematic_label, 0, 1, 0, 1)
 	@factory_stats_table.attach(@schematic_combo_box, 1, 2, 0, 1)
 	@factory_stats_table.attach(stored_products_label, 0, 1, 1, 2)
+	@factory_stats_table.attach(building_image, 2, 3, 0, 1)
 	
 	rebuild_stored_product_table
 	
