@@ -75,8 +75,8 @@ class PlanetViewWidget < Gtk::Box
 	
 	# TODO - Ugly. Convert to table or generally clean up.
 	auto_scrollbox = Gtk::ScrolledWindow.new
-	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
-	auto_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
+	# Have a horizontal or vertical scrollbar if necessary.
+	auto_scrollbox.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC)
 	auto_scrollbox.add(@buildings_tree_view)
 	
 	vertical_box = Gtk::Box.new(:vertical)

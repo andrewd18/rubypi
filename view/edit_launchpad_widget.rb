@@ -33,18 +33,18 @@ class EditLaunchpadWidget < Gtk::Box
 	add_products_column = Gtk::Box.new(:vertical)
 	add_products_column.pack_start(add_products_label, :expand => false)
 	add_products_column.pack_start(@add_products_widget, :expand => true)
-	self.pack_start(add_products_column)
+	self.pack_start(add_products_column, :expand => false)
 	
 	# Center column.
 	stored_products_column = Gtk::Box.new(:vertical)
 	stored_products_column.pack_start(@stored_products_widget, :expand => true)
 	stored_products_column.pack_start(expedited_transfer_button, :expand => false)
-	self.pack_start(stored_products_column)
+	self.pack_start(stored_products_column, :expand => true)
 	
 	# Right column.
 	right_column = Gtk::Box.new(:vertical)
-	right_column.pack_start(building_image)
-	self.pack_start(right_column)
+	right_column.pack_start(building_image, :expand => false)
+	self.pack_start(right_column, :expand => false)
 	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.

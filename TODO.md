@@ -1,3 +1,10 @@
+For 0.6
+=======
+* Get rid of table in EditFactoryWidget.
+* Get rid of table in EditExtractorWidget.
+* Find and destroy the rest of the tables.
+
+
 Core Features
 =============
 

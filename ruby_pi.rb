@@ -70,9 +70,6 @@ class RubyPI < Gtk::Window
 	@main_widget = new_widget
 	@box.pack_start(@main_widget)
 	
-	# HACK: Attempt to resize to 1px by 1px which will get rid of any extraneous space caused by a widget size change.
-	# This is a standin method until I get all the UI widgets to resize nicely to any size.
-	self.resize(1,1)
 	self.show_all
 	
 	# Finally, tell the widget it can begin observing the model.

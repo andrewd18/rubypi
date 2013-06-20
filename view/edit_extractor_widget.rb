@@ -43,27 +43,37 @@ class EditExtractorWidget < Gtk::Box
 	update
 	
 	
-	# Pack widgets into columns.
+	# Pack widgets into rows.
+	# Pack rows into columns.
 	# Left column.
-	left_column = Gtk::Box.new(:vertical)
-	left_column.pack_start(number_of_heads_label)
-	left_column.pack_start(extract_label)
-	left_column.pack_start(extraction_time_label)
+	number_of_heads_row = Gtk::Box.new(:horizontal)
+	number_of_heads_row.pack_start(number_of_heads_label, :expand => false)
+	number_of_heads_row.pack_start(@number_of_heads_spin_button)
 	
-	# Center Column.
-	center_column = Gtk::Box.new(:vertical)
-	center_column.pack_start(@number_of_heads_spin_button, :expand => false)
-	center_column.pack_start(@product_combo_box, :expand => false)
-	center_column.pack_start(@extraction_time_scale, :expand => false)
+	select_product_row = Gtk::Box.new(:horizontal)
+	select_product_row.pack_start(extract_label, :expand => false)
+	select_product_row.pack_start(@product_combo_box)
+	
+	extraction_time_row = Gtk::Box.new(:horizontal)
+	extraction_time_row.pack_start(extraction_time_label, :expand => false)
+	extraction_time_row.pack_start(@extraction_time_scale)
+	
+	
+	left_column = Gtk::Box.new(:vertical)
+	left_column.pack_start(number_of_heads_row, :expand => false)
+	left_column.pack_start(select_product_row, :expand => false)
+	left_column.pack_start(extraction_time_row, :expand => false)
+	
+	
+	
 	
 	# Right column.
-	right_column = Gtk::Box.new(:vertical)
-	right_column.pack_start(building_image)
+	building_image_column = Gtk::Box.new(:vertical)
+	building_image_column.pack_start(building_image, :expand => false)
 	
 	# Pack columns left to right.
-	self.pack_start(left_column, :expand => false)
-	self.pack_start(center_column, :expand => true)
-	self.pack_start(right_column, :expand => false)
+	self.pack_start(left_column, :expand => true)
+	self.pack_start(building_image_column, :expand => false)
 	
 	
 	self.show_all

@@ -42,17 +42,21 @@ class EditFactoryWidget < Gtk::Box
 	
 	
 	
-	# Pack widgets into columns.
+	# Pack widgets into rows.
+	# Pack rows into columns.
 	# Left column.
-	left_column = Gtk::Box.new(:vertical)
-	left_column.pack_start(schematic_label)
-	left_column.pack_start(stored_products_label)
+	schematic_row = Gtk::Box.new(:horizontal)
+	schematic_row.pack_start(schematic_label, :expand => false)
+	schematic_row.pack_start(@schematic_combo_box)
 	
-	# Center Column.
-	@center_column = Gtk::Box.new(:vertical)
-	@center_column.pack_start(@schematic_combo_box, :expand => false)
+	@stored_products_row = Gtk::Box.new(:horizontal)
+	@stored_products_row.pack_start(stored_products_label, :expand => false)
 	
 	rebuild_stored_product_table
+	
+	left_column = Gtk::Box.new(:vertical)
+	left_column.pack_start(schematic_row, :expand => false)
+	left_column.pack_start(@stored_products_row)
 	
 	
 	# Right column.
@@ -60,8 +64,7 @@ class EditFactoryWidget < Gtk::Box
 	right_column.pack_start(building_image)
 	
 	# Pack columns left to right.
-	self.pack_start(left_column, :expand => false)
-	self.pack_start(@center_column, :expand => true)
+	self.pack_start(left_column, :expand => true)
 	self.pack_start(right_column, :expand => false)
 	
 	
@@ -117,8 +120,8 @@ class EditFactoryWidget < Gtk::Box
 	  @stored_product_table.pack_start(new_row)
 	end
 	
-	@center_column.pack_start(@stored_product_table)
-	@center_column.show_all
+	@stored_products_row.pack_start(@stored_product_table)
+	@stored_products_row.show_all
   end
   
   def commit_to_model

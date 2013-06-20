@@ -42,7 +42,7 @@ class EditCommandCenterWidget < Gtk::Box
 	left_column.pack_start(add_products_label, :expand => false)
 	left_column.pack_start(@add_products_widget, :expand => true)
 	
-	self.pack_start(left_column)
+	self.pack_start(left_column, :expand => false)
 	
 	
 	# Center column.
@@ -50,7 +50,7 @@ class EditCommandCenterWidget < Gtk::Box
 	center_column.pack_start(@stored_products_widget, :expand => true)
 	center_column.pack_start(expedited_transfer_button, :expand => false)
 	
-	self.pack_start(center_column)
+	self.pack_start(center_column, :expand => true)
 	
 	
 	# Right column.
@@ -61,10 +61,10 @@ class EditCommandCenterWidget < Gtk::Box
 	right_column_upgrade_row.pack_start(@upgrade_level_spin_button, :expand => false)
 	
 	right_column = Gtk::Box.new(:vertical)
-	right_column.pack_start(building_image)
-	right_column.pack_start(right_column_upgrade_row)
+	right_column.pack_start(building_image, :expand => false)
+	right_column.pack_start(right_column_upgrade_row, :expand => false)
 	
-	self.pack_start(right_column)
+	self.pack_start(right_column, :expand => false)
 
 	
 	# Set the active iterater from the model data.
