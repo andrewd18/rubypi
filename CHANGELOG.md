@@ -1,9 +1,18 @@
 Staged For Next Release
 =======================
 
-* You can now tell an extractor how long it should operate for. This should act identically to the EVE slider. Huzzah!
-* Added extraction time to extractor model.
-* Added cycle time to factory and extractor models.
+Version 0.0.6
+=============
+
+* Redesigned a good chunk of the UI to act more like EFT/PyFA. Lost some of the bling in the process; it'll be back later.
+* You can now add and remove products from buildings.
+* You can now expedited transfer products between storage-only buildings.
+* You can now tell an extractor how long it should operate for. This should act identically to the EVE slider.
+* Added images to each of the edit building pages.
+* Completed the view for the Launchpad.
+* Removed the artificial limit on number of planets.
+* Removed planet alias as it didn't serve much purpose.
+* A ton of little bugs were squashed.
 
 Version 0.0.5
 =============
