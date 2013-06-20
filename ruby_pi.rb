@@ -46,11 +46,9 @@ class RubyPI < Gtk::Window
 	@menu_bar = RubyPIMainMenu.new
 	
 	@box = Gtk::Box.new(:vertical)
-	
-	@main_widget = SystemViewWidget.new(@pi_configuration)
 	@box.pack_start(@menu_bar, :expand => false, :fill => false)
-	@box.pack_start(@main_widget, :expand => false, :fill => false)
 	
+	self.change_main_widget(SystemViewWidget.new(@pi_configuration))
 	
 	self.add(@box)
 	
@@ -69,7 +67,10 @@ class RubyPI < Gtk::Window
   end
   
   def change_main_widget(new_widget)
-	@main_widget.destroy
+	if (@main_widget)
+	  @main_widget.destroy
+	end
+	
 	@main_widget = new_widget
 	@box.pack_start(@main_widget)
 	

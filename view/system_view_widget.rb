@@ -21,11 +21,11 @@ class SystemViewWidget < Gtk::Box
 	  
 	  frame = Gtk::Frame.new
 	  frame.add(widget)
-	  self.pack_start(frame, :expand => true, :fill => false)
+	  self.pack_start(frame)
 	end
 	
 	@system_stats_widget = SystemStatsWidget.new(@pi_configuration_model)
-	self.pack_start(@system_stats_widget, :expand => false)
+	self.pack_start(@system_stats_widget)
 	
 	return self
   end
