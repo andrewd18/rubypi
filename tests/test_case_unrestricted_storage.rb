@@ -115,6 +115,21 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	assert_equal(empty_hash, @building_stub.stored_products)
   end
   
+  def test_error_when_adding_a_quantity_of_zero_or_less
+	assert_raise ArgumentError do
+	  @building_stub.store_product("Dwarf", 0)
+	end
+	
+	assert_raise ArgumentError do
+	  @building_stub.store_product("Dwarf", -30)
+	end
+	
+	# Make sure the building didn't change.
+	# I don't even want {Dwarf => 0}
+	empty_hash = {}
+	assert_equal(empty_hash, @building_stub.stored_products)
+  end
+  
   def test_building_can_add_a_certain_amount_of_a_specific_product_to_its_stores_by_product_instance
 	@building_stub.store_product_instance(@@dwarf, 5)
 	
@@ -153,6 +168,21 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	end
 	
 	# Make sure the building didn't change.
+	empty_hash = {}
+	assert_equal(empty_hash, @building_stub.stored_products)
+  end
+  
+  def test_error_when_adding_a_product_by_instance_and_quantity_is_zero_or_less
+	assert_raise ArgumentError do
+	  @building_stub.store_product_instance(@@dwarf, 0)
+	end
+	
+	assert_raise ArgumentError do
+	  @building_stub.store_product_instance(@@dwarf, -30)
+	end
+	
+	# Make sure the building didn't change.
+	# I don't even want {Dwarf => 0}
 	empty_hash = {}
 	assert_equal(empty_hash, @building_stub.stored_products)
   end
@@ -241,6 +271,28 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	
 	# Shouldn't be at -15 dwarves.
 	assert_equal(empty_hash, @building_stub.stored_products)
+  end
+  
+  def test_error_when_removing_a_quantity_of_zero_or_less
+	hash_with_5_dwarves = {"Dwarf" => 5}
+	empty_hash = {}
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+	
+	@building_stub.store_product("Dwarf", 5)
+	
+	assert_equal(hash_with_5_dwarves, @building_stub.stored_products)
+	
+	assert_raise ArgumentError do
+	  @building_stub.remove_qty_of_product("Dwarf", 0)
+	end
+	
+	assert_raise ArgumentError do
+	  @building_stub.remove_qty_of_product("Dwarf", -30)
+	end
+	
+	# Nothing should have happened.
+	assert_equal(hash_with_5_dwarves, @building_stub.stored_products)
   end
   
   def test_building_can_show_total_volume
@@ -335,6 +387,18 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	end
 	assert_false(@was_notified_of_change)
 	
+	# Adding zero quantity.
+	assert_raise do
+	  @building_stub.store_product("Dwarf", 0)
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Adding negative quantity.
+	assert_raise do
+	  @building_stub.store_product("Dwarf", -30)
+	end
+	assert_false(@was_notified_of_change)
+	
 	@building_stub.delete_observer(self)
   end
   
@@ -367,6 +431,18 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	# Too many products.
 	assert_raise do
 	  @building_stub.store_product_instance(@@dwarf, 99999999999999999)
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Adding zero quantity.
+	assert_raise do
+	  @building_stub.store_product_instance(@@dwarf, 0)
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Adding negative quantity.
+	assert_raise do
+	  @building_stub.store_product_instance(@@dwarf, -30)
 	end
 	assert_false(@was_notified_of_change)
 	
@@ -419,6 +495,18 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	
 	assert_raise do
 	  @building_stub.remove_qty_of_product("Ancient Beast", 5)
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Removing zero quantity.
+	assert_raise do
+	  @building_stub.remove_qty_of_product("Dwarf", 0)
+	end
+	assert_false(@was_notified_of_change)
+	
+	# Removing negative quantity.
+	assert_raise do
+	  @building_stub.remove_qty_of_product("Dwarf", -30)
 	end
 	assert_false(@was_notified_of_change)
 	

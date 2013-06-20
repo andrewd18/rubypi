@@ -15,6 +15,7 @@ module UnrestrictedStorage
   def store_product(product_name, quantity)
 	raise ArgumentError, "First argument must be a String." unless product_name.is_a?(String)
 	raise ArgumentError, "Second argument must be a Numeric." unless quantity.is_a?(Numeric)
+	raise ArgumentError, "Second argument must be greater than zero." unless (quantity > 0)
 	
 	# Make sure the thing we're adding exists.
 	product_instance = Product.find_by_name(product_name)
@@ -28,6 +29,7 @@ module UnrestrictedStorage
 	if (volume_needed_for_product > volume_available)
 	  raise ArgumentError, "Adding this product would overflow the storage location."
 	end
+	
 	
 	# Ready to add!
 	
@@ -60,6 +62,7 @@ module UnrestrictedStorage
   
   def remove_qty_of_product(product_name, quantity_to_remove)
 	raise ArgumentError, "Named product is not stored here." unless stored_products.has_key?(product_name)
+	raise ArgumentError, "Second argument must be greater than zero." unless (quantity_to_remove > 0)
 	
 	current_quantity_of_product = stored_products[product_name]
 	
