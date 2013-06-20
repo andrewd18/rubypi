@@ -43,6 +43,11 @@ class AddProductsTreeView < Gtk::TreeView
 	
 	selected_product_name = tree_iter.get_value(1)
 	
+	if (Product.find_by_name(selected_product_name) == nil)
+	  # Do nothing and leave this function.
+	  return nil
+	end
+	
 	# TODO
 	if (@building_model.volume_available == 0)
 	  # Display an error.
