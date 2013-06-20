@@ -43,11 +43,15 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	                                                      #min, max,                    #scale
 	  product_quantity_slider = Gtk::Scale.new(:horizontal, 0, currently_stored_quantity, 1)
 	  
-	  # Make values visible to calling object.
+	  # Populate initial hash values.
 	  @hash_to_transfer[product_name] = product_quantity_slider.value
 	  
-	  # Make labels and sliders visible on screen.
+	  # Make sure that when the slider changes the hash gets updated.
+	  product_quantity_slider.signal_connect("value-changed") do
+		@hash_to_transfer[product_name] = product_quantity_slider.value
+	  end
 	  
+	  # Make labels and sliders visible on screen.
 	  row = Gtk::Box.new(:horizontal)
 	  row.add(product_name_label)
 	  row.add(product_quantity_slider)
