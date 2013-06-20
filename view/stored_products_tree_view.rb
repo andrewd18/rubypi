@@ -1,11 +1,15 @@
 require_relative 'icon_column.rb'
 require_relative 'text_column.rb'
+require_relative 'stored_products_list_store.rb'
+require_relative 'remove_products_from_building_dialog.rb'
 
 class StoredProductsTreeView < Gtk::TreeView
-  def initialize(tree_or_list_model)
-	@tree_or_list_model = tree_or_list_model
+  def initialize(building_model)
+	@building_model = building_model
 	
-	super(@tree_or_list_model)
+	@stored_products_store = StoredProductsListStore.new(@building_model)
+	
+	super(@stored_products_store)
 	
 	# Create columns for the tree view.
 	icon_column = IconColumn.new("Icon", 0)
@@ -20,13 +24,9 @@ class StoredProductsTreeView < Gtk::TreeView
 	self.append_column(volume_column)
 	
 	# Signals
-	# On double-click, remove the building.
+	# On double-click, run the remove_product_dialog method.
 	self.signal_connect("row-activated") do |tree_view, path, column|
-	  row = self.selection
-	  tree_iter = row.selected
-	  
-	  puts "row-activated signal"
-	  #@tree_or_list_model.delete_building(tree_iter)
+	  self.remove_product_dialog
 	end
 	
 	# Tree View settings.
@@ -35,10 +35,51 @@ class StoredProductsTreeView < Gtk::TreeView
 	return self
   end
   
+  def remove_product_dialog
+	# Get a tree iter to the selected row.
+	row = self.selection
+	tree_iter = row.selected
+	
+	selected_product_name = tree_iter.get_value(1)
+	
+	if (Product.find_by_name(selected_product_name) == nil)
+	  # Do nothing and leave this function.
+	  return nil
+	end
+	
+	dialog = RemoveProductsFromBuildingDialog.new(@building_model, selected_product_name)
+	dialog.run do |response|
+	  case response
+	  when Gtk::ResponseType::ACCEPT
+		dialog.quantity
+		  
+		@building_model.remove_qty_of_product(selected_product_name, dialog.quantity)
+		
+		# TODO
+		# 1. Show exception if necessary.
+	  else
+		puts "canceled"
+	  end
+	end
+	
+	dialog.destroy
+  end
+  
+  def start_observing_model
+	@stored_products_store.start_observing_model
+  end
+  
+  def stop_observing_model
+	@stored_products_store.stop_observing_model
+  end
+  
   def destroy
 	self.children.each do |child|
 	  child.destroy
 	end
+	
+	# Clean this up manually.
+	@stored_products_store.destroy
 	
 	super
   end

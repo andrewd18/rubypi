@@ -3,6 +3,7 @@ require 'gtk3'
 
 require_relative 'expedited_transfer_button.rb'
 require_relative 'add_products_widget.rb'
+require_relative 'stored_products_widget.rb'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditCommandCenterWidget < Gtk::Box
@@ -22,9 +23,7 @@ class EditCommandCenterWidget < Gtk::Box
 	
 	
 	# Center column.
-	stored_products_label = Gtk::Label.new("Stored Products:")
-	@stored_products_store = StoredProductsListStore.new(@building_model)
-	@stored_products_list_view = StoredProductsTreeView.new(@stored_products_store)
+	@stored_products_widget = StoredProductsWidget.new(@building_model)
 	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
 	
 	
@@ -46,8 +45,7 @@ class EditCommandCenterWidget < Gtk::Box
 	
 	# Center column.
 	center_column = Gtk::Box.new(:vertical)
-	center_column.pack_start(stored_products_label, :expand => false)
-	center_column.pack_start(@stored_products_list_view, :expand => true)
+	center_column.pack_start(@stored_products_widget, :expand => true)
 	center_column.pack_start(expedited_transfer_button, :expand => false)
 	
 	self.pack_start(center_column)
@@ -56,8 +54,8 @@ class EditCommandCenterWidget < Gtk::Box
 	# Right column.
 	# Top row.
 	right_column_top_row = Gtk::Box.new(:horizontal)
-	right_column_top_row.pack_start(upgrade_level_label)
-	right_column_top_row.pack_start(@upgrade_level_spin_button)
+	right_column_top_row.pack_start(upgrade_level_label, :expand => false)
+	right_column_top_row.pack_start(@upgrade_level_spin_button, :expand => false)
 	
 	right_column = Gtk::Box.new(:vertical)
 	right_column.pack_start(right_column_top_row)
@@ -77,13 +75,13 @@ class EditCommandCenterWidget < Gtk::Box
   def start_observing_model
 	@building_model.add_observer(self)
 	
-	@stored_products_store.start_observing_model
+	@stored_products_widget.start_observing_model
   end
   
   def stop_observing_model
 	@building_model.delete_observer(self)
 	
-	@stored_products_store.stop_observing_model
+	@stored_products_widget.stop_observing_model
   end
   
   # Called when the factory_model changes.
@@ -112,9 +110,6 @@ class EditCommandCenterWidget < Gtk::Box
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	# This isn't packed so it doesn't get called automatically.
-	@stored_products_store.destroy
 	
 	super
   end
