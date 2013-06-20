@@ -52,7 +52,7 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	  row.add(product_name_label)
 	  row.add(product_quantity_slider)
 	  
-	  self.vbox.add(row)
+	  self.child.add(row)
 	end
 	
 	# 1. Show list of stored products.
