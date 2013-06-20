@@ -9,58 +9,62 @@ class EditExtractorWidget < Gtk::Box
   attr_accessor :building_model
   
   def initialize(building_model)
-	super(:vertical)
+	super(:horizontal)
 	
 	# Hook up model data.
 	@building_model = building_model
 	
-	# Gtk::Table Syntax
-	# table = Gtk::Table.new(rows, columns)
-	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
-	
-	# Add planet building stats widgets in a nice grid.
-	extractor_stats_table = Gtk::Table.new(7, 3)
-	
-	# Number of Heads Row
+	# Create widgets.
+	# Left column.
 	number_of_heads_label = Gtk::Label.new("Number of Heads:")
 	
+	extract_label = Gtk::Label.new("Extract:")
+	
+	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
+	
+	
+	# Center column.
 	# Create the spin button.						# min, max, step
 	@number_of_heads_spin_button = Gtk::SpinButton.new(0, 10, 1)
 	@number_of_heads_spin_button.numeric = true
 	
-	
-	
-	# Extract Product Row
-	extract_label = Gtk::Label.new("Extract:")
-	
 	@product_combo_box = SimpleComboBox.new(@building_model.accepted_product_names)
 	
-	
-	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
-	extraction_time_label_autoadjust_warning = Gtk::Label.new("(May be auto-adjusted)")
 	@extraction_time_scale = SetExtractionTimeSlider.new(@building_model)
 	
 	
+	# Right column.
 	building_image = BuildingImage.new(@building_model)
+	
 	
 	
 	# Set the active iterater from the model data.
 	# Since #update does this, call #update.
 	update
 	
-	extractor_stats_table.attach(extract_label, 0, 1, 0, 1)
-	extractor_stats_table.attach(@product_combo_box, 1, 2, 0, 1)
 	
-	extractor_stats_table.attach(number_of_heads_label, 0, 1, 1, 2)
-	extractor_stats_table.attach(@number_of_heads_spin_button, 1, 2, 1, 2)
+	# Pack widgets into columns.
+	# Left column.
+	left_column = Gtk::Box.new(:vertical)
+	left_column.pack_start(number_of_heads_label)
+	left_column.pack_start(extract_label)
+	left_column.pack_start(extraction_time_label)
 	
-	extractor_stats_table.attach(extraction_time_label, 0, 1, 2, 3)
-	extractor_stats_table.attach(extraction_time_label_autoadjust_warning, 0, 1, 3, 4)
-	extractor_stats_table.attach(@extraction_time_scale, 1, 2, 2, 4)
+	# Center Column.
+	center_column = Gtk::Box.new(:vertical)
+	center_column.pack_start(@number_of_heads_spin_button, :expand => false)
+	center_column.pack_start(@product_combo_box, :expand => false)
+	center_column.pack_start(@extraction_time_scale, :expand => false)
 	
-	extractor_stats_table.attach(building_image, 2, 3, 0, 1)
+	# Right column.
+	right_column = Gtk::Box.new(:vertical)
+	right_column.pack_start(building_image)
 	
-	self.pack_start(extractor_stats_table, :expand => false)
+	# Pack columns left to right.
+	self.pack_start(left_column, :expand => false)
+	self.pack_start(center_column, :expand => true)
+	self.pack_start(right_column, :expand => false)
+	
 	
 	self.show_all
 	
