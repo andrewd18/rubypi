@@ -33,7 +33,7 @@ class SystemStatsWidget < Gtk::Box
 	# Begin semi-useful statistics.
 	# Number of colonized planets / total planets.
 	system_stats_table.attach(Gtk::Label.new("Colonized Planets: "), 0, 1, 2, 3)
-	@num_colonized_planets = Gtk::Label.new("#{pi_configuration_model.num_colonized_planets} / #{pi_configuration_model.num_planets}")
+	@num_colonized_planets = Gtk::Label.new("#{pi_configuration_model.num_colonized_planets}")
 	system_stats_table.attach(@num_colonized_planets, 1, 2, 2, 3)
 	
 	
