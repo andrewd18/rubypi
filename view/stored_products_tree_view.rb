@@ -42,26 +42,21 @@ class StoredProductsTreeView < Gtk::TreeView
 	
 	selected_product_name = tree_iter.get_value(1)
 	
-	if (Product.find_by_name(selected_product_name) == nil)
-	  # Do nothing and leave this function.
-	  return nil
-	end
-	
+	# Pop up the dialog.
 	dialog = RemoveProductsFromBuildingDialog.new(@building_model, selected_product_name)
 	dialog.run do |response|
-	  case response
-	  when Gtk::ResponseType::ACCEPT
-		dialog.quantity
-		  
+	  # Dialog has been closed.
+	  if ((dialog.quantity > 0) and
+		  (response == Gtk::ResponseType::ACCEPT))
+		
 		@building_model.remove_qty_of_product(selected_product_name, dialog.quantity)
 		
-		# TODO
-		# 1. Show exception if necessary.
 	  else
-		puts "canceled"
+		puts "User canceled or quantity was equal to or less than zero."
 	  end
 	end
 	
+	# Remove the dialog now that we've acted on it.
 	dialog.destroy
   end
   

@@ -43,33 +43,36 @@ class AddProductsTreeView < Gtk::TreeView
 	
 	selected_product_name = tree_iter.get_value(1)
 	
+	# Check for errors.
+	# Make sure the selected product is a product and not a header or something else equally undefined.
 	if (Product.find_by_name(selected_product_name) == nil)
-	  # Do nothing and leave this function.
+	  puts "User tried to add a product that does not have a definition in Product class."
 	  return nil
 	end
 	
-	# TODO
+	# Make sure the building they're trying to add to isn't full.
 	if (@building_model.volume_available == 0)
-	  # Display an error.
 	  puts "No volume available."
-	else
-	  dialog = AddProductsToBuildingDialog.new(@building_model, selected_product_name)
-	  dialog.run do |response|
-		case response
-		when Gtk::ResponseType::ACCEPT
-		  dialog.quantity
-			
-		  @building_model.store_product(selected_product_name, dialog.quantity)
-		  
-		  # TODO
-		  # 1. Show exception if necessary.
-		else
-		  puts "canceled"
-		end
-	  end
-	  
-	  dialog.destroy
+	  return nil
 	end
+	
+	
+	# OK! Pop up the dialog.
+	dialog = AddProductsToBuildingDialog.new(@building_model, selected_product_name)
+	dialog.run do |response|
+	  # Dialog has been closed.
+	  if ((dialog.quantity > 0) and
+		  (response == Gtk::ResponseType::ACCEPT))
+		
+		@building_model.store_product(selected_product_name, dialog.quantity)
+		
+	  else
+		puts "User canceled or quantity was equal to or less than zero."
+	  end
+	end
+	
+	# Remove the dialog now that we've acted on it.
+	dialog.destroy
   end
   
   def destroy

@@ -21,23 +21,27 @@ class ExpeditedTransferButton < Gtk::Button
   def process_expedited_transfer
 	dialog = ExpeditedTransferDialog.new(@building_model)
 	dialog.run do |response|
-	  case response
-	  when Gtk::ResponseType::ACCEPT
+	  if (response == Gtk::ResponseType::ACCEPT)
+		
+		# For each product in the list, perform a transfer.
 		dialog.hash_to_transfer.each_pair do |product_name, quantity_to_transfer|
 		  
-		  @building_model.remove_qty_of_product(product_name, quantity_to_transfer)
-		  
-		  dialog.destination.store_product(product_name, quantity_to_transfer)
+		  # Only transfer if the user is trying to transfer a greater-than-zero quantity.
+		  if (quantity_to_transfer > 0)
+			@building_model.remove_qty_of_product(product_name, quantity_to_transfer)
+			
+			dialog.destination.store_product(product_name, quantity_to_transfer)
+		  else
+			puts "User tried to transfer #{quantity_to_transfer} of #{product_name}, which would cause an ArgumentError."
+		  end
 		end
 		
-		# TODO
-		# 1. Show exception if necessary.
-		
 	  else
-		puts "canceled"
+		puts "User canceled the expedited transfer."
 	  end
 	end
 	
+	# Remove the dialog now that we've acted on it.
 	dialog.destroy
   end
 end
