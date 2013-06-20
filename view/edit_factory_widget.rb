@@ -14,21 +14,18 @@ class EditFactoryWidget < Gtk::Box
   attr_accessor :building_model
   
   def initialize(building_model)
-	super(:vertical)
+	super(:horizontal)
 	
 	# Hook up model data.
 	@building_model = building_model
 	
-	# Gtk::Table Syntax
-	# table = Gtk::Table.new(rows, columns)
-	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
-	
-	# Add planet building stats widgets in a nice grid.
-	@factory_stats_table = Gtk::Table.new(7, 3)
-	
-	# Schematic Row
+	# Create widgets.
+	# Left column.
 	schematic_label = Gtk::Label.new("Schematic:")
+	stored_products_label = Gtk::Label.new("Stored Products:")
 	
+	
+	# Center column.
 	# Populate the combo box with the schematics this factory can accept.
 	@schematic_combo_box = SimpleComboBox.new(@building_model.accepted_schematic_names)
 	
@@ -40,19 +37,33 @@ class EditFactoryWidget < Gtk::Box
 	  commit_to_model
 	end
 	
+	# Right column.
 	building_image = BuildingImage.new(@building_model)
 	
-	# Stored Products Row
-	stored_products_label = Gtk::Label.new("Stored Products:")
 	
-	@factory_stats_table.attach(schematic_label, 0, 1, 0, 1)
-	@factory_stats_table.attach(@schematic_combo_box, 1, 2, 0, 1)
-	@factory_stats_table.attach(stored_products_label, 0, 1, 1, 2)
-	@factory_stats_table.attach(building_image, 2, 3, 0, 1)
+	
+	# Pack widgets into columns.
+	# Left column.
+	left_column = Gtk::Box.new(:vertical)
+	left_column.pack_start(schematic_label)
+	left_column.pack_start(stored_products_label)
+	
+	# Center Column.
+	@center_column = Gtk::Box.new(:vertical)
+	@center_column.pack_start(@schematic_combo_box, :expand => false)
 	
 	rebuild_stored_product_table
 	
-	self.pack_start(@factory_stats_table, :expand => false)
+	
+	# Right column.
+	right_column = Gtk::Box.new(:vertical)
+	right_column.pack_start(building_image)
+	
+	# Pack columns left to right.
+	self.pack_start(left_column, :expand => false)
+	self.pack_start(@center_column, :expand => true)
+	self.pack_start(right_column, :expand => false)
+	
 	
 	self.show_all
 	
@@ -61,14 +72,10 @@ class EditFactoryWidget < Gtk::Box
   
   def start_observing_model
 	@building_model.add_observer(self)
-	
-	#@stored_products_store.start_observing_model
   end
   
   def stop_observing_model
 	@building_model.delete_observer(self)
-	
-	#@stored_products_store.stop_observing_model
   end
   
   # Called when the building_model changes.
@@ -110,8 +117,8 @@ class EditFactoryWidget < Gtk::Box
 	  @stored_product_table.pack_start(new_row)
 	end
 	
-	@factory_stats_table.attach(@stored_product_table, 1, 2, 1, 2)
-	@factory_stats_table.show_all
+	@center_column.pack_start(@stored_product_table)
+	@center_column.show_all
   end
   
   def commit_to_model
@@ -130,9 +137,6 @@ class EditFactoryWidget < Gtk::Box
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	# StoredProductsListStore is not packed so it's not auto-destroyed.
-	#@stored_products_store.destroy
 	
 	super
   end
