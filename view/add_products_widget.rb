@@ -6,7 +6,9 @@ class AddProductsWidget < Gtk::ScrolledWindow
 	
 	@building_model = building_model
 	
-	self.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC)
+	# Never have a horizontal scrollbar.
+	# Have a vertical scrollbar if necessary.
+	self.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	
 	@add_products_tree_view = AddProductsTreeView.new(@building_model)
 	self.add(@add_products_tree_view)

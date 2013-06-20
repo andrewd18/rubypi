@@ -15,7 +15,11 @@ class StoredProductsWidget < Gtk::Box
 	
 	# Put the list view in a scrollbox.
 	auto_scrollbox = Gtk::ScrolledWindow.new
-	auto_scrollbox.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC)
+	
+	# Never have a horizontal scrollbar.
+	# Have a vertical scrollbar if necessary.
+	auto_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
+	
 	auto_scrollbox.add(@stored_products_list_view)
 	
 	# Pack them top to bottom.
