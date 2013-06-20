@@ -37,8 +37,8 @@ class TestCaseSystemViewWidget < Test::Unit::TestCase
 	
 	@system_view_widget.start_observing_model
 	
-	# One observer for self, one observer for child object SystemStatsWidget.
-	assert_equal(2, @system_view_widget.pi_configuration_model.count_observers)
+	# One observer for self, one for SystemViewPlanetsStore, one SystemStatsWidget.
+	assert_equal(3, @system_view_widget.pi_configuration_model.count_observers)
   end
   
   def test_can_be_told_to_stop_observing_model_object
@@ -46,7 +46,8 @@ class TestCaseSystemViewWidget < Test::Unit::TestCase
 	
 	@system_view_widget.start_observing_model
 	
-	assert_equal(2, @system_view_widget.pi_configuration_model.count_observers)
+	# One observer for self, one for SystemViewPlanetsStore, one SystemStatsWidget.
+	assert_equal(3, @system_view_widget.pi_configuration_model.count_observers)
 	
 	@system_view_widget.stop_observing_model
 	
@@ -66,7 +67,8 @@ class TestCaseSystemViewWidget < Test::Unit::TestCase
   def test_when_destroyed_unhooks_observers
 	@system_view_widget.start_observing_model
 	
-	assert_equal(2, @default_pi_config_model.count_observers)
+	# One observer for self, one for SystemViewPlanetsStore, one SystemStatsWidget.
+	assert_equal(3, @default_pi_config_model.count_observers)
 	
 	@system_view_widget.destroy
 	

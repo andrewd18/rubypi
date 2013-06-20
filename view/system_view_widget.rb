@@ -1,8 +1,9 @@
 
 require 'gtk3'
-require_relative 'system_view_planet_overview_widget.rb'
-require_relative 'system_stats_widget.rb'
 require_relative 'add_planets_widget.rb'
+require_relative 'system_view_planets_list_view.rb'
+require_relative 'system_stats_widget.rb'
+require_relative 'planet_view_widget.rb'
 
 # This widget is designed to show a system of planets, akin to the system view in Endless Space.
 # Note: The planets included in said system won't necessarily be from the same solar system.
@@ -15,31 +16,60 @@ class SystemViewWidget < Gtk::Box
 	
 	# Left column.
 	# Create widgets.
-	add_planets_label = Gtk::Label.new("Add Planets:")
+	add_planets_label = Gtk::Label.new("Add Planets")
 	add_planets_widget = AddPlanetsWidget.new(@pi_configuration_model)
 	
 	# Pack top to bottom.
 	left_column = Gtk::Box.new(:vertical)
-	left_column.pack_start(add_planets_label)
+	left_column.pack_start(add_planets_label, :expand => false)
 	left_column.pack_start(add_planets_widget)
+	left_column_frame = Gtk::Frame.new
+	left_column_frame.add(left_column)
 	
 	
 	# Center column.
 	# Create widgets.
-	@planet_overview_widgets = Array.new
-	@pi_configuration_model.planets.each do |planet|
-	  widget = SystemViewPlanetOverviewWidget.new(planet)
+	colonized_planets_label = Gtk::Label.new("Colonized Planets")
+	@system_view_planets_list_view = SystemViewPlanetsListView.new(@pi_configuration_model)
+	
+	@edit_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
+	@edit_button.signal_connect("clicked") do
+	  # Get the iter for the building we want to edit.
+	  selected_row = @system_view_planets_list_view.selection
+	  selected_row_iter = selected_row.selected
 	  
-	  @planet_overview_widgets << widget
+	  if (selected_row_iter != nil)
+		selected_planet = selected_row_iter.get_value(1)
+		$ruby_pi_main_gtk_window.change_main_widget(PlanetViewWidget.new(selected_planet))
+	  end
 	end
 	
-	# Pack left to right.
-	center_column = Gtk::Box.new(:horizontal)
-	@planet_overview_widgets.each do |widget|
-	  frame = Gtk::Frame.new
-	  frame.add(widget)
-	  center_column.pack_start(frame)
+	@clear_sort_button = Gtk::Button.new(:label => "Clear Sort")
+	@clear_sort_button.signal_connect("clicked") do
+	  # BUG - Once clicked, this prevents you from drag-and-dropping stuff around in the view
+	  #       until the view is completely reloaded.
+	  # TODO - Implement a "resort by order in @planet_model.buildings" function.
+	  @system_view_planets_list_view.model.set_sort_column_id(0)
 	end
+	
+	# Pack top to bottom.
+	auto_scrollbox = Gtk::ScrolledWindow.new
+	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
+	auto_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
+	auto_scrollbox.add(@system_view_planets_list_view)
+	
+	# Pack left to right.
+	center_column = Gtk::Box.new(:vertical)
+	center_column.pack_start(colonized_planets_label, :expand => false)
+	center_column.pack_start(auto_scrollbox)
+	
+	button_row = Gtk::Box.new(:horizontal)
+	button_row.pack_end(@clear_sort_button, :expand => false)
+	button_row.pack_end(@edit_button, :expand => false)
+	
+	center_column.pack_end(button_row, :expand => false)
+	center_column_frame = Gtk::Frame.new
+	center_column_frame.add(center_column)
 	
 	
 	# Right Column.
@@ -49,12 +79,15 @@ class SystemViewWidget < Gtk::Box
 	# Pack top to bottom.
 	right_column = Gtk::Box.new(:vertical)
 	right_column.pack_start(@system_stats_widget)
-	
+	right_column_frame = Gtk::Frame.new
+	right_column_frame.add(right_column)
 	
 	# Pack columns left to right.
-	self.pack_start(left_column)
-	self.pack_start(center_column)
-	self.pack_start(right_column)
+	self.pack_start(left_column_frame, :expand => false)
+	self.pack_start(center_column_frame, :expand => true)
+	self.pack_start(right_column_frame, :expand => false)
+	
+	self.show_all
 	
 	return self
   end
@@ -67,10 +100,8 @@ class SystemViewWidget < Gtk::Box
 	# Set new PI configuration model.
 	@pi_configuration_model = new_pi_configuration
 	
-	# Give the new model to the children.
-	@pi_configuration_model.planets.each_with_index do |planet, index|
-	  @planet_overview_widgets[index].planet_model = planet
-	end
+	# Give new PI model to the children.
+	@system_view_planets_list_view.pi_configuration_model=(@pi_configuration_model)
 	
 	@system_stats_widget.pi_configuration_model=(@pi_configuration_model)
   end
@@ -80,9 +111,7 @@ class SystemViewWidget < Gtk::Box
 	@pi_configuration_model.add_observer(self)
 	
 	# Tell children to start observing.
-	@planet_overview_widgets.each do |widget|
-	  widget.start_observing_model
-	end
+	@system_view_planets_list_view.start_observing_model
 	
 	@system_stats_widget.start_observing_model
   end
@@ -92,9 +121,7 @@ class SystemViewWidget < Gtk::Box
 	@pi_configuration_model.delete_observer(self)
 	
 	# Tell children to stop observing.
-	@planet_overview_widgets.each do |widget|
-	  widget.stop_observing_model
-	end
+	@system_view_planets_list_view.stop_observing_model
 	
 	@system_stats_widget.stop_observing_model
   end
@@ -105,8 +132,6 @@ class SystemViewWidget < Gtk::Box
   
   def destroy
 	self.stop_observing_model
-	
-	@planet_overview_widgets.clear
 	
 	self.children.each do |child|
 	  child.destroy

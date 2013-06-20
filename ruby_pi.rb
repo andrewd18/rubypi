@@ -38,10 +38,6 @@ class RubyPI < Gtk::Window
 	# Create a blank PI Configuration with 6 planets. User can load a different one if they feel like it.
 	@pi_configuration = PIConfiguration.new
 	
-	6.times do
-	  @pi_configuration.add_planet(Planet.new("Uncolonized"))
-	end
-	
 	# Setup the view.
 	@menu_bar = RubyPIMainMenu.new
 	
