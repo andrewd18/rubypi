@@ -66,25 +66,6 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(nil, @planet.name)
   end
   
-  def test_planet_alias_changes_when_planet_alias_is_set
-	assert_equal(nil, @planet.alias)
-	
-	@planet.alias = "Zim's Playground"
-	
-	assert_equal("Zim's Playground", @planet.alias)
-  end
-  
-  def test_error_occurs_and_planet_alias_does_not_change_when_planet_alias_is_set_to_invalid_value
-	assert_equal(nil, @planet.alias)
-	
-	# Should fail because it's not a string.
-	assert_raise ArgumentError do
-	  @planet.alias = (1236423254)
-	end
-	
-	assert_equal(nil, @planet.alias)
-  end
-  
   def test_planet_starts_with_zero_buildings
 	assert_equal(0, @planet.buildings.count)
 	assert_equal(0, @planet.num_buildings)
@@ -218,7 +199,6 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	@planet.type = "Lava"
 	@planet.name = "J100820 - III"
-	@planet.alias = "Zim's Playground"
 	
 	@planet.abandon
 	
@@ -227,7 +207,6 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_equal("Uncolonized", @planet.type)
 	assert_equal(nil, @planet.name)
-	assert_equal(nil, @planet.alias)
   end
   
   def test_powergrid_usage_scales_with_number_of_buildings
@@ -647,29 +626,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	@planet.delete_observer(self)
   end
-  
-  def test_planet_notifies_observers_when_its_alias_changes
-	@planet.add_observer(self)
-	
-	@planet.alias = "Zim's Playground"
-	
-	assert_true(@was_notified_of_change)
-	
-	@planet.delete_observer(self)
-  end
-  
-  def test_planet_does_not_notify_observers_when_its_alias_is_set_to_identical_value
-	@planet.alias = "Zim's Playground"
-	
-	@planet.add_observer(self)
-	
-	@planet.alias = "Zim's Playground"
-	
-	assert_false(@was_notified_of_change)
-	
-	@planet.delete_observer(self)
-  end
-  
+    
   def test_planet_notifies_observers_when_it_adds_a_building
 	@planet.add_observer(self)
 	
@@ -728,7 +685,6 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	@planet.type = "Lava"
 	@planet.name = "J100820 - III"
-	@planet.alias = "Zim's Playground"
 	
 	@planet.add_observer(self)
 	

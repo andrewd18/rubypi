@@ -7,7 +7,7 @@ require_relative 'building_count_table.rb'
 
 # TODO: This widget is really similar to the Planetary Stats Widget. I should clean that up.
 
-# This widget is designed to show a single planet's image, its name, and its alias.
+# This widget is designed to show a single planet's image, its name.
 class SystemViewPlanetOverviewWidget < Gtk::Box
   def initialize(planet_model)
 	super(:vertical)
@@ -26,14 +26,12 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	@planet_image_event_wrapper.add(@planet_image)
 	
 	@planet_name_label = Gtk::Label.new("#{@planet_model.name}")
-	@planet_alias_label = Gtk::Label.new("#{@planet_model.alias}")
 	@edit_planet_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
 	
 	# Pack the completed widget into ourself.
 	self.pack_start(@building_count_table, :expand => false)
 	self.pack_start(@planet_image_event_wrapper, :expand => false)
 	self.pack_start(@planet_name_label, :expand => false)
-	self.pack_start(@planet_alias_label, :expand => false)
 	
 	self.pack_start(@edit_planet_button, :expand => false)
 	@edit_planet_button.signal_connect("clicked") do
@@ -93,7 +91,6 @@ class SystemViewPlanetOverviewWidget < Gtk::Box
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
 	  @planet_name_label.text = @planet_model.name || ""
-	  @planet_alias_label.text = @planet_model.alias || ""
 	end
   end
   

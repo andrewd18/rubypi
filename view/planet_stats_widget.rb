@@ -37,7 +37,7 @@ class PlanetStatsWidget < Gtk::Box
 	
 	
 	# Populate the combo box with the schematics this factory can accept.
-	@planet_type_combo_box = SimpleComboBox.new(Planet::PLANET_TYPES)
+	@planet_type_combo_box = SimpleComboBox.new(Planet::PLANET_TYPES_WITHOUT_UNCOLONIZED)
 	
 	# Set up immediate commit on change.
 	@planet_type_combo_box.signal_connect("changed") do
@@ -57,37 +57,28 @@ class PlanetStatsWidget < Gtk::Box
 	@planet_name_entry.text = "#{@planet_model.name}"
 	# Stick it in the second row, in second column.
 	planet_stats_table.attach(@planet_name_entry, 1, 2, 2, 3)
-	
-	# Planet Alias Row
-	planet_alias_label = Gtk::Label.new("Alias:")
-	planet_stats_table.attach(planet_alias_label, 0, 1, 3, 4)
-	
-	@planet_alias_entry = Gtk::Entry.new
-	@planet_alias_entry.text = "#{@planet_model.alias}"
-	# Stick it in the third row, across all columns.
-	planet_stats_table.attach(@planet_alias_entry, 1, 2, 3, 4)
-	
+		
 	# CPU Row.
 	cpu_label = Gtk::Label.new("CPU:")
 	@cpu_used_pct_label = Gtk::Label.new("#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}")
 	# Put the label on the left and and the stats on the right of the fifth row.
-	planet_stats_table.attach(cpu_label, 0, 1, 4, 5)
-	planet_stats_table.attach(@cpu_used_pct_label, 1, 2, 4, 5)
+	planet_stats_table.attach(cpu_label, 0, 1, 3, 4)
+	planet_stats_table.attach(@cpu_used_pct_label, 1, 2, 3, 4)
 	
 	
 	# Powergrid Row.
 	pg_label = Gtk::Label.new("PG:")
 	@pg_used_pct_label = Gtk::Label.new("#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}")
 	# Put the label on the left and and the stats on the right of the sixth row.
-	planet_stats_table.attach(pg_label, 0, 1, 5, 6)
-	planet_stats_table.attach(@pg_used_pct_label, 1, 2, 5, 6)
+	planet_stats_table.attach(pg_label, 0, 1, 4, 5)
+	planet_stats_table.attach(@pg_used_pct_label, 1, 2, 4, 5)
 	
 	# ISK Cost Row.
 	isk_label = Gtk::Label.new("ISK Cost:")
 	@isk_cost_label = Gtk::Label.new("#{@planet_model.isk_cost}")
 	# Put the main label on the left and the cost on the right of the seventh row.
-	planet_stats_table.attach(isk_label, 0, 1, 6, 7)
-	planet_stats_table.attach(@isk_cost_label, 1, 2, 6, 7)
+	planet_stats_table.attach(isk_label, 0, 1, 5, 6)
+	planet_stats_table.attach(@isk_cost_label, 1, 2, 5, 6)
 	
 	self.pack_start(@building_count_table, :expand => false)
 	self.pack_start(planet_stats_table, :expand => false)
@@ -137,7 +128,7 @@ class PlanetStatsWidget < Gtk::Box
 	  # Set the current combo box value.
 	  @planet_type_combo_box.selected_item = @planet_model.type
 	  
-	  # Ignore the alias and name. Whatever the user has in that box now is fine.
+	  # Ignore the name. Whatever the user has in that box now is fine.
 	  
 	  # Set the CPU used and PG used values.
 	  @cpu_used_pct_label.text = "#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}"
@@ -150,7 +141,6 @@ class PlanetStatsWidget < Gtk::Box
   
   def commit_to_model
 	@planet_model.type = @planet_type_combo_box.selected_item
-	@planet_model.alias = @planet_alias_entry.text
 	@planet_model.name = @planet_name_entry.text
   end
   

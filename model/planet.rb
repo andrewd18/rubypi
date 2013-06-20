@@ -30,12 +30,20 @@ class Planet
                   "Oceanic",
                   "Plasma"]
   
-  def initialize(planet_type, planet_name = nil, planet_alias = nil, planet_buildings = Array.new, pi_configuration = nil)
+  PLANET_TYPES_WITHOUT_UNCOLONIZED = ["Gas",
+									  "Ice",
+									  "Storm",
+									  "Barren",
+									  "Temperate",
+									  "Lava",
+									  "Oceanic",
+									  "Plasma"]
+  
+  
+  def initialize(planet_type, planet_name = nil, planet_buildings = Array.new, pi_configuration = nil)
 	@type = planet_type
 	
 	@name = planet_name
-	
-	@alias = planet_alias
 	
 	@buildings = planet_buildings
 	
@@ -90,25 +98,6 @@ class Planet
 	end
 	
 	return @name
-  end
-  
-  def alias
-	return @alias
-  end
-  
-  def alias=(new_alias)
-	raise ArgumentError, "#{new_alias} is not a String." unless new_alias.is_a?(String)
-	
-	# Only set it and announce if the alias actually changed.
-	if (@alias != new_alias)
-	  @alias = new_alias
-	
-	  # Tell my observers I've changed.
-	  changed # Set observeable state to "changed".
-	  notify_observers() # Notify errybody.
-	end
-	
-	return @alias
   end
   
   def powergrid_usage
@@ -227,7 +216,6 @@ class Planet
 	
 	@type = "Uncolonized"
 	@name = nil
-	@alias = nil
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
