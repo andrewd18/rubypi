@@ -39,7 +39,7 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	@hash_to_transfer = Hash.new
 	
 	@building_model.stored_products.each_pair do |product_name, currently_stored_quantity|
-	  product_name_label = Gtk::Label.new("product_name")
+	  product_name_label = Gtk::Label.new("#{product_name}")
 	                                                      #min, max,                    #scale
 	  product_quantity_slider = Gtk::Scale.new(:horizontal, 0, currently_stored_quantity, 1)
 	  
