@@ -53,15 +53,9 @@ class SystemViewWidget < Gtk::Box
 	end
 	
 	# Pack top to bottom.
-	auto_scrollbox = Gtk::ScrolledWindow.new
-	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
-	auto_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
-	auto_scrollbox.add(@system_view_planets_list_view)
-	
-	# Pack left to right.
 	center_column = Gtk::Box.new(:vertical)
 	center_column.pack_start(colonized_planets_label, :expand => false)
-	center_column.pack_start(auto_scrollbox)
+	center_column.pack_start(@system_view_planets_list_view)
 	
 	button_row = Gtk::Box.new(:horizontal)
 	button_row.pack_end(@clear_sort_button, :expand => false)
