@@ -44,12 +44,9 @@ class RubyPI < Gtk::Window
 	@box = Gtk::Box.new(:vertical)
 	@box.pack_start(@menu_bar, :expand => false, :fill => false)
 	
-	self.change_main_widget(SystemViewWidget.new(@pi_configuration))
-	
 	self.add(@box)
 	
-	# Make sure all our widgets are visible.
-	self.show_all
+	self.change_main_widget(SystemViewWidget.new(@pi_configuration))
 	
 	return self
   end
@@ -70,6 +67,7 @@ class RubyPI < Gtk::Window
 	@main_widget = new_widget
 	@box.pack_start(@main_widget)
 	
+	# Make sure all our widgets are visible.
 	self.show_all
 	
 	# Finally, tell the widget it can begin observing the model.
