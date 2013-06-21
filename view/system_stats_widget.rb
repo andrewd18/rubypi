@@ -56,7 +56,7 @@ class SystemStatsWidget < Gtk::Box
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
-	  @num_colonized_planets.text = "#{pi_configuration_model.num_colonized_planets} / #{pi_configuration_model.num_planets}"
+	  @num_colonized_planets.text = "#{pi_configuration_model.num_colonized_planets}"
 	end
   end
   
