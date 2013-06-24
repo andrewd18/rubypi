@@ -1,5 +1,6 @@
 require_relative 'icon_column.rb'
 require_relative 'text_column.rb'
+require_relative 'text_column_with_image_header.rb'
 require_relative 'system_view_planets_store.rb'
 
 class SystemViewPlanetsListView < Gtk::TreeView
@@ -11,12 +12,18 @@ class SystemViewPlanetsListView < Gtk::TreeView
 	super(@system_view_planets_store)
 	
 	# Create columns for the tree view.
-	icon_column = IconColumn.new("Icon", 2)
+	icon_column = IconColumn.new("", 2)
 	name_column = TextColumn.new("Name", 3)
-	num_extractors_column = TextColumn.new("Extractors", 4)
-	num_factories_column = TextColumn.new("Factories", 5)
-	num_storages_column = TextColumn.new("Storages", 6)
-	num_launchpads_column = TextColumn.new("Launchpads", 7)
+	num_extractors_column = TextColumnWithImageHeader.new("view/images/minimalistic_extractor_icon.png", 4)
+	num_factories_column = TextColumnWithImageHeader.new("view/images/minimalistic_factory_icon.png", 5)
+	num_storages_column = TextColumnWithImageHeader.new("view/images/minimalistic_storage_facility_icon.png", 6)
+	num_launchpads_column = TextColumnWithImageHeader.new("view/images/minimalistic_launchpad_icon.png", 7)
+	
+	# Set a default width for the icon column. 36 pixels should be enough for anyone.
+	icon_column.min_width = 36
+	
+	# Allow the name column to expand before the others do.
+	name_column.expand = true
 	
 	# Pack columns in tree view, left-to-right.
 	self.append_column(icon_column)

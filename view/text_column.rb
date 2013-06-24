@@ -6,6 +6,8 @@ class TextColumn < Gtk::TreeViewColumn
 	
 	self.reorderable = true
 	
+	self.alignment = 0.5 # Center
+	
 	# Sort by the model column you passed in.
 	self.sort_column_id = model_column
 	
