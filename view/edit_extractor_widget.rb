@@ -1,5 +1,6 @@
 require 'gtk3'
 require_relative 'simple_combo_box.rb'
+require_relative 'simple_table.rb'
 require_relative 'set_extraction_time_slider.rb'
 require_relative 'building_image.rb'
 
@@ -17,9 +18,7 @@ class EditExtractorWidget < Gtk::Box
 	# Create widgets.
 	# Left column.
 	number_of_heads_label = Gtk::Label.new("Number of Heads:")
-	
 	extract_label = Gtk::Label.new("Extract:")
-	
 	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
 	
 	
@@ -43,38 +42,46 @@ class EditExtractorWidget < Gtk::Box
 	update
 	
 	
-	# Pack widgets into rows.
-	# Pack rows into columns.
-	# Left column.
-	number_of_heads_row = Gtk::Box.new(:horizontal)
-	number_of_heads_row.pack_start(number_of_heads_label, :expand => false)
-	number_of_heads_row.pack_start(@number_of_heads_spin_button)
+	                                    # rows, columns, homogenous?
+	extractor_options_table = SimpleTable.new(3, 2, false)
 	
-	select_product_row = Gtk::Box.new(:horizontal)
-	select_product_row.pack_start(extract_label, :expand => false)
-	select_product_row.pack_start(@product_combo_box)
+	# Top row
+	extractor_options_table.attach(number_of_heads_label, 1, 1)
+	extractor_options_table.attach(@number_of_heads_spin_button, 1, 2)
 	
-	extraction_time_row = Gtk::Box.new(:horizontal)
-	extraction_time_row.pack_start(extraction_time_label, :expand => false)
-	extraction_time_row.pack_start(@extraction_time_scale)
+	# Middle row
+	extractor_options_table.attach(extract_label, 2, 1)
+	extractor_options_table.attach(@product_combo_box, 2, 2)
 	
+	# Bottom row
+	extractor_options_table.attach(extraction_time_label, 3, 1)
+	extractor_options_table.attach(@extraction_time_scale, 3, 2)
 	
-	left_column = Gtk::Box.new(:vertical)
-	left_column.pack_start(number_of_heads_row, :expand => false)
-	left_column.pack_start(select_product_row, :expand => false)
-	left_column.pack_start(extraction_time_row, :expand => false)
+	# By wrapping the table in a vertical box, we ensure that the vbox expands
+	# and the table does not.
+	extractor_options_table_vbox = Gtk::Box.new(:vertical)
+	extractor_options_table_vbox.pack_start(extractor_options_table, :expand => false)
+	
+	# Finally, add a decorator frame around it.
+	extractor_options_table_frame = Gtk::Frame.new
+	extractor_options_table_frame.add(extractor_options_table_vbox)
 	
 	
 	
 	
 	# Right column.
+	# By wrapping the image in a vertical box, we ensure that the vbox expands
+	# and the image does not.
 	building_image_column = Gtk::Box.new(:vertical)
 	building_image_column.pack_start(building_image, :expand => false)
 	
-	# Pack columns left to right.
-	self.pack_start(left_column, :expand => true)
-	self.pack_start(building_image_column, :expand => false)
+	# Finally, add a decorator frame around it.
+	building_image_frame = Gtk::Frame.new
+	building_image_frame.add(building_image_column)
 	
+	# Pack columns left to right.
+	self.pack_start(extractor_options_table_frame, :expand => true)
+	self.pack_start(building_image_frame, :expand => false)
 	
 	self.show_all
 	
