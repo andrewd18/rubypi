@@ -13,6 +13,10 @@ class UpToSystemViewButton < Gtk::Button
   end
   
   def return_to_system_view
+	# TODO: This should be a responsibility of the parent widget.
+	# Tell the parent widget to commit to the model before killing itself.
+	@parent_widget.commit_to_model
+	
 	# Get the PI configuration for this widget's planet.
 	planet_model = @parent_widget.planet_model
 	pi_configuration = planet_model.pi_configuration

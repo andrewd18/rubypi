@@ -13,6 +13,10 @@ class UpToPlanetViewButton < Gtk::Button
   end
   
   def return_to_planet_view
+	# TODO: This should be a responsibility of the parent widget.
+	# Tell the parent widget to commit to the model before killing itself.
+	@parent_widget.commit_to_model
+	
 	# Get the planet of this building_model.
 	building_model = @parent_widget.building_model
 	planet_model = building_model.planet

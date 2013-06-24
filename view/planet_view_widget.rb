@@ -5,7 +5,7 @@ require_relative 'buildings_list_store.rb'
 require_relative 'buildings_tree_view.rb'
 require_relative 'planet_stats_widget.rb'
 require_relative 'building_view_widget.rb'
-require_relative 'system_view_widget.rb'
+require_relative 'up_to_system_view_button.rb'
 
 # This is a layout-only widget that contains other, planet-specific widgets.
 class PlanetViewWidget < Gtk::Box
@@ -21,12 +21,7 @@ class PlanetViewWidget < Gtk::Box
 	planet_view_label = Gtk::Label.new("Planet View")
 	
 	# Add our up button.
-	# TODO - Push this behavior out of this widget and into a "up to system view button".
-	#        "UpToSystemViewButton.new" should be the only thing I call.
-	@up_button = Gtk::Button.new(:stock_id => Gtk::Stock::GO_UP)
-	@up_button.signal_connect("pressed") do
-	  return_to_system_view
-	end
+	@up_button = UpToSystemViewButton.new(self)
 	
 	menu_and_up_button_row.pack_start(planet_view_label, :expand => true)
 	menu_and_up_button_row.pack_start(@up_button, :expand => false)
@@ -136,6 +131,13 @@ class PlanetViewWidget < Gtk::Box
 	@planet_stats_widget.stop_observing_model
   end
   
+  # TODO: Ensure that each object commits as part of its destroy.
+  # Going to involve some refactoring of the objects themselves.
+  def commit_to_model
+	# If I don't call this, the planet_stats_widget never saves the name typed into its box.
+	@planet_stats_widget.commit_to_model
+  end
+  
   def update
 	# Do nothing.
   end
@@ -152,14 +154,5 @@ class PlanetViewWidget < Gtk::Box
 	@buildings_list_store.destroy
 	
 	super
-  end
-  
-  private
-  
-  def return_to_system_view
-	# Before we return, save the data to the model.
-	@planet_stats_widget.commit_to_model
-	
-	$ruby_pi_main_gtk_window.change_main_widget(SystemViewWidget.new(@planet_model.pi_configuration))
   end
 end

@@ -2,6 +2,7 @@
 require 'gtk3'
 
 require_relative 'planet_view_widget.rb'
+require_relative 'up_to_planet_view_button.rb'
 require_relative 'edit_command_center_widget.rb'
 require_relative 'edit_launchpad_widget.rb'
 require_relative 'edit_storage_facility_widget.rb'
@@ -28,10 +29,7 @@ class BuildingViewWidget < Gtk::Box
 	# Add our up button.
 	# TODO - Push this behavior out of this widget and into a "up to planet view button".
 	#        "UpToPlanetViewButton.new" should be the only thing I call.
-	@up_button = Gtk::Button.new(:stock_id => Gtk::Stock::GO_UP)
-	@up_button.signal_connect("pressed") do
-	  return_to_planet_view
-	end
+	@up_button = UpToPlanetViewButton.new(self)
 	
 	top_row.pack_start(building_view_label, :expand => true)
 	top_row.pack_start(@up_button, :expand => false)
@@ -119,6 +117,13 @@ class BuildingViewWidget < Gtk::Box
 	end
   end
   
+  # TODO: Ensure that each object commits as part of its destroy.
+  # Going to involve some refactoring of the objects themselves.
+  def commit_to_model
+	# If I don't call this, the specific widget never saves its values.
+	@building_widget.commit_to_model
+  end
+  
   def update
 	# Do nothing.
   end
@@ -131,15 +136,5 @@ class BuildingViewWidget < Gtk::Box
 	end
 	
 	super
-  end
-  
-  private
-  
-  def return_to_planet_view
-	# Before we return, save the data to the model.
-	# TODO - Get rid of the unless here.
-	@building_widget.commit_to_model unless @building_widget.is_a?(Gtk::Label)
-	
-	$ruby_pi_main_gtk_window.change_main_widget(PlanetViewWidget.new(@building_model.planet))
   end
 end
