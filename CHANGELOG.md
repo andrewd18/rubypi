@@ -1,6 +1,8 @@
 Staged For Next Release
 =======================
 * Fixed a layout bug in the System View and Planet view where widgets wouldn't be sized properly.
+* Swapped out text for building icons where appropriate in the System View table header.
+* Fixed a layout bug in the Edit Extractor view that caused it to look awful when using a big window. This still requires a little more work.
 * Code cleanup.
 
 
