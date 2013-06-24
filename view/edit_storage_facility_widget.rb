@@ -38,23 +38,29 @@ class EditStorageFacilityWidget < Gtk::Box
 	left_column = Gtk::Box.new(:vertical)
 	left_column.pack_start(add_products_label, :expand => false)
 	left_column.pack_start(@add_products_widget, :expand => true)
+	left_column_frame = Gtk::Frame.new
+	left_column_frame.add(left_column)
 	
-	self.pack_start(left_column, :expand => false)
+	self.pack_start(left_column_frame, :expand => false)
 	
 	
 	# Center column.
 	center_column = Gtk::Box.new(:vertical)
 	center_column.pack_start(@stored_products_widget, :expand => true)
 	center_column.pack_start(expedited_transfer_button, :expand => false)
+	center_column_frame = Gtk::Frame.new
+	center_column_frame.add(center_column)
 	
-	self.pack_start(center_column, :expand => true)
+	self.pack_start(center_column_frame, :expand => true)
 	
 	
 	# Right column.
 	right_column = Gtk::Box.new(:vertical)
 	right_column.pack_start(building_image, :expand => false)
+	right_column_frame = Gtk::Frame.new
+	right_column_frame.add(right_column)
 	
-	self.pack_start(right_column, :expand => false)
+	self.pack_start(right_column_frame, :expand => false)
 	
 	self.show_all
 	
