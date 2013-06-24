@@ -4,6 +4,7 @@ require_relative 'add_planets_widget.rb'
 require_relative 'system_view_planets_list_view.rb'
 require_relative 'system_stats_widget.rb'
 require_relative 'planet_view_widget.rb'
+require_relative 'edit_selected_button.rb'
 require_relative 'clear_sort_button.rb'
 
 # This widget is designed to show a system of planets, akin to the system view in Endless Space.
@@ -32,19 +33,7 @@ class SystemViewWidget < Gtk::Box
 	# Create widgets.
 	colonized_planets_label = Gtk::Label.new("Colonized Planets")
 	@system_view_planets_list_view = SystemViewPlanetsListView.new(@pi_configuration_model)
-	
-	@edit_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
-	@edit_button.signal_connect("clicked") do
-	  # Get the iter for the building we want to edit.
-	  selected_row = @system_view_planets_list_view.selection
-	  selected_row_iter = selected_row.selected
-	  
-	  if (selected_row_iter != nil)
-		selected_planet = selected_row_iter.get_value(1)
-		$ruby_pi_main_gtk_window.change_main_widget(PlanetViewWidget.new(selected_planet))
-	  end
-	end
-	
+	@edit_selected_button = EditSelectedButton.new(@system_view_planets_list_view)
 	@clear_sort_button = ClearSortButton.new(@system_view_planets_list_view)
 	
 	# Pack top to bottom.
@@ -54,7 +43,7 @@ class SystemViewWidget < Gtk::Box
 	
 	button_row = Gtk::Box.new(:horizontal)
 	button_row.pack_end(@clear_sort_button, :expand => false)
-	button_row.pack_end(@edit_button, :expand => false)
+	button_row.pack_end(@edit_selected_button, :expand => false)
 	
 	center_column.pack_end(button_row, :expand => false)
 	center_column_frame = Gtk::Frame.new

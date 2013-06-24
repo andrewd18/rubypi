@@ -29,7 +29,7 @@ class SystemViewPlanetsListView < Gtk::TreeView
 	# Signals
 	# On double-click, run the remove_product_dialog method.
 	self.signal_connect("row-activated") do |tree_view, path, column|
-	  self.remove_planet
+	  self.delete_selected
 	end
 	
 	# Tree View settings.
@@ -46,12 +46,18 @@ class SystemViewPlanetsListView < Gtk::TreeView
 	@system_view_planets_store.set_sort_column_id(0)
   end
   
-  def pi_configuration_model=(new_pi_configuration_model)
-	# Pass new model along to store.
-	@system_view_planets_store.pi_configuration_model=(new_pi_configuration_model)
+  def edit_selected
+	# Get a tree iter to the selected row.
+	row = self.selection
+	tree_iter = row.selected
+	
+	selected_planet_instance = tree_iter.get_value(1)
+	
+	# Create a new PlanetViewWidget, passing in the selected planet.
+	$ruby_pi_main_gtk_window.change_main_widget(PlanetViewWidget.new(selected_planet_instance))
   end
   
-  def remove_planet
+  def delete_selected
 	# Get a tree iter to the selected row.
 	row = self.selection
 	tree_iter = row.selected
@@ -59,6 +65,11 @@ class SystemViewPlanetsListView < Gtk::TreeView
 	selected_planet_instance = tree_iter.get_value(1)
 	
 	@pi_configuration_model.remove_planet(selected_planet_instance)
+  end
+  
+  def pi_configuration_model=(new_pi_configuration_model)
+	# Pass new model along to store.
+	@system_view_planets_store.pi_configuration_model=(new_pi_configuration_model)
   end
   
   def start_observing_model
