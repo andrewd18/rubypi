@@ -4,6 +4,7 @@ require_relative 'add_planets_widget.rb'
 require_relative 'system_view_planets_list_view.rb'
 require_relative 'system_stats_widget.rb'
 require_relative 'planet_view_widget.rb'
+require_relative 'clear_sort_button.rb'
 
 # This widget is designed to show a system of planets, akin to the system view in Endless Space.
 # Note: The planets included in said system won't necessarily be from the same solar system.
@@ -44,13 +45,7 @@ class SystemViewWidget < Gtk::Box
 	  end
 	end
 	
-	@clear_sort_button = Gtk::Button.new(:label => "Clear Sort")
-	@clear_sort_button.signal_connect("clicked") do
-	  # BUG - Once clicked, this prevents you from drag-and-dropping stuff around in the view
-	  #       until the view is completely reloaded.
-	  # TODO - Implement a "resort by order in @planet_model.buildings" function.
-	  @system_view_planets_list_view.model.set_sort_column_id(0)
-	end
+	@clear_sort_button = ClearSortButton.new(@system_view_planets_list_view)
 	
 	# Pack top to bottom.
 	center_column = Gtk::Box.new(:vertical)

@@ -38,6 +38,14 @@ class SystemViewPlanetsListView < Gtk::TreeView
 	return self
   end
   
+  def clear_sort
+	# BUG - Once called, this prevents you from drag-and-dropping stuff around in the view
+	#       until the view is completely reloaded.
+	
+	# Sort by the index column.
+	@system_view_planets_store.set_sort_column_id(0)
+  end
+  
   def pi_configuration_model=(new_pi_configuration_model)
 	# Pass new model along to store.
 	@system_view_planets_store.pi_configuration_model=(new_pi_configuration_model)

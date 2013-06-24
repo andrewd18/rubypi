@@ -11,7 +11,7 @@ class BuildingsListStore < Gtk::ListStore
 	@planet_model = planet_model
 	
 	# Set up columns.
-	super(Integer,		# UID
+	super(Integer,		# Index
 	      Gdk::Pixbuf,	# Icon
 	      String,		# Name
 	      String,		# Stored Products

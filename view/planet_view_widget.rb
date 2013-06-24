@@ -6,6 +6,7 @@ require_relative 'buildings_tree_view.rb'
 require_relative 'planet_stats_widget.rb'
 require_relative 'building_view_widget.rb'
 require_relative 'up_to_system_view_button.rb'
+require_relative 'clear_sort_button.rb'
 
 # This is a layout-only widget that contains other, planet-specific widgets.
 class PlanetViewWidget < Gtk::Box
@@ -60,13 +61,7 @@ class PlanetViewWidget < Gtk::Box
 	  end
 	end
 	
-	@clear_sort_button = Gtk::Button.new(:label => "Clear Sort")
-	@clear_sort_button.signal_connect("clicked") do
-	  # BUG - Once clicked, this prevents you from drag-and-dropping stuff around in the view
-	  #       until the view is completely reloaded.
-	  # TODO - Implement a "resort by order in @planet_model.buildings" function.
-	  @buildings_list_store.set_sort_column_id(0)
-	end
+	@clear_sort_button = ClearSortButton.new(@buildings_tree_view)
 	
 	# TODO - Ugly. Convert to table or generally clean up.
 	auto_scrollbox = Gtk::ScrolledWindow.new

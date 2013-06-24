@@ -40,6 +40,14 @@ class BuildingsTreeView < Gtk::TreeView
 	return self
   end
   
+  def clear_sort
+	# BUG - Once called, this prevents you from drag-and-dropping stuff around in the view
+	#       until the view is completely reloaded.
+	
+	# Sort by the index column.
+	@tree_or_list_model.set_sort_column_id(0)
+  end
+  
   def destroy
 	self.children.each do |child|
 	  child.destroy
