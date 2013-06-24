@@ -1,5 +1,8 @@
 Staged For Next Release
 =======================
+* Fixed a layout bug in the System View and Planet view where widgets wouldn't be sized properly.
+* Code cleanup.
+
 
 Version 0.0.6
 =============
