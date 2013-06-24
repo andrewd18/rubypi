@@ -46,8 +46,8 @@ class PlanetViewWidget < Gtk::Box
 	# TODO - Determine if I need the auto_scrollbox. Attempt to reduce column width.
 	# TODO - Ugly. Convert to SimpleTable or generally clean up.
 	auto_scrollbox = Gtk::ScrolledWindow.new
-	# Have a horizontal or vertical scrollbar if necessary.
-	auto_scrollbox.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC)
+	# Never scroll horizontally but scroll vertically if necessary.
+	auto_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	auto_scrollbox.add(@buildings_tree_view)
 	
 	vertical_box = Gtk::Box.new(:vertical)
