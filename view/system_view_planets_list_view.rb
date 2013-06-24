@@ -48,6 +48,12 @@ class SystemViewPlanetsListView < Gtk::TreeView
 	row = self.selection
 	tree_iter = row.selected
 	
+	# If the user hasn't selected any rows, tree_iter will be nil.
+	# In that case, return.
+	if (tree_iter == nil)
+	  return
+	end
+	
 	selected_planet_instance = tree_iter.get_value(1)
 	
 	# Create a new PlanetViewWidget, passing in the selected planet.

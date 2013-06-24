@@ -49,6 +49,12 @@ class BuildingsTreeView < Gtk::TreeView
 	row = self.selection
 	tree_iter = row.selected
 	
+	# If the user hasn't selected any rows, tree_iter will be nil.
+	# In that case, return.
+	if (tree_iter == nil)
+	  return
+	end
+	
 	# Get the building instance from the model.
 	building_instance = tree_iter.get_value(1)
 	
