@@ -6,6 +6,7 @@ require_relative 'buildings_tree_view.rb'
 require_relative 'planet_stats_widget.rb'
 require_relative 'building_view_widget.rb'
 require_relative 'up_to_system_view_button.rb'
+require_relative 'edit_selected_button.rb'
 require_relative 'clear_sort_button.rb'
 
 # This is a layout-only widget that contains other, planet-specific widgets.
@@ -16,17 +17,15 @@ class PlanetViewWidget < Gtk::Box
 	# Hook up model data.
 	@planet_model = planet_model
 	
-	# Create the menu and up button row.
-	menu_and_up_button_row = Gtk::Box.new(:horizontal)
-	
-	planet_view_label = Gtk::Label.new("Planet View")
-	
-	# Add our up button.
+	# Description and up button row widgets.
+	description_label = Gtk::Label.new("Planet View")
 	@up_button = UpToSystemViewButton.new(self)
 	
-	menu_and_up_button_row.pack_start(planet_view_label, :expand => true)
-	menu_and_up_button_row.pack_start(@up_button, :expand => false)
-	self.pack_start(menu_and_up_button_row, :expand => false)
+	# Pack the description and up button row widgets.
+	description_and_up_button_row = Gtk::Box.new(:horizontal)
+	description_and_up_button_row.pack_start(description_label, :expand => true)
+	description_and_up_button_row.pack_start(@up_button, :expand => false)
+	self.pack_start(description_and_up_button_row, :expand => false)
 	
 	
 	# Create the Bottom Row
@@ -41,25 +40,9 @@ class PlanetViewWidget < Gtk::Box
 	
 	# Center Column
 	@buildings_tree_view = BuildingsTreeView.new(@planet_model)
-	
-	@edit_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
-	@edit_button.signal_connect("clicked") do
-	  # Get the iter for the building we want to edit.
-	  current_tree_selection = @buildings_tree_view.selection
-	  selected_row_iter = current_tree_selection.selected
-	  
-	  # Verify the user has something highlighted.
-	  if (selected_row_iter != nil)
-		# Get the value of the iter.
-		building_iter = selected_row_iter.get_value(0)
-		
-		# TODO - Edit specific factory ID rather than relying on these iters matching.
-		# Change to the BuildingViewWidget.
-		$ruby_pi_main_gtk_window.change_main_widget(BuildingViewWidget.new(@planet_model.buildings[building_iter]))
-	  end
-	end
-	
+	@edit_selected_button = EditSelectedButton.new(@buildings_tree_view)
 	@clear_sort_button = ClearSortButton.new(@buildings_tree_view)
+	
 	
 	# TODO - Ugly. Convert to table or generally clean up.
 	auto_scrollbox = Gtk::ScrolledWindow.new
@@ -72,7 +55,7 @@ class PlanetViewWidget < Gtk::Box
 	
 	button_row = Gtk::Box.new(:horizontal)
 	button_row.pack_end(@clear_sort_button, :expand => false, :fill => false)
-	button_row.pack_end(@edit_button, :expand => false, :fill => false)
+	button_row.pack_end(@edit_selected_button, :expand => false, :fill => false)
 	
 	vertical_box.pack_start(button_row, :expand => false, :fill => false)
 	vertical_box_frame = Gtk::Frame.new

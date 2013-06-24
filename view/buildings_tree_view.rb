@@ -30,10 +30,7 @@ class BuildingsTreeView < Gtk::TreeView
 	# Signals
 	# On double-click, remove the building.
 	self.signal_connect("row-activated") do |tree_view, path, column|
-	  row = self.selection
-	  tree_iter = row.selected
-	  
-	  @buildings_list_store.delete_building(tree_iter)
+	  delete_selected
 	end
 	
 	# Tree View settings.
@@ -48,6 +45,27 @@ class BuildingsTreeView < Gtk::TreeView
 	
 	# Sort by the index column.
 	@buildings_list_store.set_sort_column_id(0)
+  end
+  
+  def edit_selected
+	# Determine which row is selected.
+	row = self.selection
+	tree_iter = row.selected
+	
+	# Get the building instance from the model.
+	building_instance = tree_iter.get_value(1)
+	
+	# Change the main widget to a BuildingViewWidget, passing in the selected building instance.
+	$ruby_pi_main_gtk_window.change_main_widget(BuildingViewWidget.new(building_instance))
+  end
+  
+  def delete_selected
+	# Determine which row is selected.
+	row = self.selection
+	tree_iter = row.selected
+	
+	# Pass the selected row along to the model's delete_building method.
+	@buildings_list_store.delete_building(tree_iter)
   end
   
   def planet_model=(new_planet_model)
