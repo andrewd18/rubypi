@@ -3,9 +3,7 @@ require 'gtk3'
 require_relative 'simple_combo_box.rb'
 require_relative '../model/schematic.rb'
 
-require_relative 'stored_products_list_store.rb'
-require_relative 'stored_products_tree_view.rb'
-
+require_relative 'simple_table.rb'
 require_relative 'building_image.rb'
 
 # This widget provides all the options necessary to edit a BasicIndustrialFacility, AdvancedIndustrialFacility, or HighTechIndustrialFacility.
@@ -37,36 +35,52 @@ class EditFactoryWidget < Gtk::Box
 	  commit_to_model
 	end
 	
+	
+		                                # rows, columns, homogenous?
+	@factory_options_table = SimpleTable.new(2, 2, false)
+	
+	
+	# Center column
+	create_sliders_for_stored_products
+	
+	
+	# Top row
+	@factory_options_table.attach(schematic_label, 1, 1)
+	@factory_options_table.attach(@schematic_combo_box, 1, 2)
+	
+	# Middle row
+	@factory_options_table.attach(stored_products_label, 2, 1)
+	# Middle row, right column (2, 2) is attached as part of create_sliders_for_stored_products,
+	
+	# By wrapping the table in a vertical box, we ensure that the vbox expands
+	# and the table does not.
+	factory_options_table_vbox = Gtk::Box.new(:vertical)
+	factory_options_table_vbox.pack_start(@factory_options_table, :expand => false)
+	
+	# Finally, add a decorator frame around it.
+	factory_options_table_frame = Gtk::Frame.new
+	factory_options_table_frame.add(factory_options_table_vbox)
+	
+	
+	
+	
+	
+	
 	# Right column.
 	building_image = BuildingImage.new(@building_model)
 	
+	# By wrapping the image in a vertical box, we ensure that the vbox expands
+	# and the image does not.
+	building_image_column = Gtk::Box.new(:vertical)
+	building_image_column.pack_start(building_image, :expand => false)
 	
-	
-	# Pack widgets into rows.
-	# Pack rows into columns.
-	# Left column.
-	schematic_row = Gtk::Box.new(:horizontal)
-	schematic_row.pack_start(schematic_label, :expand => false)
-	schematic_row.pack_start(@schematic_combo_box)
-	
-	@stored_products_row = Gtk::Box.new(:horizontal)
-	@stored_products_row.pack_start(stored_products_label, :expand => false)
-	
-	rebuild_stored_product_table
-	
-	left_column = Gtk::Box.new(:vertical)
-	left_column.pack_start(schematic_row, :expand => false)
-	left_column.pack_start(@stored_products_row)
-	
-	
-	# Right column.
-	right_column = Gtk::Box.new(:vertical)
-	right_column.pack_start(building_image)
+	# Finally, add a decorator frame around it.
+	building_image_frame = Gtk::Frame.new
+	building_image_frame.add(building_image_column)
 	
 	# Pack columns left to right.
-	self.pack_start(left_column, :expand => true)
-	self.pack_start(right_column, :expand => false)
-	
+	self.pack_start(factory_options_table_frame, :expand => true)
+	self.pack_start(building_image_frame, :expand => false)
 	
 	self.show_all
 	
@@ -85,11 +99,11 @@ class EditFactoryWidget < Gtk::Box
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
-	  rebuild_stored_product_table
+	  create_sliders_for_stored_products
 	end
   end
   
-  def rebuild_stored_product_table
+  def create_sliders_for_stored_products
 	if (@stored_product_table)
 	  @stored_product_table.destroy
 	  # This automatically cleans up any packed children, namely the scales of @scales_hash.
@@ -120,8 +134,11 @@ class EditFactoryWidget < Gtk::Box
 	  @stored_product_table.pack_start(new_row)
 	end
 	
-	@stored_products_row.pack_start(@stored_product_table)
-	@stored_products_row.show_all
+	@factory_options_table.attach(@stored_product_table, 2, 2)
+	
+	# WORKAROUND
+	# If I don't force a show_all on @factory_options_table here, it won't show the new columns.
+	@factory_options_table.show_all
   end
   
   def commit_to_model
