@@ -40,9 +40,7 @@ class PlanetViewWidget < Gtk::Box
 	
 	
 	# Center Column
-	@buildings_list_store = BuildingsListStore.new(@planet_model)
-	@buildings_tree_view = BuildingsTreeView.new(@buildings_list_store)
-	
+	@buildings_tree_view = BuildingsTreeView.new(@planet_model)
 	
 	@edit_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
 	@edit_button.signal_connect("clicked") do
@@ -106,7 +104,7 @@ class PlanetViewWidget < Gtk::Box
 	@planet_model = new_planet_model
 	
 	# Pass new @planet_model along to children.
-	@buildings_list_store.planet_model = (@planet_model)
+	@buildings_tree_view.planet_model = (@planet_model)
 	@planet_stats_widget.planet_model = (@planet_model)
   end
   
@@ -114,7 +112,7 @@ class PlanetViewWidget < Gtk::Box
 	@planet_model.add_observer(self)
 	
 	# Tell children to start observing.
-	@buildings_list_store.start_observing_model
+	@buildings_tree_view.start_observing_model
 	@planet_stats_widget.start_observing_model
   end
   
@@ -122,7 +120,7 @@ class PlanetViewWidget < Gtk::Box
 	@planet_model.delete_observer(self)
 	
 	# Tell children to stop observing.
-	@buildings_list_store.stop_observing_model
+	@buildings_tree_view.stop_observing_model
 	@planet_stats_widget.stop_observing_model
   end
   
@@ -143,10 +141,6 @@ class PlanetViewWidget < Gtk::Box
 	self.children.each do |child|
 	  child.destroy
 	end
-	
-	# Manually destroy @buildings_list_store because it's not packed into a widget,
-	# and therefore doesn't get killed with child#destroy.
-	@buildings_list_store.destroy
 	
 	super
   end

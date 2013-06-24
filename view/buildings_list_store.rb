@@ -4,21 +4,20 @@ class BuildingsListStore < Gtk::ListStore
   
   attr_accessor :planet_model
   
-  # TODO - Implement a "resort by order in @planet_model.buildings" function.
-  
   def initialize(planet_model)
 	
 	@planet_model = planet_model
 	
 	# Set up columns.
-	super(Integer,		# Index
-	      Gdk::Pixbuf,	# Icon
-	      String,		# Name
-	      String,		# Stored Products
-	      String,		# Produces (Product Name)
-	      Integer,		# PG Used
-	      Integer,		# CPU Used
-	      Integer		# ISK Cost
+	super(Integer,				# Index
+	      PlanetaryBuilding,	# Building instance.
+	      Gdk::Pixbuf,			# Icon
+	      String,				# Name
+	      String,				# Stored Products
+	      String,				# Produces (Product Name)
+	      Integer,				# PG Used
+	      Integer,				# CPU Used
+	      Integer				# ISK Cost
 	      )
 	
 	# Update self from @planet_model.
@@ -28,11 +27,11 @@ class BuildingsListStore < Gtk::ListStore
   end
   
   def delete_building(list_iter)
-	# Get the iter for the building we want dead.
-	building_iter_value = list_iter.get_value(0)
+	# Get the exact building instance the user wants to remove.
+	# Pull this from the Instance column.
+	building_instance = list_iter.get_value(1)
 	
-	# TODO - Delete specific building ID rather than relying on these iters matching.
-	@planet_model.remove_building(@planet_model.buildings[building_iter_value])
+	@planet_model.remove_building(building_instance)
   end
   
   def start_observing_model
@@ -53,8 +52,9 @@ class BuildingsListStore < Gtk::ListStore
 	  @planet_model.buildings.each_with_index do |building, index|
 		new_row = self.append
 		new_row.set_value(0, index)
-		new_row.set_value(1, BuildingImage.new(building, [32, 32]).pixbuf)
-		new_row.set_value(2, building.name)
+		new_row.set_value(1, building)
+		new_row.set_value(2, BuildingImage.new(building, [32, 32]).pixbuf)
+		new_row.set_value(3, building.name)
 		
 		# Stored Products
 		if (building.respond_to?(:stored_products))
@@ -69,22 +69,22 @@ class BuildingsListStore < Gtk::ListStore
 			stored_products_string_for_display.concat("\n")
 		  end
 		  
-		  new_row.set_value(3, "#{stored_products_string_for_display}")
+		  new_row.set_value(4, "#{stored_products_string_for_display}")
 		  
-		else
-		  new_row.set_value(3, "")
-		end
-		
-		# Product Name
-		if (building.respond_to?(:produces_product_name))
-		  new_row.set_value(4, building.produces_product_name)
 		else
 		  new_row.set_value(4, "")
 		end
 		
-		new_row.set_value(5, building.powergrid_usage)
-		new_row.set_value(6, building.cpu_usage)
-		new_row.set_value(7, building.isk_cost)
+		# Product Name
+		if (building.respond_to?(:produces_product_name))
+		  new_row.set_value(5, building.produces_product_name)
+		else
+		  new_row.set_value(5, "")
+		end
+		
+		new_row.set_value(6, building.powergrid_usage)
+		new_row.set_value(7, building.cpu_usage)
+		new_row.set_value(8, building.isk_cost)
 	  end
 	end
   end
