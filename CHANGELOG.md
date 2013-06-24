@@ -1,9 +1,10 @@
-Staged For Next Release
-=======================
+Version 0.0.7
+=============
 * Fixed a layout bug in the System View and Planet view where widgets wouldn't be sized properly.
 * Swapped out text for building icons where appropriate in the System View table header.
 * Fixed a layout bug in the Edit Extractor view that caused it to look awful when using a big window. This still requires a little more work.
 * Fixed a layout bug in the Edit Factory view that caused it to look awful when using a big window. This still requires a little more work.
+* Fixed a layout bug in the Planet View window that caused it to look awful when using a small window.
 * Code cleanup.
 
 
@@ -19,6 +20,7 @@ Version 0.0.6
 * Removed the artificial limit on number of planets.
 * Removed planet alias as it didn't serve much purpose.
 * A ton of little bugs were squashed.
+
 
 Version 0.0.5
 =============
