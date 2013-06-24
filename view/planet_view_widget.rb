@@ -43,8 +43,8 @@ class PlanetViewWidget < Gtk::Box
 	@edit_selected_button = EditSelectedButton.new(@buildings_tree_view)
 	@clear_sort_button = ClearSortButton.new(@buildings_tree_view)
 	
-	
-	# TODO - Ugly. Convert to table or generally clean up.
+	# TODO - Determine if I need the auto_scrollbox. Attempt to reduce column width.
+	# TODO - Ugly. Convert to SimpleTable or generally clean up.
 	auto_scrollbox = Gtk::ScrolledWindow.new
 	# Have a horizontal or vertical scrollbar if necessary.
 	auto_scrollbox.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC)
