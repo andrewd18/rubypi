@@ -17,6 +17,7 @@ require_relative './test_case_launchpad.rb'
 require_relative './test_case_storage_facility.rb'
 require_relative './test_case_extractor.rb'
 require_relative './test_case_extractor_head.rb'
+require_relative './test_case_planetary_link.rb'
 
 # Products, Schematics, Etc.
 require_relative './test_case_product.rb'
