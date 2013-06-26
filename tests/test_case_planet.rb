@@ -389,6 +389,46 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(1675, @planet.cpu_provided)
   end
   
+  def test_pct_powergrid_usage_returns_zero_if_dividing_by_zero
+	assert_equal(0, @planet.num_buildings)
+	assert_equal(0, @planet.pct_powergrid_usage)
+  end
+  
+  def test_pct_powergrid_usage_returns_accurate_percentage
+	@planet.add_building_from_class(CommandCenter)
+	
+	# 0 used / 6000 provided = 0% used.
+	assert_equal(0, @planet.pct_powergrid_usage)
+	
+	@planet.add_building_from_class(Extractor)
+	algorithm = (@planet.powergrid_usage * (100.0 / @planet.powergrid_provided))
+	assert_equal(algorithm, @planet.pct_powergrid_usage)
+	
+	@planet.add_building_from_class(StorageFacility)
+	algorithm = (@planet.powergrid_usage * (100.0 / @planet.powergrid_provided))
+	assert_equal(algorithm, @planet.pct_powergrid_usage)
+  end
+  
+  def test_pct_cpu_usage_returns_zero_if_dividing_by_zero
+	assert_equal(0, @planet.num_buildings)
+	assert_equal(0, @planet.pct_cpu_usage)
+  end
+  
+  def test_pct_cpu_usage_returns_accurate_percentage
+	@planet.add_building_from_class(CommandCenter)
+	
+	# 0 used / 1675 provided = 0% used.
+	assert_equal(0, @planet.pct_cpu_usage)
+	
+	@planet.add_building_from_class(Extractor)
+	algorithm = (@planet.cpu_usage * (100.0 / @planet.cpu_provided))
+	assert_equal(algorithm, @planet.pct_cpu_usage)
+	
+	@planet.add_building_from_class(StorageFacility)
+	algorithm = (@planet.cpu_usage * (100.0 / @planet.cpu_provided))
+	assert_equal(algorithm, @planet.pct_cpu_usage)
+  end
+  
   def test_isk_cost_scales_with_number_of_buildings
 	# 90000.00 # Command Center
 	# 250000.00 # Storage Facility

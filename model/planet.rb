@@ -152,6 +152,36 @@ class Planet
 	return total
   end
   
+  def pct_powergrid_usage
+	# Prevent dividing by zero.
+	if (self.powergrid_provided == 0)
+	  return 0
+	end
+	
+	# 100% in Float form to ensure a decimal.
+	one_hundred_percent = 100.0
+	
+	scaled_powergrid_provided = (one_hundred_percent / self.powergrid_provided)
+	percent_used = (self.powergrid_usage * scaled_powergrid_provided)
+	
+	return percent_used
+  end
+  
+  def pct_cpu_usage
+	# Prevent dividing by zero.
+	if (self.powergrid_provided == 0)
+	  return 0
+	end
+	
+	# 100% in Float form to ensure a decimal.
+	one_hundred_percent = 100.0
+	
+	scaled_cpu_provided = (one_hundred_percent / self.cpu_provided)
+	percent_used = (self.cpu_usage * scaled_cpu_provided)
+	
+	return percent_used
+  end
+  
   def isk_cost
 	total = 0
 	
