@@ -53,8 +53,8 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	  
 	  # Make labels and sliders visible on screen.
 	  row = Gtk::Box.new(:horizontal)
-	  row.add(product_name_label)
-	  row.add(product_quantity_slider)
+	  row.add(product_name_label, :expand => false)
+	  row.add(product_quantity_slider, :expand => true)
 	  
 	  self.child.add(row)
 	end
