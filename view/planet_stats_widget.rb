@@ -2,6 +2,7 @@
 require 'gtk3'
 require_relative 'planet_image.rb'
 require_relative 'building_count_table.rb'
+require_relative 'simple_table.rb'
 require_relative 'simple_combo_box.rb'
 require_relative '../model/planet.rb'
 
@@ -9,6 +10,7 @@ require_relative '../model/planet.rb'
 
 class PlanetStatsWidget < Gtk::Box
   
+  # TODO - Why the hell is this accessible?
   attr_accessor :planet_type_combo_box
   
   def initialize(planet_model)
@@ -17,26 +19,19 @@ class PlanetStatsWidget < Gtk::Box
 	# Hook up model data.
 	@planet_model = planet_model
 	
+	# Create widgets.
+	#
+	# Standalone widgets.
 	@building_count_table = BuildingCountTable.new(@planet_model)
-	
-	# Gtk::Table Syntax
-	# table = Gtk::Table.new(rows, columns)
-	# table.attach(widget, start_column, end_column, top_row, bottom_row)  # rows and columns indexed from zero
-	
-	# Add planet building stats widgets in a nice grid.
-	planet_stats_table = Gtk::Table.new(7, 2)
-	
-	# Planet Image Row
 	@planet_image = PlanetImage.new(@planet_model)
-	# Stick it in the top row, across all columns.
-	planet_stats_table.attach(@planet_image, 0, 2, 0, 1)
 	
-	# Planet Type Row
+	
+	# Widgets that will live in the planet_stats_table.
+	#
 	planet_type_label = Gtk::Label.new("Planet Type:")
 	
-	
-	
-	# Populate the combo box with the schematics this factory can accept.
+	# Populate the planet type combo box with all the valid planet types.
+	# TODO - Remove Uncolonized as an option. Going to require reworking some model tests.
 	@planet_type_combo_box = SimpleComboBox.new(Planet::PLANET_TYPES_WITHOUT_UNCOLONIZED)
 	
 	# Set up immediate commit on change.
@@ -44,43 +39,45 @@ class PlanetStatsWidget < Gtk::Box
 	  self.commit_to_model
 	end
 	
-	
-	planet_stats_table.attach(planet_type_label, 0, 1, 1, 2)
-	planet_stats_table.attach(@planet_type_combo_box, 1, 2, 1, 2)
-	
-	
-	# Planet Label Row
 	planet_name_label = Gtk::Label.new("Name:")
-	planet_stats_table.attach(planet_name_label, 0, 1, 2, 3)
-	
 	@planet_name_entry = Gtk::Entry.new
-	@planet_name_entry.text = "#{@planet_model.name}"
-	# Stick it in the second row, in second column.
-	planet_stats_table.attach(@planet_name_entry, 1, 2, 2, 3)
-		
-	# CPU Row.
-	cpu_label = Gtk::Label.new("CPU:")
-	@cpu_used_pct_label = Gtk::Label.new("#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}")
-	# Put the label on the left and and the stats on the right of the fifth row.
-	planet_stats_table.attach(cpu_label, 0, 1, 3, 4)
-	planet_stats_table.attach(@cpu_used_pct_label, 1, 2, 3, 4)
+	
+	pg_used_label = Gtk::Label.new("PG Used:")
+	@pg_used_progress_bar = Gtk::ProgressBar.new
+	@pg_used_progress_bar.show_text = true  # WORKAROUND - If you don't force this to true, text is never shown.
+	
+	cpu_used_label = Gtk::Label.new("CPU Used:")
+	@cpu_used_progress_bar = Gtk::ProgressBar.new
+	@cpu_used_progress_bar.show_text = true # WORKAROUND - If you don't force this to true, text is never shown.
+	
+	isk_cost_label = Gtk::Label.new("ISK Cost:")
+	@isk_cost_value_label = Gtk::Label.new("#{@planet_model.isk_cost}")
+	
+	# Pack child widgets into planet_stats_table, one row at a time.
+	rows = 5
+	columns = 2
+	planet_stats_table = SimpleTable.new(rows, columns)
+	
+	planet_stats_table.attach(planet_type_label, 1, 1)
+	planet_stats_table.attach(@planet_type_combo_box, 1, 2)
+	
+	planet_stats_table.attach(planet_name_label, 2, 1)
+	planet_stats_table.attach(@planet_name_entry, 2, 2)
+	
+	planet_stats_table.attach(pg_used_label, 3, 1)
+	planet_stats_table.attach(@pg_used_progress_bar, 3, 2)
+	
+	planet_stats_table.attach(cpu_used_label, 4, 1)
+	planet_stats_table.attach(@cpu_used_progress_bar, 4, 2)
+	
+	planet_stats_table.attach(isk_cost_label, 5, 1)
+	planet_stats_table.attach(@isk_cost_value_label, 5, 2)
 	
 	
-	# Powergrid Row.
-	pg_label = Gtk::Label.new("PG:")
-	@pg_used_pct_label = Gtk::Label.new("#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}")
-	# Put the label on the left and and the stats on the right of the sixth row.
-	planet_stats_table.attach(pg_label, 0, 1, 4, 5)
-	planet_stats_table.attach(@pg_used_pct_label, 1, 2, 4, 5)
 	
-	# ISK Cost Row.
-	isk_label = Gtk::Label.new("ISK Cost:")
-	@isk_cost_label = Gtk::Label.new("#{@planet_model.isk_cost}")
-	# Put the main label on the left and the cost on the right of the seventh row.
-	planet_stats_table.attach(isk_label, 0, 1, 5, 6)
-	planet_stats_table.attach(@isk_cost_label, 1, 2, 5, 6)
-	
+	# Pack widgets top to bottom.
 	self.pack_start(@building_count_table, :expand => false)
+	self.pack_start(@planet_image, :expand => false)
 	self.pack_start(planet_stats_table, :expand => false)
 	
 	# Finally, update all the values.
@@ -131,11 +128,27 @@ class PlanetStatsWidget < Gtk::Box
 	  # Ignore the name. Whatever the user has in that box now is fine.
 	  
 	  # Set the CPU used and PG used values.
-	  @cpu_used_pct_label.text = "#{@planet_model.cpu_usage} / #{@planet_model.cpu_provided}"
-	  @pg_used_pct_label.text = "#{@planet_model.powergrid_usage} / #{@planet_model.powergrid_provided}"
+	  @cpu_used_progress_bar.text = "#{@planet_model.pct_cpu_usage.round(2)} %"
+	  
+	  # WORKAROUND: Naturally, this doesn't use the same setters as CellRendererProgress... :/
+	  if (@planet_model.pct_cpu_usage > 100)
+		@cpu_used_progress_bar.fraction = 1.0
+	  else
+		@cpu_used_progress_bar.fraction = (@planet_model.pct_cpu_usage / 100.0)
+	  end
+	  
+	  
+	  @pg_used_progress_bar.text = "#{@planet_model.pct_powergrid_usage.round(2)} %"
+	  
+	  # WORKAROUND: Naturally, this doesn't use the same setters as CellRendererProgress... :/
+	  if (@planet_model.pct_powergrid_usage > 100)
+		@pg_used_progress_bar.fraction = 1.0
+	  else
+		@pg_used_progress_bar.fraction = (@planet_model.pct_powergrid_usage / 100.0)
+	  end
 	  
 	  # Set the isk cost.
-	  @isk_cost_label.text = "#{@planet_model.isk_cost}"
+	  @isk_cost_value_label.text = "#{@planet_model.isk_cost}"
 	end
   end
   
