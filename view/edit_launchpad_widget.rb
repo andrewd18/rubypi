@@ -18,7 +18,7 @@ class EditLaunchpadWidget < Gtk::Box
 	
 	# Create widgets.
 	# Left
-	add_products_label = Gtk::Label.new("Add Products:")
+	add_products_label = Gtk::Label.new("Add Products")
 	@add_products_widget = AddProductsWidget.new(@building_model)
 	
 	# Center
@@ -41,7 +41,9 @@ class EditLaunchpadWidget < Gtk::Box
 	# Center column.
 	stored_products_column = Gtk::Box.new(:vertical)
 	stored_products_column.pack_start(@stored_products_widget, :expand => true)
-	stored_products_column.pack_start(expedited_transfer_button, :expand => false)
+	button_row = Gtk::Box.new(:horizontal)
+	button_row.pack_end(expedited_transfer_button, :expand => false)
+	stored_products_column.pack_start(button_row, :expand => false)
 	stored_products_column_frame = Gtk::Frame.new
 	stored_products_column_frame.add(stored_products_column)
 	

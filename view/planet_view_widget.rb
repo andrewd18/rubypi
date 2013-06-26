@@ -39,6 +39,7 @@ class PlanetViewWidget < Gtk::Box
 	
 	
 	# Center Column
+	current_buildings_label = Gtk::Label.new("Current Buildings")
 	@buildings_tree_view = BuildingsTreeView.new(@planet_model)
 	@edit_selected_button = EditSelectedButton.new(@buildings_tree_view)
 	@clear_sort_button = ClearSortButton.new(@buildings_tree_view)
@@ -51,6 +52,7 @@ class PlanetViewWidget < Gtk::Box
 	auto_scrollbox.add(@buildings_tree_view)
 	
 	vertical_box = Gtk::Box.new(:vertical)
+	vertical_box.pack_start(current_buildings_label, :expand => false)
 	vertical_box.pack_start(auto_scrollbox, :expand => true, :fill => true)
 	
 	button_row = Gtk::Box.new(:horizontal)

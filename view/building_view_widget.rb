@@ -27,8 +27,6 @@ class BuildingViewWidget < Gtk::Box
 	building_view_label = Gtk::Label.new("Building View")
 	
 	# Add our up button.
-	# TODO - Push this behavior out of this widget and into a "up to planet view button".
-	#        "UpToPlanetViewButton.new" should be the only thing I call.
 	@up_button = UpToPlanetViewButton.new(self)
 	
 	top_row.pack_start(building_view_label, :expand => true)

@@ -61,8 +61,6 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	@tree_view.append_column(icon_column)
 	@tree_view.append_column(name_column)
 	
-	@tree_view.headers_visible = false
-	
 	# When a row is double-clicked, add the building.
 	@tree_view.signal_connect("row-activated") do |tree_view, path, column|
 	  add_building(tree_view, path, column)

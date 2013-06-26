@@ -9,7 +9,7 @@ class StoredProductsWidget < Gtk::Box
 	
 	
 	# Create the widgets.
-	stored_products_label = Gtk::Label.new("Stored Products:")
+	stored_products_label = Gtk::Label.new("Stored Products")
 	@stored_products_list_view = StoredProductsTreeView.new(@building_model)
 	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
 	

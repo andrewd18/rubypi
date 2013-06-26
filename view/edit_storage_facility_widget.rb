@@ -19,7 +19,7 @@ class EditStorageFacilityWidget < Gtk::Box
 	
 	# Create widgets.
 	# Left column.
-	add_products_label = Gtk::Label.new("Add Products:")
+	add_products_label = Gtk::Label.new("Add Products")
 	@add_products_widget = AddProductsWidget.new(@building_model)
 	
 	
@@ -47,7 +47,9 @@ class EditStorageFacilityWidget < Gtk::Box
 	# Center column.
 	center_column = Gtk::Box.new(:vertical)
 	center_column.pack_start(@stored_products_widget, :expand => true)
-	center_column.pack_start(expedited_transfer_button, :expand => false)
+	button_row = Gtk::Box.new(:horizontal)
+	button_row.pack_end(expedited_transfer_button, :expand => false)
+	center_column.pack_start(button_row, :expand => false)
 	center_column_frame = Gtk::Frame.new
 	center_column_frame.add(center_column)
 	
