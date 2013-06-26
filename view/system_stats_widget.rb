@@ -20,21 +20,16 @@ class SystemStatsWidget < Gtk::Box
 	# Add system stats widgets in a nice grid.
 	system_stats_table = Gtk::Table.new(3, 2)
 	
-	# System Label
-	@system_label = Gtk::Label.new("System")
-	# Stick it in the first row, across all columns.
-	system_stats_table.attach(@system_label, 0, 2, 0, 1)
-	
 	# System Image Row
 	@system_image = Gtk::Image.new(:file => "view/images/eve_gate_128x128.png")
-	# Stick it in the second row, across all columns.
-	system_stats_table.attach(@system_image, 0, 2, 1, 2)
+	# Stick it in the first row, across all columns.
+	system_stats_table.attach(@system_image, 0, 2, 0, 1)
 	
 	# Begin semi-useful statistics.
 	# Number of colonized planets / total planets.
-	system_stats_table.attach(Gtk::Label.new("Colonized Planets: "), 0, 1, 2, 3)
+	system_stats_table.attach(Gtk::Label.new("Colonized Planets: "), 0, 1, 1, 2)
 	@num_colonized_planets = Gtk::Label.new("#{pi_configuration_model.num_colonized_planets}")
-	system_stats_table.attach(@num_colonized_planets, 1, 2, 2, 3)
+	system_stats_table.attach(@num_colonized_planets, 1, 2, 1, 2)
 	
 	
 	self.pack_start(system_stats_table, :expand => false)

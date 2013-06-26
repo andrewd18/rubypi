@@ -11,10 +11,19 @@ require_relative 'clear_sort_button.rb'
 # Note: The planets included in said system won't necessarily be from the same solar system.
 class SystemViewWidget < Gtk::Box
   def initialize(pi_configuration_model)
-	super(:horizontal)
+	super(:vertical)
 	
 	# Hook up our model data.
 	@pi_configuration_model = pi_configuration_model
+	
+	# Description row.
+	description_label = Gtk::Label.new("System View")
+	description_row = Gtk::Box.new(:horizontal)
+	description_row.pack_start(description_label, :expand => true)
+	
+	
+	# Create the Bottom Row
+	bottom_row = Gtk::Box.new(:horizontal)
 	
 	# Left column.
 	# Create widgets.
@@ -61,9 +70,13 @@ class SystemViewWidget < Gtk::Box
 	right_column_frame.add(right_column)
 	
 	# Pack columns left to right.
-	self.pack_start(left_column_frame, :expand => false)
-	self.pack_start(center_column_frame, :expand => true)
-	self.pack_start(right_column_frame, :expand => false)
+	bottom_row.pack_start(left_column_frame, :expand => false)
+	bottom_row.pack_start(center_column_frame, :expand => true)
+	bottom_row.pack_start(right_column_frame, :expand => false)
+	
+	
+	self.pack_start(description_row, :expand => false)
+	self.pack_start(bottom_row, :expand => true)
 	
 	self.show_all
 	
