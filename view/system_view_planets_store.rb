@@ -21,6 +21,10 @@ class SystemViewPlanetsStore < Gtk::ListStore
 		  Planet,       # Planet Instance
 		  Gdk::Pixbuf,	# Icon
 	      String,		# Name
+	      String,		# Text form of Percent PG Usage
+	      Integer,		# Percent of PG Usage progress bar to fill (as it can't take values > 100)
+	      String,		# Text form of Percent CPU Usage
+	      Integer,		# Percent of CPU Usage progress bar to fill (as it can't take values > 100)
 	      Integer,		# Number of Extractors
 	      Integer,		# Number of Factories
 	      Integer,		# Number of Storages
@@ -56,10 +60,31 @@ class SystemViewPlanetsStore < Gtk::ListStore
 		new_planet_row.set_value(1, planet)
 		new_planet_row.set_value(2, Gtk::Image.new(:file => calculate_planet_image_filename(planet.type)).pixbuf)
 		new_planet_row.set_value(3, planet.name)
-		new_planet_row.set_value(4, planet.num_extractors)
-		new_planet_row.set_value(5, planet.num_factories)
-		new_planet_row.set_value(6, planet.num_storages)
-		new_planet_row.set_value(7, planet.num_launchpads)
+		
+		# Value of text in progress bar. Round to 2 digits.
+		new_planet_row.set_value(4, "#{planet.pct_powergrid_usage.round(2)} %")
+		
+		# Amount to fill progress bar. Must be an Int or GTK gets mad.
+		if (planet.pct_powergrid_usage > 100)
+		  new_planet_row.set_value(5, 100)
+		else
+		  new_planet_row.set_value(5, planet.pct_powergrid_usage.to_int)
+		end
+		
+		# Value of text in progress bar. Round to 2 digits.
+		new_planet_row.set_value(6, "#{planet.pct_cpu_usage.round(2)} %")
+		
+		# Amount to fill progress bar. Must be an Int or GTK gets mad.
+		if (planet.pct_cpu_usage > 100)
+		  new_planet_row.set_value(7, 100)
+		else
+		  new_planet_row.set_value(7, planet.pct_cpu_usage.to_int)
+		end
+		
+		new_planet_row.set_value(8, planet.num_extractors)
+		new_planet_row.set_value(9, planet.num_factories)
+		new_planet_row.set_value(10, planet.num_storages)
+		new_planet_row.set_value(11, planet.num_launchpads)
 	  end
 	end
   end

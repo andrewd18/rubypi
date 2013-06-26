@@ -1,5 +1,6 @@
 require_relative 'icon_column.rb'
 require_relative 'text_column.rb'
+require_relative 'progress_bar_column.rb'
 require_relative 'text_column_with_image_header.rb'
 require_relative 'system_view_planets_store.rb'
 
@@ -14,10 +15,12 @@ class SystemViewPlanetsListView < Gtk::TreeView
 	# Create columns for the tree view.
 	icon_column = IconColumn.new("", 2)
 	name_column = TextColumn.new("Name", 3)
-	num_extractors_column = TextColumnWithImageHeader.new("view/images/minimalistic_extractor_icon.png", 4)
-	num_factories_column = TextColumnWithImageHeader.new("view/images/minimalistic_factory_icon.png", 5)
-	num_storages_column = TextColumnWithImageHeader.new("view/images/minimalistic_storage_facility_icon.png", 6)
-	num_launchpads_column = TextColumnWithImageHeader.new("view/images/minimalistic_launchpad_icon.png", 7)
+	pct_powergrid_usage_column = ProgressBarColumn.new("PG Usage", 4, 5)  # Header, Actual Value, Pct to Fill Bar
+	pct_cpu_usage_column = ProgressBarColumn.new("CPU Usage", 6, 7)  # Header, Actual Value, Pct to Fill Bar
+	num_extractors_column = TextColumnWithImageHeader.new("view/images/minimalistic_extractor_icon.png", 8)
+	num_factories_column = TextColumnWithImageHeader.new("view/images/minimalistic_factory_icon.png", 9)
+	num_storages_column = TextColumnWithImageHeader.new("view/images/minimalistic_storage_facility_icon.png", 10)
+	num_launchpads_column = TextColumnWithImageHeader.new("view/images/minimalistic_launchpad_icon.png", 11)
 	
 	# Set a default width for the icon column. 36 pixels should be enough for anyone.
 	icon_column.min_width = 36
@@ -28,6 +31,8 @@ class SystemViewPlanetsListView < Gtk::TreeView
 	# Pack columns in tree view, left-to-right.
 	self.append_column(icon_column)
 	self.append_column(name_column)
+	self.append_column(pct_powergrid_usage_column)
+	self.append_column(pct_cpu_usage_column)
 	self.append_column(num_extractors_column)
 	self.append_column(num_factories_column)
 	self.append_column(num_storages_column)
