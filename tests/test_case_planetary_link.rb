@@ -161,17 +161,17 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   end
   
   def test_pg_used_scales_with_link_level
-	pend
+	pend("Waiting on research about how this should actually scale.")
   end
   
 
   def test_cpu_usage_scales_with_link_level
-	pend
+	pend("Waiting on research about how this should actually scale.")
   end
 
   # In addition to the base rate to build a link (10 PG+15 CPU), it also costs 0.20 cpu and 0.15 power per kilometer. 
   def test_pg_usage_scales_with_link_length
-	pend
+	pend("Waiting on research about how this should actually scale.")
 	assert_equal(2, @link.length)
 	assert_equal(10, @link.powergrid_usage)
 	
@@ -214,7 +214,7 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   
   # In addition to the base rate to build a link (10 PG+15 CPU), it also costs 0.20 cpu and 0.15 power per kilometer. 
   def test_cpu_usage_scales_with_link_length
-	pend
+	pend("Waiting on research about how this should actually scale.")
 	# Default
 	assert_equal(2, @link.length)
 	assert_equal(15, @link.cpu_usage)
@@ -264,10 +264,10 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   end
   
   def test_transfer_volume_scales_with_link_level
-	pend
+	pend("Waiting on research about how this should actually scale.")
   end
   
   def test_transfer_volume_does_not_scale_with_link_length
-	pend
+	pend("Waiting on research about how this should actually scale.")
   end
 end
