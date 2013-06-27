@@ -13,7 +13,7 @@ module ProductionCycle
   end
   
   def add_production_cycle_input_building(new_input_building)
-	raise ArgumentError unless (new_input_building.is_a?(PlanetaryBuilding))
+	raise ArgumentError unless (new_input_building.respond_to?("remove_qty_of_product"))
 	
 	self.production_cycle_input_buildings << new_input_building
   end
@@ -36,7 +36,7 @@ module ProductionCycle
   
   def production_cycle_output_building=(new_output_building)
 	if ((new_output_building.nil?) or
-		(new_output_building.is_a?(PlanetaryBuilding)))
+		(new_output_building.respond_to?("store_product")))
 	  
 	  @production_cycle_output_building = new_output_building
 	else

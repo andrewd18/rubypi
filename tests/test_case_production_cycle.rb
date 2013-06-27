@@ -42,11 +42,11 @@ class TestCaseProductionCycle < Test::Unit::TestCase
 	assert_equal([storage_facility_a, storage_facility_b], @pcstub.production_cycle_input_buildings)
   end
   
-  def test_on_set_input_building_raise_error_when_adding_non_planetary_building
-	not_a_planetary_building = ProductionCycleStub.new
+  def test_on_set_input_building_raise_error_when_adding_building_that_doesnt_respond_to_remove_qty_of_product_method
+	does_not_respond_to_remove_qty_of_product_method = ProductionCycleStub.new
 	
 	assert_raise ArgumentError do
-	  @pcstub.add_production_cycle_input_building(not_a_planetary_building)
+	  @pcstub.add_production_cycle_input_building(does_not_respond_to_remove_qty_of_product_method)
 	end
 	
 	assert_raise ArgumentError do
@@ -98,11 +98,11 @@ class TestCaseProductionCycle < Test::Unit::TestCase
 	assert_equal(storage_facility_b, @pcstub.production_cycle_output_building)
   end
   
-  def test_on_set_output_building_raise_error_when_adding_non_planetary_building
-	not_a_planetary_building = ProductionCycleStub.new
+  def test_on_set_output_building_raise_error_when_building_doesnt_respond_to_store_product_method
+	does_not_respond_to_store_product_method = ProductionCycleStub.new
 	
 	assert_raise ArgumentError do
-	  @pcstub.production_cycle_output_building=(not_a_planetary_building)
+	  @pcstub.production_cycle_output_building=(does_not_respond_to_store_product_method)
 	end
   end
   
