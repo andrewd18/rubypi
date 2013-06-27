@@ -3,7 +3,6 @@ Core Features
 
 * Add CCP disclaimer, etc. to About box.
 * Building View
-  - Add "set destination" button for extractors/factories.
   - Add launch-to-space option to Command Centers.
   - Add POCO building view, allow import/export only to extractors. Let user edit tax rate. Show cost to import/export.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
@@ -26,7 +25,6 @@ User Interface Improvements
 * Separate one-time build cost from recurring import/export costs.
 * Make ISK cost display go from K to M to make it more human readable.
 * Images
-  - Create POCO image.
   - Brighten the planet screenshots across the board. Lava, for example, just looks black.
   - Add images for every product. Show where appropriate.
   - Add images of extractor heads in the EditExtractorWindow.
