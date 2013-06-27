@@ -8,6 +8,7 @@ require_relative '../model/extractor.rb'
 require_relative '../model/high_tech_industrial_facility.rb'
 require_relative '../model/launchpad.rb'
 require_relative '../model/storage_facility.rb'
+require_relative '../model/customs_office.rb'
 
 require_relative './building_image.rb'
 
@@ -30,6 +31,7 @@ class AddPlanetaryBuildingWidget < Gtk::Box
 	buildings << BasicIndustrialFacility.new
 	buildings << AdvancedIndustrialFacility.new
 	buildings << HighTechIndustrialFacility.new
+	buildings << CustomsOffice.new
 	
 	@building_list_store = Gtk::ListStore.new(Integer,			# UID
 	                                          Gdk::Pixbuf,		# Icon

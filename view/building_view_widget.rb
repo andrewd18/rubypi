@@ -74,7 +74,7 @@ class BuildingViewWidget < Gtk::Box
 	  
 	else
 	  # Bitch and complain.
-	  @building_widget = Gtk::Label.new("TODO: Error on unknown building model.")
+	  @building_widget = Gtk::Label.new("TODO")
 	end
 	
 	
@@ -118,8 +118,10 @@ class BuildingViewWidget < Gtk::Box
   # TODO: Ensure that each object commits as part of its destroy.
   # Going to involve some refactoring of the objects themselves.
   def commit_to_model
-	# If I don't call this, the specific widget never saves its values.
-	@building_widget.commit_to_model
+	unless (building_widget.is_a?(Gtk::Label))
+	  # If I don't call this, the specific widget never saves its values.
+	  @building_widget.commit_to_model
+	end
   end
   
   def update
