@@ -28,63 +28,36 @@ class TestCaseProductionCycle < Test::Unit::TestCase
   
   
   # Inputs
-  def test_input_buildings_starts_off_empty
-	assert_equal([], @pcstub.production_cycle_input_buildings)
-  end
-  
-  def test_can_add_and_read_production_cycle_input_buildings
+  def test_can_set_production_cycle_input_building
 	storage_facility_a = StorageFacility.new
 	storage_facility_b = StorageFacility.new
 	
-	@pcstub.add_production_cycle_input_building(storage_facility_a)
-	@pcstub.add_production_cycle_input_building(storage_facility_b)
+	@pcstub.production_cycle_input_building = storage_facility_a
 	
-	assert_equal([storage_facility_a, storage_facility_b], @pcstub.production_cycle_input_buildings)
+	assert_equal(storage_facility_a, @pcstub.production_cycle_input_building)
+	
+	@pcstub.production_cycle_input_building = storage_facility_b
+	
+	assert_equal(storage_facility_b, @pcstub.production_cycle_input_building)
   end
   
   def test_on_set_input_building_raise_error_when_adding_building_that_doesnt_respond_to_remove_qty_of_product_method
 	does_not_respond_to_remove_qty_of_product_method = ProductionCycleStub.new
 	
 	assert_raise ArgumentError do
-	  @pcstub.add_production_cycle_input_building(does_not_respond_to_remove_qty_of_product_method)
-	end
-	
-	assert_raise ArgumentError do
-	  @pcstub.add_production_cycle_input_building(nil)
+	  @pcstub.production_cycle_input_building(does_not_respond_to_remove_qty_of_product_method)
 	end
   end
   
-  def test_can_remove_specific_production_cycle_input_building
-	storage_facility_a = StorageFacility.new
-	storage_facility_b = StorageFacility.new
+  def test_can_set_production_cycle_input_to_nil
+	@pcstub.production_cycle_input_building=(nil)
 	
-	@pcstub.add_production_cycle_input_building(storage_facility_a)
-	@pcstub.add_production_cycle_input_building(storage_facility_b)
-	
-	assert_equal([storage_facility_a, storage_facility_b], @pcstub.production_cycle_input_buildings)
-	
-	@pcstub.remove_production_cycle_input_building(storage_facility_a)
-	
-	assert_equal([storage_facility_b], @pcstub.production_cycle_input_buildings)
-  end
-  
-  def test_can_remove_all_production_cycle_input_buildings
-	storage_facility_a = StorageFacility.new
-	storage_facility_b = StorageFacility.new
-	
-	@pcstub.add_production_cycle_input_building(storage_facility_a)
-	@pcstub.add_production_cycle_input_building(storage_facility_b)
-	
-	assert_equal([storage_facility_a, storage_facility_b], @pcstub.production_cycle_input_buildings)
-	
-	@pcstub.remove_all_production_cycle_input_buildings
-	
-	assert_equal([], @pcstub.production_cycle_input_buildings)
+	assert_equal(nil, @pcstub.production_cycle_input_building)
   end
   
   
   
-  # Outputs
+  # Output
   def test_can_set_production_cycle_output_building
 	storage_facility_a = StorageFacility.new
 	storage_facility_b = StorageFacility.new

@@ -8,25 +8,20 @@
 
 module ProductionCycle
   # Input Buildings
-  def production_cycle_input_buildings
-	return @production_cycle_input_buildings ||= Array.new
+  def production_cycle_input_building
+	return @production_cycle_input_building
   end
   
-  def add_production_cycle_input_building(new_input_building)
-	raise ArgumentError unless (new_input_building.respond_to?("remove_qty_of_product"))
-	
-	self.production_cycle_input_buildings << new_input_building
+  def production_cycle_input_building=(new_input_building)
+	if ((new_input_building.nil?) or
+		(new_input_building.respond_to?("remove_qty_of_product")))
+	  
+	  @production_cycle_input_building = new_input_building
+	else
+	   raise ArgumentError
+	end
   end
   
-  def remove_production_cycle_input_building(instance)
-	# Lean on array.delete.
-	self.production_cycle_input_buildings.delete(instance)
-  end
-  
-  def remove_all_production_cycle_input_buildings
-	# Lean on array.clear
-	self.production_cycle_input_buildings.clear
-  end
   
   
   # Output Building
