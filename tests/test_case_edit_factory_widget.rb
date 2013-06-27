@@ -20,6 +20,11 @@ class TestCaseEditFactoryWidget < Test::Unit::TestCase
 	@advanced_industrial_facility = AdvancedIndustrialFacility.new
 	@high_tech_industrial_facility = HighTechIndustrialFacility.new
 	
+	planet = Planet.new("Lava")
+	@basic_industrial_facility.planet = planet
+	@advanced_industrial_facility.planet = planet
+	@high_tech_industrial_facility.planet = planet
+	
 	@edit_factory_widget = EditFactoryWidget.new(@basic_industrial_facility)
   end
   

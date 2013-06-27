@@ -19,6 +19,12 @@ class TestCaseBuildingViewWidget < Test::Unit::TestCase
 	@high_tech_industrial_facility = HighTechIndustrialFacility.new
 	@extractor = Extractor.new
 	
+	planet = Planet.new("Lava")
+	@basic_industrial_facility.planet = planet
+	@advanced_industrial_facility.planet = planet
+	@high_tech_industrial_facility.planet = planet
+	@extractor.planet = planet
+	
 	@building_view_widget = BuildingViewWidget.new(@basic_industrial_facility)
   end
   
