@@ -15,6 +15,7 @@ class TestCaseEditExtractorWidget < Test::Unit::TestCase
   # Run before every test.
   def setup
 	@default_building_model = Extractor.new
+	@default_building_model.planet = Planet.new("Lava")
 	
 	@edit_extractor_widget = EditExtractorWidget.new(@default_building_model)
   end

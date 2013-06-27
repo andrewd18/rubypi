@@ -1,5 +1,6 @@
 require 'gtk3'
 require_relative 'simple_combo_box.rb'
+require_relative 'select_building_combo_box.rb'
 require_relative 'simple_table.rb'
 require_relative 'set_extraction_time_slider.rb'
 require_relative 'building_image.rb'
@@ -20,6 +21,7 @@ class EditExtractorWidget < Gtk::Box
 	number_of_heads_label = Gtk::Label.new("Number of Heads:")
 	extract_label = Gtk::Label.new("Extract:")
 	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
+	output_building_label = Gtk::Label.new("Output to:")
 	
 	
 	# Center column.
@@ -28,6 +30,7 @@ class EditExtractorWidget < Gtk::Box
 	@number_of_heads_spin_button.numeric = true
 	
 	@product_combo_box = SimpleComboBox.new(@building_model.accepted_product_names)
+	@output_building_combo_box = SelectBuildingComboBox.new(@building_model.planet.aggregate_launchpads_ccs_storages)
 	
 	@extraction_time_scale = SetExtractionTimeSlider.new(@building_model)
 	
@@ -43,19 +46,23 @@ class EditExtractorWidget < Gtk::Box
 	
 	
 	                                    # rows, columns, homogenous?
-	extractor_options_table = SimpleTable.new(3, 2, false)
+	extractor_options_table = SimpleTable.new(4, 2, false)
 	
-	# Top row
+	# Number of heads row
 	extractor_options_table.attach(number_of_heads_label, 1, 1)
 	extractor_options_table.attach(@number_of_heads_spin_button, 1, 2)
 	
-	# Middle row
+	# Product row
 	extractor_options_table.attach(extract_label, 2, 1)
 	extractor_options_table.attach(@product_combo_box, 2, 2)
 	
-	# Bottom row
+	# Time row
 	extractor_options_table.attach(extraction_time_label, 3, 1)
 	extractor_options_table.attach(@extraction_time_scale, 3, 2)
+	
+	# Output row
+	extractor_options_table.attach(output_building_label, 4, 1)
+	extractor_options_table.attach(@output_building_combo_box, 4, 2)
 	
 	# By wrapping the table in a vertical box, we ensure that the vbox expands
 	# and the table does not.
@@ -111,6 +118,8 @@ class EditExtractorWidget < Gtk::Box
 	  else
 		@extraction_time_scale.value = @building_model.extraction_time_in_hours
 	  end
+	  
+	  @output_building_combo_box.selected_item = @building_model.production_cycle_output_building
 	end
   end
   
@@ -129,6 +138,9 @@ class EditExtractorWidget < Gtk::Box
 	
 	# Set the extraction time to the value of the slider.
 	@building_model.extraction_time_in_hours = @extraction_time_scale.value
+	
+	# Set the output building to the value of the combo box.
+	@building_model.production_cycle_output_building = @output_building_combo_box.selected_item
 	
 	# Start observing again.
 	self.start_observing_model
