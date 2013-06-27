@@ -1,6 +1,7 @@
 
 require 'gtk3'
 require_relative 'simple_combo_box.rb'
+require_relative 'select_building_combo_box.rb'
 require_relative '../model/schematic.rb'
 
 require_relative 'simple_table.rb'
@@ -21,7 +22,8 @@ class EditFactoryWidget < Gtk::Box
 	# Left column.
 	schematic_label = Gtk::Label.new("Schematic:")
 	stored_products_label = Gtk::Label.new("Stored Products:")
-	
+	input_from_label = Gtk::Label.new("Input from:")
+	output_to_label = Gtk::Label.new("Output to:")
 	
 	# Center column.
 	# Populate the combo box with the schematics this factory can accept.
@@ -35,22 +37,40 @@ class EditFactoryWidget < Gtk::Box
 	  commit_to_model
 	end
 	
+	@input_building_combo_box = SelectBuildingComboBox.new(@building_model.planet.aggregate_launchpads_ccs_storages)
+	@input_building_combo_box.signal_connect("changed") do |combo_box|
+	  commit_to_model
+	end
+	
+	@output_building_combo_box = SelectBuildingComboBox.new(@building_model.planet.aggregate_launchpads_ccs_storages)
+	@output_building_combo_box.signal_connect("changed") do |combo_box|
+	  commit_to_model
+	end
+	
 	
 		                                # rows, columns, homogenous?
-	@factory_options_table = SimpleTable.new(2, 2, false)
+	@factory_options_table = SimpleTable.new(4, 2, false)
 	
 	
 	# Center column
 	create_sliders_for_stored_products
 	
 	
-	# Top row
+	# Schematic row
 	@factory_options_table.attach(schematic_label, 1, 1)
 	@factory_options_table.attach(@schematic_combo_box, 1, 2)
 	
-	# Middle row
+	# Stored Products row
 	@factory_options_table.attach(stored_products_label, 2, 1)
 	# Middle row, right column (2, 2) is attached as part of create_sliders_for_stored_products,
+	
+	# Input From: row
+	@factory_options_table.attach(input_from_label, 3, 1)
+	@factory_options_table.attach(@input_building_combo_box, 3, 2)
+	
+	# Output to row
+	@factory_options_table.attach(output_to_label, 4, 1)
+	@factory_options_table.attach(@output_building_combo_box, 4, 2)
 	
 	# By wrapping the table in a vertical box, we ensure that the vbox expands
 	# and the table does not.
@@ -100,6 +120,9 @@ class EditFactoryWidget < Gtk::Box
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
 	  create_sliders_for_stored_products
+	  
+	  @input_building_combo_box.selected_item = @building_model.production_cycle_input_building
+	  @output_building_combo_box.selected_item = @building_model.production_cycle_output_building
 	end
   end
   
@@ -149,6 +172,9 @@ class EditFactoryWidget < Gtk::Box
 	@scales_hash.each_pair do |product_name, scale|
 	  @building_model.stored_products[product_name] = scale.value
 	end
+	
+	@building_model.production_cycle_input_building = @input_building_combo_box.selected_item 
+	@building_model.production_cycle_output_building = @output_building_combo_box.selected_item
   end
   
   def destroy
