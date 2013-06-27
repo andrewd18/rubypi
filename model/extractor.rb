@@ -1,5 +1,6 @@
 require_relative 'planetary_building.rb'
 require_relative 'extractor_head.rb'
+require_relative 'production_cycle.rb'
 
 require_relative 'product.rb'
 
@@ -63,6 +64,7 @@ class Extractor < PlanetaryBuilding
 	return MAX_EXTRACTION_TIME_IN_HOURS
   end
   
+  include ProductionCycle
   
   attr_accessor :extractor_heads
   attr_reader :product_name
@@ -241,6 +243,10 @@ class Extractor < PlanetaryBuilding
 	  @extraction_time = self.class.nearest_valid_extraction_time(new_extraction_time)
 	end
 	
+	# Extraction time has changed, so update the production_cycle_time.
+	new_production_cycle_time = self.class.cycle_time_given_extraction_time(@extraction_time)
+	self.production_cycle_time_in_hours=(new_production_cycle_time)
+	
 	return @extraction_time
   end
   
@@ -268,23 +274,5 @@ class Extractor < PlanetaryBuilding
   def extraction_time_in_days=(new_extraction_time)
 	new_extraction_time_in_hours = (new_extraction_time * 24.0)
 	self.extraction_time=(new_extraction_time_in_hours)
-  end
-  
-  def cycle_time
-	self.class.cycle_time_given_extraction_time(@extraction_time)
-  end
-  
-  def cycle_time_in_minutes
-	time_in_hours = self.cycle_time
-	return (time_in_hours * 60)
-  end
-  
-  def cycle_time_in_hours
-	return self.cycle_time
-  end
-  
-  def cycle_time_in_days
-	time_in_hours = self.cycle_time
-	return (time_in_hours / 24)
   end
 end

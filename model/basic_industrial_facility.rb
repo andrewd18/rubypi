@@ -1,10 +1,12 @@
 require_relative 'planetary_building.rb'
 require_relative 'schematic.rb'
 require_relative 'industrial_facility_storage.rb'
+require_relative 'production_cycle.rb'
 
 class BasicIndustrialFacility < PlanetaryBuilding
   
   include IndustrialFacilityStorage
+  include ProductionCycle
   
   POWERGRID_USAGE = 800
   CPU_USAGE = 200
@@ -25,6 +27,9 @@ class BasicIndustrialFacility < PlanetaryBuilding
 	@isk_cost = ISK_COST
 	
 	@schematic_name = schematic_name
+	
+	# Set the ProductionCycle time.
+	self.production_cycle_time_in_minutes=(CYCLE_TIME_IN_MINS)
 	
 	return self
   end

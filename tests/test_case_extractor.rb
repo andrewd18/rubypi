@@ -450,74 +450,38 @@ class TestCaseExtractor < Test::Unit::TestCase
   end
   
   #
-  # Cycle Time
+  # Cycle Time Module Interaction Tests
   #
   
-  def test_extractor_default_cycle_time_is_nil
-	assert_equal(nil, @building.cycle_time)
-  end
-  
-  def test_extractor_can_give_us_a_cycle_time_in_minutes
-	# Set extraction time to MAX.
-	@building.extraction_time = 336.0
-	
-	# 4 hours * 60 minutes = 240.
-	assert_equal(240.0, @building.cycle_time_in_minutes)
-  end
-  
-  def test_extractor_can_give_us_a_cycle_time_in_hours
-	# Set extraction time to MAX.
-	@building.extraction_time = 336.0
-	
-	# 4 hours * 1 hour = 4.
-	assert_equal(4.0, @building.cycle_time_in_hours)
-  end
-  
-  def test_extractor_stores_default_cycle_time_in_hours
-	# Set extraction time to MAX.
-	@building.extraction_time = 336.0
-	
-	# 4 hours * 60 minutes = 240.
-	assert_equal(4.0, @building.cycle_time)
-  end
-  
-  def test_extractor_can_give_us_a_cycle_time_in_days
-	# Set extraction time to MAX.
-	@building.extraction_time = 336.0
-	
-	# 4 hours / 24 hours = 0.16666666666666666.
-	assert_equal(0.16666666666666666, @building.cycle_time_in_days)
-  end
-  
-  def test_extractor_does_not_let_user_change_cycle_time
-	assert_false(@building.respond_to?(:cycle_time=))
+  def test_extractor_default_production_cycle_time_is_nil
+	assert_equal(nil, @building.production_cycle_time_in_minutes)
   end
   
   def test_extractor_cycle_time_scales_with_extraction_time
 	# If extraction time is > 60 minutes and < 25 hours
 	# Cycle time should be 15 minutes.
 	@building.extraction_time = 12.0
-	assert_equal(0.25, @building.cycle_time)
+	assert_equal(0.25, @building.production_cycle_time_in_hours)
 	
 	# If extraction time is > 25 hours and < 50 hours
 	# Cycle time should be 30 minutes.
 	@building.extraction_time = 40.0
-	assert_equal(0.5, @building.cycle_time)
+	assert_equal(0.5, @building.production_cycle_time_in_hours)
 	
 	# If extraction time is > 50 hours and < 100 hours
 	# Cycle time should be 1 hour.
 	@building.extraction_time = 75.0
-	assert_equal(1.0, @building.cycle_time)
+	assert_equal(1.0, @building.production_cycle_time_in_hours)
 	
 	# If extraction time is > 100 hours and < 200 hours
 	# Cycle time should be 2 hours.
 	@building.extraction_time = 150.0
-	assert_equal(2.0, @building.cycle_time)
+	assert_equal(2.0, @building.production_cycle_time_in_hours)
 	
 	# If extraction time is > 200 hours
 	# Cycle time should be 4 hours.
 	@building.extraction_time = 250.0
-	assert_equal(4.0, @building.cycle_time)
+	assert_equal(4.0, @building.production_cycle_time_in_hours)
   end
   
   # 

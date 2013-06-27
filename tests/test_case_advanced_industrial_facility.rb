@@ -143,24 +143,12 @@ class TestCaseAdvancedIndustrialFacility < Test::Unit::TestCase
 	assert_equal(@building.schematic.object_id, @@tosche_station_schematic.object_id)
   end
   
-  def test_facility_stores_default_cycle_time_in_minutes
-	assert_equal(60, @building.cycle_time)
-  end
+  #
+  # Cycle Time Module Interaction Tests
+  #
   
-  def test_facility_can_give_us_a_cycle_time_in_minutes
-	assert_equal(60, @building.cycle_time_in_minutes)
-  end
-  
-  def test_facility_can_give_us_a_cycle_time_in_hours
-	assert_equal(1, @building.cycle_time_in_hours)
-  end
-  
-  def test_facility_can_give_us_a_cycle_time_in_days
-	assert_equal(0.041666666666666664, @building.cycle_time_in_days)
-  end
-  
-  def test_facility_does_not_let_user_change_cycle_time
-	assert_false(@building.respond_to?(:cycle_time=))
+  def test_facility_production_cycle_time_is_sixty_minutes
+	assert_equal(60, @building.production_cycle_time_in_minutes)
   end
   
   #
