@@ -51,9 +51,9 @@ class EditFactoryWidget < Gtk::Box
 		                                # rows, columns, homogenous?
 	@factory_options_table = SimpleTable.new(4, 2, false)
 	
-	
-	# Center column
-	create_sliders_for_stored_products
+	# Now that the widgets are all created, update from the model.
+	# This must happen after @factory_options_table is created.
+	update
 	
 	
 	# Schematic row
