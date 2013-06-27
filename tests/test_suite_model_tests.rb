@@ -18,7 +18,7 @@ require_relative './test_case_storage_facility.rb'
 require_relative './test_case_extractor.rb'
 require_relative './test_case_extractor_head.rb'
 require_relative './test_case_planetary_link.rb'
-require_relative './test_case_production_cycle.rb'
+require_relative './test_case_customs_office.rb'
 
 # Products, Schematics, Etc.
 require_relative './test_case_product.rb'
@@ -27,3 +27,4 @@ require_relative './test_case_schematic.rb'
 # Helper Modules
 require_relative './test_case_unrestricted_storage.rb'
 require_relative './test_case_industrial_facility_storage.rb'
+require_relative './test_case_production_cycle.rb'
