@@ -418,7 +418,8 @@ class Planet
 	@buildings.each do |building|
 	  if ((building.class == StorageFacility) ||
 	      (building.class == CommandCenter) ||
-	      (building.class == Launchpad))
+	      (building.class == Launchpad) ||
+	      (building.class == CustomsOffice))
 		
 		count += 1
 	  end
@@ -433,7 +434,9 @@ class Planet
 	@buildings.each do |building|
 	  if ((building.class == StorageFacility) ||
 	      (building.class == CommandCenter) ||
-	      (building.class == Launchpad))
+	      (building.class == Launchpad) ||
+	      (building.class == CustomsOffice))
+		
 		list_of_aggregate_storages << building
 	  end
 	end
