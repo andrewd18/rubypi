@@ -5,15 +5,14 @@ require_relative 'simple_table.rb'
 class TransferProductsDialog < Gtk::Dialog
   attr_reader :hash_to_transfer
   
-  def initialize(building_model)
+  def initialize(planet_model)
 	title = "Transfer Products"
 	parent_window = nil
 	flags = Gtk::Dialog::Flags::MODAL
 	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
 	second_button_response_id_combo = [Gtk::Stock::CANCEL, Gtk::ResponseType::REJECT]
 	
-	@building_model = building_model
-	@planet_model = @building_model.planet
+	@planet_model = planet_model
 	@hash_to_transfer = Hash.new
 	
 	super(:title => title, :parent => parent_window, :flags => flags, :buttons => [first_button_response_id_combo, second_button_response_id_combo])

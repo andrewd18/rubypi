@@ -25,7 +25,7 @@ class EditCustomsOfficeWidget < Gtk::Box
 	
 	# Center column.
 	@stored_products_widget = StoredProductsWidget.new(@building_model)
-	expedited_transfer_button = TransferProductsButton.new(@building_model)
+	expedited_transfer_button = TransferProductsButton.new(@building_model.planet)
 	
 	
 	# Right column.

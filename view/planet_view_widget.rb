@@ -8,6 +8,7 @@ require_relative 'building_view_widget.rb'
 require_relative 'up_to_system_view_button.rb'
 require_relative 'edit_selected_button.rb'
 require_relative 'clear_sort_button.rb'
+require_relative 'transfer_products_button.rb'
 
 # This is a layout-only widget that contains other, planet-specific widgets.
 class PlanetViewWidget < Gtk::Box
@@ -43,6 +44,7 @@ class PlanetViewWidget < Gtk::Box
 	@buildings_tree_view = BuildingsTreeView.new(@planet_model)
 	@edit_selected_button = EditSelectedButton.new(@buildings_tree_view)
 	@clear_sort_button = ClearSortButton.new(@buildings_tree_view)
+	transfer_products_button = TransferProductsButton.new(@planet_model)
 	
 	# TODO - Determine if I need the auto_scrollbox. Attempt to reduce column width.
 	# TODO - Ugly. Convert to SimpleTable or generally clean up.
@@ -56,6 +58,7 @@ class PlanetViewWidget < Gtk::Box
 	vertical_box.pack_start(auto_scrollbox, :expand => true, :fill => true)
 	
 	button_row = Gtk::Box.new(:horizontal)
+	button_row.pack_end(transfer_products_button, :expand => false, :fill => false)
 	button_row.pack_end(@clear_sort_button, :expand => false, :fill => false)
 	button_row.pack_end(@edit_selected_button, :expand => false, :fill => false)
 	

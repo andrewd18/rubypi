@@ -24,7 +24,7 @@ class EditCommandCenterWidget < Gtk::Box
 	
 	# Center column.
 	@stored_products_widget = StoredProductsWidget.new(@building_model)
-	transfer_products_button = TransferProductsButton.new(@building_model)
+	transfer_products_button = TransferProductsButton.new(@building_model.planet)
 	
 	
 	# Right column.
