@@ -8,6 +8,7 @@ require_relative 'edit_launchpad_widget.rb'
 require_relative 'edit_storage_facility_widget.rb'
 require_relative 'edit_extractor_widget.rb'
 require_relative 'edit_factory_widget.rb'
+require_relative 'edit_customs_office_widget.rb'
 
 # This is a layout-only widget that contains other, building-specific widgets.
 class BuildingViewWidget < Gtk::Box
@@ -70,6 +71,12 @@ class BuildingViewWidget < Gtk::Box
 	  
 	  # Create an EditIndustrialFacilityWidget
 	  @building_widget = EditStorageFacilityWidget.new(@building_model)
+	  
+	  
+	elsif (@building_model.is_a? CustomsOffice)
+	  
+	  # Create an EditCustomsOfficeWidget
+	  @building_widget = EditCustomsOfficeWidget.new(@building_model)
 	  
 	  
 	else
