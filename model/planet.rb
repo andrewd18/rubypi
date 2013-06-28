@@ -196,20 +196,27 @@ class Planet
   end
   
   def add_building(building)
+	# Limit number of command centers and customs offices to 1.
 	if (building.is_a?(CommandCenter) and
 	    self.num_command_centers == 1)
 	  raise ArgumentError, "A planet can only have one CommandCenter."
-	else
-	  @buildings << building
-	  building.planet=(self)
-	  building.add_observer(self)
-	  
-	  # Tell my observers I've changed.
-	  changed # Set observeable state to "changed".
-	  notify_observers() # Notify errybody.
-	  
-	  return building
 	end
+	
+	if (building.is_a?(CustomsOffice) and
+	    self.num_pocos == 1)
+	  raise ArgumentError, "A planet can only have one CustomsOffice."
+	end
+	
+	# Good to go.
+	@buildings << building
+	building.planet=(self)
+	building.add_observer(self)
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
+	
+	return building
   end
   
   # Convenience wrapper.
@@ -379,6 +386,30 @@ class Planet
 	end
 	
 	return list_of_storages
+  end
+  
+  def pocos
+	list_of_pocos = Array.new
+	
+	@buildings.each do |building|
+	  if (building.class == CustomsOffice)
+		list_of_pocos << building
+	  end
+	end
+	
+	return list_of_pocos
+  end
+  
+  def num_pocos
+	count = 0
+	
+	@buildings.each do |building|
+	  if (building.class == CustomsOffice)
+		count += 1
+	  end
+	end
+	
+	return count
   end
   
   def num_aggregate_launchpads_ccs_storages

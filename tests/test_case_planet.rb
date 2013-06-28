@@ -124,6 +124,41 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(0, @planet.num_buildings)
   end
   
+  def test_cannot_add_more_than_one_customs_office
+	# Test it with the add_building method.
+	first_poco = CustomsOffice.new
+	second_poco = CustomsOffice.new
+	
+	@planet.add_building(first_poco)
+	
+	assert_raise ArgumentError do
+	  @planet.add_building(second_poco)
+	end
+	
+	@planet.remove_building(first_poco)
+	
+	# Make sure we don't have any buildings at this point.
+	assert_equal(0, @planet.buildings.count)
+	assert_equal(0, @planet.num_buildings)
+	
+	
+	
+	
+	# Now, test it with the add_building_from_class method.
+	third_poco = @planet.add_building_from_class(CustomsOffice)
+	
+	# Try to add a fourth.
+	assert_raise ArgumentError do
+	  @planet.add_building_from_class(CustomsOffice)
+	end
+	
+	@planet.remove_building(third_poco)
+	
+	# Make sure we don't have any buildings at this point.
+	assert_equal(0, @planet.buildings.count)
+	assert_equal(0, @planet.num_buildings)
+  end
+  
   def test_adding_planet_from_class_name_returns_instance
 	test_building = @planet.add_building_from_class(CommandCenter)
 	
@@ -218,6 +253,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	# 800 # Basic Industrial Facility
 	# 700 # Advanced Industrial Facility
 	# 400 # High Tech Industrial Facility
+	# 0   # POCO
 	
 	assert_equal(0, @planet.powergrid_usage)
 	
@@ -252,6 +288,10 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	
 	assert_equal(6450, @planet.powergrid_usage)
+	
+	@planet.add_building_from_class(CustomsOffice)
+	
+	assert_equal(6450, @planet.powergrid_usage)
   end
   
   def test_cpu_usage_scales_with_number_of_buildings
@@ -263,6 +303,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	# 200 # Basic Industrial Facility
 	# 500 # Advanced Industrial Facility
 	# 1100 # High Tech Industrial Facility
+	# 0   # POCO
 	
 	assert_equal(0, @planet.cpu_usage)
 	
@@ -297,6 +338,10 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	
 	assert_equal(6410, @planet.cpu_usage)
+	
+	@planet.add_building_from_class(CustomsOffice)
+	
+	assert_equal(6410, @planet.cpu_usage)
   end
   
   def test_powergrid_provided_scales_with_number_of_buildings
@@ -308,6 +353,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	# 0 # Basic Industrial Facility
 	# 0 # Advanced Industrial Facility
 	# 0 # High Tech Industrial Facility
+	# 0 # POCO
 	
 	assert_equal(0, @planet.powergrid_provided)
 	
@@ -342,6 +388,10 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	
 	assert_equal(6000, @planet.powergrid_provided)
+	
+	@planet.add_building_from_class(CustomsOffice)
+	
+	assert_equal(6000, @planet.powergrid_provided)
   end
   
   def test_cpu_provided_scales_with_number_of_buildings
@@ -353,6 +403,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	# 0 # Basic Industrial Facility
 	# 0 # Advanced Industrial Facility
 	# 0 # High Tech Industrial Facility
+	# 0 # POCO
 	
 	assert_equal(0, @planet.cpu_provided)
 	
@@ -385,6 +436,10 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(1675, @planet.cpu_provided)
 	
 	@planet.add_building_from_class(HighTechIndustrialFacility)
+	
+	assert_equal(1675, @planet.cpu_provided)
+	
+	@planet.add_building_from_class(CustomsOffice)
 	
 	assert_equal(1675, @planet.cpu_provided)
   end
@@ -438,6 +493,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	# 75000.00 # Basic Industrial Facility
 	# 250000.00 # Advanced Industrial Facility
 	# 525000.00 # High Tech Industrial Facility
+	# 0.00 # POCO
 	
 	assert_equal(0, @planet.isk_cost)
 	
@@ -472,6 +528,10 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	
 	assert_equal(2135000.00, @planet.isk_cost)
+	
+	@planet.add_building_from_class(CustomsOffice)
+	
+	assert_equal(2135000.00, @planet.isk_cost)
   end
   
   def test_number_of_command_centers_scales_with_number_of_command_centers
@@ -494,6 +554,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
+	@planet.add_building_from_class(CustomsOffice)
 	
 	assert_equal(1, @planet.num_command_centers)
   end
@@ -530,6 +591,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(StorageFacility)
 	@planet.add_building_from_class(Launchpad)
 	@planet.add_building_from_class(Extractor)
+	@planet.add_building_from_class(CustomsOffice)
 	
 	assert_equal(6, @planet.num_factories)
   end
@@ -556,6 +618,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
+	@planet.add_building_from_class(CustomsOffice)
 	
 	assert_equal(3, @planet.num_launchpads)
   end
@@ -582,6 +645,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
+	@planet.add_building_from_class(CustomsOffice)
 	
 	assert_equal(3, @planet.num_storages)
   end
@@ -606,8 +670,34 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
+	@planet.add_building_from_class(CustomsOffice)
 	
 	assert_equal(3, @planet.num_aggregate_launchpads_ccs_storages)
+  end
+  
+  def test_number_of_pocos_scales_with_number_of_pocos
+	assert_equal(0, @planet.num_pocos)
+	
+	@planet.add_building_from_class(CustomsOffice)
+	
+	assert_equal(1, @planet.num_pocos)
+	
+	assert_raise ArgumentError do
+	  @planet.add_building_from_class(CustomsOffice)
+	end
+	
+	assert_equal(1, @planet.num_pocos)
+	
+	# These types should not change the value.
+	@planet.add_building_from_class(Launchpad)
+	@planet.add_building_from_class(StorageFacility)
+	@planet.add_building_from_class(BasicIndustrialFacility)
+	@planet.add_building_from_class(AdvancedIndustrialFacility)
+	@planet.add_building_from_class(HighTechIndustrialFacility)
+	@planet.add_building_from_class(Extractor)
+	@planet.add_building_from_class(CommandCenter)
+	
+	assert_equal(1, @planet.num_pocos)
   end
   
   #
