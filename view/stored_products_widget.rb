@@ -13,6 +13,10 @@ class StoredProductsWidget < Gtk::Box
 	@stored_products_list_view = StoredProductsTreeView.new(@building_model)
 	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
 	
+	@stored_products_list_view.signal_connect("row-activated") do
+	  @stored_products_list_view.remove_product_dialog
+	end
+	
 	# Put the list view in a scrollbox.
 	auto_scrollbox = Gtk::ScrolledWindow.new
 	

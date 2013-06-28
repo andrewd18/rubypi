@@ -3,8 +3,9 @@ require_relative 'text_column.rb'
 require_relative 'stored_products_list_store.rb'
 require_relative 'remove_products_from_building_dialog.rb'
 
+
 class StoredProductsTreeView < Gtk::TreeView
-  def initialize(building_model)
+  def initialize(building_model = nil)
 	@building_model = building_model
 	
 	@stored_products_store = StoredProductsListStore.new(@building_model)
@@ -22,12 +23,6 @@ class StoredProductsTreeView < Gtk::TreeView
 	self.append_column(name_column)
 	self.append_column(quantity_column)
 	self.append_column(volume_column)
-	
-	# Signals
-	# On double-click, run the remove_product_dialog method.
-	self.signal_connect("row-activated") do |tree_view, path, column|
-	  self.remove_product_dialog
-	end
 	
 	# Tree View settings.
 	self.reorderable = true
@@ -58,6 +53,17 @@ class StoredProductsTreeView < Gtk::TreeView
 	
 	# Remove the dialog now that we've acted on it.
 	dialog.destroy
+  end
+  
+  def building_model
+	return @building_model
+  end
+  
+  def building_model=(new_building_model)
+	@building_model = new_building_model
+	
+	# Pass along to store.
+	@stored_products_store.building_model = @building_model
   end
   
   def start_observing_model
