@@ -47,4 +47,45 @@ class TestCaseCustomsOffice < Test::Unit::TestCase
   def test_storage_volume
 	assert_equal(35000.0, @building.storage_volume)
   end
+  
+  def test_default_tax_rate_is_fifteen_percent
+	assert_equal(15, @building.tax_rate)
+  end
+  
+  def test_can_set_tax_rate
+	assert_equal(15, @building.tax_rate)
+	
+	@building.tax_rate = 10
+	
+	assert_equal(10, @building.tax_rate)
+  end
+  
+  def test_cannot_set_tax_rate_below_zero
+	assert_equal(15, @building.tax_rate)
+	
+	assert_raise ArgumentError do
+	  @building.tax_rate = (-30)
+	end
+	
+	# Nothing should have changed from default.
+	assert_equal(15, @building.tax_rate)
+  end
+  
+  def test_cannot_set_tax_rate_above_one_hundred
+	assert_raise ArgumentError do
+	  @building.tax_rate = 35000
+	end
+	
+	# Nothing should have changed from default.
+	assert_equal(15, @building.tax_rate)
+  end
+  
+  def test_cannot_set_tax_rate_to_non_number
+	assert_raise ArgumentError do
+	  @building.tax_rate = "faaaail"
+	end
+	
+	# Nothing should have changed from default.
+	assert_equal(15, @building.tax_rate)
+  end
 end

@@ -11,6 +11,9 @@ class CustomsOffice < PlanetaryBuilding
   CPU_PROVIDED = 0
   ISK_COST = 0.00
   STORAGE_VOLUME = 35000.0
+  DEFAULT_TAX_RATE = 15
+  MIN_TAX_RATE = 0
+  MAX_TAX_RATE = 100
   
   def initialize
 	@powergrid_usage = POWERGRID_USAGE
@@ -18,6 +21,7 @@ class CustomsOffice < PlanetaryBuilding
 	@powergrid_provided = POWERGRID_PROVIDED
 	@cpu_provided = CPU_PROVIDED
 	@isk_cost = ISK_COST
+	@tax_rate = DEFAULT_TAX_RATE
 	
 	return self
   end
@@ -28,5 +32,15 @@ class CustomsOffice < PlanetaryBuilding
   
   def storage_volume
 	return STORAGE_VOLUME
+  end
+  
+  def tax_rate
+	return @tax_rate
+  end
+  
+  def tax_rate=(new_tax_rate)
+	raise ArgumentError unless ((MIN_TAX_RATE..MAX_TAX_RATE).include?(new_tax_rate))
+	
+	@tax_rate = new_tax_rate
   end
 end
