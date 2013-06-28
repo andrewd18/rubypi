@@ -1,7 +1,7 @@
 
 require 'gtk3'
 
-require_relative 'expedited_transfer_button.rb'
+require_relative 'transfer_products_button.rb'
 require_relative 'add_products_widget.rb'
 require_relative 'building_image.rb'
 
@@ -23,7 +23,7 @@ class EditLaunchpadWidget < Gtk::Box
 	
 	# Center
 	@stored_products_widget = StoredProductsWidget.new(@building_model)
-	expedited_transfer_button = ExpeditedTransferButton.new(@building_model)
+	transfer_products_button = TransferProductsButton.new(@building_model)
 	
 	# Right
 	building_image = BuildingImage.new(@building_model)
@@ -42,7 +42,7 @@ class EditLaunchpadWidget < Gtk::Box
 	stored_products_column = Gtk::Box.new(:vertical)
 	stored_products_column.pack_start(@stored_products_widget, :expand => true)
 	button_row = Gtk::Box.new(:horizontal)
-	button_row.pack_end(expedited_transfer_button, :expand => false)
+	button_row.pack_end(transfer_products_button, :expand => false)
 	stored_products_column.pack_start(button_row, :expand => false)
 	stored_products_column_frame = Gtk::Frame.new
 	stored_products_column_frame.add(stored_products_column)
