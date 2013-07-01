@@ -5,7 +5,7 @@ require_relative 'simple_table.rb'
 class TransferProductsDialog < Gtk::Dialog
   attr_reader :hash_to_transfer
   
-  def initialize(planet_model)
+  def initialize(planet_model, source_building = nil)
 	title = "Transfer Products"
 	parent_window = nil
 	flags = Gtk::Dialog::Flags::MODAL
@@ -24,13 +24,14 @@ class TransferProductsDialog < Gtk::Dialog
 	destination_label = Gtk::Label.new("Destination:")
 	
 	@source_combo_box = SelectBuildingComboBox.new(@planet_model.aggregate_launchpads_ccs_storages)
+	@source_combo_box.selected_item = source_building
 	@source_combo_box.signal_connect("changed") do |combo_box|
-	  self.update
+	  self.source_changed
 	end
 	
 	@destination_combo_box = SelectBuildingComboBox.new(@planet_model.aggregate_launchpads_ccs_storages)
 	@destination_combo_box.signal_connect("changed") do |combo_box|
-	  self.update
+	  self.destination_changed
 	end
 	
 	
@@ -52,11 +53,6 @@ class TransferProductsDialog < Gtk::Dialog
 	destination_stored_products_scrollbox = Gtk::ScrolledWindow.new
 	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
 	destination_stored_products_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
-	
-	
-	
-	# Update the widgets from the model using #update.
-	self.update
 	
 	
 	# Layout (needed for #update)
@@ -112,10 +108,12 @@ class TransferProductsDialog < Gtk::Dialog
 	return self
   end
   
-  def update
+  def source_changed
 	# Set the source_stored_products_table to the building model pointed at by @source_combo_box
 	@source_stored_products_list_view.building_model = self.source
-	
+  end
+  
+  def destination_changed
 	# Set the destination_stored_products_table to the building model pointed at by @destination_combo_box
 	@destination_stored_products_tree_view.building_model = self.destination
   end
