@@ -11,7 +11,7 @@ class StoredProductsListStore < Gtk::ListStore
 	super(Gdk::Pixbuf,	# Icon
 	      String,		# Name
 	      Integer,		# Quantity
-	      Integer		# Volume
+	      Float 		# Volume
 	      )
 	
 	# Update self from @building_model.
