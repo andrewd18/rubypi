@@ -4,9 +4,8 @@ require_relative 'simple_table.rb'
 
 class TransferProductsDialog < Gtk::Dialog
   
-  def initialize(planet_model, source_building = nil)
+  def initialize(planet_model, source_building = nil, parent_window = nil)
 	title = "Transfer Products"
-	parent_window = nil
 	flags = Gtk::Dialog::Flags::MODAL
 	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
 	second_button_response_id_combo = [Gtk::Stock::CANCEL, Gtk::ResponseType::REJECT]
