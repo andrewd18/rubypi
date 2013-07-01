@@ -4,7 +4,13 @@ Core Features
 * Add CCP disclaimer, etc. to About box.
 * Building View
   - Add launch-to-space option to Command Centers.
-  - Add POCO building view, allow import/export only to extractors. Let user edit tax rate. Show cost to import/export.
+* Transfer Products Dialog
+  - Show cost to transfer (if applicable).
+  - Fix issue where tables don't expand vertically.
+  - Remove the Cancel button since it's not applicable now.
+  - Make it modal to the parent window.
+  - Populate source destination on all edit_building_widget views.
+  - General code cleanup.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
 * Add links.
 * Add cycle times to all buildings.
