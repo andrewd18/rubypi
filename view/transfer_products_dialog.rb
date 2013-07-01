@@ -124,9 +124,22 @@ class TransferProductsDialog < Gtk::Dialog
 	# Figure out what the user clicked on.
 	row = @source_stored_products_list_view.selection
 	tree_iter = row.selected
+	
 	selected_product_name = tree_iter.get_value(1)
 	selected_quantity_stored = tree_iter.get_value(2)
 	selected_product_volume = tree_iter.get_value(3)
+	
+	
+	# Error if there is not enough volume in the destination.
+	max_transferrable_quantity = ((self.destination.volume_available) / (selected_product_volume))
+	max_transferrable_quantity = max_transferrable_quantity.to_int
+	
+	if (max_transferrable_quantity == 0)
+	  # Quit quietly. TODO: Error without popping up ANOTHER dialog box.
+	  return
+	end
+	
+	
 	
 	# Pop up a dialog asking how many of the selected product.
 	
@@ -143,18 +156,16 @@ class TransferProductsDialog < Gtk::Dialog
 	# Create a label with the name of the product.
 	product_name_label = Gtk::Label.new("#{selected_product_name}")
 	
-	# Create a slider bar. It should not allow the user to add more products than the destination has volume.
-	max_quantity_given_available_volume = ((self.destination.volume_available) / (selected_product_volume))
-	
 	# Limit the slider.
-	if (selected_quantity_stored > max_quantity_given_available_volume)
-	  int_max_quantity = max_quantity_given_available_volume.to_int
+	# If you've got more product than the destination can hold, your top limit is the destination volume.
+	# If you've got less product than the destination can hold, your top limit is the product amount.
+	if (selected_quantity_stored > max_transferrable_quantity)
+														# min,        #max,   # adjust_by
+	  product_quantity_slider = Gtk::Scale.new(:horizontal, 0, max_transferrable_quantity, 1)
 	else
-	  int_max_quantity = selected_quantity_stored
+	  														# min,        #max,   # adjust_by
+	  product_quantity_slider = Gtk::Scale.new(:horizontal, 0, selected_quantity_stored, 1)
 	end
-	
-	                                                   # min,        #max,                          # adjust_by
-	product_quantity_slider = Gtk::Scale.new(:horizontal, 0, int_max_quantity, 1)
 	
 	# Create a horizontal box and pack the widgets.
 	how_many_hbox = Gtk::Box.new(:horizontal)
