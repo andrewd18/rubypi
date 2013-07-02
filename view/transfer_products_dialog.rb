@@ -191,8 +191,6 @@ class TransferProductsDialog < Gtk::Dialog
 	transfer_products_select_quantity_dialog.run do |response|
 	  if (response == Gtk::ResponseType::ACCEPT)
 		self.perform_transfer(selected_product_name, transfer_products_select_quantity_dialog.quantity)
-	  else
-		puts "Transfer canceled."
 	  end
 	end
 	
