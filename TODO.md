@@ -8,7 +8,7 @@ Core Features
   - Show cost to transfer (if applicable).
   - Make it modal to the parent window.
   - Add a warning when the user tries add products to a destination that isn't selected yet.
-  - Show storage percent bars?
+  - Name should probably expand, not volume or other columns.
   - General code cleanup.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
 * Add links.
@@ -40,6 +40,9 @@ Code Cleanup
 
 * Go through all the views and consolidate stuff down into more generic classes.
 * Unify the stats boxes for planets.
+* PlanetImage and BuildingImage
+  - Either unify or get rid of Observer calls.
+  - Allow nil models without crashing.
 * Unit Tests
   - Figure out how to test event hooks in unit tests so I can fully test views.
   - Keep adding more!
