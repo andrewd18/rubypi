@@ -9,6 +9,7 @@ Core Features
   - Make it modal to the parent window.
   - Add a warning when the user tries add products to a destination that isn't selected yet.
   - Name should probably expand, not volume or other columns.
+  - Verify import / export ISK cost and scale with set tax rate.
   - General code cleanup.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
 * Add links.
