@@ -99,6 +99,14 @@ module UnrestrictedStorage
 	return total_volume_used
   end
   
+  def pct_volume_used
+	percentage_used = ((100.0 / self.total_volume) * (self.volume_used))
+	
+	pct_rounded_to_two_dec_places = percentage_used.round(2)
+	
+	return pct_rounded_to_two_dec_places
+  end
+  
   def notify_observers_if_observable
   	# Interact with Observable mixin, if used.
 	if self.is_a?(Observable)

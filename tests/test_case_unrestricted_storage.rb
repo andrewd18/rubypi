@@ -337,6 +337,30 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	@building_stub.store_product("Ancient Beast", 1)
 	assert_equal(0.39, @building_stub.volume_used)
   end
+  
+  def test_building_can_show_volume_pct_used
+	# Should return 0 percent used when empty.
+	assert_equal(0.0, @building_stub.pct_volume_used)
+	
+	# After storing 3000 dwarves, we've used 30m3 out of 500m3 volume.
+	@building_stub.store_product("Dwarf", 3000)
+	assert_equal(30.00, @building_stub.volume_used)
+	
+	# algorithm = ((@building_stub.storage_volume / 100) * @building_stub.volume_used)
+	# percent = ((500 / 100) * 30)
+	assert_equal(6.0, @building_stub.pct_volume_used)
+	
+	# Add one more dwarf and recheck.
+	@building_stub.store_product("Dwarf", 1)
+	assert_equal(30.01, @building_stub.volume_used)
+	
+	# percent = ((500 / 100) * 30)
+	
+	# Test that we round to 2 decimal places.
+	# Normally this would be 6.002000000000001
+	# But we check for 6.00
+	assert_equal(6.00, @building_stub.pct_volume_used)
+  end
     
   
   # Observer interaction tests.
