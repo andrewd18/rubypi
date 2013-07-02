@@ -83,18 +83,18 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	# Second row. Images of buildings.
 	@source_building_image = BuildingImage.new(self.source)
-	layout_table.attach(@source_building_image, 2, 1)
+	layout_table.attach(@source_building_image, 2, 1, false, false, false, false)
 	
 	@destination_building_image = BuildingImage.new(self.destination)
-	layout_table.attach(@destination_building_image, 2, 2)
+	layout_table.attach(@destination_building_image, 2, 2, false, false, false, false)
 	
 	
 	# Third row. Percentage bars showing volume.
 	@source_volume_used_bar = OverflowPercentageProgressBar.new
-	layout_table.attach(@source_volume_used_bar, 3, 1)
+	layout_table.attach(@source_volume_used_bar, 3, 1, true, true, false, false)
 	
 	@destination_volume_used_bar = OverflowPercentageProgressBar.new
-	layout_table.attach(@destination_volume_used_bar, 3, 2)
+	layout_table.attach(@destination_volume_used_bar, 3, 2, true, true, false, false)
 	
 	# Fourth row.
 	# First cell.
