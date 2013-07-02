@@ -2,6 +2,7 @@ require 'gtk3'
 require_relative 'select_building_combo_box.rb'
 require_relative 'simple_table.rb'
 require_relative 'overflow_percentage_progress_bar.rb'
+require_relative 'transfer_products_select_quantity_dialog.rb'
 
 class TransferProductsDialog < Gtk::Dialog
   
@@ -171,9 +172,7 @@ class TransferProductsDialog < Gtk::Dialog
 	tree_iter = row.selected
 	
 	selected_product_name = tree_iter.get_value(1)
-	selected_quantity_stored = tree_iter.get_value(2)
 	selected_product_volume = tree_iter.get_value(3)
-	
 	
 	# Error if there is not enough volume in the destination.
 	max_transferrable_quantity = ((self.destination.volume_available) / (selected_product_volume))
@@ -187,54 +186,23 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	
 	# Pop up a dialog asking how many of the selected product.
+	transfer_products_select_quantity_dialog = TransferProductsSelectQuantityDialog.new(self.source, self.destination, selected_product_name)
 	
-	# Dialog options.
-	title = "How Many?"
-	parent_window = self
-	flags = Gtk::Dialog::Flags::MODAL
-	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
-	second_button_response_id_combo = [Gtk::Stock::CANCEL, Gtk::ResponseType::REJECT]
-	
-	# Create the dialog.
-	how_many_dialog = Gtk::Dialog.new(:title => title, :parent => parent_window, :flags => flags, :buttons => [first_button_response_id_combo, second_button_response_id_combo])
-	
-	# Create a label with the name of the product.
-	product_name_label = Gtk::Label.new("#{selected_product_name}")
-	
-	# Limit the slider.
-	# If you've got more product than the destination can hold, your top limit is the destination volume.
-	# If you've got less product than the destination can hold, your top limit is the product amount.
-	if (selected_quantity_stored > max_transferrable_quantity)
-														# min,        #max,   # adjust_by
-	  product_quantity_slider = Gtk::Scale.new(:horizontal, 0, max_transferrable_quantity, 1)
-	else
-	  														# min,        #max,   # adjust_by
-	  product_quantity_slider = Gtk::Scale.new(:horizontal, 0, selected_quantity_stored, 1)
-	end
-	
-	# Create a horizontal box and pack the widgets.
-	how_many_hbox = Gtk::Box.new(:horizontal)
-	how_many_hbox.pack_start(product_name_label, :expand => false)
-	how_many_hbox.pack_start(product_quantity_slider, :expand => true)
-	
-	how_many_dialog.child.add(how_many_hbox)
-	how_many_dialog.show_all
-	
-	how_many_dialog.run do |response|
+	transfer_products_select_quantity_dialog.run do |response|
 	  if (response == Gtk::ResponseType::ACCEPT)
-		self.perform_transfer(selected_product_name, product_quantity_slider)
+		self.perform_transfer(selected_product_name, transfer_products_select_quantity_dialog.quantity)
 	  else
 		puts "Transfer canceled."
 	  end
 	end
 	
-	how_many_dialog.destroy
+	transfer_products_select_quantity_dialog.destroy
   end
   
-  def perform_transfer(product_name, product_quantity_slider)
-	self.source.remove_qty_of_product(product_name, product_quantity_slider.value)
+  def perform_transfer(product_name, quantity)
+	self.source.remove_qty_of_product(product_name, quantity)
 	
-	self.destination.store_product(product_name, product_quantity_slider.value)
+	self.destination.store_product(product_name, quantity)
 	
 	# Force an update.
 	self.source_changed
