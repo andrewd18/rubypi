@@ -16,12 +16,17 @@ class BuildingImage < Gtk::Image
                       "Basic Industrial Facility" => "industrial_facility_two_materials.png",
                       "Advanced Industrial Facility" => "industrial_facility_two_materials.png",
                       "High Tech Industrial Facility" => "industrial_facility_three_materials.png",
-                      "Customs Office" => "poco_icon.png"}
+                      "Customs Office" => "poco_icon.png",
+                      "Blank" => "blank.png"}
   
-  def initialize(building_model, requested_size_array_in_px = [64, 64])
+  def initialize(building_model = nil, requested_size_array_in_px = [64, 64])
 	@building_model = building_model
 	
-	@displayed_type = @building_model.name
+	if (@building_model == nil)
+	  @displayed_type = "Blank"
+	else
+	  @displayed_type = @building_model.name
+	end
 	
 	@requested_width_in_text = "#{requested_size_array_in_px[0]}"
 	@requested_height_in_text = "#{requested_size_array_in_px[1]}"

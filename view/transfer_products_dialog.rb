@@ -1,6 +1,7 @@
 require 'gtk3'
 require_relative 'select_building_combo_box.rb'
 require_relative 'simple_table.rb'
+require_relative 'overflow_percentage_progress_bar.rb'
 
 class TransferProductsDialog < Gtk::Dialog
   
@@ -55,7 +56,7 @@ class TransferProductsDialog < Gtk::Dialog
 	# For some reason self.vbox is deprecated. :/
 	
 	                          #rows, columns, homogenous?
-	layout_table = SimpleTable.new(2, 2, false)
+	layout_table = SimpleTable.new(4, 2, false)
 	
 	# First row.
 	# First cell
@@ -80,7 +81,22 @@ class TransferProductsDialog < Gtk::Dialog
 	layout_table.attach(destination_label_and_combo_box_frame, 1, 2, true, true, false, false)
 	
 	
-	# Second row.
+	# Second row. Images of buildings.
+	@source_building_image = BuildingImage.new(self.source)
+	layout_table.attach(@source_building_image, 2, 1)
+	
+	@destination_building_image = BuildingImage.new(self.destination)
+	layout_table.attach(@destination_building_image, 2, 2)
+	
+	
+	# Third row. Percentage bars showing volume.
+	@source_volume_used_bar = OverflowPercentageProgressBar.new
+	layout_table.attach(@source_volume_used_bar, 3, 1)
+	
+	@destination_volume_used_bar = OverflowPercentageProgressBar.new
+	layout_table.attach(@destination_volume_used_bar, 3, 2)
+	
+	# Fourth row.
 	# First cell.
 	source_stored_products_scrollbox.add(@source_stored_products_tree_view)
 	source_stored_products_vbox = Gtk::Box.new(:vertical)
@@ -89,7 +105,7 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	source_stored_products_frame = Gtk::Frame.new
 	source_stored_products_frame.add(source_stored_products_vbox)
-	layout_table.attach(source_stored_products_frame, 2, 1)
+	layout_table.attach(source_stored_products_frame, 4, 1)
 	
 	# Second cell
 	destination_stored_products_scrollbox.add(@destination_stored_products_tree_view)
@@ -99,7 +115,7 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	destination_stored_products_frame = Gtk::Frame.new
 	destination_stored_products_frame.add(destination_stored_products_vbox)
-	layout_table.attach(destination_stored_products_frame, 2, 2)
+	layout_table.attach(destination_stored_products_frame, 4, 2)
 	
 	self.child.pack_start(layout_table, :expand => true)
 	
@@ -118,11 +134,23 @@ class TransferProductsDialog < Gtk::Dialog
   def source_changed
 	# Set the source_stored_products_table to the building model pointed at by @source_combo_box
 	@source_stored_products_tree_view.building_model = self.source
+	
+	@source_building_image.building_model = self.source
+	# TODO - I shouldn't have to call update here. That should happen as part of the new model.
+	@source_building_image.update
+	
+	@source_volume_used_bar.value = self.source.pct_volume_used
   end
   
   def destination_changed
 	# Set the destination_stored_products_table to the building model pointed at by @destination_combo_box
 	@destination_stored_products_tree_view.building_model = self.destination
+	
+	@destination_building_image.building_model = self.destination
+	# TODO - I shouldn't have to call update here. That should happen as part of the new model.
+	@destination_building_image.update
+	
+	@destination_volume_used_bar.value = self.destination.pct_volume_used
   end
   
   def source
@@ -207,5 +235,9 @@ class TransferProductsDialog < Gtk::Dialog
 	self.source.remove_qty_of_product(product_name, product_quantity_slider.value)
 	
 	self.destination.store_product(product_name, product_quantity_slider.value)
+	
+	# Force an update.
+	self.source_changed
+	self.destination_changed
   end
 end
