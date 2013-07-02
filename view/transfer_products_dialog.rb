@@ -52,10 +52,6 @@ class TransferProductsDialog < Gtk::Dialog
 	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
 	destination_stored_products_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	
-	# WORKAROUND
-	# "self.child" is actually a vbox which we connect things to via pack_start.
-	# For some reason self.vbox is deprecated. :/
-	
 	                          #rows, columns, homogenous?
 	layout_table = SimpleTable.new(4, 2, false)
 	
@@ -118,6 +114,10 @@ class TransferProductsDialog < Gtk::Dialog
 	destination_stored_products_frame.add(destination_stored_products_vbox)
 	layout_table.attach(destination_stored_products_frame, 4, 2)
 	
+	
+	# WORKAROUND
+	# "self.child" is actually a vbox which we connect things to via pack_start.
+	# For some reason self.vbox is deprecated. :/
 	self.child.pack_start(layout_table, :expand => true)
 	
 	

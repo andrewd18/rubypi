@@ -1,4 +1,5 @@
 require 'gtk3'
+require_relative 'simple_table.rb'
 require_relative '../model/product.rb'
 
 class TransferProductsSelectQuantityDialog < Gtk::Dialog
