@@ -1,11 +1,10 @@
 require 'gtk3'
 
-class AddProductsToBuildingDialog < Gtk::Dialog
+class AddProductsSelectQuantityDialog < Gtk::Dialog
   attr_reader :quantity
   
-  def initialize(building_model, product_name)
+  def initialize(building_model, product_name, parent_window = nil)
 	title = "Add Products to Building"
-	parent_window = nil
 	flags = Gtk::Dialog::Flags::MODAL
 	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
 	second_button_response_id_combo = [Gtk::Stock::CANCEL, Gtk::ResponseType::REJECT]

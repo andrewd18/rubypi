@@ -3,7 +3,7 @@ require_relative 'add_products_tree_store.rb'
 require_relative 'icon_column.rb'
 require_relative 'text_column.rb'
 
-require_relative 'add_products_to_building_dialog.rb'
+require_relative 'add_products_select_quantity_dialog.rb'
 
 
 class AddProductsTreeView < Gtk::TreeView
@@ -58,7 +58,7 @@ class AddProductsTreeView < Gtk::TreeView
 	
 	
 	# OK! Pop up the dialog.
-	dialog = AddProductsToBuildingDialog.new(@building_model, selected_product_name)
+	dialog = AddProductsSelectQuantityDialog.new(@building_model, selected_product_name, $ruby_pi_main_gtk_window)
 	dialog.run do |response|
 	  # Dialog has been closed.
 	  if ((dialog.quantity > 0) and
