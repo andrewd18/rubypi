@@ -1,12 +1,18 @@
 require 'gtk3'
 
 class OverflowPercentageProgressBar < Gtk::ProgressBar
-  def initialize(value = 0)
+  def initialize(value = 0, round_to_digits = nil)
 	# Call super with no params. (Meaning horizontal)
 	super()
 	
 	# Set up Gtk::ProgressBar options.
 	self.show_text = true
+	
+	if (round_to_digits != nil)
+	  raise unless round_to_digits.is_a?(Numeric)
+	  
+	  @round_to_digits = round_to_digits
+	end
 	
 	# Finally input the value.
 	self.value = value
@@ -34,7 +40,11 @@ class OverflowPercentageProgressBar < Gtk::ProgressBar
 	end
 	
 	# Update the text overlaying the fill width.
-	# Round to the second digit and add a % sign.
-	self.text = "#{@value.round(2)} %"
+	# Add a % sign.
+	if (@round_to_digits != nil)
+	  self.text = "#{@value.round(@round_to_digits)} %"
+	else
+	  self.text = "#{@value} %"
+	end
   end
 end
