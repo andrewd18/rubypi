@@ -8,11 +8,10 @@ class TransferProductsDialog < Gtk::Dialog
 	title = "Transfer Products"
 	flags = Gtk::Dialog::Flags::MODAL
 	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
-	second_button_response_id_combo = [Gtk::Stock::CANCEL, Gtk::ResponseType::REJECT]
 	
 	@planet_model = planet_model
 	
-	super(:title => title, :parent => parent_window, :flags => flags, :buttons => [first_button_response_id_combo, second_button_response_id_combo])
+	super(:title => title, :parent => parent_window, :flags => flags, :buttons => [first_button_response_id_combo])
 	
 	
 	# Create all the widgets we'll be using.
@@ -29,6 +28,7 @@ class TransferProductsDialog < Gtk::Dialog
 	@destination_combo_box.signal_connect("changed") do |combo_box|
 	  self.destination_changed
 	end
+	
 	
 	
 	source_stored_products_label = Gtk::Label.new("Stored Products")
@@ -103,6 +103,13 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	self.child.pack_start(layout_table, :expand => true)
 	
+	
+	# Finally, force the model to use the source building if it was passed in.
+	# Can't do this earlier in the init because the widgets don't exist yet.
+	if (source_building != nil)
+	  self.source_changed
+	end
+	
 	self.show_all
 	
 	return self
@@ -127,6 +134,7 @@ class TransferProductsDialog < Gtk::Dialog
   end
   
   def create_how_many_dialog
+	# TODO: Give a message to the user.
 	# Error cleanly if there's no destination.
 	return unless (self.destination != nil)
 	

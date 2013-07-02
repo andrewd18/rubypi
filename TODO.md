@@ -6,10 +6,9 @@ Core Features
   - Add launch-to-space option to Command Centers.
 * Transfer Products Dialog
   - Show cost to transfer (if applicable).
-  - Fix issue where tables don't expand vertically.
-  - Remove the Cancel button since it's not applicable now.
   - Make it modal to the parent window.
-  - Populate source destination on all edit_building_widget views.
+  - Add a warning when the user tries add products to a destination that isn't selected yet.
+  - Show storage percent bars?
   - General code cleanup.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
 * Add links.

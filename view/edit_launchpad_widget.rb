@@ -23,7 +23,7 @@ class EditLaunchpadWidget < Gtk::Box
 	
 	# Center
 	@stored_products_widget = StoredProductsWidget.new(@building_model)
-	transfer_products_button = TransferProductsButton.new(@building_model.planet)
+	transfer_products_button = TransferProductsButton.new(@building_model.planet, @building_model, nil)
 	
 	# Right
 	building_image = BuildingImage.new(@building_model)

@@ -9,10 +9,12 @@ require_relative 'transfer_products_dialog.rb'
 # Show tax / cost as necessary.
 
 class TransferProductsButton < Gtk::Button
-  def initialize(planet_model)
+  def initialize(planet_model, source_building = nil, parent_window = nil)
 	super(:label => "Transfer Products")
 	
 	@planet_model = planet_model
+	@source_building = source_building
+	@parent_window = parent_window
 	
 	self.signal_connect("clicked") do
 	  self.create_transfer_dialog
@@ -22,7 +24,7 @@ class TransferProductsButton < Gtk::Button
   end
   
   def create_transfer_dialog
-	dialog = TransferProductsDialog.new(@planet_model)
+	dialog = TransferProductsDialog.new(@planet_model, @source_building, @parent_window)
 	dialog.run do |response|
 	  # Don't do anything on a response.
 	  # The TransferProductsDialog handles everything itself.

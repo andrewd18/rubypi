@@ -25,7 +25,7 @@ class EditCustomsOfficeWidget < Gtk::Box
 	
 	# Center column.
 	@stored_products_widget = StoredProductsWidget.new(@building_model)
-	expedited_transfer_button = TransferProductsButton.new(@building_model.planet)
+	transfer_products_button = TransferProductsButton.new(@building_model.planet, @building_model, nil)
 	
 	
 	# Right column.
@@ -49,7 +49,7 @@ class EditCustomsOfficeWidget < Gtk::Box
 	center_column = Gtk::Box.new(:vertical)
 	center_column.pack_start(@stored_products_widget, :expand => true)
 	button_row = Gtk::Box.new(:horizontal)
-	button_row.pack_end(expedited_transfer_button, :expand => false)
+	button_row.pack_end(transfer_products_button, :expand => false)
 	center_column.pack_start(button_row, :expand => false)
 	center_column_frame = Gtk::Frame.new
 	center_column_frame.add(center_column)
