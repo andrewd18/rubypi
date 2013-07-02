@@ -15,13 +15,13 @@ class TransferProductsButton < Gtk::Button
 	@planet_model = planet_model
 	
 	self.signal_connect("clicked") do
-	  self.process_transfer
+	  self.create_transfer_dialog
 	end
 	
 	return self
   end
   
-  def process_transfer
+  def create_transfer_dialog
 	dialog = TransferProductsDialog.new(@planet_model)
 	dialog.run do |response|
 	  # Don't do anything on a response.
