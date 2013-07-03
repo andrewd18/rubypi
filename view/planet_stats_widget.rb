@@ -4,6 +4,7 @@ require_relative 'planet_image.rb'
 require_relative 'building_count_table.rb'
 require_relative 'simple_table.rb'
 require_relative 'simple_combo_box.rb'
+require_relative 'isk_amount_label.rb'
 require_relative '../model/planet.rb'
 
 # This widget will show a planet, its buildings, and building-related stats.
@@ -51,7 +52,7 @@ class PlanetStatsWidget < Gtk::Box
 	@cpu_used_progress_bar.show_text = true # WORKAROUND - If you don't force this to true, text is never shown.
 	
 	isk_cost_label = Gtk::Label.new("ISK Cost:")
-	@isk_cost_value_label = Gtk::Label.new("#{@planet_model.isk_cost}")
+	@isk_cost_value_label = IskAmountLabel.new(@planet_model.isk_cost)
 	
 	# Pack child widgets into planet_stats_table, one row at a time.
 	rows = 5
@@ -148,7 +149,7 @@ class PlanetStatsWidget < Gtk::Box
 	  end
 	  
 	  # Set the isk cost.
-	  @isk_cost_value_label.text = "#{@planet_model.isk_cost}"
+	  @isk_cost_value_label.isk_value = @planet_model.isk_cost
 	end
   end
   

@@ -1,5 +1,6 @@
 require 'gtk3'
 require_relative 'simple_table.rb'
+require_relative 'isk_amount_label.rb'
 require_relative '../model/product.rb'
 
 class TransferProductsSelectQuantityDialog < Gtk::Dialog
@@ -58,12 +59,12 @@ class TransferProductsSelectQuantityDialog < Gtk::Dialog
 	  cost_label = Gtk::Label.new("Import / Export Cost:")
 	  transfer_layout_table.attach(cost_label, 2, 1, false, false, false, false)
 	  
-	  @amount_label = Gtk::Label.new("0.0 ISK")
-	  transfer_layout_table.attach(@amount_label, 2, 2, false, false, false, false)
+	  @isk_amount_label = IskAmountLabel.new
+	  transfer_layout_table.attach(@isk_amount_label, 2, 2, false, false, false, false)
 	  
 	  
 	  @product_quantity_slider.signal_connect("value-changed") do
-		@amount_label.text = "#{product_instance.base_import_export_cost_for_quantity(@product_quantity_slider.value)} ISK"
+		@isk_amount_label.isk_value = product_instance.base_import_export_cost_for_quantity(@product_quantity_slider.value)
 	  end
 	end
 	
