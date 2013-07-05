@@ -19,6 +19,7 @@ require_relative './test_case_extractor.rb'
 require_relative './test_case_extractor_head.rb'
 require_relative './test_case_planetary_link.rb'
 require_relative './test_case_customs_office.rb'
+require_relative './test_case_launch_can.rb'
 
 # Products, Schematics, Etc.
 require_relative './test_case_product.rb'
