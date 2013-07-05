@@ -4,17 +4,25 @@ class Product
   attr_reader :name
   attr_reader :p_level
   
+  # Values confirmed as of Odyssey 1.0.10.
+  
   P_LEVEL_TO_VOLUME = {0 => 0.01,
                        1 => 0.38,
                        2 => 1.50,
                        3 => 6.00,
                        4 => 100 }
   
-  P_LEVEL_TO_IMPORT_EXPORT_BASE_COST = {0 => 5.00,
-                                        1 => 500.00,
-                                        2 => 9000.00,
-                                        3 => 70000.00,
-                                        4 => 1350000.00}
+  P_LEVEL_TO_IMPORT_COST = {0 => 2.50,
+                            1 => 250.00,
+                            2 => 4500.00,
+                            3 => 35000.00,
+                            4 => 675000.00}
+  
+  P_LEVEL_TO_EXPORT_COST = {0 => 5.00,
+                            1 => 500.00,
+                            2 => 9000.00,
+                            3 => 70000.00,
+                            4 => 1350000.00}
   
   @@product_instances = Array.new
   
@@ -99,7 +107,7 @@ class Product
 	  @p_level = level
 	else
 	  # Invalid level passed.
-	  raise ArgumentError, "Passed in level must be between 0 and 5."
+	  raise ArgumentError, "Passed in level must be between 0 and 4."
 	end
   end
   
@@ -107,11 +115,23 @@ class Product
 	return P_LEVEL_TO_VOLUME[@p_level]
   end
   
-  def base_import_export_cost
-	return P_LEVEL_TO_IMPORT_EXPORT_BASE_COST[@p_level]
+  def import_cost
+	return P_LEVEL_TO_IMPORT_COST[@p_level]
   end
   
-  def base_import_export_cost_for_quantity(quantity)
-	return (P_LEVEL_TO_IMPORT_EXPORT_BASE_COST[@p_level] * quantity)
+  def export_cost
+	return P_LEVEL_TO_EXPORT_COST[@p_level]
+  end
+  
+  def import_cost_for_quantity(quantity)
+	raise ArgumentError unless quantity.is_a?(Numeric)
+	
+	return (self.import_cost * quantity)
+  end
+  
+  def export_cost_for_quantity(quantity)
+	raise ArgumentError unless quantity.is_a?(Numeric)
+	
+	return (self.export_cost * quantity)
   end
 end

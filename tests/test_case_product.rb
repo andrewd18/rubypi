@@ -231,21 +231,101 @@ class TestCaseProduct < Test::Unit::TestCase
 	@@snip.set_p_level(0)
   end
   
-  def test_import_export_cost_scales_with_p_level
+  def test_import_cost_scales_with_p_level
 	@@snip.set_p_level(0)
-	assert_equal(5.00, @@snip.base_import_export_cost)
+	assert_equal(2.50, @@snip.import_cost)
 	
 	@@snip.set_p_level(1)
-	assert_equal(500.00, @@snip.base_import_export_cost)
+	assert_equal(250.00, @@snip.import_cost)
 	
 	@@snip.set_p_level(2)
-	assert_equal(9000.00, @@snip.base_import_export_cost)
+	assert_equal(4500.00, @@snip.import_cost)
 	
 	@@snip.set_p_level(3)
-	assert_equal(70000.00, @@snip.base_import_export_cost)
+	assert_equal(35000.00, @@snip.import_cost)
 	
 	@@snip.set_p_level(4)
-	assert_equal(1350000.00, @@snip.base_import_export_cost)
+	assert_equal(675000.00, @@snip.import_cost)
+	
+	# Reset to 0.
+	@@snip.set_p_level(0)
+  end
+  
+  def test_export_cost_scales_with_p_level
+	@@snip.set_p_level(0)
+	assert_equal(5.00, @@snip.export_cost)
+	
+	@@snip.set_p_level(1)
+	assert_equal(500.00, @@snip.export_cost)
+	
+	@@snip.set_p_level(2)
+	assert_equal(9000.00, @@snip.export_cost)
+	
+	@@snip.set_p_level(3)
+	assert_equal(70000.00, @@snip.export_cost)
+	
+	@@snip.set_p_level(4)
+	assert_equal(1350000.00, @@snip.export_cost)
+	
+	# Reset to 0.
+	@@snip.set_p_level(0)
+  end
+  
+  def test_import_cost_for_quantity_errors_if_given_non_numeric
+	assert_raise ArgumentError do
+	  @@snip.import_cost_for_quantity(nil)
+	end
+	
+	assert_raise ArgumentError do
+	  @@snip.import_cost_for_quantity("fail")
+	end
+  end
+  
+  def test_export_cost_for_quantity_errors_if_given_non_numeric
+	assert_raise ArgumentError do
+	  @@snip.export_cost_for_quantity(nil)
+	end
+	
+	assert_raise ArgumentError do
+	  @@snip.export_cost_for_quantity("fail")
+	end
+  end
+  
+  def test_import_cost_for_quantity_scales_with_p_level
+	@@snip.set_p_level(0)
+	assert_equal(25.00, @@snip.import_cost_for_quantity(10))
+	
+	@@snip.set_p_level(1)
+	assert_equal(2500.00, @@snip.import_cost_for_quantity(10))
+	
+	@@snip.set_p_level(2)
+	assert_equal(45000.00, @@snip.import_cost_for_quantity(10))
+	
+	@@snip.set_p_level(3)
+	assert_equal(350000.00, @@snip.import_cost_for_quantity(10))
+	
+	@@snip.set_p_level(4)
+	assert_equal(6750000.00, @@snip.import_cost_for_quantity(10))
+	
+	# Reset to 0.
+	@@snip.set_p_level(0)
+  end
+  
+  def test_export_cost_for_quantity_scales_with_p_level
+	@@snip.set_p_level(0)
+	assert_equal(50.00, @@snip.export_cost_for_quantity(10))
+	
+	@@snip.set_p_level(1)
+	assert_equal(5000.00, @@snip.export_cost_for_quantity(10))
+	
+	@@snip.set_p_level(2)
+	assert_equal(90000.00, @@snip.export_cost_for_quantity(10))
+	
+	@@snip.set_p_level(3)
+	assert_equal(700000.00, @@snip.export_cost_for_quantity(10))
+	
+	@@snip.set_p_level(4)
+	assert_equal(13500000.00, @@snip.export_cost_for_quantity(10))
 	
 	# Reset to 0.
 	@@snip.set_p_level(0)
