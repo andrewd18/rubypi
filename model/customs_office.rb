@@ -1,5 +1,6 @@
 require_relative 'planetary_building.rb'
 require_relative 'unrestricted_storage.rb'
+require_relative 'product.rb'
 
 class CustomsOffice < PlanetaryBuilding
   
@@ -42,5 +43,29 @@ class CustomsOffice < PlanetaryBuilding
 	raise ArgumentError unless ((MIN_TAX_RATE..MAX_TAX_RATE).include?(new_tax_rate))
 	
 	@tax_rate = new_tax_rate
+  end
+  
+  # Sending from launchpad to a customs office is a planetary export.
+  def export_cost_with_tax(product_name, quantity)
+	product_instance = Product.find_by_name(product_name)
+	
+	base_export_cost = product_instance.export_cost_for_quantity(quantity)
+	
+	# Divide by 100.0 to guarantee float.
+	tax_rate_in_decimal = (@tax_rate / 100.0)
+	
+	return (base_export_cost * tax_rate_in_decimal)
+  end
+  
+  # Sending from customs office to a launchpad is a planetary import.
+  def import_cost_with_tax(product_name, quantity)
+	product_instance = Product.find_by_name(product_name)
+	
+	base_import_cost = product_instance.import_cost_for_quantity(quantity)
+	
+	# Divide by 100.0 to guarantee float.
+	tax_rate_in_decimal = (@tax_rate / 100.0)
+	
+	return (base_import_cost * tax_rate_in_decimal)
   end
 end
