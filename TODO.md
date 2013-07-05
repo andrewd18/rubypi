@@ -29,7 +29,7 @@ User Interface Improvements
 * When removing product, let user type in value (along with slider).
 * When transferring product, let user type in value (along with slider).
 * Separate one-time build cost from recurring import/export costs.
-* Make ISK cost display go from K to M to make it more human readable.
+* Create a View Column Renderer that auto-converts raw ISK values to a human-readable value. Use for all views with isk columns.
 * Images
   - Brighten the planet screenshots across the board. Lava, for example, just looks black.
   - Add images for every product. Show where appropriate.
