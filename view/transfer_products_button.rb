@@ -3,10 +3,6 @@ require 'gtk3'
 require_relative 'transfer_products_dialog.rb'
 
 # When clicked, creates a transfer products dialog.
-# If the dialog sends the accepted signal, do the heavy lifting of the transfer at the model level.
-
-# This should be able to handle both expedited transfers and POCO import/exports.
-# Show tax / cost as necessary.
 
 class TransferProductsButton < Gtk::Button
   def initialize(planet_model, source_building = nil, parent_window = nil)
