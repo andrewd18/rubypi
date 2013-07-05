@@ -52,7 +52,6 @@ class TransferProductsSelectQuantityDialog < Gtk::Dialog
 	
 	
 	# Determine if we need to show tax.
-	# If so, create those widgets.
 	if (source_building.respond_to?(:tax_rate) or
 	    destination_building.respond_to?(:tax_rate))
 	  
@@ -64,7 +63,17 @@ class TransferProductsSelectQuantityDialog < Gtk::Dialog
 	  
 	  
 	  @product_quantity_slider.signal_connect("value-changed") do
-		@isk_amount_label.isk_value = product_instance.base_import_export_cost_for_quantity(@product_quantity_slider.value)
+		
+		# When the quantity changes, ask the customs office how much this will be.
+		if (source_building.is_a?(CustomsOffice))
+		  # This is a planetary import.
+		  @isk_amount_label.isk_value = source_building.import_cost_with_tax(product_name, @product_quantity_slider.value)
+		  
+		elsif (destination_building.is_a?(CustomsOffice))
+		  # This is a planetary export.
+		  @isk_amount_label.isk_value = destination_building.export_cost_with_tax(product_name, @product_quantity_slider.value)
+		end
+		
 	  end
 	end
 	
