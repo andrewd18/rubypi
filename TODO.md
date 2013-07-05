@@ -5,19 +5,15 @@ Core Features
 * Building View
   - Add launch-to-space option to Command Centers.
 * Transfer Products Dialog
-  - Show cost to transfer (if applicable).
-  - Make it modal to the parent window.
-  - Add a warning when the user tries add products to a destination that isn't selected yet.
-  - Name should probably expand, not volume or other columns.
-  - Verify import / export ISK cost and scale with set tax rate.
-  - General code cleanup.
+  - Add a warning when the user tries to transfer products to a destination that isn't selected yet.
+  - Add a warning when the user tries to transfer products from one building to itself.
 * Prevent user from adding buildings to a planet that the planet doesn't support.
 * Add links.
 * Add cycle times to all buildings.
+* Add a "pipeline view" or a "chain view" or something that shows the product build cycle. Planet scope only.
 * Add product unit and volume output per hour per building.
 * Warn when there are product overages in the pipeline.
 * Warn when there are product underages in the pipeline.
-* Add a "pipeline view" or a "chain view" or something that shows the product build cycle. Planet scope only.
 * Hook up to EVE character skills.
 * Warn when the settings exceed character skills.
 
@@ -44,6 +40,8 @@ Code Cleanup
 * PlanetImage and BuildingImage
   - Either unify or get rid of Observer calls.
   - Allow nil models without crashing.
+* Allow every widget I create to accept an optional parent_window.
+* Split all my helper GTK subclasses off to their own folder.
 * Unit Tests
   - Figure out how to test event hooks in unit tests so I can fully test views.
   - Keep adding more!
