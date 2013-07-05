@@ -196,7 +196,7 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	
 	# Pop up a dialog asking how many of the selected product.
-	transfer_products_select_quantity_dialog = TransferProductsSelectQuantityDialog.new(self.source, self.destination, selected_product_name)
+	transfer_products_select_quantity_dialog = TransferProductsSelectQuantityDialog.new(self.source, self.destination, selected_product_name, self)
 	
 	transfer_products_select_quantity_dialog.run do |response|
 	  if (response == Gtk::ResponseType::ACCEPT)

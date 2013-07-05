@@ -25,7 +25,7 @@ class EditCustomsOfficeWidget < Gtk::Box
 	
 	# Center column.
 	@stored_products_widget = StoredProductsWidget.new(@building_model)
-	transfer_products_button = TransferProductsButton.new(@building_model.planet, @building_model, nil)
+	transfer_products_button = TransferProductsButton.new(@building_model.planet, @building_model, $ruby_pi_main_gtk_window)
 	
 	
 	# Right column.

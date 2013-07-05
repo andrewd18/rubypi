@@ -44,7 +44,7 @@ class PlanetViewWidget < Gtk::Box
 	@buildings_tree_view = BuildingsTreeView.new(@planet_model)
 	@edit_selected_button = EditSelectedButton.new(@buildings_tree_view)
 	@clear_sort_button = ClearSortButton.new(@buildings_tree_view)
-	transfer_products_button = TransferProductsButton.new(@planet_model)
+	transfer_products_button = TransferProductsButton.new(@planet_model, nil, $ruby_pi_main_gtk_window)
 	
 	# TODO - Determine if I need the auto_scrollbox. Attempt to reduce column width.
 	# TODO - Ugly. Convert to SimpleTable or generally clean up.
