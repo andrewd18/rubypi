@@ -4,8 +4,9 @@ require 'gtk3'
 require_relative 'add_products_widget.rb'
 require_relative 'stored_products_widget.rb'
 require_relative 'transfer_products_button.rb'
+require_relative 'launch_products_to_space_button.rb'
 
-# This widget provides all the options necessary to edit an Extractor.
+# This widget provides all the options necessary to edit a Command Center.
 class EditCommandCenterWidget < Gtk::Box
   
   attr_accessor :building_model
@@ -25,6 +26,7 @@ class EditCommandCenterWidget < Gtk::Box
 	# Center column.
 	@stored_products_widget = StoredProductsWidget.new(@building_model)
 	transfer_products_button = TransferProductsButton.new(@building_model.planet, @building_model, $ruby_pi_main_gtk_window)
+	launch_products_to_space_button = LaunchProductsToSpaceButton.new(@building_model, $ruby_pi_main_gtk_window)
 	
 	
 	# Right column.
@@ -52,6 +54,7 @@ class EditCommandCenterWidget < Gtk::Box
 	center_column.pack_start(@stored_products_widget, :expand => true)
 	button_row = Gtk::Box.new(:horizontal)
 	button_row.pack_end(transfer_products_button, :expand => false)
+	button_row.pack_end(launch_products_to_space_button, :expand => false)
 	center_column.pack_start(button_row, :expand => false)
 	center_column_frame = Gtk::Frame.new
 	center_column_frame.add(center_column)
