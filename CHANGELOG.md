@@ -1,3 +1,15 @@
+Version 0.0.8
+=============
+* Added Player Owned Customs Offices (POCOs).
+* Removed the "expedited transfer" window in favor of a "transfer products" window, which handles both expedited transfers and planet import/exports.
+* Gave Command Centers the ability to launch products to space.
+* Added percentage bars to the overview for planet PG and CPU usage.
+* Added "Input From:" and "Output To:" combo boxes for factories and extractors.
+* Added back-end support for Planetary Links. They don't do anything yet.
+* Ensured pop-up windows are modal.
+* Set sane default values for some display widgets.
+
+
 Version 0.0.7
 =============
 * Fixed a layout bug in the System View and Planet view where widgets wouldn't be sized properly.
