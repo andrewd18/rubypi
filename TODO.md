@@ -2,8 +2,6 @@ Core Features
 =============
 
 * Add CCP disclaimer, etc. to About box.
-* Building View
-  - Add launch-to-space option to Command Centers.
 * Transfer Products Dialog
   - Add a warning when the user tries to transfer products to a destination that isn't selected yet.
   - Add a warning when the user tries to transfer products from one building to itself.
@@ -21,6 +19,7 @@ Core Features
 User Interface Improvements
 ===========================
 
+* When transferring product, allow users to transfer from either side like in EVE, not just left-to-right.
 * When adding product, let user type in value (along with slider).
 * When removing product, let user type in value (along with slider).
 * When transferring product, let user type in value (along with slider).
