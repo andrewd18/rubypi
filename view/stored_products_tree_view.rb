@@ -18,6 +18,9 @@ class StoredProductsTreeView < Gtk::TreeView
 	quantity_column = TextColumn.new("Quantity", 2)
 	volume_column = TextColumn.new("Volume", 3)
 	
+	# Tell the name column to expand before the others do.
+	name_column.expand = true
+	
 	# Pack columns in tree view, left-to-right.
 	self.append_column(icon_column)
 	self.append_column(name_column)
