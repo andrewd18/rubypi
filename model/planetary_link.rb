@@ -9,7 +9,15 @@ class PlanetaryLink < PlanetaryBuilding
   ISK_COST = 0
   BASE_LENGTH = 2
   UPGRADE_LEVEL = 0
+  
+  # TODO:
+  # According to research done on Odyssey 1.0.10,
+  # default transfer volume per hour is 1250 m3 per hour.
+  # 
+  # The value below is from http://wiki.eveuniversity.org/Planetary_Buildings#Planetary_Links
+  # and is probably inaccurate.
   TRANSFER_VOLUME = 250
+  
   
   def initialize
 	@length = BASE_LENGTH
