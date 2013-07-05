@@ -1,14 +1,26 @@
 require "test/unit"
 
 require_relative "../model/command_center.rb"
+require_relative "../model/product.rb"
 
 class TestCaseCommandCenter < Test::Unit::TestCase
   # Run once.
   def self.startup
+	@@character = Product.find_or_create("Character", 0)
+	@@word = Product.find_or_create("Word", 1)
+	@@sentence = Product.find_or_create("Sentence", 2)
+	@@paragraph = Product.find_or_create("Paragraph", 3)
+	@@essay = Product.find_or_create("Essay", 4)
   end
   
   # Run once after all tests.
   def self.shutdown
+	# Cleanup.
+	Product.delete(@@character)
+	Product.delete(@@word)
+	Product.delete(@@sentence)
+	Product.delete(@@paragraph)
+	Product.delete(@@essay)
   end
   
   # Run before every test.
@@ -160,6 +172,50 @@ class TestCaseCommandCenter < Test::Unit::TestCase
   
   def test_name
 	assert_equal("Command Center", @building.name)
+  end
+  
+  def test_launch_to_space_cost_scales_with_p_level
+	# Verify the cost to export all P-levels.
+	#
+	# (1.5 * product.export_cost_for_quantity)
+	
+	character_base_cost_to_export = @@character.export_cost_for_quantity(1)
+	word_base_cost_to_export = @@word.export_cost_for_quantity(1)
+	sentence_base_cost_to_export = @@sentence.export_cost_for_quantity(1)
+	paragraph_base_cost_to_export = @@paragraph.export_cost_for_quantity(1)
+	essay_base_cost_to_export = @@essay.export_cost_for_quantity(1)
+	
+	expected_value = (1.5 * character_base_cost_to_export)
+	assert_equal(expected_value, @building.launch_to_space_cost("Character", 1))
+	
+	expected_value = (1.5 * word_base_cost_to_export)
+	assert_equal(expected_value, @building.launch_to_space_cost("Word", 1))
+	
+	expected_value = (1.5 * sentence_base_cost_to_export)
+	assert_equal(expected_value, @building.launch_to_space_cost("Sentence", 1))
+	
+	expected_value = (1.5 * paragraph_base_cost_to_export)
+	assert_equal(expected_value, @building.launch_to_space_cost("Paragraph", 1))
+	
+	expected_value = (1.5 * essay_base_cost_to_export)
+	assert_equal(expected_value, @building.launch_to_space_cost("Essay", 1))
+  end
+  
+  def test_launch_to_space_cost_scales_with_quantity
+	# Verify the cost to export a P0.
+	#
+	# (1.5) * product.export_cost_for_quantity
+	
+	base_cost_to_export = @@character.export_cost_for_quantity(1)
+	expected_value = (1.5 * base_cost_to_export)
+	
+	assert_equal(expected_value, @building.launch_to_space_cost("Character", 1))
+	
+	# Change quantity and check again.
+	base_cost_to_export = @@character.export_cost_for_quantity(50)
+	expected_value = (1.5 * base_cost_to_export)
+	
+	assert_equal(expected_value, @building.launch_to_space_cost("Character", 50))
   end
   
   # 

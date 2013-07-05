@@ -1,5 +1,6 @@
 require_relative 'planetary_building.rb'
 require_relative 'unrestricted_storage.rb'
+require_relative 'product.rb'
 
 class CommandCenter < PlanetaryBuilding
   
@@ -101,5 +102,16 @@ class CommandCenter < PlanetaryBuilding
 	  # Invalid level passed.
 	  raise ArgumentError, "Passed in level must be between 0 and 5."
 	end
+  end
+  
+  def launch_to_space_cost(product_name, quantity)
+	product_instance = Product.find_by_name(product_name)
+	
+	base_export_cost = product_instance.export_cost_for_quantity(quantity)
+	
+	# Export cost, multiplied by 1.5.
+	launch_cost = (1.5 * base_export_cost)
+	
+	return launch_cost
   end
 end
