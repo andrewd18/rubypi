@@ -169,91 +169,115 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
 	pend("Waiting on research about how this should actually scale.")
   end
 
-  # In addition to the base rate to build a link (10 PG+15 CPU), it also costs 0.20 cpu and 0.15 power per kilometer. 
   def test_pg_usage_scales_with_link_length
-	pend("Waiting on research about how this should actually scale.")
-	assert_equal(2, @link.length)
-	assert_equal(10, @link.powergrid_usage)
+	# Scale according to the table at http://wiki.eveuniversity.org/Planetary_Buildings#Planetary_Links
+	#
+	# PG Cost = ((Link Length * 0.15) + Base PG Cost of 10)
+	# 
+	# While not perfectly accurate (off by 9 pg at 40,000 km), it's "close enough" as of Odyssey 1.0.10
 	
-	# Scale according to http://wiki.eveuniversity.org/Planetary_Buildings#Planetary_Links
-	# BUG - That article is full of shit as this doesn't scale evenly at all.
-	#       Unless it scales unevenly like cycle time. Grr.
+	# I only test against truncated values here because while EVE may use floats in the background,
+	# it displays ints in the UI.
+	
 	@link.length = 2.5
-	assert_equal(11, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 10
-	assert_equal(12, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 20
-	assert_equal(14, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 50
-	assert_equal(18, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 100
-	assert_equal(26, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 200
-	assert_equal(41, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 500
-	assert_equal(86, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 1000
-	assert_equal(160, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 2000
-	assert_equal(311, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 5000
-	assert_equal(761, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
 	
 	@link.length = 40000
-	assert_equal(6001, @link.powergrid_usage)
+	expected_value = (@link.length * 0.15 + PlanetaryLink::BASE_POWERGRID_USAGE)
+	assert_equal(expected_value.to_int, @link.powergrid_usage)
   end
   
   # In addition to the base rate to build a link (10 PG+15 CPU), it also costs 0.20 cpu and 0.15 power per kilometer. 
   def test_cpu_usage_scales_with_link_length
-	pend("Waiting on research about how this should actually scale.")
-	# Default
-	assert_equal(2, @link.length)
-	assert_equal(15, @link.cpu_usage)
+	# Scale according to the table at http://wiki.eveuniversity.org/Planetary_Buildings#Planetary_Links
+	#
+	# CPU Cost = ((Link Length * 0.20) + Base CPU Cost of 15)
+	# 
+	# While not perfectly accurate (off by 1 CPU at 40,000 km), it's "close enough" as of Odyssey 1.0.10
 	
-	# Scale according to http://wiki.eveuniversity.org/Planetary_Buildings#Planetary_Links
-	# BUG - That article is full of shit as this doesn't scale evenly at all.
-	#       Unless it scales unevenly like cycle time. Grr.
+	# I only test against truncated values here because while EVE may use floats in the background,
+	# it displays ints in the UI.
+	
 	@link.length = 2.5
-	assert_equal(16, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 10
-	assert_equal(18, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 20
-	assert_equal(20, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 50
-	assert_equal(26, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 100
-	assert_equal(36, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 200
-	assert_equal(56, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 500
-	assert_equal(116, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 1000
-	assert_equal(215, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 2000
-	assert_equal(416, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 5000
-	assert_equal(1016, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
 	
 	@link.length = 40000
-	assert_equal(8016, @link.cpu_usage)
+	expected_value = (@link.length * 0.20 + PlanetaryLink::BASE_CPU_USAGE)
+	assert_equal(expected_value.to_int, @link.cpu_usage)
   end
   
   # TODO - Not sure if links are free.

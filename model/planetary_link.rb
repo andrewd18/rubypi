@@ -61,15 +61,17 @@ class PlanetaryLink < PlanetaryBuilding
   end
   
   def powergrid_usage
-	scaled_powergrid_usage = (BASE_POWERGRID_USAGE + ((@length - BASE_LENGTH) * 0.1539))
+	scaled_powergrid_usage = ((@length * 0.15) + BASE_POWERGRID_USAGE)
+	truncated_to_nearest_int = scaled_powergrid_usage.to_int
 	
-	return scaled_powergrid_usage
+	return truncated_to_nearest_int
   end
   
   def cpu_usage
-	scaled_cpu_usage = (BASE_CPU_USAGE + ((@length - BASE_LENGTH) * 0.1575))
+	scaled_cpu_usage = ((@length * 0.20) + BASE_CPU_USAGE)
+	truncated_to_nearest_int = scaled_cpu_usage.to_int
 	
-	return scaled_cpu_usage
+	return truncated_to_nearest_int
   end
   
   def powergrid_provided
