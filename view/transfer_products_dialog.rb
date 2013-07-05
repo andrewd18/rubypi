@@ -6,6 +6,8 @@ require_relative 'transfer_products_select_quantity_dialog.rb'
 
 class TransferProductsDialog < Gtk::Dialog
   
+  REQUESTED_TREE_VIEW_HEIGHT = 100
+  
   def initialize(planet_model, source_building = nil, parent_window = nil)
 	title = "Transfer Products"
 	flags = Gtk::Dialog::Flags::MODAL
@@ -40,6 +42,7 @@ class TransferProductsDialog < Gtk::Dialog
 	end
 	
 	source_stored_products_scrollbox = Gtk::ScrolledWindow.new
+	source_stored_products_scrollbox.height_request = REQUESTED_TREE_VIEW_HEIGHT
 	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
 	source_stored_products_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	
@@ -49,6 +52,7 @@ class TransferProductsDialog < Gtk::Dialog
 	@destination_stored_products_tree_view = StoredProductsTreeView.new
 	
 	destination_stored_products_scrollbox = Gtk::ScrolledWindow.new
+	destination_stored_products_scrollbox.height_request = REQUESTED_TREE_VIEW_HEIGHT
 	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
 	destination_stored_products_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	
@@ -166,6 +170,12 @@ class TransferProductsDialog < Gtk::Dialog
 	# TODO: Give a message to the user.
 	# Error cleanly if there's no destination.
 	return unless (self.destination != nil)
+	
+	# TODO: Give a message to the user.
+	# Error cleanly if the source is the destination.
+	if (self.source == self.destination)
+	  return
+	end
 	
 	# Figure out what the user clicked on.
 	row = @source_stored_products_tree_view.selection
