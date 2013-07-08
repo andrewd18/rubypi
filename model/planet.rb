@@ -9,6 +9,7 @@ require_relative 'extractor.rb'
 require_relative 'high_tech_industrial_facility.rb'
 require_relative 'launchpad.rb'
 require_relative 'storage_facility.rb'
+require_relative 'planetary_link.rb'
 
 # A planet contains a series of buildings added by the user.
 # A planet needs to observe all of its buildings for changes.
@@ -442,6 +443,22 @@ class Planet
 	end
 	
 	return list_of_aggregate_storages
+  end
+  
+  def links
+	list_of_links = Array.new
+	
+	@buildings.each do |building|
+	  if (building.class == PlanetaryLink)
+		list_of_links << building
+	  end
+	end
+	
+	return list_of_links
+  end
+  
+  def num_links
+	self.links.count
   end
   
   def remove_planet

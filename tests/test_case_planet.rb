@@ -703,6 +703,27 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(1, @planet.num_pocos)
   end
   
+  def test_links_returns_array_of_links
+	array_of_links = Array.new
+	
+	5.times do 
+	  link = PlanetaryLink.new
+	  array_of_links << link
+	  @planet.add_building(link)
+	end
+	
+	assert_equal(array_of_links, @planet.links)
+  end
+  
+  def test_number_of_links_scales_with_number_of_links
+	5.times do 
+	  link = PlanetaryLink.new
+	  @planet.add_building(link)
+	end
+	
+	assert_equal(5, @planet.num_links)
+  end
+  
   #
   # Observable tests
   #
