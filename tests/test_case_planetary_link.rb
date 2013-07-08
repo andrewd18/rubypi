@@ -1,5 +1,6 @@
 require "test/unit"
 
+require_relative "../model/planet.rb"
 require_relative "../model/planetary_link.rb"
 
 class TestCasePlanetaryLink < Test::Unit::TestCase
@@ -13,7 +14,8 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   
   # Run before every test.
   def setup
-	@link = PlanetaryLink.new
+	@planet = Planet.new("Lava")
+	@link = PlanetaryLink.new(@planet)
   end
   
   # Run after every test.
@@ -264,5 +266,9 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   
   def test_transfer_volume_does_not_scale_with_link_length
 	pend("Waiting on research about how this should actually scale.")
+  end
+  
+  def test_a_link_can_tell_you_what_planet_it_is_on
+	assert_equal(@planet, @link.planet)
   end
 end

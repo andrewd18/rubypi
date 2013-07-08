@@ -16,14 +16,19 @@ class PlanetaryLink
   # and is probably inaccurate.
   TRANSFER_VOLUME = 250
   
+  attr_reader :planet
   
-  def initialize
+  def initialize(planet)
+	# Hard coded options.
 	@length = MIN_LENGTH
 	@upgrade_level = UPGRADE_LEVEL
 	@powergrid_usage = BASE_POWERGRID_USAGE
 	@cpu_usage = BASE_CPU_USAGE
 	@isk_cost = ISK_COST
 	@transfer_volume = TRANSFER_VOLUME
+	
+	# Variable options.
+	@planet = planet
 	
 	return self
   end

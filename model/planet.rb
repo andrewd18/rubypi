@@ -9,6 +9,7 @@ require_relative 'extractor.rb'
 require_relative 'high_tech_industrial_facility.rb'
 require_relative 'launchpad.rb'
 require_relative 'storage_facility.rb'
+require_relative 'planetary_link.rb'
 
 # A planet contains a series of buildings added by the user.
 # A planet needs to observe all of its buildings for changes.
@@ -18,6 +19,7 @@ class Planet
   include Observable
   
   attr_reader :buildings
+  attr_reader :links
   attr_accessor :pi_configuration
   
   PLANET_TYPES = ["Uncolonized",
@@ -40,12 +42,14 @@ class Planet
 									  "Plasma"]
   
   
-  def initialize(planet_type, planet_name = nil, planet_buildings = Array.new, pi_configuration = nil)
+  def initialize(planet_type, planet_name = nil, planet_buildings = Array.new, planet_links = Array.new, pi_configuration = nil)
 	@type = planet_type
 	
 	@name = planet_name
 	
 	@buildings = planet_buildings
+	
+	@links = planet_links
 	
 	@pi_configuration = pi_configuration
 	
@@ -442,6 +446,33 @@ class Planet
 	end
 	
 	return list_of_aggregate_storages
+  end
+  
+  # Creates a link between node a and b.
+  def add_link
+	# TODO: Add node_a and node_b params.
+	new_link = PlanetaryLink.new(self)
+	
+	@links << new_link
+	
+	return new_link
+  end
+  
+  # Finds a link between node a and b.
+  def find_link
+	# TODO: Add node_a and node_b params.
+	
+  end
+  
+  # Removes a particular link.
+  def remove_link(link_instance)
+	# Remove it from our list.
+	# Lean on Array.delete
+	@links.delete(link_instance)
+  end
+  
+  def num_links
+	return @links.count
   end
   
   def remove_planet

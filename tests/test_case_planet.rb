@@ -703,6 +703,49 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(1, @planet.num_pocos)
   end
   
+  def test_can_add_a_link
+	added_link = @planet.add_link
+	assert_true(added_link.is_a?(PlanetaryLink))
+  end
+  
+  def test_links_gives_array_of_links
+	first_link = @planet.add_link
+	second_link = @planet.add_link
+	third_link = @planet.add_link
+	
+	known_links = [first_link, second_link, third_link]
+	
+	assert_equal(known_links, @planet.links)
+  end
+  
+  def test_can_find_a_link
+	pend
+  end
+  
+  def test_can_remove_a_link
+	first_link = @planet.add_link
+	second_link = @planet.add_link
+	third_link = @planet.add_link
+	
+	known_links = [first_link, second_link, third_link]
+	known_links_without_two = [first_link, third_link]
+	
+	assert_equal(known_links, @planet.links)
+	
+	@planet.remove_link(second_link)
+	
+	assert_equal(known_links_without_two, @planet.links)
+  end
+  
+  def test_num_links_scales_with_number_of_links
+	5.times do
+	  @planet.add_link
+	end
+	
+	assert_equal(5, @planet.num_links)
+  end
+  
+  
   #
   # Observable tests
   #
