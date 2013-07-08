@@ -15,19 +15,11 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   
   # Run before every test.
   def setup
-	planet = Planet.new("Lava")
-	@link = PlanetaryLink.new(planet)
+	@link = PlanetaryLink.new
   end
   
   # Run after every test.
   def teardown
-  end
-  
-  def test_planet_reader_returns_planet
-	test_planet = Planet.new("Gas")
-	new_link = PlanetaryLink.new(test_planet)
-	
-	assert_equal(test_planet, new_link.planet)
   end
   
   def test_set_start_node_errors_unless_planetary_building_or_nil

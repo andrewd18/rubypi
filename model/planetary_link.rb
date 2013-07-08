@@ -19,7 +19,7 @@ class PlanetaryLink < PlanetaryBuilding
   TRANSFER_VOLUME = 250
   
   
-  def initialize(planet, start_node = nil, end_node = nil)
+  def initialize(planet = nil, start_node = nil, end_node = nil)
 	@length = BASE_LENGTH
 	@upgrade_level = UPGRADE_LEVEL
 	@powergrid_usage = BASE_POWERGRID_USAGE
