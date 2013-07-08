@@ -16,10 +16,27 @@ module ProductionCycle
 	if ((new_input_building.nil?) or
 		(new_input_building.respond_to?("remove_qty_of_product")))
 	  
+	  # Delete the old planetary link.
+	  if (self.input_link)
+		self.planet.remove_link(self.input_link)
+	  end
+	  
+	  # Create the new association.
 	  @production_cycle_input_building = new_input_building
+	  
+	  # Create the new planetary link.
+	  self.planet.find_or_create_link(@production_cycle_input_building, self)
 	else
 	   raise ArgumentError
 	end
+  end
+  
+  def input_link
+	# An input link is a link that connects our input building to ourselves.
+	start_node = @production_cycle_input_building
+	end_node = self
+	
+	return self.planet.find_link(start_node, end_node)
   end
   
   
@@ -33,12 +50,28 @@ module ProductionCycle
 	if ((new_output_building.nil?) or
 		(new_output_building.respond_to?("store_product")))
 	  
+	  # Delete the old planetary link.
+	  if (self.output_link)
+		self.planet.remove_link(self.output_link)
+	  end
+	  
+	  # Create the association.
 	  @production_cycle_output_building = new_output_building
+	  
+	  # Create the new planetary link.
+	  self.planet.find_or_create_link(self, @production_cycle_output_building)
 	else
 	   raise ArgumentError
 	end
   end
   
+  def output_link
+	# An output link is a link that connects ourselves to our output building.
+	start_node = self
+	end_node = @production_cycle_output_building
+	
+	return self.planet.find_link(start_node, end_node)
+  end
   
   
   # Cycle Time

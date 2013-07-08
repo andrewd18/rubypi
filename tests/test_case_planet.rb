@@ -206,6 +206,10 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(nil, command_center.planet)
   end
   
+  def test_any_associated_planetary_links_are_removed_when_building_is_removed
+	pend("This functionality may get reworked.")
+  end
+  
   def test_can_remove_all_buildings
 	command_center = CommandCenter.new
 	extractor = Extractor.new
