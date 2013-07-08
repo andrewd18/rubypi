@@ -382,16 +382,31 @@ class Planet
 	self.aggregate_launchpads_ccs_storages.count
   end
   
-  def links
-	list_of_links = Array.new
-	
-	@buildings.each do |building|
-	  if (building.class == PlanetaryLink)
-		list_of_links << building
+  def find_or_create_link(start_node, end_node)
+	# Check for duplicates and if found, pass that back.
+	self.links.each do |link|
+	  if ((link.start_node == start_node) &&
+		  (link.end_node == end_node))
+		
+		# Duplicate found. Pass it back.
+		return link
 	  end
 	end
 	
-	return list_of_links
+	# Otherwise, create a new link and pass that back.
+	new_link = PlanetaryLink.new(self, start_node, end_node)
+	self.links << new_link
+	
+	return new_link
+  end
+  
+  def remove_link(link_instance)
+	# Lean on Array.delete
+	self.links.delete(link_instance)
+  end
+  
+  def links
+	return @links ||= Array.new
   end
   
   def num_links

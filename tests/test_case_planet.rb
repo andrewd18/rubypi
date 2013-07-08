@@ -705,20 +705,60 @@ class TestCasePlanet < Test::Unit::TestCase
   
   def test_links_returns_array_of_links
 	array_of_links = Array.new
+	# Should both be empty.
+	assert_equal(array_of_links, @planet.links)
 	
-	5.times do 
-	  link = PlanetaryLink.new
+	5.times do
+	  start_node = StorageFacility.new
+	  end_node = StorageFacility.new
+	  
+	  link = @planet.find_or_create_link(start_node, end_node)
 	  array_of_links << link
-	  @planet.add_building(link)
 	end
 	
+	# Compare the lists.
 	assert_equal(array_of_links, @planet.links)
   end
   
+  def test_find_or_create_link_can_find_matching_link
+	start_node = StorageFacility.new
+	end_node = StorageFacility.new
+	
+	assert_equal(0, @planet.num_links)
+	link = @planet.find_or_create_link(start_node, end_node)
+	assert_equal(1, @planet.num_links)
+	
+	found_link = @planet.find_or_create_link(start_node, end_node)
+	assert_equal(1, @planet.num_links)
+	
+	assert_equal(link, found_link)
+  end
+  
+  def test_find_or_create_link_creates_link_if_not_found
+	start_node = StorageFacility.new
+	end_node = StorageFacility.new
+	
+	different_start_node = StorageFacility.new
+	different_end_node = StorageFacility.new
+	
+	# Two links with both different nodes should not match.
+	known_link = @planet.find_or_create_link(start_node, end_node)
+	created_link = @planet.find_or_create_link(different_start_node, different_end_node)
+	refute_equal(known_link, created_link)
+	
+	# Two links with only one similar node should not match.
+	created_link = @planet.find_or_create_link(different_start_node, end_node)
+	refute_equal(known_link, created_link)
+	
+	created_link = @planet.find_or_create_link(start_node, different_end_node)
+	refute_equal(known_link, created_link)
+  end
+  
   def test_number_of_links_scales_with_number_of_links
-	5.times do 
-	  link = PlanetaryLink.new
-	  @planet.add_building(link)
+	5.times do |time|
+	  start_node = StorageFacility.new
+	  end_node = StorageFacility.new
+	  @planet.find_or_create_link(start_node, end_node)
 	end
 	
 	assert_equal(5, @planet.num_links)
