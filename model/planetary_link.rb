@@ -1,13 +1,11 @@
-require_relative 'planetary_building.rb'
 
-class PlanetaryLink < PlanetaryBuilding
+class PlanetaryLink
   
   BASE_POWERGRID_USAGE = 10
   BASE_CPU_USAGE = 15
-  POWERGRID_PROVIDED = 0
-  CPU_PROVIDED = 0
+  MIN_LENGTH = 2 #km
+  MAX_LENGTH = 40000 #km
   ISK_COST = 0
-  BASE_LENGTH = 2
   UPGRADE_LEVEL = 0
   
   # TODO:
@@ -20,12 +18,10 @@ class PlanetaryLink < PlanetaryBuilding
   
   
   def initialize
-	@length = BASE_LENGTH
+	@length = MIN_LENGTH
 	@upgrade_level = UPGRADE_LEVEL
 	@powergrid_usage = BASE_POWERGRID_USAGE
 	@cpu_usage = BASE_CPU_USAGE
-	@powergrid_provided = POWERGRID_PROVIDED
-	@cpu_provided = CPU_PROVIDED
 	@isk_cost = ISK_COST
 	@transfer_volume = TRANSFER_VOLUME
 	
@@ -37,7 +33,7 @@ class PlanetaryLink < PlanetaryBuilding
   end
   
   def length=(new_length)
-	if ((2..40000).include?(new_length))
+	if ((MIN_LENGTH..MAX_LENGTH).include?(new_length))
 	  @length = new_length
 	end
   end
@@ -80,14 +76,6 @@ class PlanetaryLink < PlanetaryBuilding
 	truncated_to_nearest_int = scaled_cpu_usage.to_int
 	
 	return truncated_to_nearest_int
-  end
-  
-  def powergrid_provided
-	return @powergrid_provided
-  end
-  
-  def cpu_provided
-	return @cpu_provided
   end
   
   def isk_cost

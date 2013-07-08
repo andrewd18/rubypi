@@ -21,19 +21,6 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   end
   
   
-  
-  def test_something
-	#assert_equal("A", "A")
-	#assert_true(true)
-	#assert_false(false)
-	#assert_raise SomethingError do
-	  #assert_equal("A", "B")
-	#end
-  end
-  
-  
-  
-  
   def test_can_read_link_level
 	assert_equal(0, @link.upgrade_level)
   end
@@ -143,19 +130,6 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
 	assert_equal(15, @link.cpu_usage)
   end
   
-  def test_link_powergrid_provided_is_zero
-	assert_equal(0, @link.powergrid_provided)
-  end
-  
-  def test_link_cpu_provided_is_zero
-	assert_equal(0, @link.cpu_provided)
-  end
-  
-  # TODO - Not sure if links are free.
-  def test_base_isk_cost_is_zero
-	assert_equal(0, @link.isk_cost)
-  end
-  
   def test_base_transfer_volume_is_two_hundred_fifty_meters_cubed
 	assert_equal(250, @link.transfer_volume)
   end
@@ -164,7 +138,6 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
 	pend("Waiting on research about how this should actually scale.")
   end
   
-
   def test_cpu_usage_scales_with_link_level
 	pend("Waiting on research about how this should actually scale.")
   end
@@ -280,10 +253,8 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
 	assert_equal(expected_value.to_int, @link.cpu_usage)
   end
   
-  # TODO - Not sure if links are free.
-  def test_isk_cost_does_not_scale_with_link_length
-	@link.length = 40000
-	
+  def test_isk_cost_is_zero
+	# Links cost nothing to buy or to upgrade
 	assert_equal(0, @link.isk_cost)
   end
   
