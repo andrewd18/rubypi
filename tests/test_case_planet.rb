@@ -720,6 +720,17 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(array_of_links, @planet.links)
   end
   
+  def test_find_link_can_find_matching_link
+	start_node = StorageFacility.new
+	end_node = StorageFacility.new
+	
+	assert_equal(0, @planet.num_links)
+	link = @planet.find_or_create_link(start_node, end_node)
+	found_link = @planet.find_link(start_node, end_node)
+	
+	assert_equal(link, found_link)
+  end
+  
   def test_find_or_create_link_can_find_matching_link
 	start_node = StorageFacility.new
 	end_node = StorageFacility.new
