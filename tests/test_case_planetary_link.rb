@@ -1,5 +1,7 @@
 require "test/unit"
 
+require_relative "../model/planet.rb"
+require_relative "../model/storage_facility.rb"
 require_relative "../model/planetary_link.rb"
 
 class TestCasePlanetaryLink < Test::Unit::TestCase
@@ -13,26 +15,76 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   
   # Run before every test.
   def setup
-	@link = PlanetaryLink.new
+	planet = Planet.new("Lava")
+	@link = PlanetaryLink.new(planet)
   end
   
   # Run after every test.
   def teardown
   end
   
-  
-  
-  def test_something
-	#assert_equal("A", "A")
-	#assert_true(true)
-	#assert_false(false)
-	#assert_raise SomethingError do
-	  #assert_equal("A", "B")
-	#end
+  def test_planet_reader_returns_planet
+	test_planet = Planet.new("Gas")
+	new_link = PlanetaryLink.new(test_planet)
+	
+	assert_equal(test_planet, new_link.planet)
   end
   
+  def test_set_start_node_errors_unless_planetary_building_or_nil
+	assert_raise ArgumentError do
+	  @link.start_node = "fail"
+	end
+	
+	assert_raise ArgumentError do
+	  @link.start_node = Planet.new("Gas")
+	end
+  end
   
+  def test_set_end_node_errors_unless_planetary_building_or_nil
+	assert_raise ArgumentError do
+	  @link.end_node = "fail"
+	end
+	
+	assert_raise ArgumentError do
+	  @link.end_node = Planet.new("Gas")
+	end
+  end
   
+  def test_start_node_reader_returns_planetary_building_or_nil
+	storage_facility = StorageFacility.new
+	
+	@link.start_node = storage_facility
+	
+	assert_equal(storage_facility, @link.start_node)
+  end
+  
+  def test_end_node_reader_returns_planetary_building_or_nil
+	storage_facility = StorageFacility.new
+	
+	@link.end_node = storage_facility
+	
+	assert_equal(storage_facility, @link.end_node)
+  end
+  
+  def test_cannot_set_end_node_to_same_building_as_start_node
+	storage_facility = StorageFacility.new
+	
+	@link.start_node = storage_facility
+	
+	assert_raise ArgumentError do
+	  @link.end_node = storage_facility
+	end
+  end
+  
+  def test_cannot_set_start_node_to_same_building_as_end_node
+	storage_facility = StorageFacility.new
+	
+	@link.end_node = storage_facility
+	
+	assert_raise ArgumentError do
+	  @link.start_node = storage_facility
+	end
+  end
   
   def test_can_read_link_level
 	assert_equal(0, @link.upgrade_level)

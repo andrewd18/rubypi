@@ -19,7 +19,7 @@ class PlanetaryLink < PlanetaryBuilding
   TRANSFER_VOLUME = 250
   
   
-  def initialize
+  def initialize(planet, start_node = nil, end_node = nil)
 	@length = BASE_LENGTH
 	@upgrade_level = UPGRADE_LEVEL
 	@powergrid_usage = BASE_POWERGRID_USAGE
@@ -28,6 +28,10 @@ class PlanetaryLink < PlanetaryBuilding
 	@cpu_provided = CPU_PROVIDED
 	@isk_cost = ISK_COST
 	@transfer_volume = TRANSFER_VOLUME
+	
+	self.planet = planet
+	self.start_node = start_node
+	self.end_node = end_node
 	
 	return self
   end
@@ -92,6 +96,39 @@ class PlanetaryLink < PlanetaryBuilding
   
   def isk_cost
 	return @isk_cost
+  end
+  
+  def start_node
+	return @start_node
+  end
+  
+  def start_node=(new_start_node)
+	# Param checks.
+	raise ArgumentError unless ((new_start_node.nil?) or (new_start_node.is_a?(PlanetaryBuilding)))
+	
+	# If we have an end node, check it against the new_start_node.
+	if ((self.end_node != nil) and 
+	    (self.end_node == new_start_node))
+	  raise ArgumentError, "The start node cannot be the same as the end node."
+	else
+	  @start_node = new_start_node
+	end
+  end
+  
+  def end_node
+	return @end_node
+  end
+  
+  def end_node=(new_end_node)
+	raise ArgumentError unless ((new_end_node.nil?) or (new_end_node.is_a?(PlanetaryBuilding)))
+	
+	# If we have a start node, check it against the new_end_node.
+	if ((self.start_node != nil) and 
+	    (self.start_node == new_end_node))
+	  raise ArgumentError, "The end node cannot be the same as the start node."
+	else
+	  @end_node = new_end_node
+	end
   end
   
   def transfer_volume
