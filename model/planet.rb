@@ -261,19 +261,7 @@ class Planet
   end
   
   def num_buildings
-	return @buildings.count
-  end
-  
-  def num_command_centers
-	count = 0
-	
-	@buildings.each do |building|
-	  if (building.class == CommandCenter)
-		count += 1
-	  end
-	end
-	
-	return count
+	self.buildings.count
   end
   
   def command_centers
@@ -288,16 +276,8 @@ class Planet
 	return list_of_command_centers
   end
   
-  def num_extractors
-	count = 0
-	
-	@buildings.each do |building|
-	  if (building.class == Extractor)
-		count += 1
-	  end
-	end
-	
-	return count
+  def num_command_centers
+	self.command_centers.count
   end
   
   def extractors
@@ -312,19 +292,8 @@ class Planet
 	return list_of_extractors
   end
   
-  def num_factories
-	count = 0
-	
-	@buildings.each do |building|
-	  if ((building.class == BasicIndustrialFacility) ||
-	      (building.class == HighTechIndustrialFacility) ||
-	      (building.class == AdvancedIndustrialFacility))
-		
-		count += 1
-	  end
-	end
-	
-	return count
+  def num_extractors
+	self.extractors.count
   end
   
   def factories
@@ -341,16 +310,8 @@ class Planet
 	return list_of_factories
   end
   
-  def num_launchpads
-	count = 0
-	
-	@buildings.each do |building|
-	  if (building.class == Launchpad)
-		count += 1
-	  end
-	end
-	
-	return count
+  def num_factories
+	self.factories.count
   end
   
   def launchpads
@@ -365,16 +326,8 @@ class Planet
 	return list_of_launchpads
   end
   
-  def num_storages
-	count = 0
-	
-	@buildings.each do |building|
-	  if (building.class == StorageFacility)
-		count += 1
-	  end
-	end
-	
-	return count
+  def num_launchpads
+	self.launchpads.count
   end
   
   def storages
@@ -387,6 +340,10 @@ class Planet
 	end
 	
 	return list_of_storages
+  end
+  
+  def num_storages
+	self.storages.count
   end
   
   def pocos
@@ -402,31 +359,7 @@ class Planet
   end
   
   def num_pocos
-	count = 0
-	
-	@buildings.each do |building|
-	  if (building.class == CustomsOffice)
-		count += 1
-	  end
-	end
-	
-	return count
-  end
-  
-  def num_aggregate_launchpads_ccs_storages
-	count = 0
-	
-	@buildings.each do |building|
-	  if ((building.class == StorageFacility) ||
-	      (building.class == CommandCenter) ||
-	      (building.class == Launchpad) ||
-	      (building.class == CustomsOffice))
-		
-		count += 1
-	  end
-	end
-	
-	return count
+	self.pocos.count
   end
   
   def aggregate_launchpads_ccs_storages
@@ -443,6 +376,10 @@ class Planet
 	end
 	
 	return list_of_aggregate_storages
+  end
+  
+  def num_aggregate_launchpads_ccs_storages
+	self.aggregate_launchpads_ccs_storages.count
   end
   
   def links
