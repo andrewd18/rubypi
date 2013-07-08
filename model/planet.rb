@@ -449,19 +449,27 @@ class Planet
   end
   
   # Creates a link between node a and b.
-  def add_link
-	# TODO: Add node_a and node_b params.
-	new_link = PlanetaryLink.new(self)
+  def add_link(source_building, destination_building)
+	new_link = PlanetaryLink.new(self, source_building, destination_building)
 	
 	@links << new_link
 	
 	return new_link
   end
   
-  # Finds a link between node a and b.
-  def find_link
-	# TODO: Add node_a and node_b params.
+  # Finds all links connected to the given building.
+  def find_links_connected_to(building)
+	connected_links = Array.new
 	
+	@links.each do |link|
+	  if ((link.source_building == building) or
+	      (link.destination_building == building))
+		
+		connected_links << link
+	  end
+	end
+	
+	return connected_links
   end
   
   # Removes a particular link.

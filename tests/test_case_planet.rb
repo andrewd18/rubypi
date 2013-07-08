@@ -704,14 +704,24 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_can_add_a_link
-	added_link = @planet.add_link
+	storage_facility_a = StorageFacility.new
+	storage_facility_b = StorageFacility.new
+	
+	added_link = @planet.add_link(storage_facility_a, storage_facility_b)
 	assert_true(added_link.is_a?(PlanetaryLink))
   end
   
   def test_links_gives_array_of_links
-	first_link = @planet.add_link
-	second_link = @planet.add_link
-	third_link = @planet.add_link
+	storage_facility_a = StorageFacility.new
+	storage_facility_b = StorageFacility.new
+	launchpad_a = Launchpad.new
+	launchpad_b = Launchpad.new
+	extractor_a = Extractor.new
+	extractor_b = Extractor.new
+	
+	first_link = @planet.add_link(storage_facility_a, storage_facility_b)
+	second_link = @planet.add_link(launchpad_a, launchpad_b)
+	third_link = @planet.add_link(extractor_a, extractor_b)
 	
 	known_links = [first_link, second_link, third_link]
 	
@@ -719,13 +729,34 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_can_find_a_link
-	pend
+	storage_facility_a = StorageFacility.new
+	storage_facility_b = StorageFacility.new
+	launchpad_a = Launchpad.new
+	launchpad_b = Launchpad.new
+	extractor_a = Extractor.new
+	extractor_b = Extractor.new
+	
+	first_link = @planet.add_link(storage_facility_a, storage_facility_b)
+	second_link = @planet.add_link(launchpad_a, launchpad_b)
+	third_link = @planet.add_link(extractor_a, extractor_b)
+	fourth_link = @planet.add_link(extractor_b, storage_facility_b)
+	
+	assert_equal([third_link], @planet.find_links_connected_to(extractor_a))
+	assert_equal([third_link, fourth_link], @planet.find_links_connected_to(extractor_b))
+	assert_equal([first_link, fourth_link], @planet.find_links_connected_to(storage_facility_b))
   end
   
   def test_can_remove_a_link
-	first_link = @planet.add_link
-	second_link = @planet.add_link
-	third_link = @planet.add_link
+	storage_facility_a = StorageFacility.new
+	storage_facility_b = StorageFacility.new
+	launchpad_a = Launchpad.new
+	launchpad_b = Launchpad.new
+	extractor_a = Extractor.new
+	extractor_b = Extractor.new
+	
+	first_link = @planet.add_link(storage_facility_a, storage_facility_b)
+	second_link = @planet.add_link(launchpad_a, launchpad_b)
+	third_link = @planet.add_link(extractor_a, extractor_b)
 	
 	known_links = [first_link, second_link, third_link]
 	known_links_without_two = [first_link, third_link]
@@ -738,11 +769,18 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_num_links_scales_with_number_of_links
-	5.times do
-	  @planet.add_link
-	end
+	storage_facility_a = StorageFacility.new
+	storage_facility_b = StorageFacility.new
+	launchpad_a = Launchpad.new
+	launchpad_b = Launchpad.new
+	extractor_a = Extractor.new
+	extractor_b = Extractor.new
 	
-	assert_equal(5, @planet.num_links)
+	first_link = @planet.add_link(storage_facility_a, storage_facility_b)
+	second_link = @planet.add_link(launchpad_a, launchpad_b)
+	third_link = @planet.add_link(extractor_a, extractor_b)
+	
+	assert_equal(3, @planet.num_links)
   end
   
   

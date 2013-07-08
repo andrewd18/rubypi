@@ -17,8 +17,10 @@ class PlanetaryLink
   TRANSFER_VOLUME = 250
   
   attr_reader :planet
+  attr_reader :source_building
+  attr_reader :destination_building
   
-  def initialize(planet)
+  def initialize(planet, source_building, destination_building)
 	# Hard coded options.
 	@length = MIN_LENGTH
 	@upgrade_level = UPGRADE_LEVEL
@@ -27,8 +29,13 @@ class PlanetaryLink
 	@isk_cost = ISK_COST
 	@transfer_volume = TRANSFER_VOLUME
 	
+	# Error checking before variables.
+	raise ArgumentError, "Destination cannot be the same as source." unless (source_building != destination_building)
+	
 	# Variable options.
 	@planet = planet
+	@source_building = source_building
+	@destination_building = destination_building
 	
 	return self
   end

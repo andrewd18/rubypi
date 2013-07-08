@@ -1,6 +1,7 @@
 require "test/unit"
 
 require_relative "../model/planet.rb"
+require_relative "../model/storage_facility.rb"
 require_relative "../model/planetary_link.rb"
 
 class TestCasePlanetaryLink < Test::Unit::TestCase
@@ -15,7 +16,12 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   # Run before every test.
   def setup
 	@planet = Planet.new("Lava")
-	@link = PlanetaryLink.new(@planet)
+	@storage_facility_a = StorageFacility.new
+	@storage_facility_b = StorageFacility.new
+	@storage_facility_a.planet = @planet
+	@storage_facility_b.planet = @planet
+	
+	@link = PlanetaryLink.new(@planet, @storage_facility_a, @storage_facility_b)
   end
   
   # Run after every test.
