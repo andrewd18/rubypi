@@ -728,7 +728,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(known_links, @planet.links)
   end
   
-  def test_can_find_a_link
+  def test_can_find_all_links_for_a_building
 	storage_facility_a = StorageFacility.new
 	storage_facility_b = StorageFacility.new
 	launchpad_a = Launchpad.new
@@ -744,6 +744,34 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal([third_link], @planet.find_links_connected_to(extractor_a))
 	assert_equal([third_link, fourth_link], @planet.find_links_connected_to(extractor_b))
 	assert_equal([first_link, fourth_link], @planet.find_links_connected_to(storage_facility_b))
+  end
+  
+  def test_can_find_a_specific_link_by_buildings
+	storage_facility_a = StorageFacility.new
+	launchpad_a = Launchpad.new
+	launchpad_b = Launchpad.new
+	extractor_a = Extractor.new
+	extractor_b = Extractor.new
+	
+	# Create a bunch of links all attached to launchpad_a.
+	# Note that some of these have launchpad_a as a source, and some as a destination.
+	# Order /shouldn't/ matter.
+	first_link = @planet.add_link(launchpad_a, launchpad_b)
+	second_link = @planet.add_link(extractor_a, launchpad_a)
+	third_link = @planet.add_link(extractor_b, launchpad_a)
+	fourth_link = @planet.add_link(launchpad_a, storage_facility_a)
+	
+	# Make sure we can find them if we search with the order they were created.
+	assert_equal(first_link, @planet.find_link(launchpad_a, launchpad_b))
+	assert_equal(second_link, @planet.find_link(extractor_a, launchpad_a))
+	assert_equal(third_link, @planet.find_link(extractor_b, launchpad_a))
+	assert_equal(fourth_link, @planet.find_link(launchpad_a, storage_facility_a))
+	
+	# Make sure we can find them if we search in the opposite order of how they were created.
+	assert_equal(first_link, @planet.find_link(launchpad_b, launchpad_a))
+	assert_equal(second_link, @planet.find_link(launchpad_a, extractor_a))
+	assert_equal(third_link, @planet.find_link(launchpad_a, extractor_b))
+	assert_equal(fourth_link, @planet.find_link(storage_facility_a, launchpad_a))	
   end
   
   def test_can_remove_a_link

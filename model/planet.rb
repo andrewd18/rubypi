@@ -472,6 +472,21 @@ class Planet
 	return connected_links
   end
   
+  # Finds a specific link.
+  def find_link(source_building, destination_building)
+	list_of_possible_matching_links = self.find_links_connected_to(source_building)
+	
+	list_of_possible_matching_links.each do |link|
+	  if (((link.source_building == source_building) and (link.destination_building == destination_building)) or
+		  ((link.source_building == destination_building) and (link.destination_building == source_building)))
+		
+		return link
+	  end
+	end
+	
+	return nil
+  end
+  
   # Removes a particular link.
   def remove_link(link_instance)
 	# Remove it from our list.
