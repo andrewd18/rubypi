@@ -450,11 +450,19 @@ class Planet
   
   # Creates a link between node a and b.
   def add_link(source_building, destination_building)
-	new_link = PlanetaryLink.new(self, source_building, destination_building)
+	existing_link = self.find_link(source_building, destination_building)
 	
-	@links << new_link
-	
-	return new_link
+	if (existing_link == nil)
+	  # Create a new link.
+	  new_link = PlanetaryLink.new(self, source_building, destination_building)
+	  
+	  @links << new_link
+	  
+	  return new_link
+	else
+	  # Return the existing link.
+	  return existing_link
+	end
   end
   
   # Finds all links connected to the given building.

@@ -711,6 +711,20 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_true(added_link.is_a?(PlanetaryLink))
   end
   
+  def test_when_adding_a_link_that_already_exists_a_new_one_is_not_created
+	storage_facility_a = StorageFacility.new
+	storage_facility_b = StorageFacility.new
+	
+	# Make sure if we re-run the same command we get the same instance.
+	first_link = @planet.add_link(storage_facility_a, storage_facility_b)
+	second_link = @planet.add_link(storage_facility_a, storage_facility_b)
+	assert_equal(first_link, second_link)
+	
+	# Make sure we get the same instance even if we flip the destination and source around.
+	third_link = @planet.add_link(storage_facility_b, storage_facility_a)
+	assert_equal(first_link, third_link)
+  end
+  
   def test_links_gives_array_of_links
 	storage_facility_a = StorageFacility.new
 	storage_facility_b = StorageFacility.new
