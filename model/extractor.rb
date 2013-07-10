@@ -1,7 +1,7 @@
 require_relative 'planetary_building.rb'
 require_relative 'extractor_head.rb'
 require_relative 'production_cycle.rb'
-
+require_relative 'linkable.rb'
 require_relative 'product.rb'
 
 class Extractor < PlanetaryBuilding
@@ -65,6 +65,7 @@ class Extractor < PlanetaryBuilding
   end
   
   include ProductionCycle
+  include Linkable
   
   attr_accessor :extractor_heads
   attr_reader :product_name

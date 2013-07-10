@@ -1,10 +1,12 @@
 require_relative 'planetary_building.rb'
 require_relative 'unrestricted_storage.rb'
 require_relative 'product.rb'
+require_relative 'linkable.rb'
 
 class CommandCenter < PlanetaryBuilding
   
   include UnrestrictedStorage
+  include Linkable
   
   attr_reader :upgrade_level
   

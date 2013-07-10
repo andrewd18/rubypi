@@ -1,9 +1,11 @@
 require_relative 'planetary_building.rb'
 require_relative 'unrestricted_storage.rb'
+require_relative 'linkable.rb'
 
 class Launchpad < PlanetaryBuilding
   
   include UnrestrictedStorage
+  include Linkable
   
   POWERGRID_USAGE = 700
   CPU_USAGE = 3600

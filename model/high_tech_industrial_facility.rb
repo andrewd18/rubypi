@@ -2,11 +2,13 @@ require_relative 'planetary_building.rb'
 require_relative 'schematic.rb'
 require_relative 'industrial_facility_storage.rb'
 require_relative 'production_cycle.rb'
+require_relative 'linkable.rb'
 
 class HighTechIndustrialFacility < PlanetaryBuilding
   
   include IndustrialFacilityStorage
   include ProductionCycle
+  include Linkable
   
   POWERGRID_USAGE = 400
   CPU_USAGE = 1100
