@@ -16,8 +16,8 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   # Run before every test.
   def setup
 	@planet = Planet.new("Lava")
-	@storage_facility_a = StorageFacility.new
-	@storage_facility_b = StorageFacility.new
+	@storage_facility_a = StorageFacility.new(1.2, 3.4)
+	@storage_facility_b = StorageFacility.new(5.6, 7.8)
 	@storage_facility_a.planet = @planet
 	@storage_facility_b.planet = @planet
 	
@@ -276,5 +276,21 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   
   def test_a_link_can_tell_you_what_planet_it_is_on
 	assert_equal(@planet, @link.planet)
+  end
+  
+  def test_start_x_pos
+	assert_equal(@storage_facility_a.x_pos, @link.start_x_pos)
+  end
+  
+  def test_start_y_pos
+	assert_equal(@storage_facility_a.y_pos, @link.start_y_pos)
+  end
+  
+  def test_end_x_pos
+	assert_equal(@storage_facility_b.x_pos, @link.end_x_pos)
+  end
+  
+  def test_end_y_pos
+	assert_equal(@storage_facility_b.y_pos, @link.end_y_pos)
   end
 end

@@ -97,4 +97,20 @@ class PlanetaryLink
   def transfer_volume
 	return @transfer_volume
   end
+  
+  def start_x_pos
+	return @source_building.x_pos
+  end
+  
+  def start_y_pos
+	return @source_building.y_pos
+  end
+  
+  def end_x_pos
+	return @destination_building.x_pos
+  end
+  
+  def end_y_pos
+	return @destination_building.y_pos
+  end
 end
