@@ -15,6 +15,16 @@ class BuildingToolPalette < RadioButtonToolPalette
 	# Select Building Toold
 	
 	
+	
+	
+	self.append_custom_tool_button("../rubypi/view/images/64x64/command_center_icon.png", "CommandCenter")
+	self.append_custom_tool_button("../rubypi/view/images/64x64/extractor_icon.png", "Extractor")
+	self.append_custom_tool_button("../rubypi/view/images/64x64/industrial_facility_two_materials.png", "BasicIndustrialFacility")
+	
+	# tool.signal_connect('clicked') do |tool|
+	#   # do something
+	# end
+	
 	return self
   end
 end

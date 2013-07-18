@@ -7,42 +7,60 @@ class RadioButtonToolPalette < Gtk::Toolbar
 	return self
   end
   
-  def append_new_tool(stock_id = nil)
+  def append_stock_tool_button(stock_id)
 	# WORKAROUND:
 	# Gtk::RadioToolButton sets itself up like a linked list.
 	# It doesn't want to know its parent array, it wants to know its precursor in the list.
 	# Therefore I pass self.children.last when appending.
 	
- 	if (stock_id == nil)
-	  new_tool = Gtk::RadioToolButton.new(self.children.last)
+	new_tool = Gtk::RadioToolButton.new(self.children.last, stock_id)
 	  
- 	  self.insert(new_tool, (self.children.size))
- 	else
-	  new_tool = Gtk::RadioToolButton.new(self.children.last, stock_id)
-	  
- 	  self.insert(new_tool, (self.children.size))
- 	end
-	
-	return new_tool
+	self.insert(new_tool, (self.children.size))
   end
   
-  def prepend_new_tool(stock_id = nil)
+  def prepend_stock_tool_button(stock_id)
 	# WORKAROUND:
 	# Gtk::RadioToolButton sets itself up like a linked list.
 	# It doesn't want to know its parent array, it wants to know its precursor in the list.
 	# Therefore I pass self.children.first when prepending.
 	
-	if (stock_id == nil)
-	  new_tool = Gtk::RadioToolButton.new(self.children.first)
+	new_tool = Gtk::RadioToolButton.new(self.children.first, stock_id)
 	  
- 	  self.insert(new_tool, 0)
- 	else
-	  new_tool = Gtk::RadioToolButton.new(self.children.first, stock_id)
-	  
- 	  self.insert(new_tool, 0)
- 	end
+	self.insert(new_tool, 0)
+  end
+  
+  def append_custom_tool_button(image_filename, label_text)
 	
-	return new_tool
+	icon_widget = Gtk::Image.new(:file => image_filename)
+	label_widget = Gtk::Label.new(label_text)
+	
+	# WORKAROUND:
+	# Gtk::RadioToolButton sets itself up like a linked list.
+	# It doesn't want to know its parent array, it wants to know its precursor in the list.
+	# Therefore I pass self.children.last when appending.
+	
+	new_tool = Gtk::RadioToolButton.new(self.children.last)
+	new_tool.icon_widget = icon_widget
+	new_tool.label_widget = label_widget
+	
+	self.insert(new_tool, (self.children.size))
+  end
+  
+  def prepend_custom_tool_button(icon_widget)
+	
+	icon_widget = Gtk::Image.new(:file => image_filename)
+	label_widget = Gtk::Label.new(label_text)
+	
+	# WORKAROUND:
+	# Gtk::RadioToolButton sets itself up like a linked list.
+	# It doesn't want to know its parent array, it wants to know its precursor in the list.
+	# Therefore I pass self.children.first when prepending.
+	
+	new_tool = Gtk::RadioToolButton.new(self.children.first)
+	new_tool.icon_widget = icon_widget
+	new_tool.label_widget = label_widget
+	  
+	self.insert(new_tool, 0)
   end
   
   def active_tool

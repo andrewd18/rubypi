@@ -19,6 +19,9 @@ class CairoBuildingImage
 	
 	@building_model = building_model
 	filename = NAME_TO_FILENAME[@building_model.name]
+	
+	raise "#{filename} not found." unless File.exists?(filename)
+	
 	@image = RSVG::Handle.new_from_file(filename)
 	@width = width
 	@height = height
@@ -47,8 +50,8 @@ class CairoBuildingImage
   def draw(cairo_context)
 	# Do all the painting in a transaction.
 	cairo_context.save do
-	  # Move to the x/y coordinate that will draw the center of our scaled image at the window centerpoint.
-	  cairo_context.translate(@building_model.x_pos, @building_model.y_pos)
+	  # Move to the x/y coordinate that starts the top left corner of the scaled image.
+	  cairo_context.translate(self.top_left_x_coord, self.top_left_y_coord)
 	  
 	  # Scale the base image.
 	  cairo_context.scale(self.horizontal_scale, self.vertical_scale)

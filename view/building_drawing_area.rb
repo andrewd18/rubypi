@@ -36,12 +36,12 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	
 	self.add_events(Gdk::Event::Mask::POINTER_MOTION_MASK)
 	self.signal_connect('motion-notify-event') do |widget, event|
-	  set_square_coords(widget, event)
+	  set_tool_outline_coords(widget, event)
 	end
 	
 	self.add_events(Gdk::Event::Mask::LEAVE_NOTIFY_MASK)
 	self.signal_connect('leave-notify-event') do |widget, event|
-	  clear_square_coords(widget, event)
+	  clear_tool_outline_coords(widget, event)
 	end
 	
 	self.add_events(Gdk::Event::Mask::BUTTON_PRESS_MASK)
@@ -64,24 +64,25 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  image.draw(cairo_context)
 	end
 	
-	# Square at pointer.
 	cairo_context.save do
-	  if (@x_coord != nil)
-		# Black
-		cairo_context.set_source_rgba(0.0, 0.0, 0.0, 1.0)
-		cairo_context.set_line_width(2.0)
+	  # If the mouse is over the drawing area, 
+	  # draw a faint image of the selected palette tool at the pointer coordinates.
+	  
+	  if ((@x_coord != nil) &&
+		  (@y_coord != nil))
 		
-		# x, y, width, height
-		cairo_context.rectangle((@x_coord - 32), (@y_coord - 32), 64, 64)
-		
-		cairo_context.stroke
+		image_to_display = @palette.active_tool.icon_widget.pixbuf
+		# HACK: Assumes 64x64 image.
+		cairo_context.translate(@x_coord - 32, @y_coord - 32)
+		cairo_context.set_source_pixbuf(image_to_display)
+		cairo_context.paint
 	  end
 	end
   end
   
   private
   
-  def set_square_coords(widget, event)
+  def set_tool_outline_coords(widget, event)
 	@x_coord = event.x
 	@y_coord = event.y
 	
@@ -89,7 +90,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	self.queue_draw
   end
   
-  def clear_square_coords(widget, event)
+  def clear_tool_outline_coords(widget, event)
 	@x_coord = nil
 	@y_coord = nil
 	
@@ -101,6 +102,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	building_x_pos = event.x
 	building_y_pos = event.y
 	
-	puts "#{[building_x_pos, building_y_pos]}"
+	# HACK: Assumes the name shown will be a class.
+	# HACK: Module.const_get is a bad idea.
+	class_name = Module.const_get(@palette.active_tool.label_widget.text)
+	building_instance = class_name.new(@x_coord, @y_coord)
+	@planet_model.add_building(building_instance)
   end
 end
