@@ -36,13 +36,16 @@ class CommandCenter < PlanetaryBuilding
   CPU_USAGE = 0
   STORAGE_VOLUME = 500.0
   
-  def initialize
+  def initialize(x_pos = 0.0, y_pos = 0.0)
 	@upgrade_level = UPGRADE_LEVEL
 	@powergrid_usage = POWERGRID_USAGE
 	@cpu_usage = CPU_USAGE
 	@powergrid_provided = self.powergrid_provided
 	@cpu_provided = self.cpu_provided
 	@isk_cost = self.isk_cost
+	
+	@x_pos = x_pos
+	@y_pos = y_pos
 	
 	return self
   end

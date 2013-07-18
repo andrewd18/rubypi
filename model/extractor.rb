@@ -81,7 +81,7 @@ class Extractor < PlanetaryBuilding
   
   EXTRACTS_P_LEVEL = 0
   
-  def initialize(product_name = nil)
+  def initialize(x_pos = 0.0, y_pos = 0.0, product_name = nil)
 	@base_powergrid_usage = POWERGRID_USAGE
 	@base_cpu_usage = CPU_USAGE
 	@powergrid_provided = POWERGRID_PROVIDED
@@ -91,6 +91,9 @@ class Extractor < PlanetaryBuilding
 	@extraction_time = nil
 	
 	@extractor_heads = Array.new
+	
+	@x_pos = x_pos
+	@y_pos = y_pos
 	
 	return self
   end

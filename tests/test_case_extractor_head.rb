@@ -43,4 +43,30 @@ class TestCaseExtractorHead < Test::Unit::TestCase
   def test_name
 	assert_equal("Extractor Head", @building.name)
   end
+  
+  def test_can_get_x_position
+	# Default should be 0.0.
+	assert_equal(0.0, @building.x_pos)
+  end
+  
+  def test_can_set_x_position
+	@building.x_pos = 1.5
+	assert_equal(1.5, @building.x_pos)
+  end
+  
+  def test_can_get_y_position
+	# Default should be 0.0.
+	assert_equal(0.0, @building.y_pos)
+  end
+  
+  def test_can_set_y_position
+	@building.y_pos = 3.2
+	assert_equal(3.2, @building.y_pos)
+  end
+  
+  def test_can_set_x_and_y_positions_in_constructor
+	@building = ExtractorHead.new(1.5, 3.2)
+	assert_equal(1.5, @building.x_pos)
+	assert_equal(3.2, @building.y_pos)
+  end
 end

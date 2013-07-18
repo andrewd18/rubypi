@@ -8,13 +8,16 @@ class ExtractorHead < PlanetaryBuilding
   CPU_PROVIDED = 0
   ISK_COST = 0
   
-  def initialize
+  def initialize(x_pos = 0.0, y_pos = 0.0)
 	# Accept incoming values or use defaults.
 	@powergrid_usage = POWERGRID_USAGE
 	@cpu_usage = CPU_USAGE
 	@powergrid_provided = POWERGRID_PROVIDED
 	@cpu_provided = CPU_PROVIDED
 	@isk_cost = ISK_COST
+	
+	@x_pos = x_pos
+	@y_pos = y_pos
 	
 	return self
   end

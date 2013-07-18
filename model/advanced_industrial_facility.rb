@@ -21,7 +21,7 @@ class AdvancedIndustrialFacility < PlanetaryBuilding
   
   attr_reader :schematic_name
   
-  def initialize(schematic_name = nil)
+  def initialize(x_pos = 0.0, y_pos = 0.0, schematic_name = nil)
 	@powergrid_usage = POWERGRID_USAGE
 	@cpu_usage = CPU_USAGE
 	@powergrid_provided = POWERGRID_PROVIDED
@@ -29,6 +29,9 @@ class AdvancedIndustrialFacility < PlanetaryBuilding
 	@isk_cost = ISK_COST
 	
 	@schematic_name = schematic_name
+	
+	@x_pos = x_pos
+	@y_pos = y_pos
 	
 	# Set the ProductionCycle time.
 	self.production_cycle_time_in_minutes=(CYCLE_TIME_IN_MINS)

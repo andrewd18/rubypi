@@ -72,6 +72,32 @@ class TestCaseHighTechIndustrialFacility < Test::Unit::TestCase
 	assert_equal("High Tech Industrial Facility", @building.name)
   end
   
+  def test_can_get_x_position
+	# Default should be 0.0.
+	assert_equal(0.0, @building.x_pos)
+  end
+  
+  def test_can_set_x_position
+	@building.x_pos = 1.5
+	assert_equal(1.5, @building.x_pos)
+  end
+  
+  def test_can_get_y_position
+	# Default should be 0.0.
+	assert_equal(0.0, @building.y_pos)
+  end
+  
+  def test_can_set_y_position
+	@building.y_pos = 3.2
+	assert_equal(3.2, @building.y_pos)
+  end
+  
+  def test_can_set_x_and_y_positions_in_constructor
+	@building = HighTechIndustrialFacility.new(1.5, 3.2, nil)
+	assert_equal(1.5, @building.x_pos)
+	assert_equal(3.2, @building.y_pos)
+  end
+  
   def test_set_schematic
 	@building.schematic_name = "Galactic Core"
 	assert_equal("Galactic Core", @building.schematic_name)
