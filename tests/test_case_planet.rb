@@ -125,17 +125,17 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_cannot_add_more_than_one_customs_office
-	# Test it with the add_building method.
+	# Test using the add_customs_office method.
 	first_poco = CustomsOffice.new
 	second_poco = CustomsOffice.new
 	
-	@planet.add_building(first_poco)
+	@planet.add_customs_office(first_poco)
 	
 	assert_raise ArgumentError do
-	  @planet.add_building(second_poco)
+	  @planet.add_customs_office(second_poco)
 	end
 	
-	@planet.remove_building(first_poco)
+	@planet.remove_customs_office
 	
 	# Make sure we don't have any buildings at this point.
 	assert_equal(0, @planet.buildings.count)
@@ -152,6 +152,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	  @planet.add_building_from_class(CustomsOffice)
 	end
 	
+	# Test the remove_building method.
 	@planet.remove_building(third_poco)
 	
 	# Make sure we don't have any buildings at this point.
@@ -665,17 +666,14 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_equal(3, @planet.num_aggregate_launchpads_ccs_storages)
 	
-	@planet.add_building_from_class(CustomsOffice)
-	
-	assert_equal(4, @planet.num_aggregate_launchpads_ccs_storages)
-	
 	# These types should not change the value.
 	@planet.add_building_from_class(BasicIndustrialFacility)
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
+	@planet.add_building_from_class(CustomsOffice)
 	
-	assert_equal(4, @planet.num_aggregate_launchpads_ccs_storages)
+	assert_equal(3, @planet.num_aggregate_launchpads_ccs_storages)
   end
   
   def test_number_of_pocos_scales_with_number_of_pocos

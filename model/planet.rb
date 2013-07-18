@@ -10,6 +10,7 @@ require_relative 'high_tech_industrial_facility.rb'
 require_relative 'launchpad.rb'
 require_relative 'storage_facility.rb'
 require_relative 'planetary_link.rb'
+require_relative 'customs_office.rb'
 
 # A planet contains a series of buildings added by the user.
 # A planet needs to observe all of its buildings for changes.
@@ -20,6 +21,7 @@ class Planet
   
   attr_reader :buildings
   attr_reader :links
+  attr_reader :customs_office
   attr_accessor :pi_configuration
   
   PLANET_TYPES = ["Uncolonized",
@@ -42,7 +44,7 @@ class Planet
 									  "Plasma"]
   
   
-  def initialize(planet_type, planet_name = nil, planet_buildings = Array.new, planet_links = Array.new, pi_configuration = nil)
+  def initialize(planet_type, planet_name = nil, planet_buildings = Array.new, planet_links = Array.new, customs_office = nil, pi_configuration = nil)
 	@type = planet_type
 	
 	@name = planet_name
@@ -50,6 +52,8 @@ class Planet
 	@buildings = planet_buildings
 	
 	@links = planet_links
+	
+	@customs_office = customs_office
 	
 	@pi_configuration = pi_configuration
 	
@@ -200,16 +204,19 @@ class Planet
   end
   
   def add_building(building)
+	if (building.is_a?(CustomsOffice))
+	  self.add_customs_office(building)
+	  return building
+	end
+	
 	# Limit number of command centers and customs offices to 1.
 	if (building.is_a?(CommandCenter) and
 	    self.num_command_centers == 1)
 	  raise ArgumentError, "A planet can only have one CommandCenter."
 	end
 	
-	if (building.is_a?(CustomsOffice) and
-	    self.num_pocos == 1)
-	  raise ArgumentError, "A planet can only have one CustomsOffice."
-	end
+	# Can't add anything but PlanetaryBuildings.
+	raise ArgumentError unless building.is_a?(PlanetaryBuilding)
 	
 	# Good to go.
 	@buildings << building
@@ -230,6 +237,11 @@ class Planet
   end
   
   def remove_building(building_to_remove)
+	if (building_to_remove.is_a?(CustomsOffice))
+	  self.remove_customs_office
+	  return
+	end
+	
 	building_to_remove.delete_observer(self)
 	building_to_remove.planet = nil
 	@buildings.delete(building_to_remove)
@@ -246,6 +258,29 @@ class Planet
 	end
 	
 	@buildings.clear
+	
+	@customs_office = nil
+	
+	# Tell my observers I've changed.
+	changed # Set observeable state to "changed".
+	notify_observers() # Notify errybody.
+  end
+  
+  def add_customs_office(new_customs_office)
+	# Prevent user from adding multiple customs offices.
+	if (self.customs_office != nil)
+	  raise ArgumentError, "A planet can only have one CustomsOffice."
+	else
+	  @customs_office = new_customs_office
+	  
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
+	end
+  end
+  
+  def remove_customs_office
+	@customs_office = nil
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
@@ -393,27 +428,19 @@ class Planet
   end
   
   def pocos
-	list_of_pocos = Array.new
-	
-	@buildings.each do |building|
-	  if (building.class == CustomsOffice)
-		list_of_pocos << building
-	  end
+	if (self.customs_office != nil)
+	  return [@customs_office]
+	else
+	  return Array.new
 	end
-	
-	return list_of_pocos
   end
   
   def num_pocos
-	count = 0
-	
-	@buildings.each do |building|
-	  if (building.class == CustomsOffice)
-		count += 1
-	  end
+	if (self.customs_office != nil)
+	  return 1
+	else
+	  return 0
 	end
-	
-	return count
   end
   
   def num_aggregate_launchpads_ccs_storages

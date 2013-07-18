@@ -1,8 +1,7 @@
-require_relative 'planetary_building.rb'
 require_relative 'unrestricted_storage.rb'
 require_relative 'product.rb'
 
-class CustomsOffice < PlanetaryBuilding
+class CustomsOffice
   
   include UnrestrictedStorage
   
@@ -15,6 +14,12 @@ class CustomsOffice < PlanetaryBuilding
   DEFAULT_TAX_RATE = 15
   MIN_TAX_RATE = 0
   MAX_TAX_RATE = 100
+  
+  attr_reader :powergrid_usage
+  attr_reader :cpu_usage
+  attr_reader :powergrid_provided
+  attr_reader :cpu_provided
+  attr_reader :isk_cost
   
   def initialize
 	@powergrid_usage = POWERGRID_USAGE

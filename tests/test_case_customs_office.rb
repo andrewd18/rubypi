@@ -56,6 +56,18 @@ class TestCaseCustomsOffice < Test::Unit::TestCase
 	assert_equal("Customs Office", @building.name)
   end
   
+  def test_cannot_get_x_position
+	assert_raise do
+	  @building.x_pos
+	end
+  end
+  
+  def test_cannot_get_a_y_position
+	assert_raise do
+	  @building.y_pos
+	end
+  end
+  
   def test_storage_volume
 	assert_equal(35000.0, @building.storage_volume)
   end
