@@ -11,8 +11,13 @@ class CairoLinkImage
   def draw(cairo_context)
 	# Do all the painting in a transaction.
 	cairo_context.save do
-	  # Black
-	  cairo_context.set_source_rgba(0.0, 0.0, 0.0, 1.0)
+
+	  red   = (208.0 / 255)
+	  green = (149.0 / 255)
+	  blue  = (71.0 / 255)
+	  alpha = (255.0 / 255)
+	  
+	  cairo_context.set_source_rgba(red, green, blue, alpha)
 	  cairo_context.set_line_width(2.0)
 	  
 	  # Move to the coordinates for this slot.
