@@ -19,15 +19,15 @@ require_relative 'cairo_link_image.rb'
 # On <something> remove building and connected links from the model.
 
 class BuildingDrawingArea < Gtk::DrawingArea
-  def initialize(planet_model, palette)
+  
+  BUILDING_ICON_SIZE = 64
+  
+  def initialize(planet_model)
 	# Set up GTK stuffs.
 	super()
 	
 	@planet_model = planet_model
-	@palette = palette
-	
-	@x_coord = nil
-	@y_coord = nil
+	@building_under_cursor = nil
 	
 	# Set up auto-refresh of drawing area.
 	self.signal_connect('draw') do |widget, cairo_context|
@@ -50,6 +50,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
   end
   
+  def change_building_under_cursor(building_class)
+	@building_under_cursor = building_class.new(nil, nil)
+  end
+  
   def draw_all(widget, cairo_context)
 	# Draw from back to front.
 	# LINKS
@@ -60,7 +64,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	
 	# BUILDINGS
 	@planet_model.buildings.each do |building|
-	  image = CairoBuildingImage.new(building, 64, 64)
+	  image = CairoBuildingImage.new(building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
 	  image.draw(cairo_context)
 	end
 	
@@ -68,14 +72,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  # If the mouse is over the drawing area, 
 	  # draw a faint image of the selected palette tool at the pointer coordinates.
 	  
-	  if ((@x_coord != nil) &&
-		  (@y_coord != nil))
-		
-		image_to_display = @palette.active_tool.icon_widget.pixbuf
-		# HACK: Assumes 64x64 image.
-		cairo_context.translate(@x_coord - 32, @y_coord - 32)
-		cairo_context.set_source_pixbuf(image_to_display)
-		cairo_context.paint
+	  if ((@building_under_cursor.x_pos != nil) &&
+		  (@building_under_cursor.y_pos != nil))
+		image = CairoBuildingImage.new(@building_under_cursor, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+		image.draw(cairo_context)
 	  end
 	end
   end
@@ -83,29 +83,27 @@ class BuildingDrawingArea < Gtk::DrawingArea
   private
   
   def set_tool_outline_coords(widget, event)
-	@x_coord = event.x
-	@y_coord = event.y
+	@building_under_cursor.x_pos = event.x
+	@building_under_cursor.y_pos = event.y
 	
 	# Force a redraw of the widget.
 	self.queue_draw
   end
   
   def clear_tool_outline_coords(widget, event)
-	@x_coord = nil
-	@y_coord = nil
+	@building_under_cursor.x_pos = nil
+	@building_under_cursor.y_pos = nil
 	
 	# Force a redraw of the widget.
 	self.queue_draw
   end
   
   def add_building_to_model(widget, event)
-	building_x_pos = event.x
-	building_y_pos = event.y
+	# Copy the values of @building_under_cursor
+	new_building = @building_under_cursor.class.new(@building_under_cursor.x_pos, @building_under_cursor.y_pos)
+	@planet_model.add_building(new_building)
 	
-	# HACK: Assumes the name shown will be a class.
-	# HACK: Module.const_get is a bad idea.
-	class_name = Module.const_get(@palette.active_tool.label_widget.text)
-	building_instance = class_name.new(@x_coord, @y_coord)
-	@planet_model.add_building(building_instance)
+	# Force a redraw of the widget.
+	self.queue_draw
   end
 end

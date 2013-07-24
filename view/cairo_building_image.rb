@@ -4,15 +4,16 @@ require 'rsvg2'
 
 class CairoBuildingImage
   
-  NAME_TO_FILENAME = { "Command Center" => "command_center_icon.svg",
-                       "Extractor" => "extractor_icon.svg",
-                       "Storage Facility" => "storage_facility_icon.svg",
-                       "Launchpad" => "launchpad_icon.svg",
-                       "Basic Industrial Facility" => "industrial_facility_two_materials.svg",
-                       "Advanced Industrial Facility" => "industrial_facility_two_materials.svg",
-                       "High Tech Industrial Facility" => "industrial_facility_three_materials.svg",
-                       "Customs Office" => "poco_icon.svg"}
+  NAME_TO_FILENAME = { "Command Center" => "command_center_icon.png",
+                       "Extractor" => "extractor_icon.png",
+                       "Storage Facility" => "storage_facility_icon.png",
+                       "Launchpad" => "launchpad_icon.png",
+                       "Basic Industrial Facility" => "industrial_facility_two_materials.png",
+                       "Advanced Industrial Facility" => "industrial_facility_two_materials.png",
+                       "High Tech Industrial Facility" => "industrial_facility_three_materials.png",
+                       "Customs Office" => "poco_icon.png"}
   
+  attr_reader :image
   
   def initialize(building_model, width, height)
 	raise ArgumentError unless building_model.is_a?(PlanetaryBuilding)
@@ -22,7 +23,12 @@ class CairoBuildingImage
 	
 	raise "#{filename} not found." unless File.exists?(filename)
 	
-	@image = RSVG::Handle.new_from_file(filename)
+	# WORKAROUND:
+	# So, I really wanted to use SVGs and scale them on the fly.
+	# The RSVG library says to use RSVG::Handle.new_from_file(filename). However, the GC never releases it.
+	# This causes crazy memory allocation issues.
+	# So instead I resort to using pixbufs. Sigh.
+	@image = Gdk::Pixbuf.new(filename, width, height)
 	@width = width
 	@height = height
   end
@@ -54,10 +60,11 @@ class CairoBuildingImage
 	  cairo_context.translate(self.top_left_x_coord, self.top_left_y_coord)
 	  
 	  # Scale the base image.
-	  cairo_context.scale(self.horizontal_scale, self.vertical_scale)
+	  #cairo_context.scale(self.horizontal_scale, self.vertical_scale)
 	  
 	  # Paint the SVG to the target.
-	  @image.render_cairo(cairo_context)
+	  cairo_context.set_source_pixbuf(@image)
+	  cairo_context.paint
 	end
   end
 end

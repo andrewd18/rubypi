@@ -26,10 +26,8 @@ class BuildingLayoutWidget < Gtk::Frame
 	
 	@planet_model = planet_model
 	
-	@drawing_tool_palette = BuildingToolPalette.new
-	
-	
-	@building_drawing_area = BuildingDrawingArea.new(@planet_model, @drawing_tool_palette)
+	@building_drawing_area = BuildingDrawingArea.new(@planet_model)
+	@drawing_tool_palette = BuildingToolPalette.new(@building_drawing_area)
 	
 	vbox = Gtk::Box.new(:horizontal)
 	vbox.pack_start(@drawing_tool_palette, :expand => false)
