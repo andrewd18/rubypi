@@ -101,7 +101,14 @@ class BuildingDrawingArea < Gtk::DrawingArea
   def add_building_to_model(widget, event)
 	# Copy the values of @building_under_cursor
 	new_building = @building_under_cursor.class.new(@building_under_cursor.x_pos, @building_under_cursor.y_pos)
-	@planet_model.add_building(new_building)
+	
+	begin
+	  @planet_model.add_building(new_building)
+	rescue ArgumentError => error
+	  # TODO - Tell the user what happened nicely.
+	  # For now, spit it out to the command line.
+	  puts error
+	end
 	
 	# Force a redraw of the widget.
 	self.queue_draw
