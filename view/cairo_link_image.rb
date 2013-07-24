@@ -19,6 +19,7 @@ class CairoLinkImage
 	  
 	  cairo_context.set_source_rgba(red, green, blue, alpha)
 	  cairo_context.set_line_width(2.0)
+	  cairo_context.set_dash(5.0, 5.0)
 	  
 	  # Move to the coordinates for this slot.
 	  cairo_context.move_to(@link.start_x_pos, @link.start_y_pos)
