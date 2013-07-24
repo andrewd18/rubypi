@@ -4,6 +4,8 @@ require 'rsvg2'
 
 class CairoBuildingImage
   
+  PATH_TO_IMAGES_FOLDER = "view/images/64x64/"
+  
   NAME_TO_FILENAME = { "Command Center" => "command_center_icon.png",
                        "Extractor" => "extractor_icon.png",
                        "Storage Facility" => "storage_facility_icon.png",
@@ -19,7 +21,7 @@ class CairoBuildingImage
 	raise ArgumentError unless building_model.is_a?(PlanetaryBuilding)
 	
 	@building_model = building_model
-	filename = NAME_TO_FILENAME[@building_model.name]
+	filename = "#{PATH_TO_IMAGES_FOLDER}" + "#{NAME_TO_FILENAME[@building_model.name]}"
 	
 	raise "#{filename} not found." unless File.exists?(filename)
 	
