@@ -88,15 +88,17 @@ class BuildingDrawingArea < Gtk::DrawingArea
   def will_building_position_overlap?
 	@planet_model.buildings.each do |existing_building|
 	  
-	  # TODO: This assumes a square building. Make it work with circles.
-	  existing_x_pos_minus_building_size = (existing_building.x_pos - BUILDING_ICON_SIZE)
-	  existing_x_pos_plus_building_size = (existing_building.x_pos + BUILDING_ICON_SIZE)
-	  existing_y_pos_minus_building_size = (existing_building.y_pos - BUILDING_ICON_SIZE)
-	  existing_y_pos_plus_building_size = (existing_building.y_pos + BUILDING_ICON_SIZE)
+	  # Is a point within a circle?
+	  # 
+	  # (x - center_x)^2 + (y - center_y)^2 < radius^2
 	  
-	  # If both the x and y coordinates are within another building's size, return true.
-	  if (((existing_x_pos_minus_building_size..existing_x_pos_plus_building_size).include?(@building_under_cursor.x_pos)) and
-		  ((existing_y_pos_minus_building_size..existing_y_pos_plus_building_size).include?(@building_under_cursor.y_pos)))
+	  x_pos_distance = ((@building_under_cursor.x_pos - existing_building.x_pos)**2)
+	  y_pos_distance = ((@building_under_cursor.y_pos - existing_building.y_pos)**2)
+	  diameter_squared = (BUILDING_ICON_SIZE**2)
+	  
+	  # I use diameter squared because I'm calculating for two circles, not a point within one.
+	  
+	  if ((x_pos_distance + y_pos_distance) < diameter_squared)
 		return true
 	  end
 	end
