@@ -39,6 +39,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  end
 	end
 	
+	# HACK: I have to do this because I'm not initializing something properly.
 	# Finally, update the drawing area's building class.
 	@building_drawing_area.change_building_under_cursor(self.active_tool.building_class)
 	

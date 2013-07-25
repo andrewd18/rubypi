@@ -1,7 +1,7 @@
 Building Drawing Area TODO
 ==========================
 
-* Prevent the user from adding a building on top of another building.
+* Change the overlap overlay to detect based on a circle not on a square.
 * Add a "move building" button.
 * When the user drags with a move building, change the selected model's x/y coords.
 * Add a "delete building" button.

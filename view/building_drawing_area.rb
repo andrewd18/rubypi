@@ -1,6 +1,7 @@
 require 'gtk3'
 
 require_relative 'cairo_building_image.rb'
+require_relative 'cairo_building_image_under_cursor.rb'
 require_relative 'cairo_link_image.rb'
 
 # CREATE
@@ -74,10 +75,33 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  
 	  if ((@building_under_cursor.x_pos != nil) &&
 		  (@building_under_cursor.y_pos != nil))
-		image = CairoBuildingImage.new(@building_under_cursor, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+		image = CairoBuildingImageUnderCursor.new(@building_under_cursor, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+		
+		# Set the image overlap value appropriately.
+		image.will_overlap = self.will_building_position_overlap?
+		
 		image.draw(cairo_context)
 	  end
 	end
+  end
+  
+  def will_building_position_overlap?
+	@planet_model.buildings.each do |existing_building|
+	  
+	  # TODO: This assumes a square building. Make it work with circles.
+	  existing_x_pos_minus_building_size = (existing_building.x_pos - BUILDING_ICON_SIZE)
+	  existing_x_pos_plus_building_size = (existing_building.x_pos + BUILDING_ICON_SIZE)
+	  existing_y_pos_minus_building_size = (existing_building.y_pos - BUILDING_ICON_SIZE)
+	  existing_y_pos_plus_building_size = (existing_building.y_pos + BUILDING_ICON_SIZE)
+	  
+	  # If both the x and y coordinates are within another building's size, return true.
+	  if (((existing_x_pos_minus_building_size..existing_x_pos_plus_building_size).include?(@building_under_cursor.x_pos)) and
+		  ((existing_y_pos_minus_building_size..existing_y_pos_plus_building_size).include?(@building_under_cursor.y_pos)))
+		return true
+	  end
+	end
+	
+	return false
   end
   
   private
@@ -99,6 +123,13 @@ class BuildingDrawingArea < Gtk::DrawingArea
   end
   
   def add_building_to_model(widget, event)
+	if (self.will_building_position_overlap? == true)
+	  # TODO - Tell the user what happened nicely.
+	  # For now, spit the error out to the command line.
+	  puts "Cannot add a building where it would overlap."
+	  return
+	end
+	
 	# Copy the values of @building_under_cursor
 	new_building = @building_under_cursor.class.new(@building_under_cursor.x_pos, @building_under_cursor.y_pos)
 	
