@@ -29,10 +29,10 @@ class BuildingLayoutWidget < Gtk::Frame
 	@building_drawing_area = BuildingDrawingArea.new(@planet_model)
 	@drawing_tool_palette = BuildingToolPalette.new(@building_drawing_area)
 	
-	vbox = Gtk::Box.new(:horizontal)
-	vbox.pack_start(@drawing_tool_palette, :expand => false)
-	vbox.pack_start(@building_drawing_area, :expand => true, :fill => true)
-	self.add(vbox)
+	hbox = Gtk::Box.new(:horizontal)
+	hbox.pack_start(@drawing_tool_palette, :expand => false)
+	hbox.pack_start(@building_drawing_area, :expand => true, :fill => true)
+	self.add(hbox)
 	
 	self.show_all
 	
@@ -40,10 +40,12 @@ class BuildingLayoutWidget < Gtk::Frame
   end
   
   def start_observing_model
-	# YEAH, SURE, I TOTALLY IMPLEMENTED THIS. <_<
+	# HACK
+	# YEAH, SURE, I TOTALLY IMPLEMENTED THIS. Stop erroring. <_<
   end
   
   def stop_observing_model
-	# YEAH, SURE, I TOTALLY IMPLEMENTED THIS. <_<
+	# HACK
+	# YEAH, SURE, I TOTALLY IMPLEMENTED THIS. Stop erroring. <_<
   end
 end

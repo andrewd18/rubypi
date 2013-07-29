@@ -14,7 +14,7 @@ class BuildingToolRadioButton < Gtk::RadioToolButton
 	
 	pixbuf = CairoBuildingImage.new(building_instance, 32, 32).image
 	self.icon_widget = Gtk::Image.new(:pixbuf => pixbuf)
-	self.label_widget = Gtk::Label.new(building_instance.name)
+	self.label_widget = Gtk::Label.new("Add #{building_instance.name}")
 	
 	return self
   end

@@ -70,6 +70,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  on_release(widget, event)
 	end
 	
+	# Set size request(width in px, height in px)
+	# Request 8 buildings wide x 5 buildings tall.
+	self.set_size_request((BUILDING_ICON_SIZE * 8), (BUILDING_ICON_SIZE * 5))
+	
 	return self
   end
   
