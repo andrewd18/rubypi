@@ -50,6 +50,13 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  @building_drawing_area.set_on_click_action("add_link")
 	end
 	
+	remove_link_button = Gtk::RadioToolButton.new
+	remove_link_button.label = "Delete Link"
+	self.append_custom_tool_button(remove_link_button)
+	remove_link_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("delete_link")
+	end
+	
 	# Finally, set the default action.
 	move_tool_button.active = true
 	@building_drawing_area.set_on_click_action("move_building")

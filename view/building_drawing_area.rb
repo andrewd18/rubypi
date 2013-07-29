@@ -298,11 +298,25 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	destination_building = self.building_under_cursor
 	
 	# If either one of these "buildings" is nil, abort.
-	if (@add_link_first_building == nil) or (self.building_under_cursor == nil)
+	if (source_building == nil) or (destination_building == nil)
 	  return
 	else
 	  # Otherwise, create the link.
 	  @planet_model.add_link(source_building, destination_building)
+	end
+  end
+  
+  def delete_link_from_model
+	source_building = @delete_link_first_building
+	destination_building = self.building_under_cursor
+	
+	# If either one of these "buildings" is nil, abort.
+	if (source_building == nil) or (destination_building == nil)
+	  return
+	else
+	  # Otherwise, delete the link.
+	  link_to_remove = @planet_model.find_link(source_building, destination_building)
+	  @planet_model.remove_link(link_to_remove)
 	end
   end
   
@@ -346,8 +360,18 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  end
 	  
 	when "delete_link"
-	  # TODO
-	  puts "delete_link"
+	  # If the delete_link_first_building variable is nil, that means the user either
+	  # didn't click on a building the first time, or has yet to click on a building.
+	  if (@delete_link_first_building == nil)
+		# self.building_under_cursor will return nil if nothing is found,
+		# ensuring that this gets called again properly if the user clicks on blank space
+		@delete_link_first_building = self.building_under_cursor
+	  else
+		delete_link_from_model
+		
+		# Reset the delete-link state.
+		@delete_link_first_building = nil
+	  end
 	
 	else
 	  raise RuntimeError, "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
