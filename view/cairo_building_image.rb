@@ -1,5 +1,3 @@
-require 'rsvg2'
-
 # Given a building model, can draw an image of it to a Cairo context.
 
 class CairoBuildingImage
