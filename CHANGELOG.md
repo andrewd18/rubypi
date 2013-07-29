@@ -1,3 +1,7 @@
+Version 0.0.10
+==============
+* Fixed crash on load when rsvg2 wasn't installed.
+
 Version 0.0.9
 =============
 * Swapped out the boring planet view table for an interactive widget that works much more like the EVE PI interface.
