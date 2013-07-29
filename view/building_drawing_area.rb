@@ -105,16 +105,18 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  # Draw within a cairo_context transation.
 	  cairo_context.save do
 		
-		# Since we are adding a building, create and draw an add_building_class building under the cursor position.
-		if ((@cursor_x_pos != nil) &&
-			(@cursor_y_pos != nil))
+		# If the cursor position is within the window
+		if (((@cursor_x_pos > 0.0) && (@cursor_x_pos < self.allocated_width)) &&
+			((@cursor_y_pos > 0.0) && (@cursor_y_pos < self.allocated_height)))
 		  
+		  # Create a building image.
 		  fake_building = @add_building_class.new(@cursor_x_pos, @cursor_y_pos)
 		  image = CairoBuildingImageUnderCursor.new(fake_building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
 		  
 		  # Set the image overlap value appropriately.
 		  image.will_overlap = self.will_building_position_overlap?(fake_building)
 		  
+		  # Draw the building image.
 		  image.draw(cairo_context)
 		end
 	  end
