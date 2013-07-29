@@ -1,10 +1,6 @@
 require_relative 'radio_button_tool_palette.rb'
 require_relative 'building_tool_radio_button.rb'
 
-require_relative '../model/command_center.rb'
-require_relative '../model/extractor.rb'
-require_relative '../model/basic_industrial_facility.rb'
-
 class BuildingToolPalette < RadioButtonToolPalette
   def initialize(building_drawing_area)
 	super()
