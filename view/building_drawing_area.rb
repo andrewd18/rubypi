@@ -71,6 +71,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	raise ArgumentError unless (ON_CLICK_ACTIONS.include?(string))
 	
 	@on_click_action = string
+	
+	# TODO:
+	# When the action is changed from one state to another, clear all values from the old state.
+	# Namely, @add_building_class to nil if we are no longer adding a building.
   end
   
   def set_add_building_type(building_class)
@@ -133,6 +137,26 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
   end
   
+  def building_under_cursor
+	@planet_model.buildings.each do |existing_building|
+	  
+	  # Is a point within a circle?
+	  # 
+	  # (x - center_x)^2 + (y - center_y)^2 < radius^2
+	  
+	  x_pos_distance_squared = ((@cursor_x_pos - existing_building.x_pos)**2)
+	  y_pos_distance_squared = ((@cursor_y_pos - existing_building.y_pos)**2)
+	  radius_squared = ((BUILDING_ICON_SIZE / 2)**2)
+	  
+	  if ((x_pos_distance_squared + y_pos_distance_squared) < radius_squared)
+		return existing_building
+	  end
+	end
+	
+	# Didn't find anything.
+	return nil
+  end
+  
   def will_building_position_overlap?(building_to_check)
 	@planet_model.buildings.each do |existing_building|
 	  
@@ -166,39 +190,30 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	case (@on_click_action)
 	  
 	when "add_building"
-	  # Force a redraw of the widget.
-	  self.queue_draw
+	  # Cursor movement with add_building does nothing, as we only add a building on click.
 	  
-	#when "move_building"
-	  # puts "move_building"
-	
-	#when "edit_building"
-	  #puts "edit_building"
-	  
-	#when "delete_building"
-	  #puts "delete_building"
-	  
-	#when "delete_link"
-	  #puts "delete_link"
-	
-	else
-	  #puts "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
-	end
-  end
-  
-  # Called when the pointer leaves the drawing area.
-  def on_leave_notify(widget, event)
-	# No matter what, update the cursor position.
-	@cursor_x_pos = nil
-	@cursor_y_pos = nil
-	
-	# Then, determine what else to do based on the selected action.
-	case (@on_click_action)
-	  
-	when "add_building"
-	  
-	#when "move_building"
-	  # puts "move_building"
+	when "move_building"
+	  # If the user is actively moving the building,
+	  # update its x and y coords.
+	  #
+	  # If the user tries to go out of the drawing area, prevent it.
+	  if (@move_building_selected_building != nil)
+		if @cursor_x_pos < 0.0
+		  @move_building_selected_building.x_pos = 0.0
+		elsif @cursor_x_pos > self.allocated_width
+		  @move_building_selected_building.x_pos = self.allocated_width
+		else
+		  @move_building_selected_building.x_pos = @cursor_x_pos
+		end
+		
+		if @cursor_y_pos < 0.0
+		  @move_building_selected_building.y_pos = 0.0
+		elsif @cursor_y_pos > self.allocated_height
+		  @move_building_selected_building.y_pos = self.allocated_height
+		else
+		  @move_building_selected_building.y_pos = @cursor_y_pos
+		end
+	  end
 	
 	#when "edit_building"
 	  #puts "edit_building"
@@ -217,7 +232,48 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	self.queue_draw
   end
   
-  def add_building_to_model(widget, event)
+  # Called when the pointer leaves the drawing area.
+  #
+  # NOTE: This only gets called when the pointer passes the threshold.
+  # on_motion_notify happens even when the pointer is wayyyy outside said threshold.
+  # 
+  # This is pretty much useless now.
+  def on_leave_notify(widget, event)
+	# No matter what, update the cursor position.
+	@cursor_x_pos = event.x
+	@cursor_y_pos = event.y
+	
+	# Then, determine what else to do based on the selected action.
+	case (@on_click_action)
+	  
+	when "add_building"
+	  # Cursor movement with add_building does nothing, as we only add a building on click.
+	  
+	when "move_building"
+	  # If the user is actively moving the building,
+	  # but they are leaving the drawing area,
+	  # determine the x and y coords of the cursor and set the building to the appropriate min or max.
+	  #
+	  # WORKAROUND: Due to on_motion_notify, this does nothing now. I need to evaluate if I still need it.
+	  
+	#when "edit_building"
+	  #puts "edit_building"
+	  
+	#when "delete_building"
+	  #puts "delete_building"
+	  
+	#when "delete_link"
+	  #puts "delete_link"
+	
+	else
+	  #puts "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
+	end
+	
+	# Finally, force a redraw of the widget.
+	self.queue_draw
+  end
+  
+  def add_building_to_model
 	# Create a new building of the selected class at the cursor position.
 	new_building = @add_building_class.new(@cursor_x_pos, @cursor_y_pos)
 	
@@ -249,10 +305,12 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	case (@on_click_action)
 	  
 	when "add_building"
-	  add_building_to_model(widget, event)
+	  add_building_to_model
 	  
 	when "move_building"
-	  puts "move_building"
+	  # TODO:
+	  # User wants to grab the building under the cursor. Set the selection.
+	  @move_building_selected_building = self.building_under_cursor
 	
 	when "edit_building"
 	  puts "edit_building"
@@ -273,6 +331,34 @@ class BuildingDrawingArea < Gtk::DrawingArea
   
   # Called when the user releases a button within the drawing area.
   def on_release(widget, event)
-	puts "on_release"
+	# No matter what, update the cursor position.
+	@cursor_x_pos = event.x
+	@cursor_y_pos = event.y
+	
+	# Then, determine what else to do based on the selected action.
+	case (@on_click_action)
+	  
+	when "add_building"
+	  # Mouse release with add_building does nothing, as we only add a building on click.
+	  
+	when "move_building"
+	  # User wants to let go of the building. Clear the selection. 
+	  @move_building_selected_building = nil
+	
+	when "edit_building"
+	  puts "edit_building_release"
+	  
+	when "delete_building"
+	  puts "delete_building_release"
+	  
+	when "delete_link"
+	  puts "delete_link_release"
+	
+	else
+	  puts "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
+	end
+	
+	# Finally, force a redraw of the widget.
+	self.queue_draw
   end
 end

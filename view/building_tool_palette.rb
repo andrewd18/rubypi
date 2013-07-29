@@ -47,6 +47,10 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  end
 	end
 	
+	# Finally, set the default action.
+	move_tool_button.active = true
+	@building_drawing_area.set_on_click_action("move_building")
+	
 	return self
   end
 end
