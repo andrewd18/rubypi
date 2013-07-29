@@ -1,3 +1,10 @@
+Version 0.0.9
+=============
+* Swapped out the boring planet view table for an interactive widget that works much more like the EVE PI interface.
+* You can now add and delete links. They don't give a PG/CPU value yet.
+* Likely broke backwards compatibility for old PI Config (.yml) files.
+
+
 Version 0.0.8
 =============
 * Added Player Owned Customs Offices (POCOs).
