@@ -23,12 +23,21 @@ class BuildingDrawingArea < Gtk::DrawingArea
   
   BUILDING_ICON_SIZE = 64
   
+  ON_CLICK_ACTIONS = ["add_building",
+					  "move_building",
+					  "edit_building",
+					  "delete_building",
+					  "delete_link"]
+  
   def initialize(planet_model)
 	# Set up GTK stuffs.
 	super()
 	
 	@planet_model = planet_model
-	@building_under_cursor = nil
+	@add_building_class = nil
+	
+	@cursor_x_pos = nil
+	@cursor_y_pos = nil
 	
 	# Set up auto-refresh of drawing area.
 	self.signal_connect('draw') do |widget, cairo_context|
@@ -37,22 +46,37 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	
 	self.add_events(Gdk::Event::Mask::POINTER_MOTION_MASK)
 	self.signal_connect('motion-notify-event') do |widget, event|
-	  set_tool_outline_coords(widget, event)
+	  on_motion_notify(widget, event)
 	end
 	
 	self.add_events(Gdk::Event::Mask::LEAVE_NOTIFY_MASK)
 	self.signal_connect('leave-notify-event') do |widget, event|
-	  clear_tool_outline_coords(widget, event)
+	  on_leave_notify(widget, event)
 	end
 	
 	self.add_events(Gdk::Event::Mask::BUTTON_PRESS_MASK)
 	self.signal_connect('button-press-event') do |widget, event|
-	  add_building_to_model(widget, event)
+	  on_click(widget, event)
 	end
+	
+	self.add_events(Gdk::Event::Mask::BUTTON_RELEASE_MASK)
+	self.signal_connect('button-release-event') do |widget, event|
+	  on_release(widget, event)
+	end
+	
+	return self
   end
   
-  def change_building_under_cursor(building_class)
-	@building_under_cursor = building_class.new(nil, nil)
+  def set_on_click_action(string)
+	raise ArgumentError unless (ON_CLICK_ACTIONS.include?(string))
+	
+	@on_click_action = string
+  end
+  
+  def set_add_building_type(building_class)
+	raise unless (building_class.is_a?(Class))
+	
+	@add_building_class = building_class
   end
   
   def draw_all(widget, cairo_context)
@@ -69,36 +93,60 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  image.draw(cairo_context)
 	end
 	
-	cairo_context.save do
-	  # If the mouse is over the drawing area, 
-	  # draw a faint image of the selected palette tool at the pointer coordinates.
+	# CURSOR
+	# Change what and how we draw based on the selected action.
+	case (@on_click_action)
 	  
-	  if ((@building_under_cursor.x_pos != nil) &&
-		  (@building_under_cursor.y_pos != nil))
-		image = CairoBuildingImageUnderCursor.new(@building_under_cursor, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+	when "add_building"
+	  # Draw within a cairo_context transation.
+	  cairo_context.save do
 		
-		# Set the image overlap value appropriately.
-		image.will_overlap = self.will_building_position_overlap?
-		
-		image.draw(cairo_context)
+		# Since we are adding a building, create and draw an add_building_class building under the cursor position.
+		if ((@cursor_x_pos != nil) &&
+			(@cursor_y_pos != nil))
+		  
+		  fake_building = @add_building_class.new(@cursor_x_pos, @cursor_y_pos)
+		  image = CairoBuildingImageUnderCursor.new(fake_building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+		  
+		  # Set the image overlap value appropriately.
+		  image.will_overlap = self.will_building_position_overlap?(fake_building)
+		  
+		  image.draw(cairo_context)
+		end
 	  end
+	  
+	  
+	#when "move_building"
+	  # puts "move_building"
+	
+	#when "edit_building"
+	  # puts "edit_building"
+	  
+	#when "delete_building"
+	  # puts "delete_building"
+	  
+	#when "delete_link"
+	  # puts "delete_link"
+	
+	else
+	  # puts "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
 	end
   end
   
-  def will_building_position_overlap?
+  def will_building_position_overlap?(building_to_check)
 	@planet_model.buildings.each do |existing_building|
 	  
 	  # Is a point within a circle?
 	  # 
 	  # (x - center_x)^2 + (y - center_y)^2 < radius^2
 	  
-	  x_pos_distance = ((@building_under_cursor.x_pos - existing_building.x_pos)**2)
-	  y_pos_distance = ((@building_under_cursor.y_pos - existing_building.y_pos)**2)
+	  x_pos_distance_squared = ((building_to_check.x_pos - existing_building.x_pos)**2)
+	  y_pos_distance_squared = ((building_to_check.y_pos - existing_building.y_pos)**2)
 	  diameter_squared = (BUILDING_ICON_SIZE**2)
 	  
 	  # I use diameter squared because I'm calculating for two circles, not a point within one.
 	  
-	  if ((x_pos_distance + y_pos_distance) < diameter_squared)
+	  if ((x_pos_distance_squared + y_pos_distance_squared) < diameter_squared)
 		return true
 	  end
 	end
@@ -108,33 +156,80 @@ class BuildingDrawingArea < Gtk::DrawingArea
   
   private
   
-  def set_tool_outline_coords(widget, event)
-	@building_under_cursor.x_pos = event.x
-	@building_under_cursor.y_pos = event.y
+  # Called when the pointer moves within the drawing area.
+  def on_motion_notify(widget, event)
+	# No matter what, update the cursor position.
+	@cursor_x_pos = event.x
+	@cursor_y_pos = event.y
 	
-	# Force a redraw of the widget.
-	self.queue_draw
+	# Then, determine what else to do based on the selected action.
+	case (@on_click_action)
+	  
+	when "add_building"
+	  # Force a redraw of the widget.
+	  self.queue_draw
+	  
+	#when "move_building"
+	  # puts "move_building"
+	
+	#when "edit_building"
+	  #puts "edit_building"
+	  
+	#when "delete_building"
+	  #puts "delete_building"
+	  
+	#when "delete_link"
+	  #puts "delete_link"
+	
+	else
+	  #puts "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
+	end
   end
   
-  def clear_tool_outline_coords(widget, event)
-	@building_under_cursor.x_pos = nil
-	@building_under_cursor.y_pos = nil
+  # Called when the pointer leaves the drawing area.
+  def on_leave_notify(widget, event)
+	# No matter what, update the cursor position.
+	@cursor_x_pos = nil
+	@cursor_y_pos = nil
 	
-	# Force a redraw of the widget.
+	# Then, determine what else to do based on the selected action.
+	case (@on_click_action)
+	  
+	when "add_building"
+	  
+	#when "move_building"
+	  # puts "move_building"
+	
+	#when "edit_building"
+	  #puts "edit_building"
+	  
+	#when "delete_building"
+	  #puts "delete_building"
+	  
+	#when "delete_link"
+	  #puts "delete_link"
+	
+	else
+	  #puts "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
+	end
+	
+	# Finally, force a redraw of the widget.
 	self.queue_draw
   end
   
   def add_building_to_model(widget, event)
-	if (self.will_building_position_overlap? == true)
+	# Create a new building of the selected class at the cursor position.
+	new_building = @add_building_class.new(@cursor_x_pos, @cursor_y_pos)
+	
+	# Check to see if it would overlap.
+	if (self.will_building_position_overlap?(new_building) == true)
 	  # TODO - Tell the user what happened nicely.
 	  # For now, spit the error out to the command line.
 	  puts "Cannot add a building where it would overlap."
 	  return
 	end
 	
-	# Copy the values of @building_under_cursor
-	new_building = @building_under_cursor.class.new(@building_under_cursor.x_pos, @building_under_cursor.y_pos)
-	
+	# If it didn't overlap, attempt to add it.
 	begin
 	  @planet_model.add_building(new_building)
 	rescue ArgumentError => error
@@ -142,8 +237,42 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  # For now, spit it out to the command line.
 	  puts error
 	end
+  end
+  
+  # Called when the user clicks within the drawing area.
+  def on_click(widget, event)
+	# No matter what, update the cursor position.
+	@cursor_x_pos = event.x
+	@cursor_y_pos = event.y
 	
-	# Force a redraw of the widget.
+	# Then, determine what else to do based on the selected action.
+	case (@on_click_action)
+	  
+	when "add_building"
+	  add_building_to_model(widget, event)
+	  
+	when "move_building"
+	  puts "move_building"
+	
+	when "edit_building"
+	  puts "edit_building"
+	  
+	when "delete_building"
+	  puts "delete_building"
+	  
+	when "delete_link"
+	  puts "delete_link"
+	
+	else
+	  puts "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
+	end
+	
+	# Finally, force a redraw of the widget.
 	self.queue_draw
+  end
+  
+  # Called when the user releases a button within the drawing area.
+  def on_release(widget, event)
+	puts "on_release"
   end
 end

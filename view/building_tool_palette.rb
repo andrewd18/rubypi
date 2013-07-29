@@ -21,6 +21,13 @@ class BuildingToolPalette < RadioButtonToolPalette
 	# Delete Building Tool
 	# Select Building Toold
 	
+	move_tool_button = Gtk::RadioToolButton.new
+	move_tool_button.label = "Move"
+	self.append_custom_tool_button(move_tool_button)
+	move_tool_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("move_building")
+	end
+	
 	building_class_names = Array.new
 	building_class_names << CommandCenter
 	building_class_names << StorageFacility
@@ -35,13 +42,10 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  self.append_custom_tool_button(button)
 	  
 	  button.signal_connect('clicked') do |button|
-		@building_drawing_area.change_building_under_cursor(button.building_class)
+		@building_drawing_area.set_on_click_action("add_building")
+		@building_drawing_area.set_add_building_type(button.building_class)
 	  end
 	end
-	
-	# HACK: I have to do this because I'm not initializing something properly.
-	# Finally, update the drawing area's building class.
-	@building_drawing_area.change_building_under_cursor(self.active_tool.building_class)
 	
 	return self
   end
