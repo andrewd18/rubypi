@@ -347,8 +347,13 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  @move_building_selected_building = self.building_under_cursor
 	
 	when "edit_building"
-	  # TODO
-	  puts "edit_building"
+	  selected_building = self.building_under_cursor
+	  
+	  if (selected_building != nil)
+		# Change the main widget to a BuildingViewWidget, passing in the selected building instance.
+		$ruby_pi_main_gtk_window.change_main_widget(BuildingViewWidget.new(selected_building))
+	  end
+	  
 	  
 	when "delete_building"
 	  delete_building_from_model
