@@ -43,6 +43,13 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  end
 	end
 	
+	delete_building_button = Gtk::RadioToolButton.new
+	delete_building_button.label = "Delete Building"
+	self.append_custom_tool_button(delete_building_button)
+	delete_building_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("delete_building")
+	end
+	
 	add_link_button = Gtk::RadioToolButton.new
 	add_link_button.label = "Add Link"
 	self.append_custom_tool_button(add_link_button)

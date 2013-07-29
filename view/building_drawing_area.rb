@@ -293,6 +293,16 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
   end
   
+  def delete_building_from_model
+	building_to_remove = self.building_under_cursor
+	
+	if (building_to_remove == nil)
+	  return
+	else
+	  @planet_model.remove_building(building_to_remove)
+	end
+  end
+  
   def add_link_to_model
 	source_building = @add_link_first_building
 	destination_building = self.building_under_cursor
@@ -341,8 +351,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  puts "edit_building"
 	  
 	when "delete_building"
-	  # TODO
-	  puts "delete_building"
+	  delete_building_from_model
 	  
 	when "add_link"
 	  # If the add_link_first_building variable is nil, that means the user either
