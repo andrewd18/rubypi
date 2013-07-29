@@ -43,6 +43,13 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  end
 	end
 	
+	add_link_button = Gtk::RadioToolButton.new
+	add_link_button.label = "Add Link"
+	self.append_custom_tool_button(add_link_button)
+	add_link_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("add_link")
+	end
+	
 	# Finally, set the default action.
 	move_tool_button.active = true
 	@building_drawing_area.set_on_click_action("move_building")

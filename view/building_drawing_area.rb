@@ -27,6 +27,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
 					  "move_building",
 					  "edit_building",
 					  "delete_building",
+                      "add_link",
 					  "delete_link"]
   
   def initialize(planet_model)
@@ -34,7 +35,12 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	super()
 	
 	@planet_model = planet_model
+	
+	# move_building state variables
 	@add_building_class = nil
+	
+	# add_link state variables
+	@add_link_first_building = nil
 	
 	@cursor_x_pos = 0.0
 	@cursor_y_pos = 0.0
@@ -131,6 +137,32 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	#when "delete_building"
 	  # puts "delete_building"
 	  
+	when "add_link"
+	  # If the first building has been set to a real building,
+	  # draw a line between the first building and the cursor position.
+	  if (@add_link_first_building != nil)
+		# Do all the painting in a transaction.
+		cairo_context.save do
+
+		  red   = (208.0 / 255)
+		  green = (149.0 / 255)
+		  blue  = (71.0 / 255)
+		  alpha = (255.0 / 255)
+		  
+		  cairo_context.set_source_rgba(red, green, blue, alpha)
+		  cairo_context.set_line_width(2.0)
+		  cairo_context.set_dash(5.0, 5.0)
+		  
+		  # Move to the coordinates for this slot.
+		  cairo_context.move_to(@add_link_first_building.x_pos, @add_link_first_building.y_pos)
+		  
+		  # Draw a line to the connected slot.
+		  cairo_context.line_to(@cursor_x_pos, @cursor_y_pos)
+		  
+		  cairo_context.stroke
+		end
+	  end
+	  
 	#when "delete_link"
 	  # puts "delete_link"
 	
@@ -216,10 +248,16 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		self.queue_draw
 	  end
 	  
-	# If the add action is selected...
+	# If the add building action is selected...
 	elsif (@on_click_action == "add_building")
 	  # ... redraw the whole screen because we need to draw a fake building under the new cursor coords.
 	  self.queue_draw
+	  
+	# If the add link action is selected...
+	elsif (@on_click_action == "add_link")
+	  # ... redraw the whole screen because we need to draw a fake link to the new cursor coords.
+	  self.queue_draw
+	  
 	end
   end
   
@@ -255,6 +293,19 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
   end
   
+  def add_link_to_model
+	source_building = @add_link_first_building
+	destination_building = self.building_under_cursor
+	
+	# If either one of these "buildings" is nil, abort.
+	if (@add_link_first_building == nil) or (self.building_under_cursor == nil)
+	  return
+	else
+	  # Otherwise, create the link.
+	  @planet_model.add_link(source_building, destination_building)
+	end
+  end
+  
   # Called when the user clicks within the drawing area.
   def on_click(widget, event)
 	# No matter what, update the cursor position.
@@ -278,6 +329,21 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	when "delete_building"
 	  # TODO
 	  puts "delete_building"
+	  
+	when "add_link"
+	  # If the add_link_first_building variable is nil, that means the user either
+	  # didn't click on a building the first time, or has yet to click on a building.
+	  if (@add_link_first_building == nil)
+		# self.building_under_cursor will return nil if nothing is found,
+		# ensuring that this gets called again properly if the user clicks on blank space
+		@add_link_first_building = self.building_under_cursor
+	  else
+		# This must be the second click.
+		add_link_to_model
+		
+		# Re-set the link state.
+		@add_link_first_building = nil
+	  end
 	  
 	when "delete_link"
 	  # TODO
@@ -314,6 +380,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	when "delete_building"
 	  # TODO
 	  puts "delete_building_release"
+	  
+	when "add_link"
+	  # TODO
+	  puts "add_link_release"
 	  
 	when "delete_link"
 	  # TODO
