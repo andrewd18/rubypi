@@ -182,7 +182,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
   
   private
   
-  # Called when the pointer moves within the drawing area.
+  # Called when the pointer moves, regardless of whether or not it's in the drawing area.
   def on_motion_notify(widget, event)
 	# No matter what, update the cursor position.
 	@cursor_x_pos = event.x
