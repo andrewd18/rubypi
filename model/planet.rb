@@ -244,6 +244,14 @@ class Planet
 	
 	building_to_remove.delete_observer(self)
 	building_to_remove.planet = nil
+	
+	# Remove any links associated with the building.
+	connected_links = find_links_connected_to(building_to_remove)
+	connected_links.each do |link|
+	  self.remove_link(link)
+	end
+	
+	# Remove the building.
 	@buildings.delete(building_to_remove)
 	
 	# Tell my observers I've changed.

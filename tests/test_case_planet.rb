@@ -808,6 +808,19 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(known_links_without_two, @planet.links)
   end
   
+  def test_when_building_is_removed_links_are_removed_as_well
+	storage_facility_a = StorageFacility.new
+	storage_facility_b = StorageFacility.new
+	
+	added_link = @planet.add_link(storage_facility_a, storage_facility_b)
+	
+	assert_true(@planet.find_links_connected_to(storage_facility_b).include?(added_link))
+	
+	@planet.remove_building(storage_facility_a)
+	
+	assert_false(@planet.find_links_connected_to(storage_facility_b).include?(added_link))
+  end
+  
   def test_num_links_scales_with_number_of_links
 	storage_facility_a = StorageFacility.new
 	storage_facility_b = StorageFacility.new
