@@ -90,6 +90,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
   end
   
   def draw_all(widget, cairo_context)
+	if (self.destroyed?)
+	  return
+	end
+	
 	# Draw from back to front.
 	# LINKS
 	@planet_model.links.each do |link|
@@ -245,18 +249,24 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		
 		# Only redraw the window if the user was moving a building.
 		# Otherwise it's a wasted call.
-		self.queue_draw
+		if (self.destroyed? == false)
+		  self.queue_draw
+		end
 	  end
 	  
 	# If the add building action is selected...
 	elsif (@on_click_action == "add_building")
 	  # ... redraw the whole screen because we need to draw a fake building under the new cursor coords.
-	  self.queue_draw
+	  if (self.destroyed? == false)
+		self.queue_draw
+	  end
 	  
 	# If the add link action is selected...
 	elsif (@on_click_action == "add_link")
 	  # ... redraw the whole screen because we need to draw a fake link to the new cursor coords.
-	  self.queue_draw
+	  if (self.destroyed? == false)
+		self.queue_draw
+	  end
 	  
 	end
   end
@@ -268,7 +278,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	@cursor_y_pos = event.y
 	
 	# Force a redraw of the widget.
-	self.queue_draw
+	if (self.destroyed? == false)
+	  self.queue_draw
+	end
   end
   
   def add_building_to_model
@@ -392,7 +404,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
 	
 	# Finally, force a redraw of the widget.
-	self.queue_draw
+	if (self.destroyed? == false)
+	  self.queue_draw
+	end
   end
   
   # Called when the user releases a button within the drawing area.
@@ -432,6 +446,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
 	
 	# Finally, force a redraw of the widget.
-	self.queue_draw
+	if (self.destroyed? == false)
+	  self.queue_draw
+	end
   end
 end
