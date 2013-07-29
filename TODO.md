@@ -1,19 +1,9 @@
 Building Drawing Area TODO
 ==========================
 
-* Add a "move building" button.
-* When the user drags with a move building, change the selected model's x/y coords.
-* Add a "delete building" button.
-* When the user clicks with a delete building, remove the selected building model.
-* Add a "create link" button.
-* When the user clicks two nodes in succession using create link, add a link.
-* Add a "delete link" button.
-* When the user clicks with a delete link button, remove the selected link.
-* Add a "select building" button.
-* When the user clicks with a select building button, pop up the Edit Building window.
 * Add tooltips on hover.
 * Add basic, advanced, and high-tech tags to the factory building images so you can tell them apart.
-
+* Add a max size or something to the drawing window. It's weird when I resize it down and buildings get hidden.
 
 Core Features
 =============
