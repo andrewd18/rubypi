@@ -38,4 +38,12 @@ class BuildingLayoutWidget < Gtk::Frame
 	
 	return self
   end
+  
+  def start_observing_model
+	# YEAH, SURE, I TOTALLY IMPLEMENTED THIS. <_<
+  end
+  
+  def stop_observing_model
+	# YEAH, SURE, I TOTALLY IMPLEMENTED THIS. <_<
+  end
 end

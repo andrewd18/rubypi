@@ -1,8 +1,6 @@
 require 'gtk3'
 
-require_relative 'add_planetary_building_widget.rb'
-require_relative 'buildings_list_store.rb'
-require_relative 'buildings_tree_view.rb'
+require_relative 'building_layout_widget.rb'
 require_relative 'planet_stats_widget.rb'
 require_relative 'building_view_widget.rb'
 require_relative 'up_to_system_view_button.rb'
@@ -32,41 +30,11 @@ class PlanetViewWidget < Gtk::Box
 	# Create the Bottom Row
 	bottom_row = Gtk::Box.new(:horizontal)
 	
-	# Left Column
-	@add_planetary_building_widget = AddPlanetaryBuildingWidget.new(@planet_model)
-	planetary_building_widget_frame = Gtk::Frame.new
-	planetary_building_widget_frame.add(@add_planetary_building_widget)
-	bottom_row.pack_start(planetary_building_widget_frame, :expand => false)
-	
-	
-	# Center Column
-	current_buildings_label = Gtk::Label.new("Current Buildings")
-	@buildings_tree_view = BuildingsTreeView.new(@planet_model)
-	@edit_selected_button = EditSelectedButton.new(@buildings_tree_view)
-	@clear_sort_button = ClearSortButton.new(@buildings_tree_view)
-	transfer_products_button = TransferProductsButton.new(@planet_model, nil, $ruby_pi_main_gtk_window)
-	
-	# TODO - Determine if I need the auto_scrollbox. Attempt to reduce column width.
-	# TODO - Ugly. Convert to SimpleTable or generally clean up.
-	auto_scrollbox = Gtk::ScrolledWindow.new
-	# Have a horizontal or vertical scrollbar if necessary.
-	auto_scrollbox.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC)
-	auto_scrollbox.add(@buildings_tree_view)
-	
-	vertical_box = Gtk::Box.new(:vertical)
-	vertical_box.pack_start(current_buildings_label, :expand => false)
-	vertical_box.pack_start(auto_scrollbox, :expand => true, :fill => true)
-	
-	button_row = Gtk::Box.new(:horizontal)
-	button_row.pack_end(transfer_products_button, :expand => false, :fill => false)
-	button_row.pack_end(@clear_sort_button, :expand => false, :fill => false)
-	button_row.pack_end(@edit_selected_button, :expand => false, :fill => false)
-	
-	vertical_box.pack_start(button_row, :expand => false, :fill => false)
-	vertical_box_frame = Gtk::Frame.new
-	vertical_box_frame.add(vertical_box)
-	
-	bottom_row.pack_start(vertical_box_frame, :expand => true, :fill => true)
+	# Left column(s)
+	@building_layout_widget = BuildingLayoutWidget.new(@planet_model)
+	building_layout_widget_frame = Gtk::Frame.new
+	building_layout_widget_frame.add(@building_layout_widget)
+	bottom_row.pack_start(building_layout_widget_frame, :expand => true)
 	
 	# Right Column
 	@planet_stats_widget = PlanetStatsWidget.new(@planet_model)
@@ -92,7 +60,7 @@ class PlanetViewWidget < Gtk::Box
 	@planet_model = new_planet_model
 	
 	# Pass new @planet_model along to children.
-	@buildings_tree_view.planet_model = (@planet_model)
+	@building_layout_widget.planet_model = (@planet_model)
 	@planet_stats_widget.planet_model = (@planet_model)
   end
   
@@ -100,7 +68,7 @@ class PlanetViewWidget < Gtk::Box
 	@planet_model.add_observer(self)
 	
 	# Tell children to start observing.
-	@buildings_tree_view.start_observing_model
+	@building_layout_widget.start_observing_model
 	@planet_stats_widget.start_observing_model
   end
   
@@ -108,7 +76,7 @@ class PlanetViewWidget < Gtk::Box
 	@planet_model.delete_observer(self)
 	
 	# Tell children to stop observing.
-	@buildings_tree_view.stop_observing_model
+	@building_layout_widget.stop_observing_model
 	@planet_stats_widget.stop_observing_model
   end
   
