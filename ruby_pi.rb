@@ -17,6 +17,10 @@ class RubyPI < Gtk::Window
   def initialize
 	super(Gtk::Window::Type::TOPLEVEL)
 	
+	# Set up a default size.
+	# After much fiddling around I've found these values to do well.
+	self.set_default_size(1024, 475)
+	
 	# Make sure closing the window runs properly.
 	self.signal_connect("delete_event") do
 	  close_application
