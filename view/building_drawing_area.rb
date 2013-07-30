@@ -99,6 +99,17 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
 	
 	# Draw from back to front.
+	# BACKGROUND COLOR
+	cairo_context.save do
+	  red   = (255.0 / 255)
+	  green = (255.0 / 255)
+	  blue  = (255.0 / 255)
+	  alpha = (255.0 / 255)
+	  
+	  cairo_context.set_source_rgba(red, green, blue, alpha)
+	  cairo_context.paint
+	end
+	
 	# LINKS
 	@planet_model.links.each do |link|
 	  image = CairoLinkImage.new(link)
