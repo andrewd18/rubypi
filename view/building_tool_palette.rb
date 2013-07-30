@@ -77,7 +77,6 @@ class BuildingToolPalette < RadioButtonToolPalette
 	@building_drawing_area.set_on_click_action("edit_building")
 	
 	# And set a size request.  min_width, min_height
-	puts "#{self.children.count}"
 	self.set_size_request(1, (32 * self.children.count))
 	
 	return self
