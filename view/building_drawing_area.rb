@@ -1,7 +1,6 @@
 require 'gtk3'
 
 require_relative 'cairo_building_image.rb'
-require_relative 'cairo_building_image_under_cursor.rb'
 require_relative 'cairo_link_image.rb'
 
 # CREATE
@@ -119,6 +118,15 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	# BUILDINGS
 	@planet_model.buildings.each do |building|
 	  image = CairoBuildingImage.new(building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+	  
+	  # Set its invalid position or highlighted status accordingly.
+	  image.invalid_position = will_building_position_overlap?(building)
+	  
+	  # Only highlight if we're not adding a building.
+	  if (@on_click_action != "add_building")
+		image.highlighted = (building == self.building_under_cursor)
+	  end
+	  
 	  image.draw(cairo_context)
 	end
 	
@@ -136,10 +144,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		  
 		  # Create a building image.
 		  fake_building = @add_building_class.new(@cursor_x_pos, @cursor_y_pos)
-		  image = CairoBuildingImageUnderCursor.new(fake_building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+		  image = CairoBuildingImage.new(fake_building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
 		  
 		  # Set the image overlap value appropriately.
-		  image.will_overlap = self.will_building_position_overlap?(fake_building)
+		  image.invalid_position = self.will_building_position_overlap?(fake_building)
 		  
 		  # Draw the building image.
 		  image.draw(cairo_context)
@@ -212,6 +220,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
   
   def will_building_position_overlap?(building_to_check)
 	@planet_model.buildings.each do |existing_building|
+	  # Skip self.
+	  next unless (building_to_check != existing_building)
 	  
 	  # Is a point within a circle?
 	  # 
@@ -261,28 +271,12 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		else
 		  @move_building_selected_building.y_pos = @cursor_y_pos
 		end
-		
-		# Only redraw the window if the user was moving a building.
-		# Otherwise it's a wasted call.
-		if (self.destroyed? == false)
-		  self.queue_draw
-		end
 	  end
-	  
-	# If the add building action is selected...
-	elsif (@on_click_action == "add_building")
-	  # ... redraw the whole screen because we need to draw a fake building under the new cursor coords.
-	  if (self.destroyed? == false)
-		self.queue_draw
-	  end
-	  
-	# If the add link action is selected...
-	elsif (@on_click_action == "add_link")
-	  # ... redraw the whole screen because we need to draw a fake link to the new cursor coords.
-	  if (self.destroyed? == false)
-		self.queue_draw
-	  end
-	  
+	end
+	
+	# Redraw the whole screen.
+	if (self.destroyed? == false)
+	  self.queue_draw
 	end
   end
   

@@ -14,6 +14,8 @@ class CairoBuildingImage
                        "Customs Office" => "poco_icon.png"}
   
   attr_reader :image
+  attr_accessor :invalid_position
+  attr_accessor :highlighted
   
   def initialize(building_model, width, height)
 	raise ArgumentError unless building_model.is_a?(PlanetaryBuilding)
@@ -31,6 +33,8 @@ class CairoBuildingImage
 	@image = Gdk::Pixbuf.new(filename, width, height)
 	@width = width
 	@height = height
+	@invalid_position = false
+	@highlighted = false
   end
   
   def horizontal_scale
@@ -66,5 +70,49 @@ class CairoBuildingImage
 	  cairo_context.set_source_pixbuf(@image)
 	  cairo_context.paint
 	end
+	
+	# Draw overlays if necessary.
+	if (@invalid_position == true)
+	  
+	  red   = (255.0 / 255)
+	  green = (0.0 / 255)
+	  blue  = (0.0 / 255)
+	  alpha = (160.0 / 255)
+	  
+	  cairo_context.save do
+		# Move to the x/y coordinate that starts the top left corner of the scaled image.
+		cairo_context.translate(self.top_left_x_coord, self.top_left_y_coord)
+		
+		# Cairo Full Circle:
+		# cairo_context.arc(center x_pos, center y_pos, radius, 0, (2 * Math::PI))
+		cairo_context.arc((@width / 2), (@height / 2), (@width / 2), 0, (2 * Math::PI))
+		cairo_context.set_source_rgba(red, green, blue, alpha)
+		cairo_context.fill
+	  end
+	end
+	
+	if (@highlighted == true)
+	  # If highlighted, surround it with a green ring.
+	  
+	  red   = (0.0 / 255)
+	  green = (255.0 / 255)
+	  blue  = (0.0 / 255)
+	  alpha = (160.0 / 255)
+	  
+	  cairo_context.save do
+		# Move to the x/y coordinate that starts the top left corner of the scaled image.
+		cairo_context.translate(self.top_left_x_coord, self.top_left_y_coord)
+		
+		# The ring should be #{buffer} pixels outside the actual image.
+		buffer = 5
+		
+		# Cairo Full Circle:
+		# cairo_context.arc(center x_pos, center y_pos, radius, 0, (2 * Math::PI))
+		cairo_context.arc((@width / 2), (@height / 2), ((@width / 2) + buffer), 0, (2 * Math::PI))
+		cairo_context.set_source_rgba(red, green, blue, alpha)
+		cairo_context.stroke
+	  end
+	end
+	
   end
 end
