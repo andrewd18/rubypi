@@ -1,6 +1,16 @@
+Version 0.0.11
+==============
+* Set a default window size.
+* Added a little green ring when hovering over a building to show it's the one you're about to select.
+* Added icons to the Edit Building, Delete Building, Add Link, and Delete Link buttons.
+* Shrunk the tool buttons so they fit on one screen.
+* Added a filter / search mechanism to the add products widget.
+
+
 Version 0.0.10
 ==============
 * Fixed crash on load when rsvg2 wasn't installed.
+
 
 Version 0.0.9
 =============

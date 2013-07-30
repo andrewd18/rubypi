@@ -29,7 +29,7 @@ require 'releasy'
 
 Releasy::Project.new do
   name "RubyPI"
-  version "0.0.10"
+  version "0.0.11"
   verbose # Can be removed if you don't want to see all build messages.
 
   executable "ruby_pi.rb"
