@@ -1,4 +1,4 @@
-require_relative 'add_products_tree_store.rb'
+require_relative 'add_products_tree_store_with_filter.rb'
 
 require_relative 'icon_column.rb'
 require_relative 'text_column.rb'
@@ -15,7 +15,7 @@ class AddProductsTreeView < Gtk::TreeView
 	
 	@building_model = building_model
 	
-	@tree_model = AddProductsTreeStore.new
+	@tree_model = AddProductsTreeStoreWithFilter.new
 	super(@tree_model)
 	
 	# Create columns for the tree view.
