@@ -8,6 +8,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	@building_drawing_area = building_drawing_area
 	
 	self.orientation=(:vertical)
+	self.toolbar_style=(Gtk::Toolbar::Style::BOTH_HORIZ)
 	
 	# Add all the various tools I'm going to want.
 	#
@@ -71,9 +72,13 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  @building_drawing_area.set_on_click_action("delete_link")
 	end
 	
-	# Finally, set the default action.
+	# Set the default action.
 	edit_building_button.active = true
 	@building_drawing_area.set_on_click_action("edit_building")
+	
+	# And set a size request.  min_width, min_height
+	puts "#{self.children.count}"
+	self.set_size_request(1, (32 * self.children.count))
 	
 	return self
   end
