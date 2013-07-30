@@ -277,9 +277,11 @@ class BuildingDrawingArea < Gtk::DrawingArea
   
   # Called once when the pointer leaves the drawing area.
   def on_leave_notify(widget, event)
-	# Update the cursor position which will now be outside the drawing area window.
-	@cursor_x_pos = event.x
-	@cursor_y_pos = event.y
+	# Force the cursor x/y position to 0, returning us to the default state.
+	# Setting it to 0.0 ensures that if the drawing window is resized larger and the cursor position
+	# is returned to within the window size, we don't draw a phantom building beneath the old cursor coords.
+	@cursor_x_pos = 0.0
+	@cursor_y_pos = 0.0
 	
 	# Force a redraw of the widget.
 	if (self.destroyed? == false)
