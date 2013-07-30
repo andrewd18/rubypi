@@ -38,6 +38,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	end
 	
 	move_tool_button = Gtk::RadioToolButton.new
+	move_tool_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/move_building_icon.png")
 	move_tool_button.label = "Move Building"
 	self.append_custom_tool_button(move_tool_button)
 	move_tool_button.signal_connect('clicked') do |button|
@@ -45,6 +46,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	end
 	
 	edit_building_button = Gtk::RadioToolButton.new
+	edit_building_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/edit_building_icon.png")
 	edit_building_button.label = "Edit Building"
 	self.append_custom_tool_button(edit_building_button)
 	edit_building_button.signal_connect('clicked') do |button|
@@ -52,6 +54,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	end
 	
 	delete_building_button = Gtk::RadioToolButton.new
+	delete_building_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/delete_building_icon.png")
 	delete_building_button.label = "Delete Building"
 	self.append_custom_tool_button(delete_building_button)
 	delete_building_button.signal_connect('clicked') do |button|
@@ -59,6 +62,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	end
 	
 	add_link_button = Gtk::RadioToolButton.new
+	add_link_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/add_link_icon.png")
 	add_link_button.label = "Add Link"
 	self.append_custom_tool_button(add_link_button)
 	add_link_button.signal_connect('clicked') do |button|
@@ -66,6 +70,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	end
 	
 	remove_link_button = Gtk::RadioToolButton.new
+	remove_link_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/delete_link_icon.png")
 	remove_link_button.label = "Delete Link"
 	self.append_custom_tool_button(remove_link_button)
 	remove_link_button.signal_connect('clicked') do |button|
@@ -77,7 +82,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	@building_drawing_area.set_on_click_action("edit_building")
 	
 	# And set a size request.  min_width, min_height
-	self.set_size_request(1, (32 * self.children.count))
+	self.set_size_request(1, (33 * self.children.count))
 	
 	return self
   end

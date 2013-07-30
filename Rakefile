@@ -39,6 +39,7 @@ Releasy::Project.new do
          "model/*.yml",
          "view/*.rb",
          "view/images/*.png",
+         "view/images/16x16/*.png",
          "view/images/32x32/*.png",
          "view/images/64x64/*.png"]
   
