@@ -106,11 +106,11 @@ class Extractor < PlanetaryBuilding
 	return @extractor_heads.count
   end
   
-  def add_extractor_head
+  def add_extractor_head(x_pos = 0.0, y_pos = 0.0)
 	if self.number_of_heads == 10
 	  raise "Extractor already has 10 heads."
 	else
-	  extractor_head_instance = ExtractorHead.new
+	  extractor_head_instance = ExtractorHead.new(self, x_pos, y_pos)
 	  @extractor_heads << extractor_head_instance
 	  
 	  changed

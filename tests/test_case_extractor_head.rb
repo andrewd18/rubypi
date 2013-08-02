@@ -13,7 +13,8 @@ class TestCaseExtractorHead < Test::Unit::TestCase
   
   # Run before every test.
   def setup
-	@building = ExtractorHead.new
+	@parent_extractor = Extractor.new
+	@building = ExtractorHead.new(@parent_extractor)
   end
   
   # Run once after every test.
@@ -44,6 +45,10 @@ class TestCaseExtractorHead < Test::Unit::TestCase
 	assert_equal("Extractor Head", @building.name)
   end
   
+  def test_can_get_parent_extractor
+	assert_equal(@parent_extractor, @building.extractor)
+  end
+  
   def test_can_get_x_position
 	# Default should be 0.0.
 	assert_equal(0.0, @building.x_pos)
@@ -65,7 +70,7 @@ class TestCaseExtractorHead < Test::Unit::TestCase
   end
   
   def test_can_set_x_and_y_positions_in_constructor
-	@building = ExtractorHead.new(1.5, 3.2)
+	@building = ExtractorHead.new(@parent_extractor, 1.5, 3.2)
 	assert_equal(1.5, @building.x_pos)
 	assert_equal(3.2, @building.y_pos)
   end

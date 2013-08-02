@@ -84,6 +84,11 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_true(extractor_head_instance.is_a?(ExtractorHead))
   end
   
+  def test_extractor_sets_itself_as_parent_extractor_when_adding_head
+	extractor_head_instance = @building.add_extractor_head
+	assert_equal(@building, extractor_head_instance.extractor)
+  end
+  
   def test_extractor_can_add_head_and_make_it_available_via_attr_reader
 	head_one = @building.add_extractor_head
 	head_two = @building.add_extractor_head
@@ -142,7 +147,8 @@ class TestCaseExtractor < Test::Unit::TestCase
   end
   
   def test_extractor_cannot_remove_a_head_it_doesnt_have
-	unrelated_extractor_head_instance = ExtractorHead.new
+	unrelated_extractor = Extractor.new(0.0, 0.0, nil)
+	unrelated_extractor_head_instance = ExtractorHead.new(unrelated_extractor)
 	
 	assert_raise RuntimeError do
 	  @building.remove_extractor_head(unrelated_extractor_head_instance)
@@ -563,7 +569,8 @@ class TestCaseExtractor < Test::Unit::TestCase
   end
   
   def test_extractor_does_not_notify_observers_when_a_head_is_removed_but_fails
-	unrelated_extractor_head_instance = ExtractorHead.new
+	unrelated_extractor = Extractor.new(0.0, 0.0, nil)
+	unrelated_extractor_head_instance = ExtractorHead.new(unrelated_extractor)
 	
 	@building.add_observer(self)
 	
