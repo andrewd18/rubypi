@@ -23,6 +23,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
   BUILDING_ICON_SIZE = 64
   
   ON_CLICK_ACTIONS = ["add_building",
+                      "add_extractor_head",
 					  "move_building",
 					  "edit_building",
 					  "delete_building",
@@ -40,6 +41,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	
 	# add_link state variables
 	@add_link_first_building = nil
+	
+	# add_extractor_head state variables
+	@add_extractor_head_parent_extractor = nil
 	
 	@cursor_x_pos = 0.0
 	@cursor_y_pos = 0.0
@@ -109,6 +113,47 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  cairo_context.paint
 	end
 	
+	# Extractor Heads
+	@planet_model.extractors.each do |parent_extractor|
+	  parent_extractor.extractor_heads.each do |head|
+		cairo_context.save do
+
+		  # Aqua color for extractor "links".
+		  red   = (29.0 / 255)
+		  green = (141.0 / 255)
+		  blue  = (143.0 / 255)
+		  alpha = (255.0 / 255)
+		  
+		  cairo_context.set_source_rgba(red, green, blue, alpha)
+		  cairo_context.set_line_width(2.0)
+		  cairo_context.set_dash(5.0, 5.0)
+		  
+		  # Move to the coordinates for the parent extractor.
+		  cairo_context.move_to(parent_extractor.x_pos, parent_extractor.y_pos)
+		  
+		  # Draw a line between the parent extractor and the head.
+		  cairo_context.line_to(head.x_pos, head.y_pos)
+		  
+		  cairo_context.stroke
+		end
+		
+		cairo_context.save do  
+		  # Create an extractor head building image.
+		  building_image = CairoBuildingImage.new(head, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+		  
+		  # Set its invalid position or highlighted status accordingly.
+		  building_image.invalid_position = will_extractor_head_overlap?(head)
+		  
+		  # Only highlight if we're not adding a building.
+		  if (@on_click_action != "add_building")
+			building_image.highlighted = (head == self.building_under_cursor)
+		  end
+		  
+		  building_image.draw(cairo_context)
+		end
+	  end
+	end
+	
 	# LINKS
 	@planet_model.links.each do |link|
 	  image = CairoLinkImage.new(link)
@@ -154,6 +199,53 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		end
 	  end
 	  
+	
+	when "add_extractor_head"
+	  # If the user has selected an extractor,
+	  # draw a line between the first building and the cursor position.
+	  # Also draw the extractor head icon underneath the cursor position.
+	  if (@add_extractor_head_parent_extractor != nil)
+		# If the cursor position is within the window
+		if (((@cursor_x_pos > 0.0) && (@cursor_x_pos < self.allocated_width)) &&
+			((@cursor_y_pos > 0.0) && (@cursor_y_pos < self.allocated_height)))
+		  
+		  # Do all the painting in a transaction.
+		  cairo_context.save do
+
+			# Aqua color for extractors.
+			red   = (29.0 / 255)
+			green = (141.0 / 255)
+			blue  = (143.0 / 255)
+			alpha = (255.0 / 255)
+			
+			cairo_context.set_source_rgba(red, green, blue, alpha)
+			cairo_context.set_line_width(2.0)
+			cairo_context.set_dash(5.0, 5.0)
+			
+			# Move to the coordinates for this slot.
+			cairo_context.move_to(@add_extractor_head_parent_extractor.x_pos, @add_extractor_head_parent_extractor.y_pos)
+			
+			# Draw a line to the connected slot.
+			cairo_context.line_to(@cursor_x_pos, @cursor_y_pos)
+			
+			cairo_context.stroke
+		  end
+		  
+		  cairo_context.save do
+			# Create an extractor head building image.
+			extractor_head_class = ExtractorHead
+			fake_building = extractor_head_class.new(nil, @cursor_x_pos, @cursor_y_pos)
+			image = CairoBuildingImage.new(fake_building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+			
+			# Set the image overlap value appropriately.
+			image.invalid_position = self.will_extractor_head_overlap?(fake_building)
+			
+			# Draw the building image.
+			image.draw(cairo_context)
+		  end
+		end
+	  end
+	
 	  
 	#when "move_building"
 	  # puts "move_building"
@@ -214,6 +306,22 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  end
 	end
 	
+	@planet_model.extractors.each do |parent_extractor|
+	  parent_extractor.extractor_heads.each do |head|
+		# Is a point within a circle?
+		# 
+		# (x - center_x)^2 + (y - center_y)^2 < radius^2
+		
+		x_pos_distance_squared = ((@cursor_x_pos - head.x_pos)**2)
+		y_pos_distance_squared = ((@cursor_y_pos - head.y_pos)**2)
+		radius_squared = ((BUILDING_ICON_SIZE / 2)**2)
+		
+		if ((x_pos_distance_squared + y_pos_distance_squared) < radius_squared)
+		  return head
+		end
+	  end
+	end  
+	
 	# Didn't find anything.
 	return nil
   end
@@ -235,6 +343,31 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  
 	  if ((x_pos_distance_squared + y_pos_distance_squared) < diameter_squared)
 		return true
+	  end
+	end
+	
+	return false
+  end
+  
+  def will_extractor_head_overlap?(extractor_head_to_check)
+	@planet_model.extractors.each do |parent_extractor|
+	  parent_extractor.extractor_heads.each do |head|
+		# Skip self.
+		next unless (extractor_head_to_check != head)
+		
+		# Is a point within a circle?
+		# 
+		# (x - center_x)^2 + (y - center_y)^2 < radius^2
+		
+		x_pos_distance_squared = ((extractor_head_to_check.x_pos - head.x_pos)**2)
+		y_pos_distance_squared = ((extractor_head_to_check.y_pos - head.y_pos)**2)
+		diameter_squared = (BUILDING_ICON_SIZE**2)
+		
+		# I use diameter squared because I'm calculating for two circles, not a point within one.
+		
+		if ((x_pos_distance_squared + y_pos_distance_squared) < diameter_squared)
+		  return true
+		end
 	  end
 	end
 	
@@ -321,6 +454,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	
 	if (building_to_remove == nil)
 	  return
+	elsif (building_to_remove.is_a?(ExtractorHead))
+	  parent_extractor = building_to_remove.extractor
+	  parent_extractor.remove_extractor_head(building_to_remove)
 	else
 	  @planet_model.remove_building(building_to_remove)
 	end
@@ -353,6 +489,18 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
   end
   
+  def add_extractor_head_to_model
+	parent_extractor = @add_extractor_head_parent_extractor
+	
+	begin
+	  parent_extractor.add_extractor_head(@cursor_x_pos, @cursor_y_pos)
+	rescue ArgumentError => error
+	  # TODO - Tell the user what happened nicely.
+	  # For now, spit it out to the command line.
+	  puts error
+	end
+  end
+  
   # Called when the user clicks within the drawing area.
   def on_click(widget, event)
 	# No matter what, update the cursor position.
@@ -364,6 +512,28 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  
 	when "add_building"
 	  add_building_to_model
+	  
+	when "add_extractor_head"
+	  # If the add_extractor_head_parent_extractor variable is nil, that means the user either
+	  # didn't click on an extractor the first time, or has yet to click on an extractor.
+	  if (@add_extractor_head_parent_extractor == nil)
+		# self.building_under_cursor will return nil if nothing is found,
+		# ensuring that this gets called again properly if the user clicks on blank space.
+		building_under_cursor = self.building_under_cursor
+		
+		if (building_under_cursor.is_a?(Extractor))
+		  @add_extractor_head_parent_extractor = building_under_cursor
+		else
+		  @add_extractor_head_parent_extractor = nil
+		end
+	  else
+		# This must be the second click.
+		add_extractor_head_to_model
+		
+		# Re-set the link state.
+		@add_extractor_head_parent_extractor = nil
+	  end
+	  
 	  
 	when "move_building"
 	  # User wants to grab the building under the cursor. Set the selection.
@@ -431,6 +601,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  
 	when "add_building"
 	  # Mouse release with add_building does nothing, as we only add a building on click.
+	  
+	when "add_extractor_head"
+	  # Mouse release with add_extractor_head does nothing, as we only add an extractor on click.
 	  
 	when "move_building"
 	  # User wants to let go of the building. Clear the selection. 

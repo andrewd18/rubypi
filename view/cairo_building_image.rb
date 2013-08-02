@@ -11,6 +11,7 @@ class CairoBuildingImage
                        "Basic Industrial Facility" => "industrial_facility_two_materials.png",
                        "Advanced Industrial Facility" => "industrial_facility_two_materials.png",
                        "High Tech Industrial Facility" => "industrial_facility_three_materials.png",
+                       "Extractor Head" => "extractor_head_icon.png",
                        "Customs Office" => "poco_icon.png"}
   
   attr_reader :image
