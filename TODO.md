@@ -5,7 +5,8 @@ Core Features
 * Transfer Products Dialog
   - Add a warning when the user tries to transfer products to a destination that isn't selected yet.
   - Add a warning when the user tries to transfer products from one building to itself.
-* Prevent user from adding buildings to a planet that the planet doesn't support.
+* A building should not be able to be added if a planet forbids it.
+* An extractor should not be able to extract materials that its planet does not have.
 * Links
   - Add some conversion of pixels to length.
   - Include them in the CPU / PG calcs.
@@ -33,6 +34,7 @@ User Interface Improvements
   - Add images of extractor heads in the EditExtractorWindow.
   - Add basic, advanced, and high-tech tags to the factory building images so you can tell them apart.
 * Building Drawing Area
+  - Allow user to add extractor heads like links. Click extractor, click location.
   - Add tooltips on hover.
   - Add a max size or something to the drawing window. It's weird when I resize it down and buildings get hidden.
   - Do something visual when deleting links or adding links that shows you're on step two.
