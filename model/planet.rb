@@ -230,6 +230,17 @@ class Planet
 	# Can't add anything but PlanetaryBuildings.
 	raise ArgumentError unless building.is_a?(PlanetaryBuilding)
 	
+	# Finally, check to see if the planet allows this building.
+	# Right now the only restricted building is a HighTechIndustrialFacility.
+	if (building.is_a?(HighTechIndustrialFacility))
+	  # and if
+	  if ((@type != "Barren") and
+	      (@type != "Temperate"))
+		
+		raise ArgumentError, "A #{@type} planet cannot build a #{building.name}."
+	  end
+	end
+	
 	# Good to go.
 	@buildings << building
 	building.planet=(self)

@@ -13,7 +13,8 @@ class TestCasePlanet < Test::Unit::TestCase
   
   # Run before every test.
   def setup
-	@planet = Planet.new("Uncolonized")
+	# Use a Temperate planet by default so no buildings are inherently restricted.
+	@planet = Planet.new("Temperate")
 	@was_notified_of_change = false
   end
   
@@ -22,7 +23,7 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_planet_type_changes_when_planet_type_is_set
-	assert_equal("Uncolonized", @planet.type)
+	assert_equal("Temperate", @planet.type)
 	
 	@planet.type = "Lava"
 	
@@ -30,7 +31,7 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_error_occurs_and_planet_type_does_not_change_when_planet_type_is_set_to_invalid_value
-	assert_equal("Uncolonized", @planet.type)
+	assert_equal("Temperate", @planet.type)
 	
 	# There is no Unicorn planet.
 	assert_raise ArgumentError do
@@ -43,7 +44,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	end
 	
 	# Make sure the planet is unchanged.
-	assert_equal("Uncolonized", @planet.type)
+	assert_equal("Temperate", @planet.type)
   end
   
   def test_planet_name_changes_when_planet_name_is_set
@@ -158,6 +159,49 @@ class TestCasePlanet < Test::Unit::TestCase
 	# Make sure we don't have any buildings at this point.
 	assert_equal(0, @planet.buildings.count)
 	assert_equal(0, @planet.num_buildings)
+  end
+  
+  def test_cannot_add_high_tech_industrial_facility_unless_planet_type_supports_it
+	gas_planet = Planet.new("Gas")
+	ice_planet = Planet.new("Ice")
+	storm_planet = Planet.new("Storm")
+	barren_planet = Planet.new("Barren")
+	temperate_planet = Planet.new("Temperate")
+	lava_planet = Planet.new("Lava")
+	oceanic_planet = Planet.new("Oceanic")
+	plasma_planet = Planet.new("Plasma")
+	
+	assert_raise ArgumentError do
+	  gas_planet.add_building_from_class(HighTechIndustrialFacility)
+	end
+	
+	assert_raise ArgumentError do
+	  ice_planet.add_building_from_class(HighTechIndustrialFacility)
+	end
+	
+	assert_raise ArgumentError do
+	  storm_planet.add_building_from_class(HighTechIndustrialFacility)
+	end
+	
+	assert_nothing_thrown do
+	  barren_planet.add_building_from_class(HighTechIndustrialFacility)
+	end
+	
+	assert_nothing_thrown do
+	  temperate_planet.add_building_from_class(HighTechIndustrialFacility)
+	end
+	
+	assert_raise ArgumentError do
+	  lava_planet.add_building_from_class(HighTechIndustrialFacility)
+	end
+	
+	assert_raise ArgumentError do
+	  oceanic_planet.add_building_from_class(HighTechIndustrialFacility)
+	end
+	
+	assert_raise ArgumentError do
+	  plasma_planet.add_building_from_class(HighTechIndustrialFacility)
+	end
   end
   
   def test_adding_planet_from_class_name_returns_instance
