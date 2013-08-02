@@ -22,6 +22,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
   
   BUILDING_ICON_SIZE = 64
   
+  # N pixels = 1 "kilometer".
+  PIXEL_TO_KM_SCALE = 1.28
+  
   ON_CLICK_ACTIONS = ["add_building",
                       "add_extractor_head",
 					  "move_building",
@@ -374,6 +377,20 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	return false
   end
   
+  def calculate_link_length(link)
+	bldg_a = link.source_building
+	bldg_b = link.destination_building
+	
+	x_pos_distance_squared = ((bldg_a.x_pos - bldg_b.x_pos)**2)
+	y_pos_distance_squared = ((bldg_a.y_pos - bldg_b.y_pos)**2)
+	
+	distance_between_centers_in_px = Math.sqrt(x_pos_distance_squared + y_pos_distance_squared)
+	distance_between_centers_in_km = (distance_between_centers_in_px / PIXEL_TO_KM_SCALE)
+	
+	link.length = distance_between_centers_in_km
+	# puts "calculate_link_length: #{link.length}"
+  end
+  
   private
   
   # Called when the pointer moves and is inside the drawing area.
@@ -403,6 +420,11 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		  @move_building_selected_building.y_pos = self.allocated_height
 		else
 		  @move_building_selected_building.y_pos = @cursor_y_pos
+		end
+		
+		# Recalculate the lengths of each link associated with this building.
+		@move_building_selected_building.links.each do |link|
+		  link.length = self.calculate_link_length(link)
 		end
 	  end
 	end
@@ -471,7 +493,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  return
 	else
 	  # Otherwise, create the link.
-	  @planet_model.add_link(source_building, destination_building)
+	  new_link = @planet_model.add_link(source_building, destination_building)
+	  new_link.length = self.calculate_link_length(new_link)
 	end
   end
   
