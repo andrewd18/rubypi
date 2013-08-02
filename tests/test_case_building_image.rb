@@ -27,7 +27,7 @@ class TestCaseBuildingImage < Test::Unit::TestCase
 	@advanced_industrial_facility = AdvancedIndustrialFacility.new
 	@high_tech_industrial_facility = HighTechIndustrialFacility.new
 	@extractor = Extractor.new
-	@extractor_head = ExtractorHead.new
+	@extractor_head = ExtractorHead.new(@extractor)
 	@storage_facility = StorageFacility.new
 	@launchpad = Launchpad.new
 	
