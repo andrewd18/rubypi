@@ -1,3 +1,9 @@
+Scheduled for Next Release
+==========================
+* You can now add and delete extractor heads from the planet view.
+* PG and CPU for planetary links are now calculated.
+
+
 Version 0.0.11
 ==============
 * Set a default window size.
