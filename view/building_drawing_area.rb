@@ -542,7 +542,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	when "edit_building"
 	  selected_building = self.building_under_cursor
 	  
-	  if (selected_building != nil)
+	  # If the building exists and is not an extractor head...
+	  if ((selected_building != nil) &&
+		  (selected_building.is_a?(ExtractorHead) == false))
 		# Change the main widget to a BuildingViewWidget, passing in the selected building instance.
 		$ruby_pi_main_gtk_window.change_main_widget(BuildingViewWidget.new(selected_building))
 	  end
