@@ -18,17 +18,12 @@ class EditExtractorWidget < Gtk::Box
 	
 	# Create widgets.
 	# Left column.
-	number_of_heads_label = Gtk::Label.new("Number of Heads:")
 	extract_label = Gtk::Label.new("Extract:")
 	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
 	output_building_label = Gtk::Label.new("Output to:")
 	
 	
 	# Center column.
-	# Create the spin button.						# min, max, step
-	@number_of_heads_spin_button = Gtk::SpinButton.new(0, 10, 1)
-	@number_of_heads_spin_button.numeric = true
-	
 	@product_combo_box = SimpleComboBox.new(@building_model.accepted_product_names)
 	@output_building_combo_box = SelectBuildingComboBox.new(@building_model.planet.aggregate_launchpads_ccs_storages)
 	
@@ -46,11 +41,7 @@ class EditExtractorWidget < Gtk::Box
 	
 	
 	                                    # rows, columns, homogenous?
-	extractor_options_table = SimpleTable.new(4, 2, false)
-	
-	# Number of heads row
-	extractor_options_table.attach(number_of_heads_label, 1, 1)
-	extractor_options_table.attach(@number_of_heads_spin_button, 1, 2)
+	extractor_options_table = SimpleTable.new(3, 2, false)
 	
 	# Product row
 	extractor_options_table.attach(extract_label, 2, 1)
@@ -107,8 +98,6 @@ class EditExtractorWidget < Gtk::Box
   def update
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
-	  @number_of_heads_spin_button.value = @building_model.extractor_heads.count
-	  
 	  # Set the value in the combo box to the value from the model.
 	  @product_combo_box.selected_item = @building_model.product_name
 	  
@@ -125,13 +114,6 @@ class EditExtractorWidget < Gtk::Box
   
   def commit_to_model
 	self.stop_observing_model
-	
-	@building_model.remove_all_heads
-	
-	num_heads_int = @number_of_heads_spin_button.value.to_i
-	num_heads_int.times do
-	  @building_model.add_extractor_head
-	end
 	
 	# Set the model to the value of the combo box.
 	@building_model.product_name = @product_combo_box.selected_item
