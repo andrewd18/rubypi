@@ -423,8 +423,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		end
 		
 		# Recalculate the lengths of each link associated with this building.
-		@move_building_selected_building.links.each do |link|
-		  link.length = self.calculate_link_length(link)
+		if @move_building_selected_building.is_a?(Linkable)
+		  @move_building_selected_building.links.each do |link|
+			link.length = self.calculate_link_length(link)
+		  end
 		end
 	  end
 	end
