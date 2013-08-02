@@ -22,6 +22,9 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
 	@storage_facility_b.planet = @planet
 	
 	@link = PlanetaryLink.new(@planet, @storage_facility_a, @storage_facility_b)
+	
+	# Observable variables.
+	@was_notified_of_change = false
   end
   
   # Run after every test.
@@ -292,5 +295,89 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   
   def test_end_y_pos
 	assert_equal(@storage_facility_b.y_pos, @link.end_y_pos)
+  end
+  
+  # 
+  # "Observable" tests
+  # 
+  
+  def test_link_inherits_observable
+	assert_true(@link.is_a?(Observable), "Planetary Link did not include Observable.")
+  end
+  
+  # Update method for testing observer.
+  def update
+	@was_notified_of_change = true
+  end
+  
+  def test_link_notifies_observers_on_level_increase
+	@link.upgrade_level=(0)
+	
+	@link.add_observer(self)
+	
+	@link.increase_level
+	assert_true(@was_notified_of_change, "Planetary Link did not call notify_observers or its state did not change.")
+	
+	@link.delete_observer(self)
+  end
+  
+  def test_command_center_does_not_notify_observers_if_level_increase_fails
+	@link.upgrade_level=(10)
+	
+	@link.add_observer(self)
+	
+	@link.increase_level
+	assert_false(@was_notified_of_change, "Planetary Link called notify_observers when its state did not change.")
+	
+	@link.delete_observer(self)
+  end
+  
+  def test_command_center_notifies_observers_on_level_decrease
+	# Have to be at an above-zero level to decrease properly.
+	@link.upgrade_level=(3)
+	
+	@link.add_observer(self)
+	
+	@link.decrease_level
+	assert_true(@was_notified_of_change, "Planetary Link did not call notify_observers or its state did not change.")
+	
+	@link.delete_observer(self)
+  end
+  
+  def test_command_center_does_not_notify_observers_if_level_decrease_fails
+	@link.upgrade_level=(0)
+	
+	@link.add_observer(self)
+	
+	@link.decrease_level
+	assert_false(@was_notified_of_change, "Planetary Link called notify_observers when its state did not change.")
+	
+	@link.delete_observer(self)
+  end
+  
+  def test_command_center_notifies_observers_on_level_set
+	@link.upgrade_level=(0)
+	
+	@link.add_observer(self)
+	
+	@link.upgrade_level=(3)
+	assert_true(@was_notified_of_change, "Planetary Link did not call notify_observers or its state did not change.")
+	
+	@link.delete_observer(self)
+  end
+  
+  def test_command_center_does_not_notify_observers_if_level_set_fails
+	@link.upgrade_level=(3)
+	
+	@link.add_observer(self)
+	
+	@link.upgrade_level=(3)
+	assert_false(@was_notified_of_change, "Planetary Link called notify_observers when its state did not change.")
+	
+	@link.delete_observer(self)
+  end
+  
+  def test_default_num_observers_is_zero
+	assert_equal(0, @link.count_observers)
   end
 end

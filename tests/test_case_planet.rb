@@ -345,6 +345,26 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(6410, @planet.cpu_usage)
   end
   
+  def test_powergrid_usage_scales_with_links
+	storage_a = @planet.add_building_from_class(StorageFacility)
+	storage_b = @planet.add_building_from_class(StorageFacility)
+	
+	link = @planet.add_link(storage_a, storage_b)
+	link.length = 1000
+	
+	assert_equal((link.powergrid_usage + storage_a.powergrid_usage + storage_b.powergrid_usage), @planet.powergrid_usage)
+  end
+  
+  def test_cpu_usage_scales_with_links
+	storage_a = @planet.add_building_from_class(StorageFacility)
+	storage_b = @planet.add_building_from_class(StorageFacility)
+	
+	link = @planet.add_link(storage_a, storage_b)
+	link.length = 1000
+	
+	assert_equal((link.cpu_usage + storage_a.cpu_usage + storage_b.cpu_usage), @planet.cpu_usage)
+  end
+  
   def test_powergrid_provided_scales_with_number_of_buildings
 	# 6000 # Command Center
 	# 0 # Storage Facility
@@ -533,6 +553,16 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(CustomsOffice)
 	
 	assert_equal(2135000.00, @planet.isk_cost)
+  end
+  
+  def test_isk_cost_scales_with_links
+	storage_a = @planet.add_building_from_class(StorageFacility)
+	storage_b = @planet.add_building_from_class(StorageFacility)
+	
+	link = @planet.add_link(storage_a, storage_b)
+	link.length = 1000
+	
+	assert_equal((link.isk_cost + storage_a.isk_cost + storage_b.isk_cost), @planet.isk_cost)
   end
   
   def test_number_of_command_centers_scales_with_number_of_command_centers

@@ -118,6 +118,10 @@ class Planet
 	  total += building.powergrid_usage
 	end
 	
+	@links.each do |link|
+	  total += link.powergrid_usage
+	end
+	
 	return total
   end
   
@@ -129,6 +133,10 @@ class Planet
 	
 	  # Update overall powergrid usage.
 	  total += building.cpu_usage
+	end
+	
+	@links.each do |link|
+	  total += link.cpu_usage
 	end
 	
 	return total
@@ -198,6 +206,10 @@ class Planet
 	
 	  # Update overall powergrid usage.
 	  total += building.isk_cost
+	end
+	
+	@links.each do |link|
+	  total += link.isk_cost
 	end
 	
 	return total
@@ -490,6 +502,7 @@ class Planet
 	if (existing_link == nil)
 	  # Create a new link.
 	  new_link = PlanetaryLink.new(self, source_building, destination_building)
+	  new_link.add_observer(self)
 	  
 	  @links << new_link
 	  
@@ -535,6 +548,7 @@ class Planet
 	# Remove it from our list.
 	# Lean on Array.delete
 	@links.delete(link_instance)
+	link_instance.delete_observer(self)
   end
   
   def num_links

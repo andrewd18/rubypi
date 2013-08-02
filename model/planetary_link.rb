@@ -16,6 +16,8 @@ class PlanetaryLink
   # and is probably inaccurate.
   TRANSFER_VOLUME = 250
   
+  include Observable
+  
   attr_reader :planet
   attr_reader :source_building
   attr_reader :destination_building
@@ -47,6 +49,10 @@ class PlanetaryLink
   def length=(new_length)
 	if ((MIN_LENGTH..MAX_LENGTH).include?(new_length))
 	  @length = new_length
+	  
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
 	end
   end
   
@@ -55,8 +61,16 @@ class PlanetaryLink
   end
   
   def upgrade_level=(new_upgrade_level)
+	if @upgrade_level == new_upgrade_level
+	  return
+	end
+	
 	if ((0..10).include?(new_upgrade_level))
 	  @upgrade_level = new_upgrade_level
+	  
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
 	end
   end
   
@@ -65,6 +79,10 @@ class PlanetaryLink
 	  return
 	else
 	  @upgrade_level += 1
+	  
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
 	end
   end
   
@@ -73,6 +91,10 @@ class PlanetaryLink
 	  return
 	else
 	  @upgrade_level -= 1
+	  
+	  # Tell my observers I've changed.
+	  changed # Set observeable state to "changed".
+	  notify_observers() # Notify errybody.
 	end
   end
   
