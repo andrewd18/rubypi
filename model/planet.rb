@@ -216,11 +216,6 @@ class Planet
   end
   
   def add_building(building)
-	if (building.is_a?(CustomsOffice))
-	  self.add_customs_office(building)
-	  return building
-	end
-	
 	# Limit number of command centers and customs offices to 1.
 	if (building.is_a?(CommandCenter) and
 	    self.num_command_centers == 1)
@@ -297,12 +292,12 @@ class Planet
 	notify_observers() # Notify errybody.
   end
   
-  def add_customs_office(new_customs_office)
+  def add_customs_office
 	# Prevent user from adding multiple customs offices.
-	if (self.customs_office != nil)
+	if (@customs_office != nil)
 	  raise ArgumentError, "A planet can only have one CustomsOffice."
 	else
-	  @customs_office = new_customs_office
+	  @customs_office = CustomsOffice.new(self)
 	  
 	  # Tell my observers I've changed.
 	  changed # Set observeable state to "changed".

@@ -126,39 +126,16 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_cannot_add_more_than_one_customs_office
-	# Test using the add_customs_office method.
-	first_poco = CustomsOffice.new
-	second_poco = CustomsOffice.new
-	
-	@planet.add_customs_office(first_poco)
+	@planet.add_customs_office
 	
 	assert_raise ArgumentError do
-	  @planet.add_customs_office(second_poco)
+	  @planet.add_customs_office
 	end
 	
 	@planet.remove_customs_office
 	
 	# Make sure we don't have any buildings at this point.
-	assert_equal(0, @planet.buildings.count)
-	assert_equal(0, @planet.num_buildings)
-	
-	
-	
-	
-	# Now, test it with the add_building_from_class method.
-	third_poco = @planet.add_building_from_class(CustomsOffice)
-	
-	# Try to add a fourth.
-	assert_raise ArgumentError do
-	  @planet.add_building_from_class(CustomsOffice)
-	end
-	
-	# Test the remove_building method.
-	@planet.remove_building(third_poco)
-	
-	# Make sure we don't have any buildings at this point.
-	assert_equal(0, @planet.buildings.count)
-	assert_equal(0, @planet.num_buildings)
+	assert_equal(nil, @planet.customs_office)
   end
   
   def test_cannot_add_high_tech_industrial_facility_unless_planet_type_supports_it
@@ -334,7 +311,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_equal(6450, @planet.powergrid_usage)
 	
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(6450, @planet.powergrid_usage)
   end
@@ -384,7 +361,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_equal(6410, @planet.cpu_usage)
 	
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(6410, @planet.cpu_usage)
   end
@@ -454,7 +431,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_equal(6000, @planet.powergrid_provided)
 	
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(6000, @planet.powergrid_provided)
   end
@@ -504,7 +481,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_equal(1675, @planet.cpu_provided)
 	
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(1675, @planet.cpu_provided)
   end
@@ -594,7 +571,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_equal(2135000.00, @planet.isk_cost)
 	
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(2135000.00, @planet.isk_cost)
   end
@@ -629,7 +606,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(1, @planet.num_command_centers)
   end
@@ -666,7 +643,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(StorageFacility)
 	@planet.add_building_from_class(Launchpad)
 	@planet.add_building_from_class(Extractor)
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(6, @planet.num_factories)
   end
@@ -693,7 +670,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(3, @planet.num_launchpads)
   end
@@ -720,7 +697,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(3, @planet.num_storages)
   end
@@ -745,7 +722,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(3, @planet.num_aggregate_launchpads_ccs_storages)
   end
@@ -753,12 +730,12 @@ class TestCasePlanet < Test::Unit::TestCase
   def test_number_of_pocos_scales_with_number_of_pocos
 	assert_equal(0, @planet.num_pocos)
 	
-	@planet.add_building_from_class(CustomsOffice)
+	@planet.add_customs_office
 	
 	assert_equal(1, @planet.num_pocos)
 	
 	assert_raise ArgumentError do
-	  @planet.add_building_from_class(CustomsOffice)
+	  @planet.add_customs_office
 	end
 	
 	assert_equal(1, @planet.num_pocos)

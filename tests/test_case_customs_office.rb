@@ -1,7 +1,6 @@
 require "test/unit"
 
 require_relative "../model/customs_office.rb"
-require_relative "../model/product.rb"
 
 class TestCaseCustomsOffice < Test::Unit::TestCase
   # Run once.
@@ -25,7 +24,8 @@ class TestCaseCustomsOffice < Test::Unit::TestCase
   
   # Run before every test.
   def setup
-	@building = CustomsOffice.new
+	@planet = Planet.new("Lava")
+	@building = CustomsOffice.new(@planet)
   end
   
   # Run after every test.

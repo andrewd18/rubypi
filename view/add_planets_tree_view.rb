@@ -44,6 +44,7 @@ class AddPlanetsTreeView < Gtk::TreeView
 	end
 	
 	new_planet = Planet.new(selected_planet_type)
+	new_planet.add_customs_office
 	@pi_configuration_model.add_planet(new_planet)
   end
   

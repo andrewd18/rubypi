@@ -15,6 +15,7 @@ class TestCasePlanetViewWidget < Test::Unit::TestCase
   # Run before every test.
   def setup
 	@default_planet_model = Planet.new("Lava")
+	@default_planet_model.add_customs_office
 	
 	@planet_view_widget = PlanetViewWidget.new(@default_planet_model)
   end

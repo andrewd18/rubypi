@@ -2,6 +2,7 @@ require 'gtk3'
 
 require_relative 'building_layout_widget.rb'
 require_relative 'planet_stats_widget.rb'
+require_relative 'poco_stats_widget.rb'
 require_relative 'building_view_widget.rb'
 require_relative 'up_to_system_view_button.rb'
 require_relative 'edit_selected_button.rb'
@@ -40,7 +41,17 @@ class PlanetViewWidget < Gtk::Box
 	@planet_stats_widget = PlanetStatsWidget.new(@planet_model)
 	planet_stats_widget_frame = Gtk::Frame.new
 	planet_stats_widget_frame.add(@planet_stats_widget)
-	bottom_row.pack_start(planet_stats_widget_frame, :expand => false)
+	
+	poco_stats_widget = PocoStatsWidget.new(@planet_model.customs_office)
+	
+	right_column_vbox = Gtk::Box.new(:vertical)
+	# Pad space between them with pixels
+	right_column_vbox.spacing = 10
+	right_column_vbox.add(planet_stats_widget_frame, :expand => false)
+	right_column_vbox.add(poco_stats_widget, :expand => false)
+	
+	
+	bottom_row.pack_start(right_column_vbox, :expand => false)
 	
 	
 	# Add the "edit_planet_table" to the bottom portion of self's box.

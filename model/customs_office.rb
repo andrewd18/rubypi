@@ -3,6 +3,7 @@ require_relative 'product.rb'
 
 class CustomsOffice
   
+  include Observable
   include UnrestrictedStorage
   
   POWERGRID_USAGE = 0
@@ -15,13 +16,16 @@ class CustomsOffice
   MIN_TAX_RATE = 0
   MAX_TAX_RATE = 100
   
+  attr_reader :planet
   attr_reader :powergrid_usage
   attr_reader :cpu_usage
   attr_reader :powergrid_provided
   attr_reader :cpu_provided
   attr_reader :isk_cost
   
-  def initialize
+  def initialize(planet)
+	@planet = planet
+	
 	@powergrid_usage = POWERGRID_USAGE
 	@cpu_usage = CPU_USAGE
 	@powergrid_provided = POWERGRID_PROVIDED
