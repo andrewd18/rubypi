@@ -36,8 +36,8 @@ class TestCasePlanetViewWidget < Test::Unit::TestCase
 	
 	@planet_view_widget.start_observing_model
 	
-	# One observer for self, three observers for PlanetStatsWidget, and one for BuildingsListStore.
-	assert_equal(5, @planet_view_widget.planet_model.count_observers)
+	# One observer for self, three observers for PlanetStatsWidget.
+	assert_equal(4, @planet_view_widget.planet_model.count_observers)
   end
   
   def test_can_be_told_to_stop_observing_model_object
@@ -45,8 +45,8 @@ class TestCasePlanetViewWidget < Test::Unit::TestCase
 	
 	@planet_view_widget.start_observing_model
 	
-	# One observer for self, three observers for PlanetStatsWidget, and one for BuildingsListStore.
-	assert_equal(5, @planet_view_widget.planet_model.count_observers)
+	# One observer for self, three observers for PlanetStatsWidget.
+	assert_equal(4, @planet_view_widget.planet_model.count_observers)
 	
 	@planet_view_widget.stop_observing_model
 	
@@ -65,8 +65,8 @@ class TestCasePlanetViewWidget < Test::Unit::TestCase
   def test_when_destroyed_unhooks_observers
 	@planet_view_widget.start_observing_model
 	
-	# One observer for self, three observers for PlanetStatsWidget, and one for BuildingsListStore.
-	assert_equal(5, @default_planet_model.count_observers)
+	# One observer for self, three observers for PlanetStatsWidget.
+	assert_equal(4, @default_planet_model.count_observers)
 	
 	@planet_view_widget.destroy
 	

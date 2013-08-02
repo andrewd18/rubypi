@@ -48,4 +48,11 @@ class BuildingLayoutWidget < Gtk::Frame
 	# HACK
 	# YEAH, SURE, I TOTALLY IMPLEMENTED THIS. Stop erroring. <_<
   end
+  
+  def planet_model=(new_planet_model)
+	@building_drawing_area = BuildingDrawingArea.new(new_planet_model)
+	@drawing_tool_palette = BuildingToolPalette.new(@building_drawing_area)
+	
+	self.show_all
+  end
 end
