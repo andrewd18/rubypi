@@ -26,7 +26,7 @@ class SelectBuildingComboBox < Gtk::ComboBox
   end
   
   def add_item(building)
-	raise ArgumentError, "#{building} must be a PlanetaryBuilding." unless building.is_a?(PlanetaryBuilding)
+	raise ArgumentError, "#{building} must be a PlanetaryBuilding or a Customs Office." unless ((building.is_a?(PlanetaryBuilding)) or (building.is_a?(CustomsOffice)))
 	
 	new_row = @items_list_store.append
 	new_row.set_value(0, building)

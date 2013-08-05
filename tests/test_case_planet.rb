@@ -717,14 +717,18 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_equal(3, @planet.num_aggregate_launchpads_ccs_storages)
 	
+	@planet.add_customs_office
+	
+	assert_equal(4, @planet.num_aggregate_launchpads_ccs_storages)
+	
+	
 	# These types should not change the value.
 	@planet.add_building_from_class(BasicIndustrialFacility)
 	@planet.add_building_from_class(AdvancedIndustrialFacility)
 	@planet.add_building_from_class(HighTechIndustrialFacility)
 	@planet.add_building_from_class(Extractor)
-	@planet.add_customs_office
 	
-	assert_equal(3, @planet.num_aggregate_launchpads_ccs_storages)
+	assert_equal(4, @planet.num_aggregate_launchpads_ccs_storages)
   end
   
   def test_number_of_pocos_scales_with_number_of_pocos
