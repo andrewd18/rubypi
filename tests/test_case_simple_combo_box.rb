@@ -1,6 +1,6 @@
 require "test/unit"
 
-require_relative "../view/simple_combo_box.rb"
+require_relative "../view/gtk_helpers/simple_combo_box.rb"
 
 class TestCaseSimpleComboBox < Test::Unit::TestCase
   # Run once.
