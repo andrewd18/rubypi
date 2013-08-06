@@ -1,5 +1,6 @@
-require_relative 'radio_button_tool_palette.rb'
 require_relative 'building_tool_radio_button.rb'
+
+require_relative 'gtk_helpers/radio_button_tool_palette.rb'
 
 class BuildingToolPalette < RadioButtonToolPalette
   def initialize(building_drawing_area)

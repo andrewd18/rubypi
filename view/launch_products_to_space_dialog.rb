@@ -1,9 +1,10 @@
 require 'gtk3'
 require_relative 'select_building_combo_box.rb'
-require_relative 'simple_table.rb'
-require_relative 'overflow_percentage_progress_bar.rb'
 require_relative 'transfer_products_select_quantity_dialog.rb'
 require_relative '../model/launch_can.rb'
+
+require_relative 'gtk_helpers/overflow_percentage_progress_bar.rb'
+require_relative 'gtk_helpers/simple_table.rb'
 
 class LaunchProductsToSpaceDialog < Gtk::Dialog
   

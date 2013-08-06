@@ -1,7 +1,8 @@
 require 'gtk3'
-require_relative 'simple_table.rb'
 require_relative 'isk_amount_label.rb'
 require_relative '../model/product.rb'
+
+require_relative 'gtk_helpers/simple_table.rb'
 
 class TransferProductsSelectQuantityDialog < Gtk::Dialog
   attr_reader :quantity

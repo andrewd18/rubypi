@@ -1,7 +1,7 @@
 require_relative 'add_planets_list_store.rb'
 
-require_relative 'icon_column.rb'
-require_relative 'text_column.rb'
+require_relative 'gtk_helpers/icon_column.rb'
+require_relative 'gtk_helpers/text_column.rb'
 
 
 class AddPlanetsTreeView < Gtk::TreeView

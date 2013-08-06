@@ -1,7 +1,7 @@
 require_relative 'add_products_tree_store_with_filter.rb'
 
-require_relative 'icon_column.rb'
-require_relative 'text_column.rb'
+require_relative 'gtk_helpers/icon_column.rb'
+require_relative 'gtk_helpers/text_column.rb'
 
 require_relative 'add_products_select_quantity_dialog.rb'
 

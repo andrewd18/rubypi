@@ -1,0 +1,2 @@
+This folder contains classes whose sole purpose are to make working with GTK less painful or to abstract away workarounds/bugs.
+They should not contain any domain specific language.

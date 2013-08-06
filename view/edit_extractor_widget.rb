@@ -1,9 +1,10 @@
 require 'gtk3'
-require_relative 'simple_combo_box.rb'
 require_relative 'select_building_combo_box.rb'
-require_relative 'simple_table.rb'
 require_relative 'set_extraction_time_slider.rb'
 require_relative 'building_image.rb'
+
+require_relative 'gtk_helpers/simple_combo_box.rb'
+require_relative 'gtk_helpers/simple_table.rb'
 
 # This widget provides all the options necessary to edit an Extractor.
 class EditExtractorWidget < Gtk::Box

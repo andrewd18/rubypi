@@ -1,7 +1,8 @@
-require_relative 'icon_column.rb'
-require_relative 'text_column.rb'
 require_relative 'stored_products_list_store.rb'
 require_relative 'remove_products_from_building_dialog.rb'
+
+require_relative 'gtk_helpers/icon_column.rb'
+require_relative 'gtk_helpers/text_column.rb'
 
 
 class StoredProductsTreeView < Gtk::TreeView

@@ -5,7 +5,8 @@ require_relative 'system_view_planets_list_view.rb'
 require_relative 'system_stats_widget.rb'
 require_relative 'planet_view_widget.rb'
 require_relative 'edit_selected_button.rb'
-require_relative 'clear_sort_button.rb'
+
+require_relative 'gtk_helpers/clear_sort_button.rb'
 
 # This widget is designed to show a system of planets, akin to the system view in Endless Space.
 # Note: The planets included in said system won't necessarily be from the same solar system.

@@ -1,11 +1,11 @@
-
 require 'gtk3'
-require_relative 'simple_combo_box.rb'
-require_relative 'select_building_combo_box.rb'
-require_relative '../model/schematic.rb'
 
-require_relative 'simple_table.rb'
+require_relative '../model/schematic.rb'
+require_relative 'select_building_combo_box.rb'
 require_relative 'building_image.rb'
+
+require_relative 'gtk_helpers/simple_combo_box.rb'
+require_relative 'gtk_helpers/simple_table.rb'
 
 # This widget provides all the options necessary to edit a BasicIndustrialFacility, AdvancedIndustrialFacility, or HighTechIndustrialFacility.
 class EditFactoryWidget < Gtk::Box

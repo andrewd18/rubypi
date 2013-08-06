@@ -33,6 +33,8 @@ User Interface Improvements
   - Add tooltips on hover.
   - Add a max size or something to the drawing window. It's weird when I resize it down and buildings get hidden.
   - Do something visual when deleting links or adding links that shows you're on step two.
+* Convert "Transfer Products" widget to an Expedited Transfer widget.
+* Create a new, unique Import / Export widget rather than reusing the Transfer Products widget.
   
 
 Code Cleanup
@@ -44,7 +46,6 @@ Code Cleanup
   - Either unify or get rid of Observer calls.
   - Allow nil models without crashing.
 * Allow every widget I create to accept an optional parent_window.
-* Split all my helper GTK subclasses off to their own folder.
 * Unit Tests
   - Figure out how to test event hooks in unit tests so I can fully test views.
   - Keep adding more!

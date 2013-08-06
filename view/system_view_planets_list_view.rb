@@ -1,8 +1,9 @@
-require_relative 'icon_column.rb'
-require_relative 'text_column.rb'
-require_relative 'progress_bar_column.rb'
-require_relative 'text_column_with_image_header.rb'
 require_relative 'system_view_planets_store.rb'
+
+require_relative 'gtk_helpers/icon_column.rb'
+require_relative 'gtk_helpers/text_column.rb'
+require_relative 'gtk_helpers/text_column_with_image_header.rb'
+require_relative 'gtk_helpers/progress_bar_column.rb'
 
 class SystemViewPlanetsListView < Gtk::TreeView
   def initialize(pi_configuration_model)

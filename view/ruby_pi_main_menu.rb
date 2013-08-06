@@ -1,8 +1,9 @@
 require 'gtk3'
 
-require_relative 'save_to_yaml_dialog.rb'
-require_relative 'load_from_yaml_dialog.rb'
 require_relative 'ruby_pi_about_dialog.rb'
+
+require_relative 'gtk_helpers/save_to_yaml_dialog.rb'
+require_relative 'gtk_helpers/load_from_yaml_dialog.rb'
 
 class RubyPIMainMenu < Gtk::MenuBar
   def initialize

@@ -1,6 +1,7 @@
-require_relative 'icon_column.rb'
-require_relative 'text_column.rb'
 require_relative 'buildings_list_store.rb'
+
+require_relative 'gtk_helpers/icon_column.rb'
+require_relative 'gtk_helpers/text_column.rb'
 
 class BuildingsTreeView < Gtk::TreeView
   def initialize(planet_model)

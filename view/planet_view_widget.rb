@@ -6,8 +6,9 @@ require_relative 'poco_stats_widget.rb'
 require_relative 'building_view_widget.rb'
 require_relative 'up_to_system_view_button.rb'
 require_relative 'edit_selected_button.rb'
-require_relative 'clear_sort_button.rb'
 require_relative 'transfer_products_button.rb'
+
+require_relative 'gtk_helpers/clear_sort_button.rb'
 
 # This is a layout-only widget that contains other, planet-specific widgets.
 class PlanetViewWidget < Gtk::Box
