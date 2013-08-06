@@ -64,16 +64,10 @@ Releasy::Project.new do
     # add_package :tar_gz
   # end
 
-  add_build :source do
-    add_package :"7z"
-  end
-
   # If building on a Windows machine, :windows_folder and/or :windows_installer are recommended.
   add_build :windows_folder do
     # icon "media/icon.ico"
     executable_type :windows # Assuming you don't want it to run with a console window.
     add_package :exe # Windows self-extracting archive.
   end
-
-  add_deploy :local # Only deploy locally.
 end
