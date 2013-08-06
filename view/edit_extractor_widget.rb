@@ -25,7 +25,7 @@ class EditExtractorWidget < Gtk::Box
 	
 	
 	# Center column.
-	@product_combo_box = SimpleComboBox.new(@building_model.accepted_product_names)
+	@product_combo_box = SimpleComboBox.new(@building_model.planet.pzero_product_list)
 	@output_building_combo_box = SelectBuildingComboBox.new(@building_model.planet.aggregate_launchpads_ccs_storages)
 	
 	@extraction_time_scale = SetExtractionTimeSlider.new(@building_model)

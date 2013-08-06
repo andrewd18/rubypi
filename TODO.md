@@ -5,7 +5,6 @@ Core Features
   - Add a warning when the user tries to transfer products to a destination that isn't selected yet.
   - Add a warning when the user tries to transfer products from one building to itself.
 * A building should not be able to be added if a planet forbids it.
-* An extractor should not be able to extract materials that its planet does not have.
 * Add cycle times to all buildings.
 * Add a "pipeline view" or a "chain view" or something that shows the product build cycle. Planet scope only.
 * Add product unit and volume output per hour per building.
