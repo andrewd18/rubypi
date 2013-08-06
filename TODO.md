@@ -1,7 +1,6 @@
 Core Features
 =============
 
-* Add CCP disclaimer, etc. to About box.
 * Transfer Products Dialog
   - Add a warning when the user tries to transfer products to a destination that isn't selected yet.
   - Add a warning when the user tries to transfer products from one building to itself.
