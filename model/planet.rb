@@ -53,7 +53,11 @@ class Planet
 	
 	@links = planet_links
 	
-	@customs_office = customs_office
+	if (customs_office != nil)
+	  @customs_office = customs_office
+	else
+	  @customs_office = CustomsOffice.new(self)
+	end
 	
 	@pi_configuration = pi_configuration
 	
@@ -255,11 +259,6 @@ class Planet
   end
   
   def remove_building(building_to_remove)
-	if (building_to_remove.is_a?(CustomsOffice))
-	  self.remove_customs_office
-	  return
-	end
-	
 	building_to_remove.delete_observer(self)
 	building_to_remove.planet = nil
 	
@@ -284,29 +283,6 @@ class Planet
 	end
 	
 	@buildings.clear
-	
-	@customs_office = nil
-	
-	# Tell my observers I've changed.
-	changed # Set observeable state to "changed".
-	notify_observers() # Notify errybody.
-  end
-  
-  def add_customs_office
-	# Prevent user from adding multiple customs offices.
-	if (@customs_office != nil)
-	  raise ArgumentError, "A planet can only have one CustomsOffice."
-	else
-	  @customs_office = CustomsOffice.new(self)
-	  
-	  # Tell my observers I've changed.
-	  changed # Set observeable state to "changed".
-	  notify_observers() # Notify errybody.
-	end
-  end
-  
-  def remove_customs_office
-	@customs_office = nil
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".
@@ -453,22 +429,6 @@ class Planet
 	return list_of_storages
   end
   
-  def pocos
-	if (self.customs_office != nil)
-	  return [@customs_office]
-	else
-	  return Array.new
-	end
-  end
-  
-  def num_pocos
-	if (self.customs_office != nil)
-	  return 1
-	else
-	  return 0
-	end
-  end
-  
   def num_aggregate_launchpads_ccs_storages
 	count = 0
 	
@@ -479,10 +439,6 @@ class Planet
 		
 		count += 1
 	  end
-	end
-	
-	if (@customs_office != nil)
-	  count += 1
 	end
 	
 	return count
@@ -498,10 +454,6 @@ class Planet
 		
 		list_of_aggregate_storages << building
 	  end
-	end
-	
-	if (@customs_office != nil)
-	  list_of_aggregate_storages << @customs_office
 	end
 	
 	return list_of_aggregate_storages
