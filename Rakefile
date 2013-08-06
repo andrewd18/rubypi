@@ -27,9 +27,12 @@ end
 # Get releasy.
 require 'releasy'
 
+# Get the main RubyPI class to get the version number.
+require_relative "ruby_pi.rb"
+
 Releasy::Project.new do
   name "RubyPI"
-  version "0.0.11"
+  version RubyPI::VERSION
   verbose # Can be removed if you don't want to see all build messages.
 
   executable "ruby_pi.rb"
@@ -38,6 +41,7 @@ Releasy::Project.new do
          "model/*.rb",
          "model/*.yml",
          "view/*.rb",
+         "view/gtk_helpers/*.rb",
          "view/images/*.png",
          "view/images/16x16/*.png",
          "view/images/32x32/*.png",
