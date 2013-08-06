@@ -833,6 +833,30 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(3, @planet.num_links)
   end
   
+  def test_can_get_pzero_product_list
+	planet = Planet.new("Temperate")
+	
+	assert_true(planet.pzero_product_list.include?("Autotrophs"))
+	assert_true(planet.pzero_product_list.include?("Carbon Compounds"))
+	assert_true(planet.pzero_product_list.include?("Micro Organisms"))
+	assert_true(planet.pzero_product_list.include?("Complex Organisms"))
+	assert_true(planet.pzero_product_list.include?("Aqueous Liquids"))
+	
+	assert_false(planet.pzero_product_list.include?("Felsic Magma"))
+  end
+  
+  def test_can_ask_if_planet_has_pzero
+	planet = Planet.new("Temperate")
+	
+	assert_true(planet.has_pzero?("Autotrophs"))
+	assert_true(planet.has_pzero?("Carbon Compounds"))
+	assert_true(planet.has_pzero?("Micro Organisms"))
+	assert_true(planet.has_pzero?("Complex Organisms"))
+	assert_true(planet.has_pzero?("Aqueous Liquids"))
+	
+	assert_false(planet.has_pzero?("Felsic Magma"))
+  end
+  
   
   #
   # Observable tests

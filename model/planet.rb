@@ -43,6 +43,54 @@ class Planet
 									  "Oceanic",
 									  "Plasma"]
   
+  TYPE_TO_NATIVE_P0_LIST = {"Gas" => ["Aqueous Liquids",
+                                      "Ionic Solutions",
+                                      "Base Metals",
+                                      "Noble Gas",
+                                      "Reactive Gas"],
+                            
+                            "Ice" => ["Aqueous Liquids",
+                                      "Heavy Metals",
+                                      "Micro Organisms",
+                                      "Planktic Colonies",
+                                      "Noble Gas"],
+                            
+                            "Storm" => ["Aqueous Liquids",
+                                        "Ionic Solutions",
+                                        "Base Metals",
+                                        "Noble Gas",
+                                        "Suspended Plasma"],
+                            
+                            "Barren" => ["Aqueous Liquids",
+                                         "Base Metals",
+                                         "Noble Metals",
+                                         "Carbon Compounds",
+                                         "Micro Organisms"],
+                            
+                            "Temperate" => ["Aqueous Liquids",
+                                            "Carbon Compounds",
+                                            "Micro Organisms",
+                                            "Complex Organisms",
+                                            "Autotrophs"],
+                            
+                            "Lava" => ["Base Metals",
+                                       "Heavy Metals",
+                                       "Felsic Magma",
+                                       "Non-CS Crystals",
+                                       "Suspended Plasma"],
+                            
+                            "Oceanic" => ["Aqueous Liquids",
+                                          "Carbon Compounds",
+                                          "Micro Organisms",
+                                          "Complex Organisms",
+                                          "Planktic Colonies"],
+                            
+                            "Plasma" => ["Base Metals",
+                                         "Heavy Metals",
+                                         "Noble Metals",
+                                         "Non-CS Crystals",
+                                         "Suspended Plasma"]}
+  
   
   def initialize(planet_type, planet_name = nil, planet_buildings = Array.new, planet_links = Array.new, customs_office = nil, pi_configuration = nil)
 	@type = planet_type
@@ -517,6 +565,20 @@ class Planet
   
   def num_links
 	return @links.count
+  end
+  
+  def pzero_product_list
+	return TYPE_TO_NATIVE_P0_LIST[@type]
+  end
+  
+  def has_pzero?(p_zero_name)
+	list_of_pzeros = TYPE_TO_NATIVE_P0_LIST[@type]
+	
+	if (list_of_pzeros.include?(p_zero_name))
+	  return true
+	else
+	  return false
+	end
   end
   
   def remove_planet
