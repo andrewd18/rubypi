@@ -12,6 +12,8 @@ require_relative 'model/schematic.rb'
 
 class RubyPI < Gtk::Window
   
+  VERSION = "0.0.11"
+  
   attr_accessor :pi_configuration
   
   def initialize
