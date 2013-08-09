@@ -4,7 +4,8 @@ require 'bundler/setup' unless not defined?(Ocra)
 require 'gtk3'
 
 require_relative 'view/ruby_pi_main_menu.rb'
-require_relative 'view/system_view_widget.rb'
+#require_relative 'view/system_view_widget.rb'
+require_relative 'controllers/pi_configuration_controller.rb'
 require_relative 'model/pi_configuration.rb'
 
 require_relative 'model/product.rb'
@@ -52,7 +53,9 @@ class RubyPI < Gtk::Window
 	
 	self.add(@box)
 	
-	self.change_main_widget(SystemViewWidget.new(@pi_configuration))
+	self.change_controller(PIConfigurationController.new(@pi_configuration))
+	
+	# self.change_main_widget(SystemViewWidget.new(@pi_configuration))
 	
 	return self
   end
@@ -78,6 +81,17 @@ class RubyPI < Gtk::Window
 	
 	# Finally, tell the widget it can begin observing the model.
 	@main_widget.start_observing_model
+  end
+  
+  def change_controller(controller)
+	if (@controller)
+	  @controller.destroy
+	end
+	
+	@controller = controller
+	@box.pack_start(@controller.view)
+	
+	self.show_all
   end
   
   def close_application
