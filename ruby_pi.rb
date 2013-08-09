@@ -53,42 +53,29 @@ class RubyPI < Gtk::Window
 	
 	self.add(@box)
 	
-	self.change_controller(PIConfigurationController.new(@pi_configuration))
-	
-	# self.change_main_widget(SystemViewWidget.new(@pi_configuration))
+	self.load_controller_for_model(@pi_configuration)
 	
 	return self
-  end
-  
-  def main_widget
-	return @main_widget
   end
   
   def menu_bar
 	return @menu_bar
   end
   
-  def change_main_widget(new_widget)
-	if (@main_widget)
-	  @main_widget.destroy
-	end
-	
-	@main_widget = new_widget
-	@box.pack_start(@main_widget)
-	
-	# Make sure all our widgets are visible.
-	self.show_all
-	
-	# Finally, tell the widget it can begin observing the model.
-	@main_widget.start_observing_model
-  end
-  
-  def change_controller(controller)
+  # Given a model object,
+  # Selects a controller (or errors)
+  # and connects its view to the box beneath the menu.
+  def load_controller_for_model(model_object)
 	if (@controller)
 	  @controller.destroy
 	end
 	
-	@controller = controller
+	if (model_object.is_a?(PIConfiguration))
+	  @controller = PIConfigurationController.new(model_object)
+	else
+	  raise ArgumentError, "Unknown model object class #{model_object.class}."
+	end
+	
 	@box.pack_start(@controller.view)
 	
 	self.show_all

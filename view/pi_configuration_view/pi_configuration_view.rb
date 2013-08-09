@@ -19,8 +19,19 @@ class PIConfigurationView < Gtk::Box
 	planet_list_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	planet_list_scrolled_window.add(@planet_list)
 	
+	
+	edit_selected_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
+	edit_selected_button.signal_connect("clicked") do |button|
+	  @controller.edit_selected_planet(@planet_list.selected_planet_instance)
+	end
+	edit_button_box = Gtk::Box.new(:vertical)
+	edit_button_box.pack_start(edit_selected_button, :expand => false)
+	
+	
+	
 	self.pack_start(@planet_tool_palette, :expand => false)
 	self.pack_start(planet_list_scrolled_window, :expand => true)
+	self.pack_start(edit_button_box, :expand => false, :padding => 10)
 	
 	self.show_all
 	

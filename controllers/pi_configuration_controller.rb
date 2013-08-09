@@ -52,6 +52,10 @@ class PIConfigurationController
 	@pi_configuration_model.remove_planet(planet_instance)
   end
   
+  def edit_selected_planet(planet_instance)
+	$ruby_pi_main_gtk_window.load_controller_for_model(planet_instance)
+  end
+  
   
   # Model observation methods.
   def start_observing_model

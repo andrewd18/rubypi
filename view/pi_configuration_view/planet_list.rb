@@ -13,12 +13,9 @@ class PlanetList < Gtk::TreeView
 	
 	# Signals
 	self.signal_connect("row-activated") do |treeview, path, column|
-	  row = treeview.selection
-	  tree_iter = row.selected
-	  
-	  selected_planet_instance = tree_iter.get_value(0)
-	  
-	  @controller.remove_planet(selected_planet_instance)
+	  unless (self.selected_planet_instance == nil)
+		@controller.remove_planet(self.selected_planet_instance)
+	  end
 	end
 	
 	# Create columns for the tree view.
@@ -56,5 +53,17 @@ class PlanetList < Gtk::TreeView
   def pi_configuration_model=(new_model)
 	list_store = PlanetListStore.new(new_model)
 	self.model = list_store
+  end
+  
+  def selected_planet_instance
+	row = self.selection
+	tree_iter = row.selected
+	
+	if (tree_iter == nil)
+	  return nil
+	else
+	  selected_planet_instance = tree_iter.get_value(0)
+	  return selected_planet_instance
+	end
   end
 end
