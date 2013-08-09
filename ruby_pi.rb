@@ -6,6 +6,8 @@ require 'gtk3'
 require_relative 'view/ruby_pi_main_menu.rb'
 #require_relative 'view/system_view_widget.rb'
 require_relative 'controllers/pi_configuration_controller.rb'
+require_relative 'controllers/planet_controller.rb'
+
 require_relative 'model/pi_configuration.rb'
 
 require_relative 'model/product.rb'
@@ -72,6 +74,10 @@ class RubyPI < Gtk::Window
 	
 	if (model_object.is_a?(PIConfiguration))
 	  @controller = PIConfigurationController.new(model_object)
+	  
+	elsif (model_object.is_a?(Planet))
+	  @controller = PlanetController.new(model_object)
+	  
 	else
 	  raise ArgumentError, "Unknown model object class #{model_object.class}."
 	end
