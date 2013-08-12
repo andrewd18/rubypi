@@ -35,8 +35,7 @@ class PlanetStatsWidget < Gtk::Box
 	
 	# Set up immediate commit on change.
 	@planet_type_combo_box.signal_connect("changed") do |combo_box|
-	  # BUG: This doesn't work right.
-	  #@controller.change_planet_type(combo_box.selected_item)
+	  @controller.change_planet_type(combo_box.selected_item)
 	end
 	
 	planet_name_label = Gtk::Label.new("Name:")

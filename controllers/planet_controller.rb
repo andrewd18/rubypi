@@ -54,8 +54,11 @@ class PlanetController
 	@planet_model.remove_link(link_to_remove)
   end
   
-  def change_planet_type
-	puts "planet_controller: change_planet_type"
+  def change_planet_type(new_type)
+	# Only change the model if the passed in type is different from the model type.
+	unless (@planet_model.type == new_type)
+	  @planet_model.type = new_type
+	end
   end
   
   def up_to_pi_configuration_controller
