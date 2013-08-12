@@ -1,5 +1,7 @@
 require 'gtk3'
 
+require_relative 'building_image.rb'
+
 class BuildingToolRadioButton < Gtk::RadioToolButton
   attr_reader :building_class
   
@@ -12,8 +14,7 @@ class BuildingToolRadioButton < Gtk::RadioToolButton
 	
 	building_instance = building_class.new
 	
-	pixbuf = CairoBuildingImage.new(building_instance, 16, 16).image
-	self.icon_widget = Gtk::Image.new(:pixbuf => pixbuf)
+	self.icon_widget = BuildingImage.new(building_instance, [16, 16])
 	self.label_widget = Gtk::Label.new("Add #{building_instance.name}")
 	
 	return self
