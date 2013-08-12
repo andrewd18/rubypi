@@ -16,10 +16,12 @@ class PlanetImage < Gtk::Image
                       "Plasma" => "plasma_planet.png"}
   
   def initialize(requested_size_array_in_px = [64, 64])
-	@requested_width_in_text = "#{requested_size_array_in_px[0]}"
-	@requested_height_in_text = "#{requested_size_array_in_px[1]}"
+	@requested_width = requested_size_array_in_px[0]
+	@requested_height = requested_size_array_in_px[1]
 	
 	super(:file => calculate_filename)
+	
+	self.set_size_request(@requested_width, @requested_height)
 	
 	return self
   end
@@ -35,9 +37,9 @@ class PlanetImage < Gtk::Image
   
   def calculate_filename
 	if (@planet_model == nil)
-	  return "#{BASE_IMAGES_FOLDER}" + "/" + "#{@requested_width_in_text}x#{@requested_height_in_text}" + "/uncolonized_planet.png"
+	  return "#{BASE_IMAGES_FOLDER}" + "/" + "#{@requested_width}x#{@requested_height}" + "/uncolonized_planet.png"
 	else
-	  return "#{BASE_IMAGES_FOLDER}" + "/" + "#{@requested_width_in_text}x#{@requested_height_in_text}" + "/" + "#{TYPE_TO_FILENAME[@planet_model.type]}"
+	  return "#{BASE_IMAGES_FOLDER}" + "/" + "#{@requested_width}x#{@requested_height}" + "/" + "#{TYPE_TO_FILENAME[@planet_model.type]}"
 	end
   end
 end
