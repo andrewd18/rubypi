@@ -61,6 +61,13 @@ class PlanetController
 	end
   end
   
+  def change_planet_name(new_name)
+	# Only change the model if the passed in name is different from the model name.
+	unless (@planet_model.name == new_name)
+	  @planet_model.name = new_name
+	end
+  end
+  
   def up_to_pi_configuration_controller
 	$ruby_pi_main_gtk_window.load_controller_for_model(@planet_model.pi_configuration)
   end

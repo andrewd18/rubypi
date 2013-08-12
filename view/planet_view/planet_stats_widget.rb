@@ -40,6 +40,9 @@ class PlanetStatsWidget < Gtk::Box
 	
 	planet_name_label = Gtk::Label.new("Name:")
 	@planet_name_entry = Gtk::Entry.new
+	@planet_name_entry.signal_connect("changed") do |text_entry|
+	  @controller.change_planet_name(text_entry.text)
+	end
 	
 	pg_used_label = Gtk::Label.new("PG Used:")
 	@pg_used_progress_bar = Gtk::ProgressBar.new
@@ -107,7 +110,12 @@ class PlanetStatsWidget < Gtk::Box
 		# Set the current combo box value.
 		@planet_type_combo_box.selected_item = @planet_model.type
 		
-		# Ignore the name. Whatever the user has in that box now is fine.
+		# Set the current planet name.
+		if (@planet_model.name == nil)
+		  @planet_name_entry.text = ""
+		else
+		  @planet_name_entry.text = @planet_model.name
+		end
 		
 		# Set the CPU used and PG used values.
 		@cpu_used_progress_bar.text = "#{@planet_model.pct_cpu_usage.round(2)} %"
