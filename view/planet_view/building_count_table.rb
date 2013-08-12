@@ -52,11 +52,20 @@ class BuildingCountTable < Gtk::Table
   end
   
   def planet_model=(new_planet_model)
+	@planet_model = new_planet_model
+	
+	# Update view.
+	update_from_model
+  end
+  
+  private
+  
+  def update_from_model
 	if (@planet_model == nil)
-		@num_extractors_label.text = "0"
-		@num_factories_label.text = "0"
-		@num_storages_label.text = "0"
-		@num_launchpads_label.text = "0"
+	  @num_extractors_label.text = "0"
+	  @num_factories_label.text = "0"
+	  @num_storages_label.text = "0"
+	  @num_launchpads_label.text = "0"
 	else
 	  @num_extractors_label.text = "#{@planet_model.num_extractors}"
 	  @num_factories_label.text = "#{@planet_model.num_factories}"

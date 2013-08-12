@@ -15,7 +15,6 @@ class PlanetStatsWidget < Gtk::Box
   def initialize(controller)
 	super(:vertical)
 	
-	# Hook up model data.
 	@controller = controller
 	
 	# Create widgets.
@@ -32,8 +31,6 @@ class PlanetStatsWidget < Gtk::Box
 	# Populate the planet type combo box with all the valid planet types.
 	# TODO - Remove Uncolonized as an option. Going to require reworking some model tests.
 	@planet_type_combo_box = SimpleComboBox.new(Planet::PLANET_TYPES_WITHOUT_UNCOLONIZED)
-	
-	# Set up immediate commit on change.
 	@planet_type_combo_box.signal_connect("changed") do |combo_box|
 	  @controller.change_planet_type(combo_box.selected_item)
 	end
@@ -82,10 +79,6 @@ class PlanetStatsWidget < Gtk::Box
 	self.pack_start(@planet_image, :expand => false)
 	self.pack_start(planet_stats_table, :expand => false)
 	
-	# Finally, update all the values.
-	# Since #update does this, call #update.
-	self.update
-	
 	self.show_all
 	
 	return self
@@ -98,48 +91,40 @@ class PlanetStatsWidget < Gtk::Box
 	@building_count_table.planet_model = new_planet_model
 	@planet_image.planet_model = new_planet_model
 	
-	self.update
+	update_from_model
   end
   
-  def update
+  private
+  
+  def update_from_model
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
-	  unless (@planet_model == nil)
-		# The model data changed. Update the display.
-		
-		# Set the current combo box value.
-		@planet_type_combo_box.selected_item = @planet_model.type
-		
-		# Set the current planet name.
-		if (@planet_model.name == nil)
-		  @planet_name_entry.text = ""
-		else
-		  @planet_name_entry.text = @planet_model.name
-		end
-		
-		# Set the CPU used and PG used values.
-		@cpu_used_progress_bar.text = "#{@planet_model.pct_cpu_usage.round(2)} %"
-		
-		# WORKAROUND: Naturally, this doesn't use the same setters as CellRendererProgress... :/
-		if (@planet_model.pct_cpu_usage > 100)
-		  @cpu_used_progress_bar.fraction = 1.0
-		else
-		  @cpu_used_progress_bar.fraction = (@planet_model.pct_cpu_usage / 100.0)
-		end
-		
-		
-		@pg_used_progress_bar.text = "#{@planet_model.pct_powergrid_usage.round(2)} %"
-		
-		# WORKAROUND: Naturally, this doesn't use the same setters as CellRendererProgress... :/
-		if (@planet_model.pct_powergrid_usage > 100)
-		  @pg_used_progress_bar.fraction = 1.0
-		else
-		  @pg_used_progress_bar.fraction = (@planet_model.pct_powergrid_usage / 100.0)
-		end
-		
-		# Set the isk cost.
-		@isk_cost_value_label.isk_value = @planet_model.isk_cost
+	  # Set the current combo box value.
+	  @planet_type_combo_box.selected_item = @planet_model.type
+	  
+	  # Set the current planet name.
+	  @planet_name_entry.text = @planet_model.name
+	  
+	  # Set the CPU used and PG used values.
+	  @cpu_used_progress_bar.text = "#{@planet_model.pct_cpu_usage.round(2)} %"
+	  
+	  if (@planet_model.pct_cpu_usage > 100)
+		@cpu_used_progress_bar.fraction = 1.0
+	  else
+		@cpu_used_progress_bar.fraction = (@planet_model.pct_cpu_usage / 100.0)
 	  end
+	  
+	  
+	  @pg_used_progress_bar.text = "#{@planet_model.pct_powergrid_usage.round(2)} %"
+	  
+	  if (@planet_model.pct_powergrid_usage > 100)
+		@pg_used_progress_bar.fraction = 1.0
+	  else
+		@pg_used_progress_bar.fraction = (@planet_model.pct_powergrid_usage / 100.0)
+	  end
+	  
+	  # Set the isk cost.
+	  @isk_cost_value_label.isk_value = @planet_model.isk_cost
 	end
   end
 end
