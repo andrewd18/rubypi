@@ -2,7 +2,7 @@
 
 class CairoBuildingImage
   
-  PATH_TO_IMAGES_FOLDER = "view/images/64x64/"
+  PATH_TO_IMAGES_FOLDER = "view/images"
   
   NAME_TO_FILENAME = { "Command Center" => "command_center_icon.png",
                        "Extractor" => "extractor_icon.png",
@@ -22,7 +22,7 @@ class CairoBuildingImage
 	raise ArgumentError unless building_model.is_a?(PlanetaryBuilding)
 	
 	@building_model = building_model
-	filename = "#{PATH_TO_IMAGES_FOLDER}" + "#{NAME_TO_FILENAME[@building_model.name]}"
+	filename = "#{PATH_TO_IMAGES_FOLDER}" + "/" + "#{width}" + "x" + "#{height}" + "/" + "#{NAME_TO_FILENAME[@building_model.name]}"
 	
 	raise "#{filename} not found." unless File.exists?(filename)
 	
@@ -65,9 +65,9 @@ class CairoBuildingImage
 	  cairo_context.translate(self.top_left_x_coord, self.top_left_y_coord)
 	  
 	  # Scale the base image.
-	  #cairo_context.scale(self.horizontal_scale, self.vertical_scale)
+	  cairo_context.scale(self.horizontal_scale, self.vertical_scale)
 	  
-	  # Paint the SVG to the target.
+	  # Paint the image to the target.
 	  cairo_context.set_source_pixbuf(@image)
 	  cairo_context.paint
 	end
