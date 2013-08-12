@@ -92,7 +92,7 @@ class Planet
                                          "Suspended Plasma"]}
   
   
-  def initialize(planet_type, planet_name = nil, planet_buildings = Array.new, planet_links = Array.new, customs_office = nil, pi_configuration = nil)
+  def initialize(planet_type, planet_name = "", planet_buildings = Array.new, planet_links = Array.new, customs_office = nil, pi_configuration = nil)
 	@type = planet_type
 	
 	@name = planet_name

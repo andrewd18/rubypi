@@ -48,7 +48,7 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_planet_name_changes_when_planet_name_is_set
-	assert_equal(nil, @planet.name)
+	assert_equal("", @planet.name)
 	
 	@planet.name = "J100820 - III"
 	
@@ -56,7 +56,7 @@ class TestCasePlanet < Test::Unit::TestCase
   end
   
   def test_error_occurs_and_planet_name_does_not_change_when_planet_name_is_set_to_invalid_value
-	assert_equal(nil, @planet.name)
+	assert_equal("", @planet.name)
 	
 	# Should fail because it's not a string.
 	assert_raise ArgumentError do
@@ -64,7 +64,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	end
 	
 	# Make sure the planet is unchanged.
-	assert_equal(nil, @planet.name)
+	assert_equal("", @planet.name)
   end
   
   def test_planet_starts_with_zero_buildings
