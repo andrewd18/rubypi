@@ -9,9 +9,6 @@ class IskAmountLabel < Gtk::Label
   end
 
   def isk_value=(new_isk_value)
-	# If it's over 1 million, truncate
-	# If it's under 1 million, show by default
-	# Either way, hide the digits after the period.
 	raise unless new_isk_value.is_a?(Numeric)
 	
 	@isk_value = new_isk_value
