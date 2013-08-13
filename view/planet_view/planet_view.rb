@@ -2,11 +2,8 @@ require 'gtk3'
 
 require_relative 'building_layout_widget.rb'
 require_relative 'planet_stats_widget.rb'
-#require_relative 'poco_stats_widget.rb'
-#require_relative 'building_view_widget.rb'
+require_relative 'poco_stats_widget.rb'
 require_relative 'up_to_pi_config_button.rb'
-#require_relative 'edit_selected_button.rb'
-#require_relative 'transfer_products_button.rb'
 
 require_relative '../gtk_helpers/clear_sort_button.rb'
 
@@ -44,13 +41,13 @@ class PlanetView < Gtk::Box
 	planet_stats_widget_frame = Gtk::Frame.new
 	planet_stats_widget_frame.add(@planet_stats_widget)
 	
-	# poco_stats_widget = PocoStatsWidget.new(@planet_model.customs_office)
+	@poco_stats_widget = PocoStatsWidget.new(@controller)
 	
 	right_column_vbox = Gtk::Box.new(:vertical)
 	# Pad space between them with pixels
 	right_column_vbox.spacing = 10
 	right_column_vbox.add(planet_stats_widget_frame, :expand => false)
-	# right_column_vbox.add(poco_stats_widget, :expand => false)
+	right_column_vbox.add(@poco_stats_widget, :expand => false)
 	
 	
 	bottom_row.pack_start(right_column_vbox, :expand => false)
@@ -71,5 +68,6 @@ class PlanetView < Gtk::Box
 	# Pass new @planet_model along to children.
 	@building_layout_widget.planet_model = (@planet_model)
 	@planet_stats_widget.planet_model = (@planet_model)
+	@poco_stats_widget.planet_model = (@planet_model)
   end
 end
