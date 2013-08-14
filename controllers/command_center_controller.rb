@@ -31,7 +31,13 @@ class CommandCenterController
   end
   
   def remove_qty_of_product(product_name, quantity)
-	@building_model.remove_qty_of_product(product_name, quantity)
+	begin
+	  @building_model.remove_qty_of_product(product_name, quantity)
+	rescue ArgumentError => error
+	  # TODO - Tell the user what happened nicely.
+	  # For now, spit it out to the command line.
+	  puts error
+	end
   end
   
   def up_to_planet_controller
