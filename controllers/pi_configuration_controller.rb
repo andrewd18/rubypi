@@ -68,8 +68,11 @@ class PIConfigurationController
   end
   
   def on_model_changed
-	# Pass the model up to the view.
-	@view.pi_configuration_model = @pi_configuration_model
+	# Pass a duplicated, frozen model up to the view so the view can't directly change it.
+	duplicated_model = @pi_configuration_model.dup
+	frozen_model = duplicated_model.freeze
+	
+	@view.pi_configuration_model = frozen_model
   end
   
   # Destructor.

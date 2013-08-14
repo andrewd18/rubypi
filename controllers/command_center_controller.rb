@@ -49,8 +49,11 @@ class CommandCenterController
   end
   
   def on_model_changed
-	# Pass the model up to the view.
-	@view.building_model = @building_model
+	# Pass a duplicated, frozen model up to the view so the view can't directly change it.
+	duplicated_model = @building_model.dup
+	frozen_model = duplicated_model.freeze
+	
+	@view.building_model = frozen_model
   end
   
   # Destructor.

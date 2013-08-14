@@ -87,8 +87,11 @@ class PlanetController
   end
   
   def on_model_changed
-	# Pass the model up to the view.
-	@view.planet_model = @planet_model
+	# Pass a duplicated, frozen model up to the view so the view can't directly change it.
+	duplicated_model = @planet_model.dup
+	frozen_model = duplicated_model.freeze
+	
+	@view.planet_model = frozen_model
   end
   
   # Destructor.
