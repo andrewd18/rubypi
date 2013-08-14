@@ -102,6 +102,16 @@ class TestCaseCommandCenter < Test::Unit::TestCase
 	assert_equal(0, @building.upgrade_level, "Level should not be able to be set above five.")
   end
   
+  def test_level_can_be_set_as_float_but_is_converted_to_int
+	assert_nothing_raised do
+	  @building.set_level(5.0)
+	end
+	
+	assert_equal(5, @building.upgrade_level) # value must be the same
+	assert_equal("5", "#{@building.upgrade_level}") # string representation must be the same
+	assert_not_nil(@building.powergrid_provided) # must be able to find the powergrid_provided based on the level
+  end
+  
   def test_powergrid_provided_scales_with_level
 	# CC Level 0
 	assert_equal(6000, @building.powergrid_provided, "Level 0 CC powergrid is not accurate.")

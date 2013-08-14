@@ -10,26 +10,26 @@ class CommandCenter < PlanetaryBuilding
   
   attr_reader :upgrade_level
   
-  LEVEL_TO_PG_TABLE = {"0" => 6000,
-                       "1" => 9000,
-                       "2" => 12000,
-                       "3" => 15000,
-                       "4" => 17000,
-                       "5" => 19000 }
+  LEVEL_TO_PG_TABLE = {0 => 6000,
+                       1 => 9000,
+                       2 => 12000,
+                       3 => 15000,
+                       4 => 17000,
+                       5 => 19000 }
   
-  LEVEL_TO_CPU_TABLE = {"0" => 1675,
-                        "1" => 7057,
-                        "2" => 12136,
-                        "3" => 17215,
-                        "4" => 21315,
-                        "5" => 25415 }
+  LEVEL_TO_CPU_TABLE = {0 => 1675,
+                        1 => 7057,
+                        2 => 12136,
+                        3 => 17215,
+                        4 => 21315,
+                        5 => 25415 }
   
-  LEVEL_TO_ISK_TABLE = {"0" => 90000,
-                        "1" => 670000,
-                        "2" => 1600000,
-                        "3" => 2800000,
-                        "4" => 4300000,
-                        "5" => 6400000 }
+  LEVEL_TO_ISK_TABLE = {0 => 90000,
+                        1 => 670000,
+                        2 => 1600000,
+                        3 => 2800000,
+                        4 => 4300000,
+                        5 => 6400000 }
   
   UPGRADE_LEVEL = 0
   POWERGRID_USAGE = 0
@@ -55,15 +55,15 @@ class CommandCenter < PlanetaryBuilding
   end
   
   def powergrid_provided
-	return LEVEL_TO_PG_TABLE["#{@upgrade_level}"]
+	return LEVEL_TO_PG_TABLE[@upgrade_level]
   end
   
   def cpu_provided
-	return LEVEL_TO_CPU_TABLE["#{@upgrade_level}"]
+	return LEVEL_TO_CPU_TABLE[@upgrade_level]
   end
   
   def isk_cost
-	return LEVEL_TO_ISK_TABLE["#{@upgrade_level}"]
+	return LEVEL_TO_ISK_TABLE[@upgrade_level]
   end
   
   def storage_volume
@@ -92,17 +92,18 @@ class CommandCenter < PlanetaryBuilding
   end
   
   def set_level(level)
-	if (level.between?(0, 5))
-	  # Ok, it's a valid level.
-	  # Let's make sure we're not setting something we already have.
-	  if (level == @upgrade_level)
-		# No change in the value.
-		return
+	# If we're passed a non-int, convert it to an int. 
+	level = level.to_int
+	
+	# Arg check.
+	if (LEVEL_TO_PG_TABLE.keys.include?(level))
+	  # Argument is valid.
+	  # Only update the level if it's changed.
+	  unless (@upgrade_level == level)
+		@upgrade_level = level
+		changed # Set observeable state to "changed".
+		notify_observers() # Notify errybody.
 	  end
-	  
-	  @upgrade_level = level
-	  changed # Set observeable state to "changed".
-	  notify_observers() # Notify errybody.
 	else
 	  # Invalid level passed.
 	  raise ArgumentError, "Passed in level must be between 0 and 5."
