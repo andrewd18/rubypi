@@ -4,11 +4,12 @@ require 'bundler/setup' unless not defined?(Ocra)
 require 'gtk3'
 
 require_relative 'view/ruby_pi_main_menu.rb'
-#require_relative 'view/system_view_widget.rb'
+
 require_relative 'controllers/pi_configuration_controller.rb'
 require_relative 'controllers/planet_controller.rb'
 require_relative 'controllers/command_center_controller.rb'
 require_relative 'controllers/customs_office_controller.rb'
+require_relative 'controllers/storage_facility_controller.rb'
 
 require_relative 'model/pi_configuration.rb'
 
@@ -85,6 +86,9 @@ class RubyPI < Gtk::Window
 	  
 	elsif (model_object.is_a?(CustomsOffice))
 	  @controller = CustomsOfficeController.new(model_object)
+	  
+	elsif (model_object.is_a?(StorageFacility))
+	  @controller = StorageFacilityController.new(model_object)
 	  
 	else
 	  raise ArgumentError, "Unknown model object class #{model_object.class}."
