@@ -10,6 +10,7 @@ require_relative 'controllers/planet_controller.rb'
 require_relative 'controllers/command_center_controller.rb'
 require_relative 'controllers/customs_office_controller.rb'
 require_relative 'controllers/storage_facility_controller.rb'
+require_relative 'controllers/industrial_facility_controller.rb'
 
 require_relative 'model/pi_configuration.rb'
 
@@ -89,6 +90,12 @@ class RubyPI < Gtk::Window
 	  
 	elsif (model_object.is_a?(StorageFacility))
 	  @controller = StorageFacilityController.new(model_object)
+	  
+	elsif (model_object.is_a?(BasicIndustrialFacility) or
+	       model_object.is_a?(AdvancedIndustrialFacility) or
+	       model_object.is_a?(HighTechIndustrialFacility))
+	  
+	  @controller = IndustrialFacilityController.new(model_object)
 	  
 	else
 	  raise ArgumentError, "Unknown model object class #{model_object.class}."
