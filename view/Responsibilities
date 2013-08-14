@@ -1,27 +1,38 @@
-A view needs to be given a controller.
-A view needs to be given a place to draw itself.
-A view is responsible for the instantiation and layout of all of its widgets.
-A view is responsible for connecting its widgets' signals (user input) to controller actions.
-A view is responsible for receiving a new model object and updating its widgets accordingly.
-A view must never directly change the model it is given.
+Modeled after Ruby on Rails MVC design.
 
+1. The main application thread determines which controller to activate.
+2. The controller creates a view.
+3. The controller passes the model up to the view.
+4. The view displays itself.
+5. Upon user input, the view sends signals to the controller.
+6. The controller interprets the signals and calls the appropriate model methods.
+7. The model does all the heavy lifting.
+8. The controller passes passes the updated model back up to the view.
 
-A controller is given r/w access to a domain model.
-A controller is given a place to draw a view.
-A controller is responsible for creating the view.
-A controller is responsible for translating view signals into model changes.
-A controller is responsible for observing the model.
-A controller is responsible for passing a read-only version of the model to the view when the model changes.
-
-
-
-# Modeled after Rails controllers.
-# The view only ever interacts with the controller.
-# The model does the heavy lifting.
-# The controller is just an intermediary.
 
 View Signal --> Controller Action
                 Controller Action          --> Model Method
                 Controller on_model_change <-- Model Method
 View.model= <-- Controller passes r/o Model
 View.update
+
+
+
+
+
+A view must be given a controller.
+A view is responsible for instantiation, layout, and destruction of all of its widgets.
+A view is responsible for connecting its widgets' GTK signals (user input) to controller actions.
+A view is responsible for receiving a new model object and updating its widgets accordingly.
+A view should not cause signals to be emitted when updating widgets with model data (a common issue with signal_connect('changed')).
+A view must not change the model it is given.
+
+A controller must be given r/w access to a domain model.
+A controller must provide a getter to its view.
+A controller is responsible for creating the view.
+A controller is responsible for translating view signals into model changes.
+A controller is responsible for observing the model.
+A controller is responsible for passing a read-only version of the model to the view when the model changes.
+
+A model is responsible for representing the domain objects.
+A model is responsible for holding and serializing data.
