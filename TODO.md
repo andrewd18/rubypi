@@ -33,7 +33,9 @@ User Interface Improvements
   - Do something visual when deleting links or adding links that shows you're on step two.
 * Convert "Transfer Products" widget to an Expedited Transfer widget.
 * Create a new, unique Import / Export widget rather than reusing the Transfer Products widget.
-  
+* Redesign Industrial Facility View to get rid of sliders and have that left-to-right feel.
+
+
 
 Code Cleanup
 ============
@@ -49,6 +51,7 @@ Code Cleanup
   - Keep adding more!
 * Do my own serialization of @pi_configuration that doesn't rely on a straight YAML dump.
 * Refactor out Observer to make serialization easier and the data more database-like?
+* Make "signal_handler_block(signal_id){}" into a GTK helper or something less clunky.
 
 
 Packaging & Release
