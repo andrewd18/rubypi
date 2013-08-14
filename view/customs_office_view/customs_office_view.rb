@@ -56,7 +56,7 @@ class CustomsOfficeView < Gtk::Box
 	tax_rate_label = Gtk::Label.new("Tax Rate Percentage:")
 	@tax_rate_scale = Gtk::Scale.new(:horizontal, CustomsOffice::MIN_TAX_RATE, CustomsOffice::MAX_TAX_RATE, 1)
 	@tax_rate_scale.width_request = 100 # width request in pixels
-	@tax_rate_scale.signal_connect('value_changed') do |scale|
+	@on_tax_rate_change_signal = @tax_rate_scale.signal_connect('value_changed') do |scale|
 	  @controller.change_tax_rate(scale.value)
 	end
 	
@@ -105,7 +105,13 @@ class CustomsOfficeView < Gtk::Box
   def building_model=(new_building_model)
 	@building_model = new_building_model
 	
-	@tax_rate_scale.value = @building_model.tax_rate
+	# WORKAROUND
+	# I wrap the view-update events in signal_handler_block(id) closures.
+	# This temporarily nullifies the objects from sending GTK signal I previously hooked up.
+	
+	@tax_rate_scale.signal_handler_block(@on_tax_rate_change_signal) do
+	  @tax_rate_scale.value = @building_model.tax_rate
+	end
 	
 	# Pass along to children.
 	@add_products_widget.building_model = @building_model

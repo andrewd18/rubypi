@@ -50,7 +50,7 @@ class CommandCenterView < Gtk::Box
 	# Upgrade level spin button.						# min, max, step
 	@upgrade_level_spin_button = Gtk::SpinButton.new(0, 5, 1)
 	@upgrade_level_spin_button.numeric = true
-	@upgrade_level_spin_button.signal_connect("value-changed") do |spin_button|
+	@on_upgrade_level_change_signal = @upgrade_level_spin_button.signal_connect("value-changed") do |spin_button|
 	  @controller.change_upgrade_level(spin_button.value)
 	end
 	
@@ -101,7 +101,13 @@ class CommandCenterView < Gtk::Box
   def building_model=(new_building_model)
 	@building_model = new_building_model
 	
-	@upgrade_level_spin_button.value = @building_model.upgrade_level
+	# WORKAROUND
+	# I wrap the view-update events in signal_handler_block(id) closures.
+	# This temporarily nullifies the objects from sending GTK signal I previously hooked up.
+	
+	@upgrade_level_spin_button.signal_handler_block(@on_upgrade_level_change_signal) do
+	  @upgrade_level_spin_button.value = @building_model.upgrade_level
+	end
 	
 	# Pass along to children.
 	@add_products_widget.building_model = new_building_model

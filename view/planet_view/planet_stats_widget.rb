@@ -30,13 +30,13 @@ class PlanetStatsWidget < Gtk::Box
 	
 	# Populate the planet type combo box with all the valid planet types.
 	@planet_type_combo_box = SimpleComboBox.new(Planet::PLANET_TYPES)
-	@planet_type_combo_box.signal_connect("changed") do |combo_box|
+	@on_planet_type_changed_signal = @planet_type_combo_box.signal_connect("changed") do |combo_box|
 	  @controller.change_planet_type(combo_box.selected_item)
 	end
 	
 	planet_name_label = Gtk::Label.new("Name:")
 	@planet_name_entry = Gtk::Entry.new
-	@planet_name_entry.signal_connect("changed") do |text_entry|
+	@on_planet_name_changed_signal = @planet_name_entry.signal_connect("changed") do |text_entry|
 	  @controller.change_planet_name(text_entry.text)
 	end
 	
@@ -98,11 +98,21 @@ class PlanetStatsWidget < Gtk::Box
   def update_from_model
 	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
 	unless (self.destroyed?)
-	  # Set the current combo box value.
-	  @planet_type_combo_box.selected_item = @planet_model.type
+	  # WORKAROUND
+	  # I wrap the view-update events in signal_handler_block(id) closures.
+	  # This temporarily nullifies the objects from sending GTK signal I previously hooked up.
 	  
-	  # Set the current planet name.
-	  @planet_name_entry.text = @planet_model.name
+	  @planet_type_combo_box.signal_handler_block(@on_planet_type_changed_signal) do
+		# Set the current combo box value.
+		@planet_type_combo_box.selected_item = @planet_model.type
+	  end
+	  
+	  @planet_name_entry.signal_handler_block(@on_planet_name_changed_signal) do
+		# Set the current planet name.
+		@planet_name_entry.text = @planet_model.name
+	  end
+	  
+	  
 	  
 	  # Set the CPU used and PG used values.
 	  @cpu_used_progress_bar.text = "#{@planet_model.pct_cpu_usage.round(2)} %"
