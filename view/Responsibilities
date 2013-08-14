@@ -1,0 +1,27 @@
+A view needs to be given a controller.
+A view needs to be given a place to draw itself.
+A view is responsible for the instantiation and layout of all of its widgets.
+A view is responsible for connecting its widgets' signals (user input) to controller actions.
+A view is responsible for receiving a new model object and updating its widgets accordingly.
+A view must never directly change the model it is given.
+
+
+A controller is given r/w access to a domain model.
+A controller is given a place to draw a view.
+A controller is responsible for creating the view.
+A controller is responsible for translating view signals into model changes.
+A controller is responsible for observing the model.
+A controller is responsible for passing a read-only version of the model to the view when the model changes.
+
+
+
+# Modeled after Rails controllers.
+# The view only ever interacts with the controller.
+# The model does the heavy lifting.
+# The controller is just an intermediary.
+
+View Signal --> Controller Action
+                Controller Action          --> Model Method
+                Controller on_model_change <-- Model Method
+View.model= <-- Controller passes r/o Model
+View.update
