@@ -9,9 +9,7 @@ class CommandCenterController
 	@building_model = building_model
 	
 	@view = CommandCenterView.new(self)
-	
-	# Perform a one-time push of the model to the view.
-	self.on_model_changed
+	@view.building_model = @building_model
 	
 	# Begin observing the model.
 	self.start_observing_model

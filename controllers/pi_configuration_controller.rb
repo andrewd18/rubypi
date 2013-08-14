@@ -10,9 +10,7 @@ class PIConfigurationController
 	
 	# Create the view.
 	@view = PIConfigurationView.new(self)
-	
-	# Perform a one-time push of the model to the view.
-	self.on_model_changed
+	@view.pi_configuration_model = @pi_configuration_model
 	
 	# Begin observing the model.
 	self.start_observing_model
