@@ -62,7 +62,7 @@ class AddProductsTreeView < Gtk::TreeView
 		if ((dialog.quantity > 0) and
 			(response == Gtk::ResponseType::ACCEPT))
 		  
-		  @building_model.store_product(selected_product_name, dialog.quantity)
+		  @controller.store_product(selected_product_name, dialog.quantity)
 		  
 		else
 		  puts "User canceled or quantity was equal to or less than zero."
