@@ -10,7 +10,9 @@ class PlanetController
 	
 	# Create the view.
 	@view = PlanetView.new(self)
-	@view.planet_model = @planet_model
+	
+	# Perform a one-time push of the model to the view.
+	self.on_model_changed
 	
 	# Begin observing the model.
 	self.start_observing_model
