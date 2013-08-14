@@ -29,8 +29,7 @@ class PlanetStatsWidget < Gtk::Box
 	planet_type_label = Gtk::Label.new("Planet Type:")
 	
 	# Populate the planet type combo box with all the valid planet types.
-	# TODO - Remove Uncolonized as an option. Going to require reworking some model tests.
-	@planet_type_combo_box = SimpleComboBox.new(Planet::PLANET_TYPES_WITHOUT_UNCOLONIZED)
+	@planet_type_combo_box = SimpleComboBox.new(Planet::PLANET_TYPES)
 	@planet_type_combo_box.signal_connect("changed") do |combo_box|
 	  @controller.change_planet_type(combo_box.selected_item)
 	end

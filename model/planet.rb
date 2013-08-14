@@ -24,8 +24,7 @@ class Planet
   attr_reader :customs_office
   attr_accessor :pi_configuration
   
-  PLANET_TYPES = ["Uncolonized",
-                  "Gas",
+  PLANET_TYPES = ["Gas",
                   "Ice",
                   "Storm",
                   "Barren",
@@ -33,15 +32,6 @@ class Planet
                   "Lava",
                   "Oceanic",
                   "Plasma"]
-  
-  PLANET_TYPES_WITHOUT_UNCOLONIZED = ["Gas",
-									  "Ice",
-									  "Storm",
-									  "Barren",
-									  "Temperate",
-									  "Lava",
-									  "Oceanic",
-									  "Plasma"]
   
   TYPE_TO_NATIVE_P0_LIST = {"Gas" => ["Aqueous Liquids",
                                       "Ionic Solutions",
@@ -331,17 +321,6 @@ class Planet
 	end
 	
 	@buildings.clear
-	
-	# Tell my observers I've changed.
-	changed # Set observeable state to "changed".
-	notify_observers() # Notify errybody.
-  end
-  
-  def abandon
-	self.remove_all_buildings
-	
-	@type = "Uncolonized"
-	@name = nil
 	
 	# Tell my observers I've changed.
 	changed # Set observeable state to "changed".

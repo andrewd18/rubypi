@@ -245,28 +245,6 @@ class TestCasePlanet < Test::Unit::TestCase
 	assert_equal(0, @planet.buildings.count)
   end
   
-  def test_can_abandon_planet_completely
-	command_center = CommandCenter.new
-	extractor = Extractor.new
-	
-	@planet.add_building(command_center)
-	@planet.add_building(extractor)
-	
-	assert_equal(2, @planet.num_buildings)
-	assert_equal(2, @planet.buildings.count)
-	
-	@planet.type = "Lava"
-	@planet.name = "J100820 - III"
-	
-	@planet.abandon
-	
-	assert_equal(0, @planet.num_buildings)
-	assert_equal(0, @planet.buildings.count)
-	
-	assert_equal("Uncolonized", @planet.type)
-	assert_equal(nil, @planet.name)
-  end
-  
   def test_powergrid_usage_scales_with_number_of_buildings
 	# 0 # Command Center
 	# 700 # Storage Facility
@@ -955,28 +933,6 @@ class TestCasePlanet < Test::Unit::TestCase
 	@planet.add_observer(self)
 	
 	@planet.remove_all_buildings
-	
-	assert_true(@was_notified_of_change)
-	
-	@planet.delete_observer(self)
-  end
-  
-  def test_planet_notifies_observers_when_it_is_abandoned
-	command_center = CommandCenter.new
-	extractor = Extractor.new
-	
-	@planet.add_building(command_center)
-	@planet.add_building(extractor)
-	
-	assert_equal(2, @planet.num_buildings)
-	assert_equal(2, @planet.buildings.count)
-	
-	@planet.type = "Lava"
-	@planet.name = "J100820 - III"
-	
-	@planet.add_observer(self)
-	
-	@planet.abandon
 	
 	assert_true(@was_notified_of_change)
 	
