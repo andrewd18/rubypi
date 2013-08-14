@@ -9,9 +9,7 @@ class CustomsOfficeController
 	@building_model = building_model
 	
 	@view = CustomsOfficeView.new(self)
-	
-	# Perform a one-time push of the model to the view.
-	self.on_model_changed
+	@view.building_model = @building_model
 	
 	# Begin observing the model.
 	self.start_observing_model
@@ -57,11 +55,8 @@ class CustomsOfficeController
   end
   
   def on_model_changed
-	# Pass a duplicated, frozen model up to the view so the view can't directly change it.
-	duplicated_model = @building_model.dup
-	frozen_model = duplicated_model.freeze
-	
-	@view.building_model = frozen_model
+	# Pass the model up to the view.
+	@view.building_model = @building_model
   end
   
   # Destructor.
