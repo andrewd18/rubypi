@@ -1,6 +1,6 @@
 require 'gtk3'
 
-require_relative 'building_image.rb'
+require_relative '../common/building_image.rb'
 
 class BuildingToolRadioButton < Gtk::RadioToolButton
   attr_reader :building_class

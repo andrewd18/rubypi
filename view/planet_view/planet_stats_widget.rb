@@ -1,6 +1,6 @@
 
 require 'gtk3'
-require_relative 'planet_image.rb'
+require_relative '../common/planet_image.rb'
 require_relative 'building_count_table.rb'
 require_relative 'isk_amount_label.rb'
 require_relative '../../model/planet.rb'
