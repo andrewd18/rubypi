@@ -86,54 +86,46 @@ class PlanetStatsWidget < Gtk::Box
   def planet_model=(new_planet_model)
 	@planet_model = new_planet_model
 	
+	# WORKAROUND
+	# I wrap the view-update events in signal_handler_block(id) closures.
+	# This temporarily nullifies the objects from sending GTK signal I previously hooked up.
+	
+	@planet_type_combo_box.signal_handler_block(@on_planet_type_changed_signal) do
+	  # Set the current combo box value.
+	  @planet_type_combo_box.selected_item = @planet_model.type
+	end
+	
+	@planet_name_entry.signal_handler_block(@on_planet_name_changed_signal) do
+	  # Set the current planet name.
+	  @planet_name_entry.text = @planet_model.name
+	end
+	
+	
+	
+	# Set the CPU used and PG used values.
+	@cpu_used_progress_bar.text = "#{@planet_model.pct_cpu_usage.round(2)} %"
+	
+	if (@planet_model.pct_cpu_usage > 100)
+	  @cpu_used_progress_bar.fraction = 1.0
+	else
+	  @cpu_used_progress_bar.fraction = (@planet_model.pct_cpu_usage / 100.0)
+	end
+	
+	
+	@pg_used_progress_bar.text = "#{@planet_model.pct_powergrid_usage.round(2)} %"
+	
+	if (@planet_model.pct_powergrid_usage > 100)
+	  @pg_used_progress_bar.fraction = 1.0
+	else
+	  @pg_used_progress_bar.fraction = (@planet_model.pct_powergrid_usage / 100.0)
+	end
+	
+	# Set the isk cost.
+	@isk_cost_value_label.isk_value = @planet_model.isk_cost
+	
+	
 	# Pass along to children.
 	@building_count_table.planet_model = new_planet_model
 	@planet_image.planet_model = new_planet_model
-	
-	update_from_model
-  end
-  
-  private
-  
-  def update_from_model
-	# Don't update the Gtk/Glib C object if it's in the process of being destroyed.
-	unless (self.destroyed?)
-	  # WORKAROUND
-	  # I wrap the view-update events in signal_handler_block(id) closures.
-	  # This temporarily nullifies the objects from sending GTK signal I previously hooked up.
-	  
-	  @planet_type_combo_box.signal_handler_block(@on_planet_type_changed_signal) do
-		# Set the current combo box value.
-		@planet_type_combo_box.selected_item = @planet_model.type
-	  end
-	  
-	  @planet_name_entry.signal_handler_block(@on_planet_name_changed_signal) do
-		# Set the current planet name.
-		@planet_name_entry.text = @planet_model.name
-	  end
-	  
-	  
-	  
-	  # Set the CPU used and PG used values.
-	  @cpu_used_progress_bar.text = "#{@planet_model.pct_cpu_usage.round(2)} %"
-	  
-	  if (@planet_model.pct_cpu_usage > 100)
-		@cpu_used_progress_bar.fraction = 1.0
-	  else
-		@cpu_used_progress_bar.fraction = (@planet_model.pct_cpu_usage / 100.0)
-	  end
-	  
-	  
-	  @pg_used_progress_bar.text = "#{@planet_model.pct_powergrid_usage.round(2)} %"
-	  
-	  if (@planet_model.pct_powergrid_usage > 100)
-		@pg_used_progress_bar.fraction = 1.0
-	  else
-		@pg_used_progress_bar.fraction = (@planet_model.pct_powergrid_usage / 100.0)
-	  end
-	  
-	  # Set the isk cost.
-	  @isk_cost_value_label.isk_value = @planet_model.isk_cost
-	end
   end
 end
