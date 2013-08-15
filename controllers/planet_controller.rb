@@ -37,7 +37,13 @@ class PlanetController
   end
   
   def add_extractor_head(parent_extractor, head_x_pos, head_y_pos)
-	parent_extractor.add_extractor_head(head_x_pos, head_y_pos)
+	begin
+	  parent_extractor.add_extractor_head(head_x_pos, head_y_pos)
+	rescue RuntimeError => error
+	  # TODO - Tell the user what happened nicely.
+	  # For now, spit it out to the command line.
+	  puts error
+	end
   end
   
   def add_link(source_building, destination_building)
