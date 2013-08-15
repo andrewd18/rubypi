@@ -41,7 +41,13 @@ class PlanetController
   end
   
   def add_link(source_building, destination_building)
-	@planet_model.add_link(source_building, destination_building)
+	begin
+	  @planet_model.add_link(source_building, destination_building)
+	rescue ArgumentError => error
+	  # TODO - Tell the user what happened nicely.
+	  # For now, spit it out to the command line.
+	  puts error
+	end
   end
   
   def set_link_length(source_building, destination_building, length)

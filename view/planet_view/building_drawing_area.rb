@@ -492,8 +492,12 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  return
 	else
 	  new_link = @controller.add_link(source_building, destination_building)
-	  link_length = self.calculate_link_length(new_link)
-	  @controller.set_link_length(source_building, destination_building, link_length)
+	  
+	  # If the link didn't get created due to some kind of model error, don't bother doing anything else.
+	  unless (new_link.nil?)
+		link_length = self.calculate_link_length(new_link)
+		@controller.set_link_length(source_building, destination_building, link_length)
+	  end
 	end
   end
   
