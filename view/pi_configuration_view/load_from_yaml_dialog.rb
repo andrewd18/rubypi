@@ -11,7 +11,7 @@ class LoadFromYamlDialog < Gtk::FileChooserDialog
 	
 	
 	# Set up options.
-	ruby_pi_folder = File.expand_path("..", File.dirname(__FILE__))
+	ruby_pi_folder = File.expand_path("../..", File.dirname(__FILE__))
 	self.current_folder=(ruby_pi_folder)
 	
 	# Filter out anything but YAML files.

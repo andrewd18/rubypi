@@ -53,6 +53,23 @@ class PIConfigurationController
 	@pi_configuration_model.remove_planet(planet_instance)
   end
   
+  def import_from_file(filename)
+	self.stop_observing_model
+	
+	@pi_configuration_model = PIConfiguration.load_from_yaml(filename)
+	@view.pi_configuration_model = @pi_configuration_model
+	
+	self.start_observing_model
+  end
+  
+  def export_to_file(filename)
+	self.stop_observing_model
+	
+	PIConfiguration.save_to_yaml(@pi_configuration_model, filename)
+	
+	self.start_observing_model
+  end
+  
   def edit_selected_planet(planet_instance)
 	$ruby_pi_main_gtk_window.load_controller_for_model(planet_instance)
   end
