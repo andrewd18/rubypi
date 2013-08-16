@@ -25,6 +25,12 @@ class RubyPIAboutDialog < Gtk::AboutDialog
 	# Couple of paragraphs.
 	licenses += "\n\n\n\n"
 	
+	# Tango Project Attribution.
+	licenses += "Some public domain icons courtesy of the Tango Desktop Project. http://tango.freedesktop.org/"
+	
+	# Couple of paragraphs.
+	licenses += "\n\n\n\n"
+	
 	# GPL License.
 	licenses += "This program is free software: you can redistribute it and/or modify "
 	licenses += "it under the terms of the GNU General Public License as published by "
