@@ -119,20 +119,32 @@ class RubyPI < Gtk::Window
 	# Before quitting, ask if they want to save.
 	save_dialog = SaveBeforeQuitDialog.new(self)
 	save_dialog.run do |response|
-	  if (response == Gtk::ResponseType::YES)
+	  case response
+	  when (Gtk::ResponseType::NO)
+		# Quit without saving.
+		save_dialog.destroy
+		Gtk.main_quit
+		exit!
+		
+	  when (Gtk::ResponseType::YES)
+		# Export to yaml and then quit.
 		self.export_to_yaml
+		save_dialog.destroy
+		Gtk.main_quit
+		exit!
+		
+	  when (Gtk::ResponseType::REJECT)
+		# Don't quit.
+		save_dialog.destroy
 	  end
 	end
-	
-	save_dialog.destroy
-	
-	Gtk.main_quit
-	exit!
   end
   
   def export_to_yaml
 	# Create a save dialog.
 	export_dialog = SaveToYamlDialog.new($ruby_pi_main_gtk_window)
+	
+	# TODO - This is nearly identical to the PIConfigurationController method, with a different scope. Unify them.
 	
 	# Run the dialog.
 	if export_dialog.run == Gtk::ResponseType::ACCEPT
