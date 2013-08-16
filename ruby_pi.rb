@@ -133,7 +133,7 @@ class RubyPI < Gtk::Window
 		Gtk.main_quit
 		exit!
 		
-	  when (Gtk::ResponseType::REJECT)
+	  else
 		# Don't quit.
 		save_dialog.destroy
 	  end
