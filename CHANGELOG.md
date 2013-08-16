@@ -2,6 +2,12 @@ Scheduled for Next Release
 ==========================
 * You can now add and delete extractor heads from the planet view.
 * PG and CPU for planetary links are now calculated.
+* Every planet now gets a POCO by default. Whether or not you use it is up to you.
+* Extractors can no longer extract P0s that its planet does not have.
+* When closing RubyPI, you will be given the opportunity to save your PI Config.
+* Added CCP IP notices to the About box.
+* Refactored the entire application structure to improve testability.
+* Fixed a lot of stupid mistakes that would cause crashes.
 
 
 Version 0.0.11
