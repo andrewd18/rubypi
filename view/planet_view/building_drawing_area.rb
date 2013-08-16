@@ -163,11 +163,13 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  end
 	end
 	
+	
 	# LINKS
 	@planet_model.links.each do |link|
 	  image = CairoLinkImage.new(link)
 	  image.draw(cairo_context)
 	end
+	
 	
 	# BUILDINGS
 	@planet_model.buildings.each do |building|
@@ -184,11 +186,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  image.draw(cairo_context)
 	end
 	
+	
 	# CURSOR
 	# Change what and how we draw based on the selected action.
-	case (@on_click_action)
-	  
-	when "add_building"
+	if (@on_click_action == "add_building")
 	  # Draw within a cairo_context transation.
 	  cairo_context.save do
 		
@@ -208,8 +209,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		end
 	  end
 	  
-	
-	when "add_extractor_head"
+	  
+	elsif (@on_click_action == "add_extractor_head")
 	  # If the user has selected an extractor,
 	  # draw a line between the first building and the cursor position.
 	  # Also draw the extractor head icon underneath the cursor position.
@@ -254,18 +255,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		  end
 		end
 	  end
-	
 	  
-	#when "move_building"
-	  # puts "move_building"
-	
-	#when "edit_building"
-	  # puts "edit_building"
 	  
-	#when "delete_building"
-	  # puts "delete_building"
 	  
-	when "add_link"
+	elsif (@on_click_action == "add_link")
 	  # If the first building has been set to a real building,
 	  # draw a line between the first building and the cursor position.
 	  if (@add_link_first_building != nil)
@@ -290,12 +283,6 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		  cairo_context.stroke
 		end
 	  end
-	  
-	#when "delete_link"
-	  # puts "delete_link"
-	
-	else
-	  # puts "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
 	end
   end
   
@@ -394,7 +381,6 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	distance_between_centers_in_km = (distance_between_centers_in_px / PIXEL_TO_KM_SCALE)
 	
 	link.length = distance_between_centers_in_km
-	# puts "calculate_link_length: #{link.length}"
   end
   
   private
@@ -621,42 +607,16 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	@cursor_x_pos = event.x
 	@cursor_y_pos = event.y
 	
-	# Then, determine what else to do based on the selected action.
-	case (@on_click_action)
-	  
-	when "add_building"
-	  # Mouse release with add_building does nothing, as we only add a building on click.
-	  
-	when "add_extractor_head"
-	  # Mouse release with add_extractor_head does nothing, as we only add an extractor on click.
-	  
-	when "move_building"
+	# Move building is the only action we need to check for.
+	# In all other cases we perform actions on the click, not on the release.
+	if (@on_click_action == "move_building")
 	  # User wants to let go of the building. Clear the selection. 
 	  @move_building_selected_building = nil
-	
-	when "edit_building"
-	  # TODO
-	  puts "edit_building_release"
 	  
-	when "delete_building"
-	  # TODO
-	  puts "delete_building_release"
-	  
-	when "add_link"
-	  # TODO
-	  puts "add_link_release"
-	  
-	when "delete_link"
-	  # TODO
-	  puts "delete_link_release"
-	
-	else
-	  raise RuntimeError, "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
-	end
-	
-	# Finally, force a redraw of the widget.
-	if (self.destroyed? == false)
-	  self.queue_draw
+	  # Only redraw if something changed.
+	  if (self.destroyed? == false)
+		self.queue_draw
+	  end
 	end
   end
 end
