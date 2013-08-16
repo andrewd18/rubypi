@@ -4,7 +4,7 @@ require 'gtk3'
 require_relative '../common/up_to_planet_view_button.rb'
 require_relative '../common/add_products_widget.rb'
 require_relative '../common/stored_products_widget.rb'
-
+require_relative '../common/building_image.rb'
 
 class CommandCenterView < Gtk::Box
   
@@ -44,7 +44,7 @@ class CommandCenterView < Gtk::Box
 	
 	
 	# Right column.
-	building_image = Gtk::Image.new(:file => "view/images/64x64/command_center_icon.png")
+	@building_image = BuildingImage.new
 	
 	upgrade_level_label = Gtk::Label.new("Upgrade Level:")
 	# Upgrade level spin button.						# min, max, step
@@ -86,7 +86,7 @@ class CommandCenterView < Gtk::Box
 	right_column_upgrade_row.pack_start(@upgrade_level_spin_button, :expand => false)
 	
 	right_column = Gtk::Box.new(:vertical)
-	right_column.pack_start(building_image, :expand => false)
+	right_column.pack_start(@building_image, :expand => false)
 	right_column.pack_start(right_column_upgrade_row, :expand => false)
 	right_column_frame = Gtk::Frame.new
 	right_column_frame.add(right_column)
@@ -112,5 +112,6 @@ class CommandCenterView < Gtk::Box
 	# Pass along to children.
 	@add_products_widget.building_model = new_building_model
 	@stored_products_widget.building_model = new_building_model
+	@building_image.building_model = new_building_model
   end
 end

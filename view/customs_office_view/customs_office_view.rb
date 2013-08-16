@@ -7,6 +7,7 @@ require_relative '../../model/customs_office.rb' # to get min and max tax rate
 require_relative '../common/up_to_planet_view_button.rb'
 require_relative '../common/add_products_widget.rb'
 require_relative '../common/stored_products_widget.rb'
+require_relative '../common/building_image.rb'
 
 
 # This widget provides all the options necessary to edit an Extractor.
@@ -51,7 +52,7 @@ class CustomsOfficeView < Gtk::Box
 	
 	
 	# Right column.
-	building_image = Gtk::Image.new(:file => "view/images/64x64/poco_icon.png")
+	@building_image = BuildingImage.new
 	
 	tax_rate_label = Gtk::Label.new("Tax Rate Percentage:")
 	@tax_rate_scale = Gtk::Scale.new(:horizontal, CustomsOffice::MIN_TAX_RATE, CustomsOffice::MAX_TAX_RATE, 1)
@@ -85,7 +86,7 @@ class CustomsOfficeView < Gtk::Box
 	
 	# Right column.
 	right_column = Gtk::Box.new(:vertical)
-	right_column.pack_start(building_image, :expand => false)
+	right_column.pack_start(@building_image, :expand => false)
 	tax_rate_row = Gtk::Box.new(:horizontal)
 	tax_rate_row.pack_start(tax_rate_label, :expand => false)
 	tax_rate_row.pack_start(@tax_rate_scale, :expand => true)
@@ -116,5 +117,6 @@ class CustomsOfficeView < Gtk::Box
 	# Pass along to children.
 	@add_products_widget.building_model = @building_model
 	@stored_products_widget.building_model = @building_model
+	@building_image.building_model = @building_model
   end
 end

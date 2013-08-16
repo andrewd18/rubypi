@@ -44,7 +44,7 @@ class StorageFacilityView < Gtk::Box
 	
 	
 	# Right column.
-	building_image = Gtk::Image.new(:file => "view/images/64x64/storage_facility_icon.png")
+	@building_image = BuildingImage.new
 	
 	
 	
@@ -73,7 +73,7 @@ class StorageFacilityView < Gtk::Box
 	
 	# Right column.
 	right_column = Gtk::Box.new(:vertical)
-	right_column.pack_start(building_image, :expand => false)
+	right_column.pack_start(@building_image, :expand => false)
 	right_column_frame = Gtk::Frame.new
 	right_column_frame.add(right_column)
 	
@@ -92,5 +92,6 @@ class StorageFacilityView < Gtk::Box
 	# Pass new building_model to children.
 	@add_products_widget.building_model = @building_model
 	@stored_products_widget.building_model = @building_model
+	@building_image.building_model = @building_model
   end
 end

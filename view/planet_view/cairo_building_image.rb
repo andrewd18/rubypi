@@ -22,7 +22,27 @@ class CairoBuildingImage
 	raise ArgumentError unless building_model.is_a?(PlanetaryBuilding)
 	
 	@building_model = building_model
-	filename = "#{PATH_TO_IMAGES_FOLDER}" + "/" + "#{width}" + "x" + "#{height}" + "/" + "#{NAME_TO_FILENAME[@building_model.name]}"
+	
+	# Determine which image to use.
+	# TODO - Clean this up.
+	if (@building_model.is_a?(BasicIndustrialFacility) or
+	    @building_model.is_a?(AdvancedIndustrialFacility) or
+	    @building_model.is_a?(HighTechIndustrialFacility))
+	  
+	  # Calculate a filename based on schematic.
+	  if (@building_model.schematic == nil)
+		# No schematic set. Use default image.
+		filename = "#{PATH_TO_IMAGES_FOLDER}" + "/" + "#{width}x#{height}" + "/" + "#{NAME_TO_FILENAME[@building_model.name]}"
+	  else
+		base_filename = "#{PATH_TO_IMAGES_FOLDER}" + "/" + "#{width}x#{height}" + "/"
+		
+		image_by_p_level_and_inputs = "industrial_facility_p" + "#{@building_model.schematic.p_level}_#{@building_model.schematic.inputs.count}" + "_mat.png"
+		
+		filename = base_filename + image_by_p_level_and_inputs
+	  end
+	else
+	  filename = "#{PATH_TO_IMAGES_FOLDER}" + "/" + "#{width}" + "x" + "#{height}" + "/" + "#{NAME_TO_FILENAME[@building_model.name]}"
+	end
 	
 	raise "#{filename} not found." unless File.exists?(filename)
 	

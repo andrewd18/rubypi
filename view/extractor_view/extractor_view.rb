@@ -1,5 +1,6 @@
 require 'gtk3'
 require_relative '../common/select_building_combo_box.rb'
+require_relative '../common/building_image.rb'
 require_relative 'set_extraction_time_slider.rb'
 
 require_relative '../gtk_helpers/simple_combo_box.rb'
@@ -56,7 +57,7 @@ class ExtractorView < Gtk::Box
 	end
 	
 	# Right column.
-	building_image = Gtk::Image.new(:file => "view/images/64x64/extractor_icon.png")
+	@building_image = BuildingImage.new
 	
 	
 	                                    # rows, columns, homogenous?
@@ -90,7 +91,7 @@ class ExtractorView < Gtk::Box
 	# By wrapping the image in a vertical box, we ensure that the vbox expands
 	# and the image does not.
 	building_image_column = Gtk::Box.new(:vertical)
-	building_image_column.pack_start(building_image, :expand => false)
+	building_image_column.pack_start(@building_image, :expand => false)
 	
 	# Finally, add a decorator frame around it.
 	building_image_frame = Gtk::Frame.new
@@ -110,6 +111,8 @@ class ExtractorView < Gtk::Box
   
   def building_model=(new_building_model)
 	@building_model = new_building_model
+	
+	@building_image.building_model = new_building_model
 	
 	# WORKAROUND
 	# I wrap the view-update events in signal_handler_block(id) closures.

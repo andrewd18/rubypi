@@ -2,6 +2,7 @@ require 'gtk3'
 
 require_relative '../../model/schematic.rb'
 require_relative '../common/select_building_combo_box.rb'
+require_relative '../common/building_image.rb'
 
 require_relative '../gtk_helpers/simple_combo_box.rb'
 require_relative '../gtk_helpers/simple_table.rb'
@@ -89,12 +90,12 @@ class IndustrialFacilityView < Gtk::Box
 	
 	
 	# Right column.
-	building_image = Gtk::Image.new(:file => "view/images/64x64/industrial_facility_two_materials.png")
+	@building_image = BuildingImage.new
 	
 	# By wrapping the image in a vertical box, we ensure that the vbox expands
 	# and the image does not.
 	building_image_column = Gtk::Box.new(:vertical)
-	building_image_column.pack_start(building_image, :expand => false)
+	building_image_column.pack_start(@building_image, :expand => false)
 	
 	# Finally, add a decorator frame around it.
 	building_image_frame = Gtk::Frame.new
@@ -113,6 +114,8 @@ class IndustrialFacilityView < Gtk::Box
   
   def building_model=(new_building_model)
 	@building_model = new_building_model
+	
+	@building_image.building_model = new_building_model
 	
 	# WORKAROUND
 	# I wrap the view-update events in signal_handler_block(id) closures.
