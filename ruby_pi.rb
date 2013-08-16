@@ -4,6 +4,7 @@ require 'bundler/setup' unless not defined?(Ocra)
 require 'gtk3'
 
 require_relative 'view/ruby_pi_main_menu.rb'
+require_relative 'view/common/save_before_quit_dialog.rb'
 
 require_relative 'controllers/pi_configuration_controller.rb'
 require_relative 'controllers/planet_controller.rb'
@@ -115,8 +116,42 @@ class RubyPI < Gtk::Window
   end
   
   def close_application
+	# Before quitting, ask if they want to save.
+	save_dialog = SaveBeforeQuitDialog.new(self)
+	save_dialog.run do |response|
+	  if (response == Gtk::ResponseType::YES)
+		self.export_to_yaml
+	  end
+	end
+	
+	save_dialog.destroy
+	
 	Gtk.main_quit
 	exit!
+  end
+  
+  def export_to_yaml
+	# Create a save dialog.
+	export_dialog = SaveToYamlDialog.new($ruby_pi_main_gtk_window)
+	
+	# Run the dialog.
+	if export_dialog.run == Gtk::ResponseType::ACCEPT
+	  # Get the filename the user gave us.
+	  user_set_filename = export_dialog.filename
+	  
+	  # Append .yml to it, if necessary.
+	  unless (user_set_filename.end_with?(".yml"))
+		user_set_filename += ".yml"
+	  end
+	  
+	  @controller.stop_observing_model
+	  
+	  PIConfiguration.save_to_yaml(pi_configuration, user_set_filename)
+	  
+	  @controller.start_observing_model
+	end
+	
+	export_dialog.destroy
   end
 end
 
