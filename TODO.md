@@ -52,6 +52,7 @@ Code Cleanup
 * Do my own serialization of @pi_configuration that doesn't rely on a straight YAML dump.
 * Refactor out Observer to make serialization easier and the data more database-like?
 * Make "signal_handler_block(signal_id){}" into a GTK helper or something less clunky.
+* Unify the export_to_yaml dialog in the main ruby_pi app and the pi_configuration_view controller
 
 
 Packaging & Release
