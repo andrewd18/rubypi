@@ -46,7 +46,8 @@ class PIConfigurationView < Gtk::Box
 	
 	
 	button_box = Gtk::Box.new(:horizontal)
-	edit_selected_button = Gtk::Button.new(:stock_id => Gtk::Stock::EDIT)
+	edit_selected_button = Gtk::Button.new(:label => "Edit Highlighted Planet")
+	edit_selected_button.image = Gtk::Image.new(:file => "view/images/16x16/edit-find-replace.png")
 	edit_selected_button.signal_connect("clicked") do |button|
 	  unless (@planet_list.selected_planet_instance == nil)
 		@controller.edit_selected_planet(@planet_list.selected_planet_instance)
