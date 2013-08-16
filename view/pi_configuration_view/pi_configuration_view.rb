@@ -16,21 +16,9 @@ class PIConfigurationView < Gtk::Box
 	# Description and up button row widgets.
 	description_label = Gtk::Label.new("PI Configuration View")
 	
-	import_from_yaml_button = Gtk::Button.new(:stock_id => Gtk::Stock::OPEN)
-	import_from_yaml_button.signal_connect("clicked") do |button|
-	  self.load_from_yaml
-	end
-	
-	export_to_yaml_button = Gtk::Button.new(:stock_id => Gtk::Stock::SAVE)
-	export_to_yaml_button.signal_connect("clicked") do |button|
-	  self.save_to_yaml
-	end
-	
 	# Pack the description and up button row widgets.
 	top_row = Gtk::Box.new(:horizontal)
 	top_row.pack_start(description_label, :expand => true)
-	top_row.pack_start(import_from_yaml_button, :expand => false)
-	top_row.pack_start(export_to_yaml_button, :expand => false)
 	self.pack_start(top_row, :expand => false)
 	
 	
@@ -89,36 +77,6 @@ class PIConfigurationView < Gtk::Box
 	self.show_all
 	
 	return self
-  end
-  
-  def save_to_yaml
-	dialog = SaveToYamlDialog.new($ruby_pi_main_gtk_window)
-	
-	# Run the dialog.
-	if dialog.run == Gtk::ResponseType::ACCEPT
-	  # Get the filename the user gave us.
-	  user_set_filename = dialog.filename
-	  
-	  # Append .yml to it, if necessary.
-	  unless (user_set_filename.end_with?(".yml"))
-		user_set_filename += ".yml"
-	  end
-	  
-	  @controller.export_to_file(user_set_filename)
-	end
-	
-	dialog.destroy
-  end
-  
-  def load_from_yaml
-	dialog = LoadFromYamlDialog.new($ruby_pi_main_gtk_window)
-	
-	# Run the dialog.
-	if dialog.run == Gtk::ResponseType::ACCEPT
-	  @controller.import_from_file(dialog.filename)
-	end
-	
-	dialog.destroy
   end
   
   def pi_configuration_model=(new_model)

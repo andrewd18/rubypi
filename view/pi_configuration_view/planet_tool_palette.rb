@@ -14,11 +14,25 @@ class PlanetToolPalette < Gtk::Toolbar
 	self.orientation=(:vertical)
 	self.toolbar_style=(Gtk::Toolbar::Style::BOTH_HORIZ)
 	
+	list_of_buttons = Array.new
+	
+	
+	import_from_yaml_button = Gtk::ToolButton.new(:icon_widget => Gtk::Image.new(:file => "view/images/16x16/document-open.png"), :label => "Load PI Config")
+	import_from_yaml_button.signal_connect("clicked") do |button|
+	  self.load_from_yaml
+	end
+	list_of_buttons << import_from_yaml_button
+	
+	export_to_yaml_button = Gtk::ToolButton.new(:icon_widget => Gtk::Image.new(:file => "view/images/16x16/document-save.png"), :label => "Save PI Config")
+	export_to_yaml_button.signal_connect("clicked") do |button|
+	  self.save_to_yaml
+	end
+	list_of_buttons << export_to_yaml_button
+	
 	
 	#
 	# Add the "Add <Type> Planet" buttons.
 	#
-	list_of_buttons = Array.new
 	
 	add_gas_planet_button = Gtk::ToolButton.new(:icon_widget => Gtk::Image.new(:file => "view/images/16x16/gas_planet.png"), :label => "Add Gas Planet")
 	add_gas_planet_button.signal_connect("clicked") do |widget, event|
@@ -77,5 +91,35 @@ class PlanetToolPalette < Gtk::Toolbar
 	self.set_size_request(1, (33 * self.children.count))
 	
 	return self
+  end
+  
+  def save_to_yaml
+	dialog = SaveToYamlDialog.new($ruby_pi_main_gtk_window)
+	
+	# Run the dialog.
+	if dialog.run == Gtk::ResponseType::ACCEPT
+	  # Get the filename the user gave us.
+	  user_set_filename = dialog.filename
+	  
+	  # Append .yml to it, if necessary.
+	  unless (user_set_filename.end_with?(".yml"))
+		user_set_filename += ".yml"
+	  end
+	  
+	  @controller.export_to_file(user_set_filename)
+	end
+	
+	dialog.destroy
+  end
+  
+  def load_from_yaml
+	dialog = LoadFromYamlDialog.new($ruby_pi_main_gtk_window)
+	
+	# Run the dialog.
+	if dialog.run == Gtk::ResponseType::ACCEPT
+	  @controller.import_from_file(dialog.filename)
+	end
+	
+	dialog.destroy
   end
 end
