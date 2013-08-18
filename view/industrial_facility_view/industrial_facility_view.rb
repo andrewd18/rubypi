@@ -168,6 +168,10 @@ class IndustrialFacilityView < Gtk::Box
 	  product_quantity_scale = Gtk::Scale.new(:horizontal, 0, max_allowed_storage_for_this_product, 1)
 	  product_quantity_scale.value = quantity
 	  product_quantity_scale.width_request=(100)
+	  # Hook up signal.
+	  product_quantity_scale.signal_connect("value-changed") do |scale|
+		@controller.set_product_quantity(product_name, scale.value)
+	  end
 	  
 	  @scales_hash[product_name] = product_quantity_scale
 	  

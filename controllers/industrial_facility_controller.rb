@@ -28,19 +28,17 @@ class IndustrialFacilityController
 	@building_model.production_cycle_output_building = building_instance
   end
   
-  def store_product(product_name, quantity)
+  def set_product_quantity(product_name, quantity)
 	begin
-	  @building_model.store_product(product_name, quantity)
+	  @building_model.remove_all_of_product(product_name)
 	rescue ArgumentError => error
 	  # TODO - Tell the user what happened nicely.
 	  # For now, spit it out to the command line.
 	  puts error
 	end
-  end
-  
-  def remove_qty_of_product(product_name, quantity)
+	
 	begin
-	  @building_model.remove_qty_of_product(product_name, quantity)
+	  @building_model.store_product(product_name, quantity)
 	rescue ArgumentError => error
 	  # TODO - Tell the user what happened nicely.
 	  # For now, spit it out to the command line.
