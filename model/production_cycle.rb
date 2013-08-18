@@ -17,6 +17,11 @@ module ProductionCycle
 		(new_input_building.respond_to?("remove_qty_of_product")))
 	  
 	  @production_cycle_input_building = new_input_building
+	  
+	  if (self.is_a?(Observable))
+		changed
+		notify_observers
+	  end
 	else
 	   raise ArgumentError
 	end
@@ -34,6 +39,11 @@ module ProductionCycle
 		(new_output_building.respond_to?("store_product")))
 	  
 	  @production_cycle_output_building = new_output_building
+	  
+	  if (self.is_a?(Observable))
+		changed
+		notify_observers
+	  end
 	else
 	   raise ArgumentError
 	end

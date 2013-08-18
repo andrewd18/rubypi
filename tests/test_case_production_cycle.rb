@@ -7,6 +7,11 @@ class ProductionCycleStub
   include ProductionCycle
 end
 
+class ObservableProductionCycleStub
+  include ProductionCycle
+  include Observable
+end
+
 class TestCaseProductionCycle < Test::Unit::TestCase
   # Run once.
   def self.startup
@@ -19,6 +24,8 @@ class TestCaseProductionCycle < Test::Unit::TestCase
   # Run before every test.
   def setup
 	@pcstub = ProductionCycleStub.new
+	@obspcstub = ObservableProductionCycleStub.new
+	@was_notified_of_change = false
   end
   
   # Run after every test.
@@ -136,5 +143,47 @@ class TestCaseProductionCycle < Test::Unit::TestCase
 	
 	assert_equal(1440, @pcstub.production_cycle_time_in_minutes)
 	assert_equal(24, @pcstub.production_cycle_time_in_hours)
+  end
+  
+  
+  # Observable Interaction Tests
+  
+  # Update method for testing observer.
+  def update
+	@was_notified_of_change = true
+  end
+  
+  def test_if_input_building_changes_observable_is_called
+	@obspcstub.add_observer(self)
+	
+	storage_facility_a = StorageFacility.new
+	@obspcstub.production_cycle_input_building = storage_facility_a
+	
+	assert_equal(true, @was_notified_of_change)
+	
+	@was_notified_of_change = false
+	
+	@obspcstub.production_cycle_input_building = nil
+	
+	assert_equal(true, @was_notified_of_change)
+	
+	@obspcstub.delete_observer(self)
+  end
+  
+  def test_if_output_building_changes_observable_is_called
+	@obspcstub.add_observer(self)
+	
+	storage_facility_a = StorageFacility.new
+	@obspcstub.production_cycle_output_building = storage_facility_a
+	
+	assert_equal(true, @was_notified_of_change)
+	
+	@was_notified_of_change = false
+	
+	@obspcstub.production_cycle_output_building = nil
+	
+	assert_equal(true, @was_notified_of_change)
+	
+	@obspcstub.delete_observer(self)
   end
 end
