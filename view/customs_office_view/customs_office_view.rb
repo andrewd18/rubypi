@@ -94,7 +94,7 @@ class CustomsOfficeView < Gtk::Box
 	right_column_frame = Gtk::Frame.new
 	right_column_frame.add(right_column)
 	
-	bottom_row.pack_start(right_column_frame, :expand => true)
+	bottom_row.pack_start(right_column_frame, :expand => false)
 	
 	self.pack_start(bottom_row, :expand => true)
 	
