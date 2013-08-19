@@ -1,6 +1,7 @@
 Scheduled for Next Release
 ==========================
 * You can now add and delete extractor heads from the planet view.
+* You can now edit a planetary link and set its upgrade level.
 * PG and CPU for planetary links are now calculated.
 * An industrial facility will now change its icon based on whether or not it has a schematic, and said schematic's p-level.
 * Every planet now gets a POCO by default. Whether or not you use it is up to you.
