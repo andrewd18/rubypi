@@ -46,6 +46,8 @@ class IndustrialFacilityView < Gtk::Box
 	input_building_vbox.pack_start(@input_building_combo_box, :expand => false)
 	input_building_vbox.pack_start(@input_building_image, :expand => false)
 	input_building_vbox.pack_start(@input_building_stored_products_widget, :expand => true)
+	input_building_frame = Gtk::Frame.new
+	input_building_frame.add(input_building_vbox)
 	
 	schematic_label = Gtk::Label.new("Schematic")
 	@schematic_combo_box = SimpleComboBox.new
@@ -58,6 +60,8 @@ class IndustrialFacilityView < Gtk::Box
 	@stored_products_vbox.pack_start(@factory_building_image, :expand => false)
 	@stored_products_vbox.pack_start(stored_products_label, :expand => false)
 	@stored_products_vbox.pack_start(@stored_products_table, :expand => false)
+	stored_producs_frame = Gtk::Frame.new
+	stored_producs_frame.add(@stored_products_vbox)
 	
 	
 	output_building_label = Gtk::Label.new("Output Building")
@@ -70,6 +74,8 @@ class IndustrialFacilityView < Gtk::Box
 	output_building_vbox.pack_start(@output_building_combo_box, :expand => false)
 	output_building_vbox.pack_start(@output_building_image, :expand => false)
 	output_building_vbox.pack_start(@output_building_stored_products_widget, :expand => true)
+	output_building_frame = Gtk::Frame.new
+	output_building_frame.add(output_building_vbox)
 	
 	# Set up signals.
 	@on_schematic_change_signal = @schematic_combo_box.signal_connect("changed") do |combo_box|
@@ -84,26 +90,10 @@ class IndustrialFacilityView < Gtk::Box
 	  @controller.set_output_building(combo_box.selected_item)
 	end
 	
-	
-	
-	
-	# Right column.
-	@building_image = BuildingImage.new
-	
-	# By wrapping the image in a vertical box, we ensure that the vbox expands
-	# and the image does not.
-	building_image_column = Gtk::Box.new(:vertical)
-	building_image_column.pack_start(@building_image, :expand => false)
-	
-	# Finally, add a decorator frame around it.
-	building_image_frame = Gtk::Frame.new
-	building_image_frame.add(building_image_column)
-	
 	# Pack columns left to right.
-	bottom_row.pack_start(input_building_vbox, :expand => false)
-	bottom_row.pack_start(@stored_products_vbox, :expand => true)
-	bottom_row.pack_start(output_building_vbox, :expand => false)
-	bottom_row.pack_start(building_image_frame, :expand => false)
+	bottom_row.pack_start(input_building_frame, :expand => false)
+	bottom_row.pack_start(stored_producs_frame, :expand => true)
+	bottom_row.pack_start(output_building_frame, :expand => false)
 	
 	self.pack_start(bottom_row, :expand => true)
 	
