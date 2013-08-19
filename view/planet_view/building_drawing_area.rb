@@ -31,6 +31,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
 					  "edit_building",
 					  "delete_building",
                       "add_link",
+                      "edit_link",
 					  "delete_link"]
   
   attr_accessor :planet_model
@@ -43,12 +44,15 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	
 	# move_building state variables
 	@add_building_class = nil
-	
-	# add_link state variables
-	@add_link_first_building = nil
-	
+		
 	# add_extractor_head state variables
 	@add_extractor_head_parent_extractor = nil
+	
+	# Link variables.
+	@add_link_first_building = nil
+	@edit_link_first_building = nil
+	@delete_link_first_building = nil
+	
 	
 	@cursor_x_pos = 0.0
 	@cursor_y_pos = 0.0
@@ -487,6 +491,18 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
   end
   
+  def edit_link_in_model
+	source_building = @edit_link_first_building
+	destination_building = self.building_under_cursor
+	
+	# If either one of these "buildings" is nil, abort.
+	if (source_building == nil) or (destination_building == nil)
+	  return
+	else
+	  @controller.edit_link(source_building, destination_building)
+	end
+  end
+  
   def delete_link_from_model
 	source_building = @delete_link_first_building
 	destination_building = self.building_under_cursor
@@ -575,6 +591,20 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		
 		# Re-set the link state.
 		@add_link_first_building = nil
+	  end
+	  
+	when "edit_link"
+	  # If the edit_link_first_building variable is nil, that means the user either
+	  # didn't click on a building the first time, or has yet to click on a building.
+	  if (@edit_link_first_building == nil)
+		# self.building_under_cursor will return nil if nothing is found,
+		# ensuring that this gets called again properly if the user clicks on blank space
+		@edit_link_first_building = self.building_under_cursor
+	  else
+		edit_link_in_model
+		
+		# Reset the delete-link state.
+		@edit_link_first_building = nil
 	  end
 	  
 	when "delete_link"

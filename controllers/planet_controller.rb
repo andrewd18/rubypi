@@ -56,6 +56,11 @@ class PlanetController
 	end
   end
   
+  def edit_link(source_building, destination_building)
+	link_to_edit = @planet_model.find_link(source_building, destination_building)
+	$ruby_pi_main_gtk_window.load_controller_for_model(link_to_edit)
+  end
+  
   def set_link_length(source_building, destination_building, length)
 	link_to_edit = @planet_model.find_link(source_building, destination_building)
 	link_to_edit.length = length
