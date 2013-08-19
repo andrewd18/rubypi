@@ -68,7 +68,8 @@ class PlanetaryLink
 	end
 	
 	if ((0..10).include?(new_upgrade_level))
-	  @upgrade_level = new_upgrade_level
+	  # Force an Int.
+	  @upgrade_level = new_upgrade_level.to_int
 	  
 	  # Tell my observers I've changed.
 	  changed # Set observeable state to "changed".
