@@ -53,7 +53,7 @@ class PlanetaryLinkView < Gtk::Box
 	
 	link_upgrade_level_label = Gtk::Label.new("Upgrade Level:")
 	                                             # min, max, step
-	@link_upgrade_level_spinner = Gtk::SpinButton.new(1, 10, 1)
+	@link_upgrade_level_spinner = Gtk::SpinButton.new(0, 10, 1)
 	link_stats_table.attach(link_upgrade_level_label, 1, 1)
 	link_stats_table.attach(@link_upgrade_level_spinner, 1, 2)
 	
