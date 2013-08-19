@@ -141,16 +141,164 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
 	assert_equal(15, @link.cpu_usage)
   end
   
-  def test_base_transfer_volume_is_two_hundred_fifty_meters_cubed
-	assert_equal(250, @link.transfer_volume)
+  def test_base_transfer_volume_is_twelve_hundred_fifty_meters_cubed
+	assert_equal(1250, @link.transfer_volume)
   end
   
   def test_pg_used_scales_with_link_level
-	pend("Waiting on research about how this should actually scale.")
+	# So this isn't well documented.
+	#
+	# "PG Load Level Modifier" in the DB is 1.2
+	#
+	# Right now I'm working from the theory of TOTAL = (BASE_POWERGRID_USAGE + LINK_MODIFIER + LEVEL_MODIFIER)
+	# This gets close in some situations and is way off in others (namely the high end of levels).
+	# However since no one ever upgrades to level 10, I'll live with it and tweak later as necessary.
+	length_pg_usage = (@link.length * 0.15)
+	
+	
+	@link.upgrade_level=(0)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(1)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(2)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(3)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(4)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(5)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(6)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(7)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(8)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(9)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
+	
+	@link.upgrade_level=(10)
+	level_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE * @link.upgrade_level * 1.2)
+	total_pg_usage = (PlanetaryLink::BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	expected_value = (total_pg_usage.to_int)
+	assert_equal(expected_value, @link.powergrid_usage)
   end
   
   def test_cpu_usage_scales_with_link_level
-	pend("Waiting on research about how this should actually scale.")
+	# So this isn't well documented.
+	#
+	# "CPU Load Level Modifier" in the DB is 1.4
+	#
+	# Right now I'm working from the theory of TOTAL = (BASE_CPU_USAGE + LINK_MODIFIER + LEVEL_MODIFIER)
+	# This gets close in some situations and is way off in others (namely the high end of levels).
+	# However since no one ever upgrades to level 10, I'll live with it and tweak later as necessary.
+	length_cpu_usage = (@link.length * 0.2)
+	
+	
+	@link.upgrade_level=(0)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(1)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(2)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(3)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(4)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(5)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(6)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(7)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(8)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(9)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
+	
+	@link.upgrade_level=(10)
+	level_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE * @link.upgrade_level * 1.4)
+	total_cpu_usage = (PlanetaryLink::BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	expected_value = (total_cpu_usage.to_int)
+	assert_equal(expected_value, @link.cpu_usage)
   end
 
   def test_pg_usage_scales_with_link_length
@@ -270,11 +418,47 @@ class TestCasePlanetaryLink < Test::Unit::TestCase
   end
   
   def test_transfer_volume_scales_with_link_level
-	pend("Waiting on research about how this should actually scale.")
+	# Doubles per level.
+	@link.upgrade_level=(0)
+	assert_equal(1250, @link.transfer_volume)
+	
+	@link.upgrade_level=(1)
+	assert_equal(2500, @link.transfer_volume)
+	
+	@link.upgrade_level=(2)
+	assert_equal(5000, @link.transfer_volume)
+	
+	@link.upgrade_level=(3)
+	assert_equal(10000, @link.transfer_volume)
+	
+	@link.upgrade_level=(4)
+	assert_equal(20000, @link.transfer_volume)
+	
+	@link.upgrade_level=(5)
+	assert_equal(40000, @link.transfer_volume)
+	
+	@link.upgrade_level=(6)
+	assert_equal(80000, @link.transfer_volume)
+	
+	@link.upgrade_level=(7)
+	assert_equal(160000, @link.transfer_volume)
+	
+	@link.upgrade_level=(8)
+	assert_equal(320000, @link.transfer_volume)
+	
+	@link.upgrade_level=(9)
+	assert_equal(640000, @link.transfer_volume)
+	
+	@link.upgrade_level=(10)
+	assert_equal(1280000, @link.transfer_volume)
   end
   
   def test_transfer_volume_does_not_scale_with_link_length
-	pend("Waiting on research about how this should actually scale.")
+	assert_equal(1250, @link.transfer_volume)
+	
+	@link.length = 40000
+	
+	assert_equal(1250, @link.transfer_volume)
   end
   
   def test_a_link_can_tell_you_what_planet_it_is_on

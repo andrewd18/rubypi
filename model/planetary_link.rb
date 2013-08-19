@@ -7,14 +7,17 @@ class PlanetaryLink
   MAX_LENGTH = 40000 #km
   ISK_COST = 0
   UPGRADE_LEVEL = 0
-  
-  # TODO:
-  # According to research done on Odyssey 1.0.10,
-  # default transfer volume per hour is 1250 m3 per hour.
-  # 
-  # The value below is from http://wiki.eveuniversity.org/Planetary_Buildings#Planetary_Links
-  # and is probably inaccurate.
-  TRANSFER_VOLUME = 250
+  LEVEL_TO_TRANSFER_VOLUME = {0 => 1250,
+                              1 => 2500,
+                              2 => 5000, 
+                              3 => 10000,
+                              4 => 20000,
+                              5 => 40000,
+                              6 => 80000,
+                              7 => 160000,
+                              8 => 320000,
+                              9 => 640000,
+                              10 => 1280000}
   
   include Observable
   
@@ -29,7 +32,6 @@ class PlanetaryLink
 	@powergrid_usage = BASE_POWERGRID_USAGE
 	@cpu_usage = BASE_CPU_USAGE
 	@isk_cost = ISK_COST
-	@transfer_volume = TRANSFER_VOLUME
 	
 	# Error checking before variables.
 	raise ArgumentError, "Destination cannot be the same as source." unless (source_building != destination_building)
@@ -99,15 +101,21 @@ class PlanetaryLink
   end
   
   def powergrid_usage
-	scaled_powergrid_usage = ((@length * 0.15) + BASE_POWERGRID_USAGE)
-	truncated_to_nearest_int = scaled_powergrid_usage.to_int
+	length_pg_usage = (@length * 0.15)
+	level_pg_usage = (BASE_POWERGRID_USAGE * @upgrade_level * 1.2)
+	
+	total_pg_usage = (BASE_POWERGRID_USAGE + length_pg_usage + level_pg_usage)
+	truncated_to_nearest_int = total_pg_usage.to_int
 	
 	return truncated_to_nearest_int
   end
   
   def cpu_usage
-	scaled_cpu_usage = ((@length * 0.20) + BASE_CPU_USAGE)
-	truncated_to_nearest_int = scaled_cpu_usage.to_int
+	length_cpu_usage = (@length * 0.20)
+	level_cpu_usage = (BASE_CPU_USAGE * @upgrade_level * 1.4)
+	
+	total_cpu_usage = (BASE_CPU_USAGE + length_cpu_usage + level_cpu_usage)
+	truncated_to_nearest_int = total_cpu_usage.to_int
 	
 	return truncated_to_nearest_int
   end
@@ -117,7 +125,7 @@ class PlanetaryLink
   end
   
   def transfer_volume
-	return @transfer_volume
+	return LEVEL_TO_TRANSFER_VOLUME[@upgrade_level]
   end
   
   def start_x_pos
