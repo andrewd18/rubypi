@@ -4,7 +4,7 @@ class RemoveProductsFromBuildingDialog < Gtk::Dialog
   attr_reader :quantity
   
   def initialize(building_model, product_name)
-	title = "Remove Products from Building"
+	title = "Remove #{product_name} from #{building_model.name}"
 	parent_window = nil
 	flags = Gtk::Dialog::Flags::MODAL
 	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
@@ -18,11 +18,14 @@ class RemoveProductsFromBuildingDialog < Gtk::Dialog
 	currently_stored_quantity = @building_model.stored_products[product_name]
 	
 	# Fill top of dialog in.
-	how_many_label = Gtk::Label.new("How Many?")
+	how_many_label = Gtk::Label.new("Remove #{product_name} from #{building_model.name}")
 	@product_quantity_slider = Gtk::Scale.new(:horizontal, 0, currently_stored_quantity, 1)
 	
-	self.child.add(how_many_label)
-	self.child.add(@product_quantity_slider)
+	# WORKAROUND
+	# "self.child" is actually a vbox which we connect things to via pack_start.
+	# For some reason self.vbox is deprecated. :/
+	self.child.pack_start(how_many_label, :expand => false)
+	self.child.pack_start(@product_quantity_slider, :expand => false)
 	
 	self.show_all
 	

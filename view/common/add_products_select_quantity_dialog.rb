@@ -16,17 +16,14 @@ class AddProductsSelectQuantityDialog < Gtk::Dialog
 	# Force an int.
 	most_amount_addable = most_amount_addable.to_i
 	
-	product_name_label = Gtk::Label.new("#{product_name}")
+	product_name_label = Gtk::Label.new("Add #{product_name} to #{building_model.name}")
 	@product_quantity_slider = Gtk::Scale.new(:horizontal, 0, most_amount_addable, 1)
-	
-	hbox = Gtk::Box.new(:horizontal)
-	hbox.pack_start(product_name_label, :expand => false)
-	hbox.pack_start(@product_quantity_slider, :expand => true)
 	
 	# WORKAROUND
 	# "self.child" is actually a vbox which we connect things to via pack_start.
 	# For some reason self.vbox is deprecated. :/
-	self.child.pack_start(hbox, :expand => false)
+	self.child.pack_start(product_name_label, :expand => false)
+	self.child.pack_start(@product_quantity_slider, :expand => false)
 	
 	self.show_all
 	
