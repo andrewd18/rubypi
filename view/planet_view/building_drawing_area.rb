@@ -35,6 +35,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
 					  "delete_link"]
   
   attr_accessor :planet_model
+  attr_accessor :show_buildings
+  attr_accessor :show_links
   
   def initialize(controller)
 	# Set up GTK stuffs.
@@ -52,6 +54,10 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	@add_link_first_building = nil
 	@edit_link_first_building = nil
 	@delete_link_first_building = nil
+	
+	# Display Variables
+	self.show_buildings = true
+	self.show_links = true
 	
 	
 	@cursor_x_pos = 0.0
@@ -126,70 +132,73 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  cairo_context.paint
 	end
 	
-	# Extractor Heads
-	@planet_model.extractors.each do |parent_extractor|
-	  parent_extractor.extractor_heads.each do |head|
-		cairo_context.save do
+	if (@show_buildings == true)
+	  # Extractor Heads
+	  @planet_model.extractors.each do |parent_extractor|
+		parent_extractor.extractor_heads.each do |head|
+		  cairo_context.save do
 
-		  # Aqua color for extractor "links".
-		  red   = (29.0 / 255)
-		  green = (141.0 / 255)
-		  blue  = (143.0 / 255)
-		  alpha = (255.0 / 255)
-		  
-		  cairo_context.set_source_rgba(red, green, blue, alpha)
-		  cairo_context.set_line_width(2.0)
-		  cairo_context.set_dash(5.0, 5.0)
-		  
-		  # Move to the coordinates for the parent extractor.
-		  cairo_context.move_to(parent_extractor.x_pos, parent_extractor.y_pos)
-		  
-		  # Draw a line between the parent extractor and the head.
-		  cairo_context.line_to(head.x_pos, head.y_pos)
-		  
-		  cairo_context.stroke
-		end
-		
-		cairo_context.save do  
-		  # Create an extractor head building image.
-		  building_image = CairoBuildingImage.new(head, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
-		  
-		  # Set its invalid position or highlighted status accordingly.
-		  building_image.invalid_position = will_extractor_head_overlap?(head)
-		  
-		  # Only highlight if we're not adding a building.
-		  if (@on_click_action != "add_building")
-			building_image.highlighted = (head == self.building_under_cursor)
+			# Aqua color for extractor "links".
+			red   = (29.0 / 255)
+			green = (141.0 / 255)
+			blue  = (143.0 / 255)
+			alpha = (255.0 / 255)
+			
+			cairo_context.set_source_rgba(red, green, blue, alpha)
+			cairo_context.set_line_width(2.0)
+			cairo_context.set_dash(5.0, 5.0)
+			
+			# Move to the coordinates for the parent extractor.
+			cairo_context.move_to(parent_extractor.x_pos, parent_extractor.y_pos)
+			
+			# Draw a line between the parent extractor and the head.
+			cairo_context.line_to(head.x_pos, head.y_pos)
+			
+			cairo_context.stroke
 		  end
 		  
-		  building_image.draw(cairo_context)
+		  cairo_context.save do  
+			# Create an extractor head building image.
+			building_image = CairoBuildingImage.new(head, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+			
+			# Set its invalid position or highlighted status accordingly.
+			building_image.invalid_position = will_extractor_head_overlap?(head)
+			
+			# Only highlight if we're not adding a building.
+			if (@on_click_action != "add_building")
+			  building_image.highlighted = (head == self.building_under_cursor)
+			end
+			
+			building_image.draw(cairo_context)
+		  end
 		end
 	  end
 	end
 	
-	
-	# LINKS
-	@planet_model.links.each do |link|
-	  image = CairoLinkImage.new(link)
-	  image.draw(cairo_context)
-	end
-	
-	
-	# BUILDINGS
-	@planet_model.buildings.each do |building|
-	  image = CairoBuildingImage.new(building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
-	  
-	  # Set its invalid position or highlighted status accordingly.
-	  image.invalid_position = will_building_position_overlap?(building)
-	  
-	  # Only highlight if we're not adding a building.
-	  if (@on_click_action != "add_building")
-		image.highlighted = (building == self.building_under_cursor)
+	if (show_links == true)
+	  # LINKS
+	  @planet_model.links.each do |link|
+		image = CairoLinkImage.new(link)
+		image.draw(cairo_context)
 	  end
-	  
-	  image.draw(cairo_context)
 	end
 	
+	if (show_buildings == true)
+	  # BUILDINGS
+	  @planet_model.buildings.each do |building|
+		image = CairoBuildingImage.new(building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+		
+		# Set its invalid position or highlighted status accordingly.
+		image.invalid_position = will_building_position_overlap?(building)
+		
+		# Only highlight if we're not adding a building.
+		if (@on_click_action != "add_building")
+		  image.highlighted = (building == self.building_under_cursor)
+		end
+		
+		image.draw(cairo_context)
+	  end
+	end
 	
 	# CURSOR
 	# Change what and how we draw based on the selected action.
