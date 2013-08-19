@@ -16,6 +16,7 @@ class AddProductsSelectQuantityDialog < Gtk::Dialog
 	# Force an int.
 	most_amount_addable = most_amount_addable.to_i
 	
+	# Fill top of dialog in.
 	product_name_label = Gtk::Label.new("Add #{product_name} to #{building_model.name}")
 	@product_quantity_slider = Gtk::Scale.new(:horizontal, 0, most_amount_addable, 1)
 	

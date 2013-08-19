@@ -3,19 +3,15 @@ require 'gtk3'
 class RemoveProductsFromBuildingDialog < Gtk::Dialog
   attr_reader :quantity
   
-  def initialize(building_model, product_name)
+  def initialize(building_model, product_name, parent_window = nil)
 	title = "Remove #{product_name} from #{building_model.name}"
-	parent_window = nil
 	flags = Gtk::Dialog::Flags::MODAL
 	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
 	second_button_response_id_combo = [Gtk::Stock::CANCEL, Gtk::ResponseType::REJECT]
 	
-	@building_model = building_model
-	
 	super(:title => title, :parent => parent_window, :flags => flags, :buttons => [first_button_response_id_combo, second_button_response_id_combo])
 	
-	
-	currently_stored_quantity = @building_model.stored_products[product_name]
+	currently_stored_quantity = building_model.stored_products[product_name]
 	
 	# Fill top of dialog in.
 	how_many_label = Gtk::Label.new("Remove #{product_name} from #{building_model.name}")
