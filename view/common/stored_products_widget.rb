@@ -24,6 +24,10 @@ class StoredProductsWidget < Gtk::Box
 	self.pack_start(stored_products_label, :expand => false)
 	self.pack_start(auto_scrollbox, :expand => true)
 	
+	@stored_products_list_view.signal_connect("row-activated") do
+	  @stored_products_list_view.remove_product_dialog
+	end
+	
 	self.show_all
 	
 	return self

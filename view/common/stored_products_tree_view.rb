@@ -31,10 +31,6 @@ class StoredProductsTreeView < Gtk::TreeView
 	# Tree View settings.
 	self.reorderable = true
 	
-	self.signal_connect("row-activated") do
-	  self.remove_product_dialog
-	end
-	
 	return self
   end
   
