@@ -16,6 +16,11 @@ class BuildingLayoutWidget < Gtk::Frame
 	@building_drawing_area_settings_widget = BuildingDrawingAreaSettingsWidget.new(@building_drawing_area)
 	@drawing_tool_palette = BuildingToolPalette.new(@building_drawing_area)
 	
+	drawing_tool_palette_window = Gtk::ScrolledWindow.new
+	drawing_tool_palette_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
+	drawing_tool_palette_window.add_with_viewport(@drawing_tool_palette)
+	
+	
 	drawing_area_vbox = Gtk::Box.new(:vertical)
 	drawing_area_vbox.pack_start(@building_drawing_area, :expand => true)
 	drawing_area_vbox.pack_start(@building_drawing_area_settings_widget, :expand => false)
@@ -23,7 +28,7 @@ class BuildingLayoutWidget < Gtk::Frame
 	drawing_area_frame.add(drawing_area_vbox)
 	
 	hbox = Gtk::Box.new(:horizontal)
-	hbox.pack_start(@drawing_tool_palette, :expand => false)
+	hbox.pack_start(drawing_tool_palette_window, :expand => false)
 	hbox.pack_start(drawing_area_frame, :expand => true, :fill => true)
 	
 	self.add(hbox)

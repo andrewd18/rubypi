@@ -1,8 +1,8 @@
 require 'gtk3'
-require_relative 'isk_amount_label.rb'
-require_relative '../model/product.rb'
+require_relative '../planet_view/isk_amount_label.rb'
+require_relative '../../model/product.rb'
 
-require_relative 'gtk_helpers/simple_table.rb'
+require_relative '../gtk_helpers/simple_table.rb'
 
 class TransferProductsSelectQuantityDialog < Gtk::Dialog
   attr_reader :quantity
@@ -75,18 +75,18 @@ class TransferProductsSelectQuantityDialog < Gtk::Dialog
 	  end
 	  
 	  
-	elsif (destination_building.is_a?(LaunchCan))
+	#elsif (destination_building.is_a?(LaunchCan))
 	  # Then this poor bastard is doing a planetary launch from a command center because he's too poor to afford POCOs.
-	  cost_label = Gtk::Label.new("Launch Cost:")
-	  transfer_layout_table.attach(cost_label, 2, 1, false, false, false, false)
+	  #cost_label = Gtk::Label.new("Launch Cost:")
+	  #transfer_layout_table.attach(cost_label, 2, 1, false, false, false, false)
 	  
-	  @isk_amount_label = IskAmountLabel.new
-	  transfer_layout_table.attach(@isk_amount_label, 2, 2, false, false, false, false)
+	  #@isk_amount_label = IskAmountLabel.new
+	  #transfer_layout_table.attach(@isk_amount_label, 2, 2, false, false, false, false)
 	  
 	  # When the quantity changes, ask the command center how much this will be.
-	  @product_quantity_slider.signal_connect("value-changed") do
-		@isk_amount_label.isk_value = source_building.launch_to_space_cost(product_name, @product_quantity_slider.value)
-	  end
+	  #@product_quantity_slider.signal_connect("value-changed") do
+		#@isk_amount_label.isk_value = source_building.launch_to_space_cost(product_name, @product_quantity_slider.value)
+	  #end
 	  
 	else
 	  # Don't need to show any tax value as it's technically an "expedited transfer".

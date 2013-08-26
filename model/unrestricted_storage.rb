@@ -79,6 +79,12 @@ module UnrestrictedStorage
 	return stored_products[product_name]
   end
   
+  def remove_all_products
+	stored_products.clear
+	
+	notify_observers_if_observable
+  end
+  
   def total_volume
 	return storage_volume
   end

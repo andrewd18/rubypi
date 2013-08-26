@@ -85,6 +85,18 @@ class PlanetController
 	end
   end
   
+  def overwrite_planet_storage(initial_building, updated_building)
+	@planet_model.buildings.each do |building_on_planet|
+	  if (initial_building == building_on_planet)
+		building_on_planet.remove_all_products
+		
+		updated_building.stored_products.each_pair do |product_name, quantity|
+		  building_on_planet.store_product(product_name, quantity)
+		end
+	  end
+	end
+  end
+  
   def up_to_pi_configuration_controller
 	$ruby_pi_main_gtk_window.load_controller_for_model(@planet_model.pi_configuration)
   end

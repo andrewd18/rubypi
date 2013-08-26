@@ -2,6 +2,7 @@ require 'gtk3'
 
 require_relative 'cairo_building_image.rb'
 require_relative 'cairo_link_image.rb'
+require_relative '../common/transfer_products_dialog.rb'
 
 # CREATE
 # On-click, adds selected building type to model at location.
@@ -32,7 +33,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
 					  "delete_building",
                       "add_link",
                       "edit_link",
-					  "delete_link"]
+					  "delete_link",
+                      "transfer_products"]
   
   attr_accessor :planet_model
   attr_accessor :show_buildings
@@ -89,8 +91,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
 	
 	# Set size request(width in px, height in px)
-	# Request 8 buildings wide x 5 buildings tall.
-	self.set_size_request((BUILDING_ICON_SIZE * 8), (BUILDING_ICON_SIZE * 5))
+	# Request 9 buildings wide x 7 buildings tall.
+	self.set_size_request((BUILDING_ICON_SIZE * 9), (BUILDING_ICON_SIZE * 7))
 	
 	return self
   end
@@ -535,6 +537,37 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	end
   end
   
+  def transfer_products_popup
+	source_building = @transfer_products_first_building
+	destination_building = self.building_under_cursor
+	
+	# You can only expedited transfer between certain building types.
+	# CommandCenter, StorageFacility, and Launchpad.
+	if ((source_building.is_a?(CommandCenter) or
+	     source_building.is_a?(StorageFacility) or
+	     source_building.is_a?(Launchpad)) and
+	    (destination_building.is_a?(CommandCenter) or
+	     destination_building.is_a?(StorageFacility) or
+	     destination_building.is_a?(Launchpad)))
+	  
+	  # Create the dialog.
+	  dialog = TransferProductsDialog.new(@controller, source_building, destination_building, $ruby_pi_main_window)
+	  dialog.run do |response|
+		if (response == Gtk::ResponseType::ACCEPT)
+		  # Perform the transfer.
+		  @controller.overwrite_planet_storage(source_building, dialog.source_building)
+		  @controller.overwrite_planet_storage(destination_building, dialog.destination_building)
+		end
+	  end
+	  
+	  dialog.destroy
+	else
+	  # TODO - Tell the user what happened nicely.
+	  # For now, spit it out to the command line.
+	  puts "Both buildings must support expedited transfers."
+	end
+  end
+  
   # Called when the user clicks within the drawing area.
   def on_click(widget, event)
 	# No matter what, update the cursor position.
@@ -628,6 +661,20 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		
 		# Reset the delete-link state.
 		@delete_link_first_building = nil
+	  end
+	  
+	when "transfer_products"
+	  # If the @transfer_products_first_building variable is nil, that means the user either
+	  # didn't click on a building the first time, or has yet to click on a building.
+	  if (@transfer_products_first_building == nil)
+		# self.building_under_cursor will return nil if nothing is found,
+		# ensuring that this gets called again properly if the user clicks on blank space
+		@transfer_products_first_building = self.building_under_cursor
+	  else
+		transfer_products_popup
+		
+		# Reset the delete-link state.
+		@transfer_products_first_building = nil
 	  end
 	
 	else
