@@ -1,16 +1,14 @@
 require_relative '../gtk_helpers/icon_column.rb'
 require_relative '../gtk_helpers/text_column.rb'
 
-# require_relative 'add_products_tree_store_with_filter.rb'
-# require_relative 'add_products_select_quantity_dialog.rb'
 require_relative 'name_quantity_hash_list_store.rb'
 
 class NameQuantityHashTreeView < Gtk::TreeView
-  def initialize()
-	# @controller = controller
-	
+  def initialize(name_quantity_hash)
 	@list_model = NameQuantityHashListStore.new()
 	super(@list_model)
+	
+	self.name_quantity_hash = name_quantity_hash
 	
 	# Create columns for the tree view.
 	icon_column = IconColumn.new("Icon", 0)

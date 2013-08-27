@@ -555,8 +555,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  dialog.run do |response|
 		if (response == Gtk::ResponseType::ACCEPT)
 		  # Perform the transfer, overwriting the real model with the values from the dialog.
-		  @controller.overwrite_planet_storage(dialog.source_building.stored_products, source_building)
-		  @controller.overwrite_planet_storage(dialog.destination_building.stored_products, destination_building)
+		  @controller.overwrite_planet_storage(dialog.source_stored_products_hash, source_building)
+		  @controller.overwrite_planet_storage(dialog.destination_stored_products_hash, destination_building)
 		end
 	  end
 	  

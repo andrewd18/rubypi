@@ -12,8 +12,8 @@ class TransferProductsDialog < Gtk::Dialog
   
   REQUESTED_TREE_VIEW_HEIGHT = 100
   
-  attr_reader :source_building
-  attr_reader :destination_building
+  attr_reader :source_stored_products_hash
+  attr_reader :destination_stored_products_hash
   
   def initialize(controller, source_building, destination_building, parent_window = nil)
 	title = "Transfer Products"
@@ -25,12 +25,18 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	@controller = controller
 	
-	# Model
-	# Make a copy of the source and destination buildings. 
-	# These will be edited directly by the view so I can reuse model methods rather than replicate them.
-	@source_building = source_building.dup
-	@destination_building = destination_building.dup
+	# Load values from model objects.
+	@source_stored_products_hash = Hash.new
+	@source_stored_products_hash.replace(source_building.stored_products)
 	
+	@destination_stored_products_hash = Hash.new
+	@destination_stored_products_hash.replace(destination_building.stored_products)
+	
+	@source_total_volume = source_building.storage_volume
+	@source_used_volume = source_building.volume_used
+	
+	@destination_total_volume = destination_building.storage_volume
+	@destination_used_volume = destination_building.volume_used
 	
 	# Create columns.
 	
@@ -39,21 +45,35 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	# Create the widgets.
 	source_label = Gtk::Label.new("Source:")
-	@source_building_image = BuildingImage.new(@source_building)
+	@source_building_image = BuildingImage.new(source_building)
 	source_stored_products_label = Gtk::Label.new("Stored Products")
 	
 	@source_volume_used_bar = OverflowPercentageProgressBar.new
-	@source_volume_used_bar.value = @source_building.pct_volume_used
+	@source_volume_used_bar.value = source_pct_used_volume
 	
 	source_stored_products_scrollbox = Gtk::ScrolledWindow.new
 	source_stored_products_scrollbox.height_request = REQUESTED_TREE_VIEW_HEIGHT
 	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
 	source_stored_products_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	
-	@source_stored_products_tree_view = StoredProductsTreeView.new(@controller)
-	@source_stored_products_tree_view.building_model = @source_building
-	@source_stored_products_tree_view.signal_connect("row-activated") do
-	  self.ask_for_quantity_to_transfer_to_destination
+	@source_stored_products_tree_view = NameQuantityHashTreeView.new(@source_stored_products_hash)
+	@source_stored_products_tree_view.signal_connect("row-activated") do |tree_view, tree_path, tree_column|
+	  # What product did the user click on?
+	  row = tree_view.selection
+	  tree_iter = row.selected
+	  selected_product_name = tree_iter.get_value(1)
+	  selected_product_quantity = tree_iter.get_value(2)
+	  selected_product_volume = tree_iter.get_value(3)
+	  
+	  # Figure out the maximum number of the product that will fit, given potential volume available.
+	  max_transferrable_quantity = [(destination_available_volume / selected_product_volume), (selected_product_quantity)].min
+	  max_transferrable_quantity = max_transferrable_quantity.to_int
+	  
+	  if (max_transferrable_quantity <= 0)
+		puts "Cannot transfer. This would overflow the destination."
+	  else
+		self.ask_for_quantity_and_transfer_from(@source_stored_products_hash, @destination_stored_products_hash, selected_product_name, max_transferrable_quantity)
+	  end
 	end
 	
 	# Pack into column.
@@ -74,21 +94,36 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	# Create the widgets.
 	destination_label = Gtk::Label.new("Destination:")
-	@destination_building_image = BuildingImage.new(@destination_building)
+	@destination_building_image = BuildingImage.new(destination_building)
 	destination_stored_products_label = Gtk::Label.new("Stored Products")
 	
 	@destination_volume_used_bar = OverflowPercentageProgressBar.new
-	@destination_volume_used_bar.value = @destination_building.pct_volume_used
+	@destination_volume_used_bar.value = destination_pct_used_volume
 	
 	destination_stored_products_scrollbox = Gtk::ScrolledWindow.new
 	destination_stored_products_scrollbox.height_request = REQUESTED_TREE_VIEW_HEIGHT
 	# Never have a horizontal scrollbar. Have a vertical scrollbar if necessary.
 	destination_stored_products_scrollbox.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	
-	@destination_stored_products_tree_view = StoredProductsTreeView.new(@controller)
-	@destination_stored_products_tree_view.building_model = @destination_building
-	@destination_stored_products_tree_view.signal_connect("row-activated") do
-	  self.ask_for_quantity_to_transfer_to_source
+	@destination_stored_products_tree_view = NameQuantityHashTreeView.new(@destination_stored_products_hash)
+	@destination_stored_products_tree_view.signal_connect("row-activated") do |tree_view, tree_path, tree_column|
+	  # What product did the user click on?
+	  row = tree_view.selection
+	  tree_iter = row.selected
+	  selected_product_name = tree_iter.get_value(1)
+	  selected_product_quantity = tree_iter.get_value(2)
+	  selected_product_volume = tree_iter.get_value(3)
+	  
+	  # Figure out the maximum number of the product that will fit, given potential volume available.
+	  # Select the smaller of the two.
+	  max_transferrable_quantity = [(source_available_volume / selected_product_volume), (selected_product_quantity)].min
+	  max_transferrable_quantity = max_transferrable_quantity.to_int
+	  
+	  if (max_transferrable_quantity <= 0)
+		puts "Cannot transfer. This would overflow the source."
+	  else
+		self.ask_for_quantity_and_transfer_from(@destination_stored_products_hash, @source_stored_products_hash, selected_product_name, max_transferrable_quantity)
+	  end
 	end
 	
 	# Pack into column.
@@ -121,74 +156,78 @@ class TransferProductsDialog < Gtk::Dialog
 	return self
   end
   
-  def ask_for_quantity_to_transfer_to_destination
-	# What product did the user click on?
-	row = @source_stored_products_tree_view.selection
-	tree_iter = row.selected
-	selected_product_name = tree_iter.get_value(1)
-	selected_product_volume = tree_iter.get_value(3)
+  def ask_for_quantity_and_transfer_from(from_hash, to_hash, product_name, max_transferrable_quantity)
+	# Pop up a dialog asking how many of the selected product.
+	select_qty_dialog = TransferProductsSelectQuantityDialog.new(product_name, max_transferrable_quantity, self)
 	
-	# Figure out the maximum number of the product that will fit, given potential volume available.
-	max_transferrable_quantity = (@destination_building.volume_available / selected_product_volume)
-	max_transferrable_quantity = max_transferrable_quantity.to_int
-	
-	if (max_transferrable_quantity <= 0)
-	  puts "Cannot transfer. This would overflow the destination."
-	else
-	  # Pop up a dialog asking how many of the selected product.
-	  transfer_products_select_quantity_dialog = TransferProductsSelectQuantityDialog.new(@source_building, @destination_building, selected_product_name, self)
-	  
-	  transfer_products_select_quantity_dialog.run do |response|
-		if (response == Gtk::ResponseType::ACCEPT)
-		  # Perform the transfer.
-		  @destination_building.store_product(selected_product_name, transfer_products_select_quantity_dialog.quantity)
-		  @source_building.remove_qty_of_product(selected_product_name, transfer_products_select_quantity_dialog.quantity)
+	select_qty_dialog.run do |response|
+	  if (response == Gtk::ResponseType::ACCEPT)
+		# Perform the transfer.
+		amount_to_transfer = select_qty_dialog.quantity
+		
+		from_hash[product_name] = (from_hash[product_name] - amount_to_transfer)
+		
+		if (to_hash[product_name] == nil)
+		  to_hash[product_name] = amount_to_transfer
 		else
-		  puts "Selecting quantity cancelled."
+		  to_hash[product_name] = (to_hash[product_name] + amount_to_transfer)
 		end
+	  else
+		puts "Selecting quantity cancelled."
 	  end
-	  
-	  transfer_products_select_quantity_dialog.destroy
 	end
 	
-	self.update
-  end
-  
-  def ask_for_quantity_to_transfer_to_source
-	# What product did the user click on?
-	row = @destination_stored_products_tree_view.selection
-	tree_iter = row.selected
-	selected_product_name = tree_iter.get_value(1)
-	selected_product_volume = tree_iter.get_value(3)
-	
-	# Figure out the maximum number of the product that will fit, given potential volume available.
-	max_transferrable_quantity = (@source_building.volume_available / selected_product_volume)
-	max_transferrable_quantity = max_transferrable_quantity.to_int
-	
-	if (max_transferrable_quantity <= 0)
-	  puts "Cannot transfer. This would overflow the destination."
-	else
-	  # Pop up a dialog asking how many of the selected product.
-	  transfer_products_select_quantity_dialog = TransferProductsSelectQuantityDialog.new(@destination_building, @source_building, selected_product_name, self)
-	  
-	  transfer_products_select_quantity_dialog.run do |response|
-		if (response == Gtk::ResponseType::ACCEPT)
-		  # Perform the transfer.
-		  @source_building.store_product(selected_product_name, transfer_products_select_quantity_dialog.quantity)
-		  @destination_building.remove_qty_of_product(selected_product_name, transfer_products_select_quantity_dialog.quantity)
-		else
-		  puts "Selecting quantity cancelled."
-		end
-	  end
-	  
-	  transfer_products_select_quantity_dialog.destroy
-	end
+	select_qty_dialog.destroy
 	
 	self.update
   end
   
   def update
-	@source_stored_products_tree_view.building_model = @source_building
-	@destination_stored_products_tree_view.building_model = @destination_building
+	@source_stored_products_tree_view.name_quantity_hash = @source_stored_products_hash
+	@destination_stored_products_tree_view.name_quantity_hash = @destination_stored_products_hash
+	
+	# Update the available volume for the source.
+	total_source_used_volume = 0
+	
+	@source_stored_products_hash.each_pair do |name, qty|
+	  product_volume = Product.find_by_name(name).volume
+	  total_source_used_volume += (product_volume * qty)
+	end
+	
+	@source_used_volume = total_source_used_volume
+	
+	
+	
+	# Update the available volume for the destination.
+	total_destination_used_volume = 0
+	
+	@destination_stored_products_hash.each_pair do |name, qty|
+	  product_volume = Product.find_by_name(name).volume
+	  total_destination_used_volume += (product_volume * qty)
+	end
+	
+	@destination_used_volume = total_destination_used_volume
+	
+	# Finally, update the overflow percentage bars.
+	@source_volume_used_bar.value = source_pct_used_volume
+	@destination_volume_used_bar.value = destination_pct_used_volume
+  end
+  
+  private
+  
+  def source_pct_used_volume
+	return (@source_used_volume / (@source_total_volume / 100)).round(2)
+  end
+  
+  def source_available_volume
+	return (@source_total_volume - @source_used_volume)
+  end
+  
+  def destination_pct_used_volume
+	return (@destination_used_volume / (@destination_total_volume / 100)).round(2)
+  end
+  
+  def destination_available_volume
+	return (@destination_total_volume - @destination_used_volume)
   end
 end
