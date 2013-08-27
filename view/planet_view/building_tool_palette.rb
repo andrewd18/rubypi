@@ -81,7 +81,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	
 	add_extractor_button = Gtk::RadioToolButton.new
 	add_extractor_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/extractor_head_icon.png")
-	add_extractor_button.label = "Add Extractor Head"
+	add_extractor_button.label = "Add Extractor Head..."
 	self.append_custom_tool_button(add_extractor_button)
 	add_extractor_button.signal_connect('clicked') do |button|
 	  @building_drawing_area.set_on_click_action("add_extractor_head")
