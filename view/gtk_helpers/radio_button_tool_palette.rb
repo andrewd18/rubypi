@@ -95,6 +95,14 @@ class RadioButtonToolPalette < Gtk::Toolbar
 	return new_tool
   end
   
+  def append_separator
+	separator = Gtk::SeparatorToolItem.new
+	
+	self.insert(separator, (self.children.size))
+	
+	return separator
+  end
+  
   def active_tool
 	self.children.each do |tool|
 	  if (tool.active?)
