@@ -1,12 +1,10 @@
 require 'gtk3'
-require_relative 'select_building_combo_box.rb'
-require_relative 'transfer_products_select_quantity_dialog.rb'
-require_relative '../../model/product.rb'
-
-require_relative '../gtk_helpers/simple_table.rb'
 require_relative '../gtk_helpers/overflow_percentage_progress_bar.rb'
 
+require_relative '../../model/product.rb'
+
 require_relative 'name_quantity_hash_tree_view.rb'
+require_relative 'transfer_products_select_quantity_dialog.rb'
 
 class TransferProductsDialog < Gtk::Dialog
   
@@ -162,11 +160,13 @@ class TransferProductsDialog < Gtk::Dialog
 	
 	select_qty_dialog.run do |response|
 	  if (response == Gtk::ResponseType::ACCEPT)
-		# Perform the transfer.
+		# Figure out how much we're transferring.
 		amount_to_transfer = select_qty_dialog.quantity
 		
+		# Subtract it from the from hash.
 		from_hash[product_name] = (from_hash[product_name] - amount_to_transfer)
 		
+		# Add it to the to hash.
 		if (to_hash[product_name] == nil)
 		  to_hash[product_name] = amount_to_transfer
 		else
