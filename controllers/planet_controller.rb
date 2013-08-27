@@ -66,7 +66,7 @@ class PlanetController
 	link_to_edit.length = length
   end
   
-  def delete_link
+  def delete_link(source_building, destination_building)
 	link_to_remove = @planet_model.find_link(source_building, destination_building)
 	@planet_model.remove_link(link_to_remove)
   end
