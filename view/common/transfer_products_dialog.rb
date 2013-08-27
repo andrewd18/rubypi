@@ -66,6 +66,9 @@ class TransferProductsDialog < Gtk::Dialog
 	source_stored_products_scrollbox.add(@source_stored_products_tree_view)
 	source_building_column.pack_start(source_stored_products_scrollbox, :expand => true)
 	
+	source_building_frame = Gtk::Frame.new
+	source_building_frame.add(source_building_column)
+	
 	# Right column.
 	# Destination building.
 	
@@ -98,12 +101,15 @@ class TransferProductsDialog < Gtk::Dialog
 	destination_stored_products_scrollbox.add(@destination_stored_products_tree_view)
 	destination_building_column.pack_start(destination_stored_products_scrollbox, :expand => true)
 	
+	destination_building_frame = Gtk::Frame.new
+	destination_building_frame.add(destination_building_column)
+	
 	
 	
 	# Pack columns left to right.
 	hbox = Gtk::Box.new(:horizontal)
-	hbox.pack_start(source_building_column, :expand => false)
-	hbox.pack_start(destination_building_column, :expand => false)
+	hbox.pack_start(source_building_frame, :expand => false)
+	hbox.pack_start(destination_building_frame, :expand => false)
 	
 	# WORKAROUND
 	# "self.child" is actually a vbox which we connect things to via pack_start.
