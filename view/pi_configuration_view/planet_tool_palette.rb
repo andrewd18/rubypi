@@ -13,6 +13,7 @@ class PlanetToolPalette < Gtk::Toolbar
 	# Configure GTK+ options for this widget.
 	self.orientation=(:vertical)
 	self.toolbar_style=(Gtk::Toolbar::Style::BOTH_HORIZ)
+	self.show_arrow = false
 	
 	list_of_buttons = Array.new
 	
@@ -29,6 +30,9 @@ class PlanetToolPalette < Gtk::Toolbar
 	end
 	list_of_buttons << export_to_yaml_button
 	
+	
+	separator = Gtk::SeparatorToolItem.new
+	list_of_buttons << separator
 	
 	#
 	# Add the "Add <Type> Planet" buttons.
@@ -86,9 +90,6 @@ class PlanetToolPalette < Gtk::Toolbar
 	list_of_buttons.each_with_index do |button, index|
 	  self.insert(button, index)
 	end
-	
-	# And set a size request.  min_width, min_height
-	self.set_size_request(1, (33 * self.children.count))
 	
 	return self
   end
