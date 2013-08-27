@@ -4,24 +4,22 @@ require_relative '../gtk_helpers/overflow_percentage_progress_bar.rb'
 require_relative '../../model/product.rb'
 
 require_relative 'name_quantity_hash_tree_view.rb'
-require_relative 'transfer_products_select_quantity_dialog.rb'
+require_relative 'expedited_transfer_select_quantity_dialog.rb'
 
-class TransferProductsDialog < Gtk::Dialog
+class ExpeditedTransferDialog < Gtk::Dialog
   
   REQUESTED_TREE_VIEW_HEIGHT = 100
   
   attr_reader :source_stored_products_hash
   attr_reader :destination_stored_products_hash
   
-  def initialize(controller, source_building, destination_building, parent_window = nil)
-	title = "Transfer Products"
+  def initialize(source_building, destination_building, parent_window = nil)
+	title = "Expedited Transfer"
 	flags = Gtk::Dialog::Flags::MODAL
 	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
 	second_button_response_id_combo = [Gtk::Stock::CANCEL, Gtk::ResponseType::REJECT]
 	
 	super(:title => title, :parent => parent_window, :flags => flags, :buttons => [first_button_response_id_combo, second_button_response_id_combo])
-	
-	@controller = controller
 	
 	# Load values from model objects.
 	@source_stored_products_hash = Hash.new
@@ -156,7 +154,7 @@ class TransferProductsDialog < Gtk::Dialog
   
   def ask_for_quantity_and_transfer_from(from_hash, to_hash, product_name, max_transferrable_quantity)
 	# Pop up a dialog asking how many of the selected product.
-	select_qty_dialog = TransferProductsSelectQuantityDialog.new(product_name, max_transferrable_quantity, self)
+	select_qty_dialog = ExpeditedTransferSelectQuantityDialog.new(product_name, max_transferrable_quantity, self)
 	
 	select_qty_dialog.run do |response|
 	  if (response == Gtk::ResponseType::ACCEPT)

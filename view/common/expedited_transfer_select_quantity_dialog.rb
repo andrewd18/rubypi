@@ -1,11 +1,11 @@
 require 'gtk3'
 
-class TransferProductsSelectQuantityDialog < Gtk::Dialog
+class ExpeditedTransferSelectQuantityDialog < Gtk::Dialog
   attr_reader :quantity
   
   def initialize(product_name, max_transferrable_quantity, parent_window = nil)
 	# Dialog options.
-	title = "Transfer #{product_name}"
+	title = "Expedited Transfer #{product_name}"
 	flags = Gtk::Dialog::Flags::MODAL
 	first_button_response_id_combo = [Gtk::Stock::OK, Gtk::ResponseType::ACCEPT]
 	second_button_response_id_combo = [Gtk::Stock::CANCEL, Gtk::ResponseType::REJECT]

@@ -94,12 +94,12 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  @building_drawing_area.set_on_click_action("delete_link")
 	end
 	
-	transfer_products_button = Gtk::RadioToolButton.new
-	transfer_products_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/delete_link_icon.png")
-	transfer_products_button.label = "Transfer Products Between..."
-	self.append_custom_tool_button(transfer_products_button)
-	transfer_products_button.signal_connect('clicked') do |button|
-	  @building_drawing_area.set_on_click_action("transfer_products")
+	expedited_transfer_button = Gtk::RadioToolButton.new
+	expedited_transfer_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/delete_link_icon.png")
+	expedited_transfer_button.label = "Expedited Transfer Between..."
+	self.append_custom_tool_button(expedited_transfer_button)
+	expedited_transfer_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("expedited_transfer")
 	end
 	
 	# Set the default action.
