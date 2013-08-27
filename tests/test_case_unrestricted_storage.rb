@@ -306,6 +306,22 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	assert_equal(hash_with_5_dwarves, @building_stub.stored_products)
   end
   
+  def test_when_replacing_stored_products_with_new_hash_zero_values_are_filtered_out
+	hash_with_zero_values = {"Dwarf" => 0, "Forgotten Beast" => 0}
+	hash_with_5_dwarves = {"Dwarf" => 5}
+	empty_hash = {}
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+	
+	@building_stub.stored_products = hash_with_zero_values
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+	
+	@building_stub.stored_products = {"Dwarf" => 5, "Forgotten Beast" => 0}
+	
+	assert_equal(hash_with_5_dwarves, @building_stub.stored_products)
+  end
+  
   def test_cannot_replace_stored_products_with_a_non_hash
 	empty_hash = {}
 	

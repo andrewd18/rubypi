@@ -15,6 +15,9 @@ module UnrestrictedStorage
   def stored_products=(new_hash)
 	raise ArgumentError unless new_hash.is_a?(Hash)
 	
+	# Remove any keys where their value is equal to or below.
+	new_hash.keep_if {|key, value| value > 0}
+	
 	@stored_products = new_hash
 	
 	notify_observers_if_observable

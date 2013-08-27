@@ -16,6 +16,9 @@ module IndustrialFacilityStorage
   def stored_products=(new_stored_products)
 	raise ArgumentError, "Argument is not a Hash." unless new_stored_products.is_a?(Hash)
 	
+	# Remove any keys where their value is equal to or below.
+	new_stored_products.keep_if {|key, value| value > 0}
+	
 	@stored_products = new_stored_products
   end
   
