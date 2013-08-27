@@ -42,10 +42,11 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	# Create the widgets.
 	source_label = Gtk::Label.new("Source:")
 	@source_building_image = BuildingImage.new(source_building)
-	source_stored_products_label = Gtk::Label.new("Stored Products")
 	
 	@source_volume_used_bar = OverflowPercentageProgressBar.new
 	@source_volume_used_bar.value = source_pct_used_volume
+	
+	source_stored_products_label = Gtk::Label.new("Stored Products")
 	
 	source_stored_products_scrollbox = Gtk::ScrolledWindow.new
 	source_stored_products_scrollbox.height_request = REQUESTED_TREE_VIEW_HEIGHT
@@ -66,6 +67,8 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	  max_transferrable_quantity = max_transferrable_quantity.to_int
 	  
 	  if (max_transferrable_quantity <= 0)
+		# TODO: Show this to the user.
+		# For now, dump it out to the CLI.
 		puts "Cannot transfer. This would overflow the destination."
 	  else
 		self.ask_for_quantity_and_transfer_from(@source_stored_products_hash, @destination_stored_products_hash, selected_product_name, max_transferrable_quantity)
@@ -76,8 +79,8 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	source_building_column = Gtk::Box.new(:vertical)
 	source_building_column.pack_start(source_label, :expand => false)
 	source_building_column.pack_start(@source_building_image, :expand => false)
-	source_building_column.pack_start(source_stored_products_label, :expand => false)
 	source_building_column.pack_start(@source_volume_used_bar, :expand => false)
+	source_building_column.pack_start(source_stored_products_label, :expand => false)
 	
 	source_stored_products_scrollbox.add(@source_stored_products_tree_view)
 	source_building_column.pack_start(source_stored_products_scrollbox, :expand => true)
@@ -91,10 +94,11 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	# Create the widgets.
 	destination_label = Gtk::Label.new("Destination:")
 	@destination_building_image = BuildingImage.new(destination_building)
-	destination_stored_products_label = Gtk::Label.new("Stored Products")
 	
 	@destination_volume_used_bar = OverflowPercentageProgressBar.new
 	@destination_volume_used_bar.value = destination_pct_used_volume
+	
+	destination_stored_products_label = Gtk::Label.new("Stored Products")
 	
 	destination_stored_products_scrollbox = Gtk::ScrolledWindow.new
 	destination_stored_products_scrollbox.height_request = REQUESTED_TREE_VIEW_HEIGHT
@@ -116,6 +120,8 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	  max_transferrable_quantity = max_transferrable_quantity.to_int
 	  
 	  if (max_transferrable_quantity <= 0)
+		# TODO: Show this to the user.
+		# For now, dump it out to the CLI.
 		puts "Cannot transfer. This would overflow the source."
 	  else
 		self.ask_for_quantity_and_transfer_from(@destination_stored_products_hash, @source_stored_products_hash, selected_product_name, max_transferrable_quantity)
@@ -126,8 +132,8 @@ class ExpeditedTransferDialog < Gtk::Dialog
 	destination_building_column = Gtk::Box.new(:vertical)
 	destination_building_column.pack_start(destination_label, :expand => false)
 	destination_building_column.pack_start(@destination_building_image, :expand => false)
-	destination_building_column.pack_start(destination_stored_products_label, :expand => false)
 	destination_building_column.pack_start(@destination_volume_used_bar, :expand => false)
+	destination_building_column.pack_start(destination_stored_products_label, :expand => false)
 	
 	destination_stored_products_scrollbox.add(@destination_stored_products_tree_view)
 	destination_building_column.pack_start(destination_stored_products_scrollbox, :expand => true)
@@ -170,8 +176,6 @@ class ExpeditedTransferDialog < Gtk::Dialog
 		else
 		  to_hash[product_name] = (to_hash[product_name] + amount_to_transfer)
 		end
-	  else
-		puts "Selecting quantity cancelled."
 	  end
 	end
 	
