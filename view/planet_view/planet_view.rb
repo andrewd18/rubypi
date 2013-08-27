@@ -32,9 +32,7 @@ class PlanetView < Gtk::Box
 	
 	# Left column(s)
 	@building_layout_widget = BuildingLayoutWidget.new(@controller)
-	building_layout_widget_frame = Gtk::Frame.new
-	building_layout_widget_frame.add(@building_layout_widget)
-	bottom_row.pack_start(building_layout_widget_frame, :expand => true)
+	bottom_row.pack_start(@building_layout_widget, :expand => true)
 	
 	# Right Column
 	@planet_stats_widget = PlanetStatsWidget.new(@controller)
