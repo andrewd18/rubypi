@@ -85,14 +85,11 @@ class PlanetController
 	end
   end
   
-  def overwrite_planet_storage(initial_building, updated_building)
-	@planet_model.buildings.each do |building_on_planet|
-	  if (initial_building == building_on_planet)
-		building_on_planet.remove_all_products
-		
-		updated_building.stored_products.each_pair do |product_name, quantity|
-		  building_on_planet.store_product(product_name, quantity)
-		end
+  def overwrite_planet_storage(product_quantity_hash, building_to_update)
+	@planet_model.buildings.each do |known_building|
+	  if (known_building == building_to_update)
+		# Set its stored_products hash to the new hash.
+		known_building.stored_products=(product_quantity_hash)
 	  end
 	end
   end

@@ -12,6 +12,14 @@ module UnrestrictedStorage
 	return @stored_products ||= Hash.new
   end
   
+  def stored_products=(new_hash)
+	raise ArgumentError unless new_hash.is_a?(Hash)
+	
+	@stored_products = new_hash
+	
+	notify_observers_if_observable
+  end
+  
   def store_product(product_name, quantity)
 	raise ArgumentError, "First argument must be a String." unless product_name.is_a?(String)
 	raise ArgumentError, "Second argument must be a Numeric." unless quantity.is_a?(Numeric)

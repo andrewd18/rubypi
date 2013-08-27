@@ -295,6 +295,37 @@ class TestCaseUnrestrictedStorage < Test::Unit::TestCase
 	assert_equal(hash_with_5_dwarves, @building_stub.stored_products)
   end
   
+  def test_can_replace_stored_products_with_new_hash
+	hash_with_5_dwarves = {"Dwarf" => 5}
+	empty_hash = {}
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+	
+	@building_stub.stored_products = hash_with_5_dwarves
+	
+	assert_equal(hash_with_5_dwarves, @building_stub.stored_products)
+  end
+  
+  def test_cannot_replace_stored_products_with_a_non_hash
+	empty_hash = {}
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+	
+	assert_raise ArgumentError do
+	  @building_stub.stored_products = "Forgotten Beast"
+	end
+	
+	assert_raise ArgumentError do
+	  @building_stub.stored_products = 1.0
+	end
+	
+	assert_raise ArgumentError do
+	  @building_stub.stored_products = ["Forgotten Beast", 1.0]
+	end
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+  end
+  
   def test_building_can_show_total_volume
 	# Default
 	assert_equal(500.0, @building_stub.total_volume)

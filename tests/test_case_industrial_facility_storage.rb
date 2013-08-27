@@ -278,4 +278,41 @@ class TestCaseIndustrialFacilityStorage < Test::Unit::TestCase
 	
 	assert_equal(storage_with_silicon_empty, @building_stub.stored_products)
   end
+  
+  # TODO
+  # Note that the following test implies I can assign stored_products at will
+  # regardless of the products I put into it being part of the schematic.
+  # While this is normal operation for a unrestricted storage, it should probably
+  # be checked against for an industrial_facility_storage.
+  
+  def test_can_replace_stored_products_with_new_hash
+	hash_with_5_dwarves = {"Dwarf" => 5}
+	empty_hash = {}
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+	
+	@building_stub.stored_products = hash_with_5_dwarves
+	
+	assert_equal(hash_with_5_dwarves, @building_stub.stored_products)
+  end
+  
+  def test_cannot_replace_stored_products_with_a_non_hash
+	empty_hash = {}
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+	
+	assert_raise ArgumentError do
+	  @building_stub.stored_products = "Forgotten Beast"
+	end
+	
+	assert_raise ArgumentError do
+	  @building_stub.stored_products = 1.0
+	end
+	
+	assert_raise ArgumentError do
+	  @building_stub.stored_products = ["Forgotten Beast", 1.0]
+	end
+	
+	assert_equal(empty_hash, @building_stub.stored_products)
+  end
 end

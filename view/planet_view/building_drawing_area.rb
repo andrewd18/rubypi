@@ -554,9 +554,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  dialog = TransferProductsDialog.new(@controller, source_building, destination_building, $ruby_pi_main_window)
 	  dialog.run do |response|
 		if (response == Gtk::ResponseType::ACCEPT)
-		  # Perform the transfer.
-		  @controller.overwrite_planet_storage(source_building, dialog.source_building)
-		  @controller.overwrite_planet_storage(destination_building, dialog.destination_building)
+		  # Perform the transfer, overwriting the real model with the values from the dialog.
+		  @controller.overwrite_planet_storage(dialog.source_building.stored_products, source_building)
+		  @controller.overwrite_planet_storage(dialog.destination_building.stored_products, destination_building)
 		end
 	  end
 	  
