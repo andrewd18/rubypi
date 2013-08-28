@@ -28,7 +28,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	#
 	expedited_transfer_button = Gtk::RadioToolButton.new
 	expedited_transfer_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/expedited_transfer_icon.png")
-	expedited_transfer_button.label = "Transfer Products Between..."
+	expedited_transfer_button.label = "Expedited Transfer Between..."
 	self.append_custom_tool_button(expedited_transfer_button)
 	expedited_transfer_button.signal_connect('clicked') do |button|
 	  @building_drawing_area.set_on_click_action("expedited_transfer")
@@ -127,7 +127,7 @@ class BuildingToolPalette < RadioButtonToolPalette
 	
 	# Set the default action.
 	move_tool_button.active = true
-	@building_drawing_area.set_on_click_action("move_building")
+	@building_drawing_area.set_on_click_action("edit_building")
 	
 	return self
   end
