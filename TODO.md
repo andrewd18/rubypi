@@ -43,6 +43,9 @@ Code Cleanup
   - Mostly mitigated now by the 0.0.12 model/view/controller revamp. Having the object IDs change every save/load is annoying but livable.
 * Make "signal_handler_block(signal_id){}" into a GTK helper or something less clunky.
 * Unify the export_to_yaml dialog in the main ruby_pi app and the pi_configuration_view controller
+* Simplify the building_drawing_area class down from 700-some lines.
+* Speed up the building_drawing_area class' draw routines so it feels snappier.
+* Rework the API between the building_drawing_area and the tool palette. Too many responsibilities split across classes.
 
 
 Packaging & Release
