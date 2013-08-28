@@ -1,5 +1,5 @@
-Scheduled for Next Release
-==========================
+Version 0.0.12
+==============
 * You can now add and delete extractor heads from the planet view.
 * You can now edit a planetary link and set its upgrade level.
 * PG and CPU for planetary links are now calculated.

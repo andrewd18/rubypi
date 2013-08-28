@@ -1,8 +1,6 @@
 Core Features
 =============
 
-* Create an Import to Launchpad / Export from Launchpad widget.
-* Create a Launch From Command Center widget.
 * Add cycle times to all buildings.
 * Add a "pipeline view" or a "chain view" or something that shows the product build cycle. Planet scope only.
 * Add product unit and volume output per hour per building.
