@@ -3,6 +3,7 @@ require 'gtk3'
 require_relative 'cairo_building_image.rb'
 require_relative 'cairo_link_image.rb'
 require_relative '../common/expedited_transfer_dialog.rb'
+require 'observer.rb'
 
 # CREATE
 # On-click, adds selected building type to model at location.
@@ -21,6 +22,8 @@ require_relative '../common/expedited_transfer_dialog.rb'
 
 class BuildingDrawingArea < Gtk::DrawingArea
   
+  include Observable
+  
   BUILDING_ICON_SIZE = 64
   
   # N pixels = 1 "kilometer".
@@ -37,8 +40,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
                       "expedited_transfer"]
   
   attr_accessor :planet_model
-  attr_accessor :show_buildings
-  attr_accessor :show_links
+  attr_reader :status_message
   
   def initialize(controller)
 	# Set up GTK stuffs.
@@ -57,10 +59,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	@edit_link_first_building = nil
 	@delete_link_first_building = nil
 	
-	# Display Variables
-	self.show_buildings = true
-	self.show_links = true
-	
+	@status_message = ""
 	
 	@cursor_x_pos = 0.0
 	@cursor_y_pos = 0.0
@@ -102,15 +101,23 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	
 	@on_click_action = string
 	
+	set_status_message
+	
 	# TODO:
 	# When the action is changed from one state to another, clear all values from the old state.
 	# Namely, @add_building_class to nil if we are no longer adding a building.
+	
+	changed()
+	notify_observers()
   end
   
   def set_add_building_type(building_class)
 	raise unless (building_class.is_a?(Class))
 	
 	@add_building_class = building_class
+	
+	changed()
+	notify_observers()
   end
   
   def draw_all(widget, cairo_context)
@@ -134,72 +141,66 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  cairo_context.paint
 	end
 	
-	if (@show_buildings == true)
-	  # Extractor Heads
-	  @planet_model.extractors.each do |parent_extractor|
-		parent_extractor.extractor_heads.each do |head|
-		  cairo_context.save do
+	# Extractor Heads
+	@planet_model.extractors.each do |parent_extractor|
+	  parent_extractor.extractor_heads.each do |head|
+		cairo_context.save do
 
-			# Aqua color for extractor "links".
-			red   = (29.0 / 255)
-			green = (141.0 / 255)
-			blue  = (143.0 / 255)
-			alpha = (255.0 / 255)
-			
-			cairo_context.set_source_rgba(red, green, blue, alpha)
-			cairo_context.set_line_width(2.0)
-			cairo_context.set_dash(5.0, 5.0)
-			
-			# Move to the coordinates for the parent extractor.
-			cairo_context.move_to(parent_extractor.x_pos, parent_extractor.y_pos)
-			
-			# Draw a line between the parent extractor and the head.
-			cairo_context.line_to(head.x_pos, head.y_pos)
-			
-			cairo_context.stroke
+		  # Aqua color for extractor "links".
+		  red   = (29.0 / 255)
+		  green = (141.0 / 255)
+		  blue  = (143.0 / 255)
+		  alpha = (255.0 / 255)
+		  
+		  cairo_context.set_source_rgba(red, green, blue, alpha)
+		  cairo_context.set_line_width(2.0)
+		  cairo_context.set_dash(5.0, 5.0)
+		  
+		  # Move to the coordinates for the parent extractor.
+		  cairo_context.move_to(parent_extractor.x_pos, parent_extractor.y_pos)
+		  
+		  # Draw a line between the parent extractor and the head.
+		  cairo_context.line_to(head.x_pos, head.y_pos)
+		  
+		  cairo_context.stroke
+		end
+		
+		cairo_context.save do  
+		  # Create an extractor head building image.
+		  building_image = CairoBuildingImage.new(head, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+		  
+		  # Set its invalid position or highlighted status accordingly.
+		  building_image.invalid_position = will_extractor_head_overlap?(head)
+		  
+		  # Only highlight if we're not adding a building.
+		  if (@on_click_action != "add_building")
+			building_image.highlighted = (head == self.building_under_cursor)
 		  end
 		  
-		  cairo_context.save do  
-			# Create an extractor head building image.
-			building_image = CairoBuildingImage.new(head, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
-			
-			# Set its invalid position or highlighted status accordingly.
-			building_image.invalid_position = will_extractor_head_overlap?(head)
-			
-			# Only highlight if we're not adding a building.
-			if (@on_click_action != "add_building")
-			  building_image.highlighted = (head == self.building_under_cursor)
-			end
-			
-			building_image.draw(cairo_context)
-		  end
+		  building_image.draw(cairo_context)
 		end
 	  end
 	end
 	
-	if (show_links == true)
-	  # LINKS
-	  @planet_model.links.each do |link|
-		image = CairoLinkImage.new(link)
-		image.draw(cairo_context)
-	  end
+	# LINKS
+	@planet_model.links.each do |link|
+	  image = CairoLinkImage.new(link)
+	  image.draw(cairo_context)
 	end
 	
-	if (show_buildings == true)
-	  # BUILDINGS
-	  @planet_model.buildings.each do |building|
-		image = CairoBuildingImage.new(building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
-		
-		# Set its invalid position or highlighted status accordingly.
-		image.invalid_position = will_building_position_overlap?(building)
-		
-		# Only highlight if we're not adding a building.
-		if (@on_click_action != "add_building")
-		  image.highlighted = (building == self.building_under_cursor)
-		end
-		
-		image.draw(cairo_context)
+	# BUILDINGS
+	@planet_model.buildings.each do |building|
+	  image = CairoBuildingImage.new(building, BUILDING_ICON_SIZE, BUILDING_ICON_SIZE)
+	  
+	  # Set its invalid position or highlighted status accordingly.
+	  image.invalid_position = will_building_position_overlap?(building)
+	  
+	  # Only highlight if we're not adding a building.
+	  if (@on_click_action != "add_building")
+		image.highlighted = (building == self.building_under_cursor)
 	  end
+	  
+	  image.draw(cairo_context)
 	end
 	
 	# CURSOR
@@ -703,6 +704,41 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  if (self.destroyed? == false)
 		self.queue_draw
 	  end
+	end
+  end
+  
+  def set_status_message
+	case (@on_click_action)
+	  
+	when "add_building"
+	  @status_message = "Click to add a building."
+	  
+	when "add_extractor_head"
+	  @status_message = "Click on an extractor, then click to add a head."
+	  
+	when "move_building"
+	  @status_message = "Click and drag to move a building."
+	  
+	when "edit_building"
+	  @status_message = "Click to edit a building."
+	  
+	when "delete_building"
+	  @status_message = "Click to delete a building."
+	  
+	when "add_link"
+	  @status_message = "Click two buildings to add a link between them."
+	  
+	when "edit_link"
+	  @status_message = "Click two buildings to edit the link between them."
+	  
+	when "delete_link"
+	  @status_message = "Click two buildings to delete the link between them."
+	  
+	when "expedited_transfer"
+	  @status_message = "Click two buildings to expedited transfer between them."
+	  
+	else
+	  @status_message = ""
 	end
   end
 end

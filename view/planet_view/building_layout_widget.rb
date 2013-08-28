@@ -2,7 +2,7 @@ require 'gtk3'
 
 require_relative 'building_tool_palette.rb'
 require_relative 'building_drawing_area.rb'
-require_relative 'building_drawing_area_settings_widget.rb'
+require_relative 'building_drawing_area_status_widget.rb'
 
 class BuildingLayoutWidget < Gtk::Frame
   def initialize(controller)
@@ -13,7 +13,7 @@ class BuildingLayoutWidget < Gtk::Frame
 	
 	# Create a drawing area and a tool palette linked to it.
 	@building_drawing_area = BuildingDrawingArea.new(@controller)
-	@building_drawing_area_settings_widget = BuildingDrawingAreaSettingsWidget.new(@building_drawing_area)
+	@building_drawing_area_settings_widget = BuildingDrawingAreaStatusWidget.new(@building_drawing_area)
 	@drawing_tool_palette = BuildingToolPalette.new(@building_drawing_area)
 	
 	drawing_tool_palette_window = Gtk::ScrolledWindow.new
