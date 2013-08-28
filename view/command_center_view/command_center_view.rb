@@ -5,6 +5,7 @@ require_relative '../common/up_to_planet_view_button.rb'
 require_relative '../common/add_products_widget.rb'
 require_relative '../common/stored_products_widget.rb'
 require_relative '../common/building_image.rb'
+require_relative './launch_products_to_space_button.rb'
 
 class CommandCenterView < Gtk::Box
   
@@ -39,8 +40,7 @@ class CommandCenterView < Gtk::Box
 	
 	# Center column.
 	@stored_products_widget = StoredProductsWidget.new(@controller)
-	#transfer_products_button = TransferProductsButton.new(@building_model.planet, @building_model, $ruby_pi_main_gtk_window)
-	#launch_products_to_space_button = LaunchProductsToSpaceButton.new(@building_model, $ruby_pi_main_gtk_window)
+	@launch_products_to_space_button = LaunchProductsToSpaceButton.new(@controller, @building_model, $ruby_pi_main_gtk_window)
 	
 	
 	# Right column.
@@ -69,8 +69,6 @@ class CommandCenterView < Gtk::Box
 	center_column = Gtk::Box.new(:vertical)
 	center_column.pack_start(@stored_products_widget, :expand => true)
 	button_row = Gtk::Box.new(:horizontal)
-	#button_row.pack_end(transfer_products_button, :expand => false)
-	#button_row.pack_end(launch_products_to_space_button, :expand => false)
 	center_column.pack_start(button_row, :expand => false)
 	center_column_frame = Gtk::Frame.new
 	center_column_frame.add(center_column)
@@ -88,6 +86,7 @@ class CommandCenterView < Gtk::Box
 	right_column = Gtk::Box.new(:vertical)
 	right_column.pack_start(@building_image, :expand => false)
 	right_column.pack_start(right_column_upgrade_row, :expand => false)
+	right_column.pack_start(@launch_products_to_space_button, :expand => false)
 	right_column_frame = Gtk::Frame.new
 	right_column_frame.add(right_column)
 	
@@ -113,5 +112,6 @@ class CommandCenterView < Gtk::Box
 	@add_products_widget.building_model = new_building_model
 	@stored_products_widget.building_model = new_building_model
 	@building_image.building_model = new_building_model
+	@launch_products_to_space_button.building_model = new_building_model
   end
 end

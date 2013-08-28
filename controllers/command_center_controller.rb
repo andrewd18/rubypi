@@ -40,6 +40,10 @@ class CommandCenterController
 	end
   end
   
+  def overwrite_storage(hash)
+	@building_model.stored_products=(hash)
+  end
+  
   def up_to_planet_controller
 	$ruby_pi_main_gtk_window.load_controller_for_model(@building_model.planet)
   end
