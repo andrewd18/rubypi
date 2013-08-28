@@ -39,6 +39,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
   attr_accessor :planet_model
   attr_accessor :show_buildings
   attr_accessor :show_links
+  attr_reader :on_click_action
+  attr_reader :add_building_class
   
   def initialize(controller)
 	# Set up GTK stuffs.
@@ -56,6 +58,17 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	@add_link_first_building = nil
 	@edit_link_first_building = nil
 	@delete_link_first_building = nil
+	
+	
+	# Set default On Click action from global app preferences if available.
+	prefs = $ruby_pi_main_gtk_window.view_preferences_hash
+	
+	if (prefs["on_click_action"] == nil)
+	  self.set_on_click_action("edit_building")
+	else
+	  @on_click_action = prefs["on_click_action"]
+	end
+	
 	
 	# Display Variables
 	self.show_buildings = true
@@ -101,6 +114,12 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	raise ArgumentError unless (ON_CLICK_ACTIONS.include?(string))
 	
 	@on_click_action = string
+	
+	# Save it off to the global preferences.
+	prefs = $ruby_pi_main_gtk_window.view_preferences_hash
+	
+	prefs["on_click_action"] = @on_click_action
+	
 	
 	# TODO:
 	# When the action is changed from one state to another, clear all values from the old state.

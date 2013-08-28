@@ -26,6 +26,7 @@ class RubyPI < Gtk::Window
   VERSION = "0.0.11"
   
   attr_accessor :pi_configuration
+  attr_accessor :view_preferences_hash
   
   def initialize
 	super(Gtk::Window::Type::TOPLEVEL)
@@ -54,6 +55,9 @@ class RubyPI < Gtk::Window
 	
 	# Create a blank PI Configuration with 6 planets. User can load a different one if they feel like it.
 	@pi_configuration = PIConfiguration.new
+	
+	# Set up the view preferences hash.
+	@view_preferences_hash = Hash.new
 	
 	# Setup the view.
 	@menu_bar = RubyPIMainMenu.new
