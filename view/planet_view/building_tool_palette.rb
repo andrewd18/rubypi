@@ -13,47 +13,33 @@ class BuildingToolPalette < RadioButtonToolPalette
 	self.show_arrow = false
 	
 	# Add all the various tools I'm going to want.
-	# Move Building (click-drag)
-	# Edit Building (click)
-	# Edit Link Between... (two-click)
+	# 
+	# Import / Export... (click)
 	# Expedited Transfer Between... (two-click)
 	# ---------
 	# Add building (click)
+	# Move Building (click-drag)
+	# Edit Building (click)
 	# Delete building (click)
 	# ---------
-	# Add link between....
-	# Delete link between...
+	# Add link between.... (two-click)
+	# Edit Link Between... (two-click)
+	# Delete link between... (two-click)
 	#
-	move_tool_button = Gtk::RadioToolButton.new
-	move_tool_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/move_building_icon.png")
-	move_tool_button.label = "Move Building"
-	self.append_custom_tool_button(move_tool_button)
-	move_tool_button.signal_connect('clicked') do |button|
-	  @building_drawing_area.set_on_click_action("move_building")
-	end
-	
-	edit_building_button = Gtk::RadioToolButton.new
-	edit_building_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/edit_building_icon.png")
-	edit_building_button.label = "Edit Building"
-	self.append_custom_tool_button(edit_building_button)
-	edit_building_button.signal_connect('clicked') do |button|
-	  @building_drawing_area.set_on_click_action("edit_building")
-	end
-	
-	edit_link_button = Gtk::RadioToolButton.new
-	edit_link_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/edit_link_icon.png")
-	edit_link_button.label = "Edit Link Between..."
-	self.append_custom_tool_button(edit_link_button)
-	edit_link_button.signal_connect('clicked') do |button|
-	  @building_drawing_area.set_on_click_action("edit_link")
-	end
-	
 	expedited_transfer_button = Gtk::RadioToolButton.new
 	expedited_transfer_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/expedited_transfer_icon.png")
-	expedited_transfer_button.label = "Expedited Transfer Between..."
+	expedited_transfer_button.label = "Transfer Products Between..."
 	self.append_custom_tool_button(expedited_transfer_button)
 	expedited_transfer_button.signal_connect('clicked') do |button|
 	  @building_drawing_area.set_on_click_action("expedited_transfer")
+	end
+	
+	import_export_button = Gtk::RadioToolButton.new
+	import_export_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/poco_import_export_icon.png")
+	import_export_button.label = "Import / Export Products"
+	self.append_custom_tool_button(import_export_button)
+	import_export_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("import_export")
 	end
 	
 	
@@ -87,6 +73,22 @@ class BuildingToolPalette < RadioButtonToolPalette
 	  @building_drawing_area.set_on_click_action("add_extractor_head")
 	end
 	
+	move_tool_button = Gtk::RadioToolButton.new
+	move_tool_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/move_building_icon.png")
+	move_tool_button.label = "Move Building"
+	self.append_custom_tool_button(move_tool_button)
+	move_tool_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("move_building")
+	end
+	
+	edit_building_button = Gtk::RadioToolButton.new
+	edit_building_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/edit_building_icon.png")
+	edit_building_button.label = "Edit Building"
+	self.append_custom_tool_button(edit_building_button)
+	edit_building_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("edit_building")
+	end
+	
 	delete_building_button = Gtk::RadioToolButton.new
 	delete_building_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/delete_building_icon.png")
 	delete_building_button.label = "Delete Building"
@@ -105,6 +107,14 @@ class BuildingToolPalette < RadioButtonToolPalette
 	self.append_custom_tool_button(add_link_button)
 	add_link_button.signal_connect('clicked') do |button|
 	  @building_drawing_area.set_on_click_action("add_link")
+	end
+	
+	edit_link_button = Gtk::RadioToolButton.new
+	edit_link_button.icon_widget = Gtk::Image.new(:file => "view/images/16x16/edit_link_icon.png")
+	edit_link_button.label = "Edit Link Between..."
+	self.append_custom_tool_button(edit_link_button)
+	edit_link_button.signal_connect('clicked') do |button|
+	  @building_drawing_area.set_on_click_action("edit_link")
 	end
 	
 	remove_link_button = Gtk::RadioToolButton.new

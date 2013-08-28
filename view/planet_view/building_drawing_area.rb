@@ -37,7 +37,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
                       "add_link",
                       "edit_link",
 					  "delete_link",
-                      "expedited_transfer"]
+                      "expedited_transfer",
+                      "import_export"]
   
   attr_accessor :planet_model
   attr_reader :status_message
@@ -556,8 +557,8 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  dialog.run do |response|
 		if (response == Gtk::ResponseType::ACCEPT)
 		  # Perform the transfer, overwriting the real model with the values from the dialog.
-		  @controller.overwrite_planet_storage(dialog.source_stored_products_hash, source_building)
-		  @controller.overwrite_planet_storage(dialog.destination_stored_products_hash, destination_building)
+		  @controller.overwrite_planetary_building_storage(dialog.source_stored_products_hash, source_building)
+		  @controller.overwrite_planetary_building_storage(dialog.destination_stored_products_hash, destination_building)
 		end
 	  end
 	  
@@ -566,6 +567,28 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  # TODO - Tell the user what happened nicely.
 	  # For now, spit it out to the command line.
 	  puts "Both buildings must support expedited transfers."
+	end
+  end
+  
+  def import_export_popup
+	poco = @planet_model.customs_office
+	launchpad = self.building_under_cursor
+	
+	# Only create a dialog if it's a launchpad.
+	if (launchpad.is_a?(Launchpad))
+	  # Create the dialog.
+	  dialog = ExpeditedTransferDialog.new(poco, launchpad, $ruby_pi_main_window)
+	  dialog.run do |response|
+		if (response == Gtk::ResponseType::ACCEPT)
+		  # Perform the transfer, overwriting the real model with the values from the dialog.
+		  @controller.overwrite_poco_storage(dialog.source_stored_products_hash)
+		  @controller.overwrite_planetary_building_storage(dialog.destination_stored_products_hash, launchpad)
+		end
+	  end
+	  
+	  dialog.destroy
+	else
+	  puts "Must be a Launchpad."
 	end
   end
   
@@ -677,6 +700,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 		# Reset the delete-link state.
 		@expedited_transfer_first_building = nil
 	  end
+	  
+	when "import_export"
+	  import_export_popup
 	
 	else
 	  raise RuntimeError, "BuildingDrawingArea.on_click: unknown action #{@on_click_action}"
@@ -736,6 +762,9 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  
 	when "expedited_transfer"
 	  @status_message = "Click two buildings to expedited transfer between them."
+	  
+	when "import_export"
+	  @status_message = "Click a Launchpad to import or export to the customs office."
 	  
 	else
 	  @status_message = ""
