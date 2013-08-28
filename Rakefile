@@ -38,14 +38,9 @@ Releasy::Project.new do
   executable "ruby_pi.rb"
   
   files ["ruby_pi.rb",
-         "model/*.rb",
-         "model/*.yml",
-         "view/*.rb",
-         "view/gtk_helpers/*.rb",
-         "view/images/*.png",
-         "view/images/16x16/*.png",
-         "view/images/32x32/*.png",
-         "view/images/64x64/*.png"]
+         "model/*",
+         "view/*",
+         "controllers/*"]
   
   exposed_files ["README.md",
                  "LICENSE",
