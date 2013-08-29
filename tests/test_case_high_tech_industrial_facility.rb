@@ -153,6 +153,55 @@ class TestCaseHighTechIndustrialFacility < Test::Unit::TestCase
 	assert_equal(@building.schematic.object_id, @@galactic_core_schematic.object_id)
   end
   
+  def test_facility_without_schematic_has_empty_hash_inputs_per_cycle
+	assert_equal(nil, @building.schematic_name)
+	assert_equal({}, @building.input_products_per_cycle)
+  end
+  
+  def test_facility_with_schematic_shows_accurate_inputs_per_cycle
+	@building.schematic_name = "Galactic Core"
+	hash_of_inputs_per_cycle = {"Coruscant" => 1, "Alderaan" => 1, "Kuat" => 1}
+	
+	assert_equal(hash_of_inputs_per_cycle, @building.input_products_per_cycle)
+  end
+  
+  def test_facility_without_schematic_has_empty_hash_inputs_per_hour
+	assert_equal(nil, @building.schematic_name)
+	assert_equal({}, @building.input_products_per_hour)
+  end
+  
+  def test_facility_with_schematic_shows_accurate_inputs_per_hour
+	@building.schematic_name = "Galactic Core"
+	hash_of_inputs_per_hour = {"Coruscant" => 1, "Alderaan" => 1, "Kuat" => 1}
+	
+	# Expected cycle time for a P4 is 1 per hour.
+	assert_equal(hash_of_inputs_per_hour, @building.input_products_per_hour)
+  end
+  
+  def test_facility_without_schematic_has_empty_hash_outputs_per_cycle
+	assert_equal(nil, @building.schematic_name)
+	assert_equal({}, @building.output_products_per_cycle)
+  end
+  
+  def test_facility_with_schematic_shows_accurate_outputs_per_cycle
+	@building.schematic_name = "Galactic Core"
+	hash_of_outputs_per_cycle = {"Galactic Core" => 1}
+	
+	assert_equal(hash_of_outputs_per_cycle, @building.output_products_per_cycle)
+  end
+  
+  def test_facility_without_schematic_has_empty_hash_outputs_per_hour
+	assert_equal(nil, @building.schematic_name)
+	assert_equal({}, @building.output_products_per_hour)
+  end
+  
+  def test_facility_with_schematic_shows_accurate_outputs_per_hour
+	@building.schematic_name = "Galactic Core"
+	hash_of_outputs_per_hour = {"Galactic Core" => 1}
+	
+	assert_equal(hash_of_outputs_per_hour, @building.output_products_per_hour)
+  end
+  
   #
   # Cycle Time Module Interaction Tests
   #
