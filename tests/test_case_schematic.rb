@@ -93,6 +93,10 @@ class TestCaseSchematic < Test::Unit::TestCase
 	assert_equal(@@boy.object_id, @@boy_schematic.output_product.object_id)
   end
   
+  def test_can_get_hash_of_output_products_per_cycle
+	assert_equal({"Boy" => 1}, @@boy_schematic.outputs)
+  end
+  
   def test_p_level_matches_output_product_p_level
 	assert_equal(@@boy.p_level, @@boy_schematic.p_level)
   end

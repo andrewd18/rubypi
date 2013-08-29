@@ -97,4 +97,8 @@ class Schematic
   def inputs
 	return @inputs_hash
   end
+  
+  def outputs
+	return {@output_product_name => @output_quantity}
+  end
 end
