@@ -8,7 +8,7 @@ class PlanetListRow < Gtk::Box
 	super(:horizontal)
 	
 	@controller = controller
-	@planet_model = nil
+	@planet_model = planet_model
 	
 	planet_image_and_name_column = Gtk::Box.new(:vertical)
 	@planet_image = PlanetImage.new(@planet_model)
