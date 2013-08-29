@@ -1,8 +1,8 @@
 
 require 'gtk3'
 require_relative '../common/planet_image.rb'
-require_relative 'building_count_table.rb'
-require_relative 'isk_amount_label.rb'
+require_relative '../common/building_count_table.rb'
+require_relative '../common/isk_amount_label.rb'
 require_relative '../../model/planet.rb'
 
 require_relative '../gtk_helpers/simple_combo_box.rb'
