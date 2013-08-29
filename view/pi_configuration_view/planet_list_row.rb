@@ -41,12 +41,12 @@ class PlanetListRow < Gtk::Box
 	end
 	delete_button_column.pack_start(delete_button, :expand => false)
 	
-	self.pack_start(planet_image_and_name_column, :expand => false)
-	self.pack_start(@planet_buildings_box, :expand => false)
-	self.pack_start(planet_import_list, :expand => true)
-	self.pack_start(planet_export_list, :expand => true)
-	self.pack_start(edit_button_column, :expand => false)
-	self.pack_start(delete_button_column, :expand => false)
+	self.pack_start(planet_image_and_name_column, :padding => 5, :expand => false)
+	self.pack_start(@planet_buildings_box, :padding => 5, :expand => false)
+	self.pack_start(planet_import_list, :padding => 5, :expand => true)
+	self.pack_start(planet_export_list, :padding => 5, :expand => true)
+	self.pack_start(edit_button_column, :padding => 5, :expand => false)
+	self.pack_start(delete_button_column, :padding => 5, :expand => false)
 	
 	return self
   end
