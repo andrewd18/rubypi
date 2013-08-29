@@ -18,7 +18,10 @@ class PlanetList < Gtk::Box
 	end
 	
 	new_model.planets.each do |planet_model|
-	  self.pack_start(PlanetListRow.new(@controller, planet_model), :expand => false)
+	  list_row = PlanetListRow.new(@controller, planet_model)
+	  list_row_frame = Gtk::Frame.new
+	  list_row_frame.add(list_row)
+	  self.pack_start(list_row_frame, :expand => false)
 	end
 	
 	self.show_all

@@ -21,7 +21,7 @@ class PlanetListRow < Gtk::Box
 	planet_import_list = Gtk::Label.new("Import List")
 	planet_export_list = Gtk::Label.new("Export List")
 	
-	edit_delete_button_column = Gtk::Box.new(:vertical)
+	edit_button_column = Gtk::Box.new(:vertical)
 	edit_button = Gtk::Button.new(:label => "Edit")
 	edit_button.image = Gtk::Image.new(:file => "view/images/16x16/edit-find-replace.png")
 	edit_button.signal_connect("clicked") do |button|
@@ -29,7 +29,9 @@ class PlanetListRow < Gtk::Box
 		@controller.edit_selected_planet(@planet_model)
 	  end
 	end
+	edit_button_column.pack_start(edit_button, :expand => false)
 	
+	delete_button_column = Gtk::Box.new(:vertical)
 	delete_button = Gtk::Button.new(:label => "Delete")
 	delete_button.image = Gtk::Image.new(:file => "view/images/16x16/edit-find-replace.png")
 	delete_button.signal_connect("clicked") do |button|
@@ -37,15 +39,14 @@ class PlanetListRow < Gtk::Box
 		@controller.remove_planet(@planet_model)
 	  end
 	end
-	
-	edit_delete_button_column.pack_start(edit_button, :expand => false)
-	edit_delete_button_column.pack_start(delete_button, :expand => false)
+	delete_button_column.pack_start(delete_button, :expand => false)
 	
 	self.pack_start(planet_image_and_name_column, :expand => false)
 	self.pack_start(@planet_buildings_box, :expand => false)
 	self.pack_start(planet_import_list, :expand => true)
 	self.pack_start(planet_export_list, :expand => true)
-	self.pack_start(edit_delete_button_column, :expand => false)
+	self.pack_start(edit_button_column, :expand => false)
+	self.pack_start(delete_button_column, :expand => false)
 	
 	return self
   end
