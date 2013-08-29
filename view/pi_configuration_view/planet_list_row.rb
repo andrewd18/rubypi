@@ -11,12 +11,12 @@ class PlanetListRow < Gtk::Box
 	@planet_model = nil
 	
 	planet_image_and_name_column = Gtk::Box.new(:vertical)
-	@planet_image = PlanetImage.new
-	@planet_name_label = Gtk::Label.new("")
+	@planet_image = PlanetImage.new(@planet_model)
+	@planet_name_label = Gtk::Label.new("#{@planet_model.name}")
 	planet_image_and_name_column.pack_start(@planet_image, :expand => false)
 	planet_image_and_name_column.pack_start(@planet_name_label, :expand => false)
 	
-	@planet_buildings_box = BuildingCountTable.new
+	@planet_buildings_box = BuildingCountTable.new(@planet_model)
 	
 	planet_import_list = Gtk::Label.new("Import List")
 	planet_export_list = Gtk::Label.new("Export List")
@@ -43,11 +43,9 @@ class PlanetListRow < Gtk::Box
 	
 	self.pack_start(planet_image_and_name_column, :expand => false)
 	self.pack_start(@planet_buildings_box, :expand => false)
-	self.pack_start(planet_import_list, :expand => false)
-	self.pack_start(planet_export_list, :expand => false)
+	self.pack_start(planet_import_list, :expand => true)
+	self.pack_start(planet_export_list, :expand => true)
 	self.pack_start(edit_delete_button_column, :expand => false)
-	
-	self.planet_model = planet_model
 	
 	return self
   end
