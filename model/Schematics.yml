@@ -352,56 +352,56 @@
     Viral Agent: 10
 - !ruby/object:Schematic
   output_product_name: Broadcast Node
-  output_quantity: 3
+  output_quantity: 1
   inputs_hash:
     Neocoms: 6
     Data Chips: 6
     High-Tech Transmitters: 6
 - !ruby/object:Schematic
   output_product_name: Integrity Response Drones
-  output_quantity: 3
+  output_quantity: 1
   inputs_hash:
     Gel-Matrix Biopaste: 6
     Hazmat Detection Systems: 6
     Planetary Vehicles: 6
 - !ruby/object:Schematic
   output_product_name: Nano-Factory
-  output_quantity: 3
+  output_quantity: 1
   inputs_hash:
     Industrial Explosives: 6
     Reactive Metals: 40
     Ukomi Superconductors: 6
 - !ruby/object:Schematic
   output_product_name: Organic Mortar Applicators
-  output_quantity: 3
+  output_quantity: 1
   inputs_hash:
     Condensates: 6
     Bacteria: 40
     Robotics: 6
 - !ruby/object:Schematic
   output_product_name: Recursive Computing Module
-  output_quantity: 3
+  output_quantity: 1
   inputs_hash:
     Synthetic Synapses: 6
     Guidance Systems: 6
     Transcranial Microcontrollers: 6
 - !ruby/object:Schematic
   output_product_name: Self-Harmonizing Power Core
-  output_quantity: 3
+  output_quantity: 1
   inputs_hash:
     Camera Drones: 6
     Nuclear Reactors: 6
     Hermetic Membranes: 6
 - !ruby/object:Schematic
   output_product_name: Sterile Conduits
-  output_quantity: 3
+  output_quantity: 1
   inputs_hash:
     Smartfab Units: 6
     Water: 40
     Vaccines: 6
 - !ruby/object:Schematic
   output_product_name: Wetware Mainframe
-  output_quantity: 3
+  output_quantity: 1
   inputs_hash:
     Supercomputers: 6
     Biotech Research Reports: 6
