@@ -9,6 +9,8 @@ class PlanetImportList < Gtk::TreeView
 	
 	super(@list_store)
 	
+	self.set_headers_visible(false)
+	
 	name_column = TextColumn.new("Name", 1)
 	quantity_column = TextColumn.new("Quantity", 2)
 	
