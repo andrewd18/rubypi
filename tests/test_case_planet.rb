@@ -1,14 +1,26 @@
 require "test/unit"
 
 require_relative "../model/planet.rb"
+require_relative "../model/schematic.rb"
 
 class TestCasePlanet < Test::Unit::TestCase
   # Run once.
   def self.startup
+	# P0 products.
+	@@foo_product = Product.new("Foo", 0)
+	@@baz_product = Product.new("Baz", 0)
+	@@widget_product = Product.new("Widget", 1)
+	
+	@@widget_schematic = Schematic.new("Widget", 1, {"Foo" => 5, "Baz" => 5})
   end
   
   # Run once after all tests.
   def self.shutdown
+	Schematic.delete(@@widget_schematic)
+	
+	Product.delete(@@foo_product)
+	Product.delete(@@baz_product)
+	Product.delete(@@widget_product)
   end
   
   # Run before every test.
@@ -809,6 +821,40 @@ class TestCasePlanet < Test::Unit::TestCase
 	third_link = @planet.add_link(extractor_a, extractor_b)
 	
 	assert_equal(3, @planet.num_links)
+  end
+  
+  def test_can_get_product_inputs_used_per_hour
+	indy = @planet.add_building_from_class(BasicIndustrialFacility)
+	indy.schematic_name = "Widget"
+	
+	indy_two = @planet.add_building_from_class(BasicIndustrialFacility)
+	indy_two.schematic_name = "Widget"
+	
+	num_indies = 2
+	indy_inputs_used_per_cycle = 5
+	indy_cycles_per_hour = 2
+	total_per_hour = (num_indies * indy_inputs_used_per_cycle * indy_cycles_per_hour)
+	
+	expected_hash = {"Foo" => total_per_hour, "Baz" => total_per_hour}
+	
+	assert_equal(expected_hash, @planet.input_products_per_hour)
+  end
+  
+  def test_can_get_product_outputs_created_per_hour
+	indy = @planet.add_building_from_class(BasicIndustrialFacility)
+	indy.schematic_name = "Widget"
+	
+	indy_two = @planet.add_building_from_class(BasicIndustrialFacility)
+	indy_two.schematic_name = "Widget"
+	
+	num_indies = 2
+	indy_outputs_created_per_cycle = 1
+	indy_cycles_per_hour = 2
+	total_per_hour = (num_indies * indy_outputs_created_per_cycle * indy_cycles_per_hour)
+	
+	expected_hash = {"Widget" => total_per_hour}
+	
+	assert_equal(expected_hash, @planet.output_products_per_hour)
   end
   
   def test_can_get_pzero_product_list

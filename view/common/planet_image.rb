@@ -15,7 +15,9 @@ class PlanetImage < Gtk::Image
                       "Oceanic" => "oceanic_planet.png",
                       "Plasma" => "plasma_planet.png"}
   
-  def initialize(requested_size_array_in_px = [64, 64])
+  def initialize(planet_model = nil, requested_size_array_in_px = [64, 64])
+	@planet_model = planet_model
+	
 	@requested_width = requested_size_array_in_px[0]
 	@requested_height = requested_size_array_in_px[1]
 	

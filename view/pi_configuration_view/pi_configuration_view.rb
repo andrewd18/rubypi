@@ -35,29 +35,13 @@ class PIConfigurationView < Gtk::Box
 	
 	
 	# Center column.
-	center_column_frame = Gtk::Frame.new
-	center_column = Gtk::Box.new(:vertical)
-	
-	planet_list_scrolled_window = Gtk::ScrolledWindow.new
-	planet_list_scrolled_window.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC)
+	center_column_window = Gtk::ScrolledWindow.new
+	# Never scroll L/R, auto up/down.
+	center_column_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	
 	@planet_list = PlanetList.new(@controller)
-	planet_list_scrolled_window.add(@planet_list)
+	center_column_window.add_with_viewport(@planet_list)
 	
-	
-	button_box = Gtk::Box.new(:horizontal)
-	edit_selected_button = Gtk::Button.new(:label => "Edit Highlighted Planet")
-	edit_selected_button.image = Gtk::Image.new(:file => "view/images/16x16/edit-find-replace.png")
-	edit_selected_button.signal_connect("clicked") do |button|
-	  unless (@planet_list.selected_planet_instance == nil)
-		@controller.edit_selected_planet(@planet_list.selected_planet_instance)
-	  end
-	end
-	button_box.pack_end(edit_selected_button, :expand => false)
-	
-	center_column.pack_start(planet_list_scrolled_window, :expand => true)
-	center_column.pack_start(button_box, :expand => false)
-	center_column_frame.add(center_column)
 	
 	# Right column.
 	right_column_frame = Gtk::Frame.new
@@ -70,7 +54,7 @@ class PIConfigurationView < Gtk::Box
 	right_column_frame.add(right_column)
 	
 	bottom_row.pack_start(left_column_frame, :expand => false)
-	bottom_row.pack_start(center_column_frame, :expand => true, :fill => true)
+	bottom_row.pack_start(center_column_window, :expand => true, :fill => true)
 	bottom_row.pack_start(right_column_frame, :expand => false)
 	
 	self.pack_start(bottom_row, :expand => true)

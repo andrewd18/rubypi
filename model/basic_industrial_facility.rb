@@ -136,4 +136,40 @@ class BasicIndustrialFacility < PlanetaryBuilding
   def cycle_time_in_days
 	return (self.cycle_time_in_hours / 24.0)
   end
+  
+  def input_products_per_cycle
+	if (self.schematic != nil)
+	  return schematic.inputs
+	else
+	  return {}
+	end
+  end
+  
+  def input_products_per_hour
+	products_per_hour = {}
+	
+	self.input_products_per_cycle.each_pair do |product_name, quantity|
+	  products_per_hour[product_name] = (quantity / self.cycle_time_in_hours)
+	end
+	
+	return products_per_hour
+  end
+  
+  def output_products_per_cycle
+	if (self.schematic != nil)
+	  return schematic.outputs
+	else
+	  return {}
+	end
+  end
+  
+  def output_products_per_hour
+	products_per_hour = {}
+	
+	self.output_products_per_cycle.each_pair do |product_name, quantity|
+	  products_per_hour[product_name] = (quantity / self.cycle_time_in_hours)
+	end
+	
+	return products_per_hour
+  end
 end

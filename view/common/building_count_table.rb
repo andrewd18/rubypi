@@ -2,8 +2,10 @@ require 'gtk3'
 
 class BuildingCountTable < Gtk::Table
   
-  def initialize
+  def initialize(planet_model = nil)
 	super(2, 2)
+	
+	@planet_model = planet_model
 	
 	# Building stats box like FIDS in Endless Space.
 	# Gtk::Table Syntax
@@ -47,6 +49,9 @@ class BuildingCountTable < Gtk::Table
 	# Second row.
 	self.attach(storage_cell, 0, 1, 1, 2)
 	self.attach(launchpad_cell, 1, 2, 1, 2)
+	
+	# Update view.
+	update_from_model
 	
 	return self
   end

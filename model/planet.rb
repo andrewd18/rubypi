@@ -560,6 +560,34 @@ class Planet
 	end
   end
   
+  def input_products_per_hour
+	input_products_hash = {}
+	
+	@buildings.each do |building|
+	  if building.respond_to?("input_products_per_hour")
+		
+		# Merge the two arrays in place. If the input product already exists, combine the values into one key using the block.
+		input_products_hash.merge!(building.input_products_per_hour){|key, oldval, newval| oldval + newval}
+	  end
+	end
+	
+	return input_products_hash
+  end
+  
+  def output_products_per_hour
+	output_products_hash = {}
+	
+	@buildings.each do |building|
+	  if building.respond_to?("output_products_per_hour")
+		
+		# Merge the two arrays in place. If the output product already exists, combine the values into one key using the block.
+		output_products_hash.merge!(building.output_products_per_hour){|key, oldval, newval| oldval + newval}
+	  end
+	end
+	
+	return output_products_hash
+  end
+  
   def remove_planet
 	# Lean on parent pi_configuration function.
 	@pi_configuration.remove_planet(self)
