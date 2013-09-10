@@ -12,6 +12,11 @@ class PlanetList < Gtk::Box
   end
   
   def pi_configuration_model=(new_model)
+	# TODO
+	# The more planets there are, the longer this takes.
+	# This also locks the entire app until it's done redrawing.
+	# I should fix that.
+	
 	# Clean out rows.
 	self.children.each do |child|
 	  child.destroy
