@@ -25,5 +25,8 @@ class PlanetList < Gtk::Box
 	end
 	
 	self.show_all
+	
+	# Ask for a resize because stuff changed.
+	self.queue_resize
   end
 end
