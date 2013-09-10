@@ -42,7 +42,7 @@ class PlanetListRow < Gtk::Box
 	
 	edit_button_column = Gtk::Box.new(:vertical)
 	edit_button = Gtk::Button.new(:label => "Edit")
-	edit_button.image = Gtk::Image.new(:file => "view/images/16x16/edit-find-replace.png")
+	edit_button.image = Gtk::Image.new(:file => "view/images/16x16/view_in_planet_mode.png")
 	edit_button.signal_connect("clicked") do |button|
 	  unless (@planet_model == nil)
 		@controller.edit_selected_planet(@planet_model)
@@ -52,7 +52,7 @@ class PlanetListRow < Gtk::Box
 	
 	delete_button_column = Gtk::Box.new(:vertical)
 	delete_button = Gtk::Button.new(:label => "Delete")
-	delete_button.image = Gtk::Image.new(:file => "view/images/16x16/edit-find-replace.png")
+	delete_button.image = Gtk::Image.new(:file => "view/images/16x16/delete_planet_icon.png")
 	delete_button.signal_connect("clicked") do |button|
 	  unless (@planet_model == nil)
 		@controller.remove_planet(@planet_model)
