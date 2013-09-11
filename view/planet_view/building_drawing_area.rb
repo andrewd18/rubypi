@@ -3,6 +3,7 @@ require 'gtk3'
 require_relative 'cairo_building_image.rb'
 require_relative 'cairo_link_image.rb'
 require_relative '../common/expedited_transfer_dialog.rb'
+require_relative '../common/poco_import_export_dialog.rb'
 require 'observer.rb'
 
 # CREATE
@@ -613,7 +614,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	# Only create a dialog if it's a launchpad.
 	if (launchpad.is_a?(Launchpad))
 	  # Create the dialog.
-	  dialog = ExpeditedTransferDialog.new(poco, launchpad, $ruby_pi_main_window)
+	  dialog = POCOImportExportDialog.new(poco, launchpad, $ruby_pi_main_window)
 	  dialog.run do |response|
 		if (response == Gtk::ResponseType::ACCEPT)
 		  # Perform the transfer, overwriting the real model with the values from the dialog.
