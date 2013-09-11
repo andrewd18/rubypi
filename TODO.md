@@ -44,6 +44,7 @@ Code Cleanup
 * Speed up the building_drawing_area class' draw routines so it feels snappier.
 * Rework the API between the building_drawing_area and the tool palette. Too many responsibilities split across classes.
 * Speed up the redraw routine for the pi_configuration_view's planet list.
+* POCO Import / Export dialog is a pile of cruft.
 
 Packaging & Release
 ===================
