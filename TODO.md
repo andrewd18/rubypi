@@ -23,7 +23,6 @@ User Interface Improvements
   - Add images for every product. Show where appropriate.
 * Building Drawing Area
   - Add tooltips on hover.
-  - Add a max size or something to the drawing window. It's weird when I resize it down and buildings get hidden.
   - Do something visual on two-step building processes (adding, editing, or deleting links, expedited transfers) that shows you're on step two.
 * Transfer Products Dialog
   - Add a warning when the user tries to transfer products to a destination that isn't selected yet.
