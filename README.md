@@ -4,21 +4,32 @@ RubyPI
 An EVE Online Planetary Interaction tool, written in Ruby.
 
 
-Supported OSes
---------------
-
- * Anything that runs Ruby 1.9 or 2.0 and has Ruby GTK bindings. That'd be Windows, Linux, Mac.
- * For now, you'll need to know how to use the command line.
-
-Installation
-------------
+Installation on Linux, Mac
+--------------------------
 
  * Download the git repo.
- * Install Ruby 1.9 or 2.0 on your machine - if you use Windows, check out http://rubyinstaller.org/
- * Run "gem install gtk3" from the command line.
+ * Install Ruby 1.9 or 2.0 on your machine.
+ * Run "gem install bundle" from the command line.
+ * Run "bundle install" from the command line which should get the dependencies you need.
+
+Installation on Windows (Native)
+--------------------------------
+
+ * Download the git repo.
+ * Install Ruby 1.9 or 2.0 on your machine from http://rubyinstaller.org/
+ * Run "gem install bundle" from the command line.
+ * Run "bundle install" from the command line which should get the dependencies you need.
+
+
+Installation on Windows (Prepackaged)
+-------------------------------------
+
+ * Download the latest prepackaged edition for Windows.
+ * Unzip it somewhere.
+
 
 Running RubyPI
 --------------
 
- * Run "ruby ruby_pi.rb" from the command line.
-
+ * Linux, OSX, Windows Native: Run "ruby ruby_pi.rb" from the command line.
+ * Windows Prepackaged: Run rubypi.exe, which will auto-unpack Ruby and run RubyPI. Because of this unpacking, please ignore any antivirus warnings.
