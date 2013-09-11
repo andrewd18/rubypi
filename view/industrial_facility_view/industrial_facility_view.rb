@@ -60,8 +60,8 @@ class IndustrialFacilityView < Gtk::Box
 	@stored_products_vbox.pack_start(@factory_building_image, :expand => false)
 	@stored_products_vbox.pack_start(stored_products_label, :expand => false)
 	@stored_products_vbox.pack_start(@stored_products_table, :expand => false)
-	stored_producs_frame = Gtk::Frame.new
-	stored_producs_frame.add(@stored_products_vbox)
+	stored_products_frame = Gtk::Frame.new
+	stored_products_frame.add(@stored_products_vbox)
 	
 	
 	output_building_label = Gtk::Label.new("Output Building")
@@ -92,7 +92,7 @@ class IndustrialFacilityView < Gtk::Box
 	
 	# Pack columns left to right.
 	bottom_row.pack_start(input_building_frame, :expand => false)
-	bottom_row.pack_start(stored_producs_frame, :expand => true)
+	bottom_row.pack_start(stored_products_frame, :expand => true)
 	bottom_row.pack_start(output_building_frame, :expand => false)
 	
 	self.pack_start(bottom_row, :expand => true)
