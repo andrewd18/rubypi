@@ -1,3 +1,11 @@
+Version 0.1.0
+=============
+* Reworked the PI Config View UI. Now shows products used & created per hour.
+* Added products used & created per hour to planet view.
+* Resolved issue with planet view where maximizing the window, creating a building, and shrinking it would hide a building.
+* Initial announcement to Reddit.
+
+
 Version 0.0.12
 ==============
 * You can now add and delete extractor heads from the planet view.

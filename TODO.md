@@ -1,9 +1,7 @@
 Core Features
 =============
 
-* Add cycle times to all buildings.
-* Add a "pipeline view" or a "chain view" or something that shows the product build cycle. Planet scope only.
-* Add product unit and volume output per hour per building.
+* Add a visual "pipeline view" or a "chain view" or something that shows the overall product build cycle. Planet scope only.
 * Warn when there are product overages in the pipeline.
 * Warn when there are product underages in the pipeline.
 * Hook up to EVE character skills.
@@ -16,18 +14,15 @@ User Interface Improvements
 * When adding product, let user type in value (along with slider).
 * When removing product, let user type in value (along with slider).
 * When transferring product, let user type in value (along with slider).
-* Separate one-time build cost from recurring import/export costs.
-* Create a View Column Renderer that auto-converts raw ISK values to a human-readable value. Use for all views with isk columns.
+* Show product unit and volume output per hour in the stats pane of the appropriate building editing screens.
 * Images
   - Brighten the planet screenshots across the board. Lava, for example, just looks black.
   - Add images for every product. Show where appropriate.
 * Building Drawing Area
-  - Add tooltips on hover.
+  - Add tooltips on hover or maybe a show details button that pops up a new window.
+  - Selectively choose when the highlight ring appears.
+  - Don't let the user expedited transfer products from a building to itself. Lawl.
   - Do something visual on two-step building processes (adding, editing, or deleting links, expedited transfers) that shows you're on step two.
-* Transfer Products Dialog
-  - Add a warning when the user tries to transfer products to a destination that isn't selected yet.
-  - Add a warning when the user tries to transfer products from one building to itself.
-
 
 
 Code Cleanup
@@ -49,8 +44,6 @@ Code Cleanup
 Packaging & Release
 ===================
 
-* Windows
-  - Research why the EXE is so huge.
 * Mac
   - Lure in some Mac beta testers. Cookies? Apple fritters?
 
