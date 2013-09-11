@@ -21,15 +21,21 @@ class BuildingLayoutWidget < Gtk::Frame
 	drawing_tool_palette_window.add_with_viewport(@drawing_tool_palette)
 	
 	
+	# NOTE: Do not let the @building_drawing_area expand. It should be the size it requests and nothing more.
+	# If the user's resolution is too small, let the viewport handle it with scrolling.
+	drawing_area_viewport = Gtk::ScrolledWindow.new
+	drawing_area_viewport.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC)
+	drawing_area_viewport.add_with_viewport(@building_drawing_area)
+	
+	
 	drawing_area_vbox = Gtk::Box.new(:vertical)
-	drawing_area_vbox.pack_start(@building_drawing_area, :expand => true)
-	drawing_area_vbox.pack_start(@building_drawing_area_settings_widget, :expand => false)
-	drawing_area_frame = Gtk::Frame.new
-	drawing_area_frame.add(drawing_area_vbox)
+	drawing_area_vbox.pack_start(drawing_area_viewport, :expand => true)
+	drawing_area_vbox.pack_end(@building_drawing_area_settings_widget, :expand => false)
+	
 	
 	hbox = Gtk::Box.new(:horizontal)
 	hbox.pack_start(drawing_tool_palette_window, :expand => false)
-	hbox.pack_start(drawing_area_frame, :expand => true, :fill => true)
+	hbox.pack_start(drawing_area_vbox, :expand => true, :fill => true)
 	
 	self.add(hbox)
 	

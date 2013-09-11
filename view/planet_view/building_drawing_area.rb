@@ -40,7 +40,7 @@ class BuildingDrawingArea < Gtk::DrawingArea
                       "expedited_transfer",
                       "import_export"]
   
-  attr_accessor :planet_model
+  attr_reader :planet_model
   attr_reader :status_message
   
   def initialize(controller)
@@ -90,11 +90,46 @@ class BuildingDrawingArea < Gtk::DrawingArea
 	  on_release(widget, event)
 	end
 	
-	# Set size request(width in px, height in px)
-	# Request 9 buildings wide x 7 buildings tall.
-	self.set_size_request((BUILDING_ICON_SIZE * 9), (BUILDING_ICON_SIZE * 7))
+	self.determine_and_set_min_size
 	
 	return self
+  end
+  
+  def planet_model=(new_planet_model)
+	@planet_model = new_planet_model
+	
+	# Because the buildings could have changed positions, we may need to resize the drawing area.
+	self.determine_and_set_min_size
+  end
+  
+  def determine_and_set_min_size
+	# Drawing area can get as big as your resolution allows.
+	# However it cannot get smaller than the furthest out building (such that buildings can't scroll off the screen if you shrink it).
+	
+	# Defaults are 7 buildings high by 9 buildings wide.
+	width_request = (BUILDING_ICON_SIZE * 9)
+	height_request = (BUILDING_ICON_SIZE * 7)
+	
+	if (@planet_model != nil)
+	  # Loop through all the buildings.
+	  @planet_model.buildings.each do |building|
+		
+		# Find the max width point.
+		if (building.x_pos > width_request)
+		  # Overwrite the default width_request.
+		  width_request = building.x_pos
+		end
+		
+		# Find the max height point.
+		if (building.y_pos > height_request)
+		  # Overwrite the default height_request.
+		  height_request = building.y_pos
+		end
+	  end
+	end
+	
+	# Set the window size request.
+	self.set_size_request(width_request, height_request)
   end
   
   def set_on_click_action(string)
