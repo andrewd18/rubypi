@@ -2,8 +2,8 @@ require 'gtk3'
 
 require_relative '../common/planet_image.rb'
 require_relative '../common/building_count_table.rb'
-require_relative 'planet_import_list.rb'
-require_relative 'planet_export_list.rb'
+require_relative '../common/planet_import_list.rb'
+require_relative '../common/planet_export_list.rb'
 
 class PlanetListRow < Gtk::Box
   def initialize(controller, planet_model)
