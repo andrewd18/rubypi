@@ -43,11 +43,12 @@ class BuildingDrawingArea < Gtk::DrawingArea
   attr_reader :planet_model
   attr_reader :status_message
   
-  def initialize(controller)
+  def initialize(controller, planet_model = nil)
 	# Set up GTK stuffs.
 	super()
 	
 	@controller = controller
+	@planet_model = planet_model
 	
 	# move_building state variables
 	@add_building_class = nil
