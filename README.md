@@ -24,8 +24,8 @@ Installation on Windows (Native)
 Installation on Windows (Prepackaged)
 -------------------------------------
 
- * Download the latest prepackaged edition for Windows.
- * Unzip it somewhere.
+ * Download the latest prepackaged edition for Windows from http://andrewd18.com/rubypi/
+ * Unzip it somewhere. Requires 7zip (available at http://www.7-zip.org/).
 
 
 Running RubyPI
