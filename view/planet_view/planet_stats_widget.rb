@@ -48,7 +48,7 @@ class PlanetStatsWidget < Gtk::Box
 	@cpu_used_progress_bar = Gtk::ProgressBar.new
 	@cpu_used_progress_bar.show_text = true # WORKAROUND - If you don't force this to true, text is never shown.
 	
-	isk_cost_label = Gtk::Label.new("ISK Cost:")
+	isk_cost_label = Gtk::Label.new("Cost to Build:")
 	@isk_cost_value_label = IskAmountLabel.new
 	
 	# Pack child widgets into planet_stats_table, one row at a time.
