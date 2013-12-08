@@ -41,7 +41,7 @@ class Planet
                             
                             "Ice" => ["Aqueous Liquids",
                                       "Heavy Metals",
-                                      "Micro Organisms",
+                                      "Microorganisms",
                                       "Planktic Colonies",
                                       "Noble Gas"],
                             
@@ -55,11 +55,11 @@ class Planet
                                          "Base Metals",
                                          "Noble Metals",
                                          "Carbon Compounds",
-                                         "Micro Organisms"],
+                                         "Microorganisms"],
                             
                             "Temperate" => ["Aqueous Liquids",
                                             "Carbon Compounds",
-                                            "Micro Organisms",
+                                            "Microorganisms",
                                             "Complex Organisms",
                                             "Autotrophs"],
                             
@@ -71,7 +71,7 @@ class Planet
                             
                             "Oceanic" => ["Aqueous Liquids",
                                           "Carbon Compounds",
-                                          "Micro Organisms",
+                                          "Microorganisms",
                                           "Complex Organisms",
                                           "Planktic Colonies"],
                             
