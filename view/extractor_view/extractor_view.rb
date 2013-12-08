@@ -38,6 +38,7 @@ class ExtractorView < Gtk::Box
 	# Extractor Details Frame
 	
 	# Left column.
+	extractor_label = Gtk::Label.new("Extractor")
 	extract_label = Gtk::Label.new("Extract:")
 	
 	@product_combo_box = SimpleComboBox.new
@@ -58,11 +59,19 @@ class ExtractorView < Gtk::Box
 	
 	# Pack columns top to bottom
 	extractor_column = Gtk::Box.new(:vertical)
-	extractor_column.pack_start(extract_label, :expand => false)
-	extractor_column.pack_start(@product_combo_box, :expand => false)
+	extractor_column.pack_start(extractor_label, :expand => false)
 	extractor_column.pack_start(@building_image, :expand => false)
-	extractor_column.pack_start(extraction_time_label, :expand => false)
-	extractor_column.pack_start(@extraction_time_scale, :expand => false)
+	
+											# rows, columns
+	extractor_options_table = SimpleTable.new(3, 2)
+	
+	# attach(widget, row, column)
+	extractor_options_table.attach(extract_label, 1, 1)
+	extractor_options_table.attach(@product_combo_box, 1, 2)
+	extractor_options_table.attach(extraction_time_label, 2, 1)
+	extractor_options_table.attach(@extraction_time_scale, 2, 2)
+	
+	extractor_column.pack_start(extractor_options_table, :expand => false)
 	
 	extractor_column_frame = Gtk::Frame.new
 	extractor_column_frame.add(extractor_column)
