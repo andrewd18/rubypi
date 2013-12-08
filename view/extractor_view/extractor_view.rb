@@ -19,7 +19,7 @@ class ExtractorView < Gtk::Box
 	# Top row should contain a label stating what view we're looking at, followed by an UP button.
 	top_row = Gtk::Box.new(:horizontal)
 	
-	building_view_label = Gtk::Label.new("Launchpad View")
+	building_view_label = Gtk::Label.new("Extractor View")
 	
 	# Add our up button.
 	@up_button = UpToPlanetViewButton.new(@controller)
@@ -34,72 +34,66 @@ class ExtractorView < Gtk::Box
 	bottom_row = Gtk::Box.new(:horizontal)
 	
 	# Create widgets.
+	
+	# Extractor Details Frame
+	
 	# Left column.
 	extract_label = Gtk::Label.new("Extract:")
-	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
-	output_building_label = Gtk::Label.new("Output to:")
 	
-	
-	# Center column.
 	@product_combo_box = SimpleComboBox.new
+	@building_image = BuildingImage.new
+	
+	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
+	@extraction_time_scale = SetExtractionTimeSlider.new
+	
+	
+	
+	# Right column
+	output_building_label = Gtk::Label.new("Output Building")
+	
+	@output_building_combo_box = SelectBuildingComboBox.new
+	@output_building_image = BuildingImage.new
+	@output_building_stored_products_widget = StoredProductsWidget.new(@controller)
+	
+	
+	# Pack columns top to bottom
+	extractor_column = Gtk::Box.new(:vertical)
+	extractor_column.pack_start(extract_label, :expand => false)
+	extractor_column.pack_start(@product_combo_box, :expand => false)
+	extractor_column.pack_start(@building_image, :expand => false)
+	extractor_column.pack_start(extraction_time_label, :expand => false)
+	extractor_column.pack_start(@extraction_time_scale, :expand => false)
+	
+	extractor_column_frame = Gtk::Frame.new
+	extractor_column_frame.add(extractor_column)
+	
+	
+	output_building_vbox = Gtk::Box.new(:vertical)
+	output_building_vbox.pack_start(output_building_label, :expand => false)
+	output_building_vbox.pack_start(@output_building_combo_box, :expand => false)
+	output_building_vbox.pack_start(@output_building_image, :expand => false)
+	output_building_vbox.pack_start(@output_building_stored_products_widget, :expand => true)
+	
+	output_building_frame = Gtk::Frame.new
+	output_building_frame.add(output_building_vbox)
+	
+	# Pack columns into the row, left to right.
+	bottom_row.pack_start(extractor_column_frame, :expand => true)
+	bottom_row.pack_start(output_building_frame, :expand => false)
+	
+	
+	# Set up signals.
 	@on_product_change_signal = @product_combo_box.signal_connect("changed") do |combo_box|
 	  @controller.set_extracted_product_name(combo_box.selected_item)
 	end
 	
-	@output_building_combo_box = SelectBuildingComboBox.new
-	@on_output_building_change_signal = @output_building_combo_box.signal_connect("changed") do |combo_box|
-	  @controller.set_output_building(combo_box.selected_item)
-	end
-	
-	@extraction_time_scale = SetExtractionTimeSlider.new
 	@on_extraction_time_change_signal = @extraction_time_scale.signal_connect("value-changed") do |combo_box|
 	  @controller.set_extraction_time_scale(combo_box.value)
 	end
 	
-	# Right column.
-	@building_image = BuildingImage.new
-	
-	
-	                                    # rows, columns, homogenous?
-	extractor_options_table = SimpleTable.new(3, 2, false)
-	
-	# Product row
-	extractor_options_table.attach(extract_label, 2, 1)
-	extractor_options_table.attach(@product_combo_box, 2, 2)
-	
-	# Time row
-	extractor_options_table.attach(extraction_time_label, 3, 1)
-	extractor_options_table.attach(@extraction_time_scale, 3, 2)
-	
-	# Output row
-	extractor_options_table.attach(output_building_label, 4, 1)
-	extractor_options_table.attach(@output_building_combo_box, 4, 2)
-	
-	# By wrapping the table in a vertical box, we ensure that the vbox expands
-	# and the table does not.
-	extractor_options_table_vbox = Gtk::Box.new(:vertical)
-	extractor_options_table_vbox.pack_start(extractor_options_table, :expand => false)
-	
-	# Finally, add a decorator frame around it.
-	extractor_options_table_frame = Gtk::Frame.new
-	extractor_options_table_frame.add(extractor_options_table_vbox)
-	
-	
-	
-	
-	# Right column.
-	# By wrapping the image in a vertical box, we ensure that the vbox expands
-	# and the image does not.
-	building_image_column = Gtk::Box.new(:vertical)
-	building_image_column.pack_start(@building_image, :expand => false)
-	
-	# Finally, add a decorator frame around it.
-	building_image_frame = Gtk::Frame.new
-	building_image_frame.add(building_image_column)
-	
-	# Pack columns left to right.
-	bottom_row.pack_start(extractor_options_table_frame, :expand => true)
-	bottom_row.pack_start(building_image_frame, :expand => false)
+	@on_output_building_change_signal = @output_building_combo_box.signal_connect("changed") do |combo_box|
+	  @controller.set_output_building(combo_box.selected_item)
+	end
 	
 	
 	self.pack_start(bottom_row, :expand => true)
@@ -113,6 +107,10 @@ class ExtractorView < Gtk::Box
 	@building_model = new_building_model
 	
 	@building_image.building_model = new_building_model
+	
+	unless (@building_model.production_cycle_output_building == nil)
+	  @output_building_image.building_model = @building_model.production_cycle_output_building
+	end
 	
 	# WORKAROUND
 	# I wrap the view-update events in signal_handler_block(id) closures.
