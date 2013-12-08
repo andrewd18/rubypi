@@ -105,24 +105,10 @@ class IndustrialFacilityView < Gtk::Box
   def building_model=(new_building_model)
 	@building_model = new_building_model
 	
-	# Change images.
-	@factory_building_image.building_model = new_building_model
 	
+	# Input building.
 	unless (@building_model.production_cycle_input_building == nil)
 	  @input_building_image.building_model = @building_model.production_cycle_input_building
-	end
-	
-	unless (@building_model.production_cycle_output_building == nil)
-	  @output_building_image.building_model = @building_model.production_cycle_output_building
-	end
-	
-	# WORKAROUND
-	# I wrap the view-update events in signal_handler_block(id) closures.
-	# This temporarily nullifies the objects from sending GTK signal I previously hooked up.
-	
-	@schematic_combo_box.signal_handler_block(@on_schematic_change_signal) do
-	  @schematic_combo_box.items=(@building_model.accepted_schematic_names)
-	  @schematic_combo_box.selected_item = @building_model.schematic_name
 	end
 	
 	@input_building_combo_box.signal_handler_block(@on_input_building_change_signal) do
@@ -130,12 +116,33 @@ class IndustrialFacilityView < Gtk::Box
 	  @input_building_combo_box.selected_item = @building_model.production_cycle_input_building
 	end
 	
+	@input_building_stored_products_widget.building_model = @building_model.production_cycle_input_building
+	
+	
+	
+	# Factory itself
+	@factory_building_image.building_model = @building_model
+	
+	@schematic_combo_box.signal_handler_block(@on_schematic_change_signal) do
+	  @schematic_combo_box.items=(@building_model.accepted_schematic_names)
+	  @schematic_combo_box.selected_item = @building_model.schematic_name
+	end
+	
+	create_sliders_for_stored_products
+	
+	
+	# Output building
+	unless (@building_model.production_cycle_output_building == nil)
+	  @output_building_image.building_model = @building_model.production_cycle_output_building
+	end
+	
 	@output_building_combo_box.signal_handler_block(@on_output_building_change_signal) do
 	  @output_building_combo_box.items = (@building_model.planet.aggregate_launchpads_ccs_storages)
 	  @output_building_combo_box.selected_item = @building_model.production_cycle_output_building
 	end
 	
-	create_sliders_for_stored_products
+	@output_building_stored_products_widget.building_model = @building_model.production_cycle_output_building
+	
   end
   
   def create_sliders_for_stored_products

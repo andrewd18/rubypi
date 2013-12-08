@@ -106,24 +106,13 @@ class ExtractorView < Gtk::Box
   def building_model=(new_building_model)
 	@building_model = new_building_model
 	
-	@building_image.building_model = new_building_model
 	
-	unless (@building_model.production_cycle_output_building == nil)
-	  @output_building_image.building_model = @building_model.production_cycle_output_building
-	end
-	
-	# WORKAROUND
-	# I wrap the view-update events in signal_handler_block(id) closures.
-	# This temporarily nullifies the objects from sending GTK signal I previously hooked up.
+	# Extractor itself.
+	@building_image.building_model = @building_model
 	
 	@product_combo_box.signal_handler_block(@on_product_change_signal) do
 	  @product_combo_box.items = (@building_model.planet.pzero_product_list)
 	  @product_combo_box.selected_item = (@building_model.product_name)
-	end
-	
-	@output_building_combo_box.signal_handler_block(@on_output_building_change_signal) do
-	  @output_building_combo_box.items = (@building_model.planet.aggregate_launchpads_ccs_storages)
-	  @output_building_combo_box.selected_item = @building_model.production_cycle_output_building
 	end
 	
 	@extraction_time_scale.signal_handler_block(@on_extraction_time_change_signal) do
@@ -132,6 +121,18 @@ class ExtractorView < Gtk::Box
 	  else
 		@extraction_time_scale.value = @building_model.extraction_time_in_hours
 	  end
+	end
+	
+	# Output building.
+	unless (@building_model.production_cycle_output_building == nil)
+	  @output_building_image.building_model = @building_model.production_cycle_output_building
+	end
+	
+	@output_building_stored_products_widget.building_model = @building_model.production_cycle_output_building
+	
+	@output_building_combo_box.signal_handler_block(@on_output_building_change_signal) do
+	  @output_building_combo_box.items = (@building_model.planet.aggregate_launchpads_ccs_storages)
+	  @output_building_combo_box.selected_item = @building_model.production_cycle_output_building
 	end
 	
   end
