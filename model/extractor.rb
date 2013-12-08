@@ -79,6 +79,8 @@ class Extractor < PlanetaryBuilding
   MIN_EXTRACTION_TIME_IN_HOURS = 1.0
   MAX_EXTRACTION_TIME_IN_HOURS = 336.0
   
+  MAX_EXTRACTION_QUANTITY_PER_HOUR = 250000
+  
   EXTRACTS_P_LEVEL = 0
   
   def initialize(x_pos = 0.0, y_pos = 0.0, product_name = nil)
@@ -240,6 +242,8 @@ class Extractor < PlanetaryBuilding
   def quantity_extracted_per_hour=(new_quantity)
 	if ((new_quantity.nil?) or (new_quantity < 0))
 		@quantity_extracted_per_hour = 0
+	elsif (new_quantity > MAX_EXTRACTION_QUANTITY_PER_HOUR)
+		@quantity_extracted_per_hour = MAX_EXTRACTION_QUANTITY_PER_HOUR
 	else
 		@quantity_extracted_per_hour = new_quantity
 	end

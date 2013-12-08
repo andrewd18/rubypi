@@ -538,6 +538,15 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(0, @building.quantity_extracted_per_hour)
   end
   
+  def test_extractor_sets_quantity_extracted_per_hour_to_two_hundred_fifty_k_if_given_huge_number
+	@building.quantity_extracted_per_hour = 500
+	assert_equal(500, @building.quantity_extracted_per_hour)
+	
+	@building.quantity_extracted_per_hour = 1234567890
+	
+	assert_equal(250000, @building.quantity_extracted_per_hour)
+  end
+  
   def test_extractor_can_give_output_products_per_hour
 	@building.product_name = "Carebear Tears"
 	@building.quantity_extracted_per_hour = 500
