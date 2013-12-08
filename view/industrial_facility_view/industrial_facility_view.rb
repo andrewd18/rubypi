@@ -20,7 +20,7 @@ class IndustrialFacilityView < Gtk::Box
 	# Top row should contain a label stating what view we're looking at, followed by an UP button.
 	top_row = Gtk::Box.new(:horizontal)
 	
-	building_view_label = Gtk::Label.new("Storage Facility View")
+	building_view_label = Gtk::Label.new("Industrial Facility View")
 	
 	# Add our up button.
 	@up_button = UpToPlanetViewButton.new(@controller)
