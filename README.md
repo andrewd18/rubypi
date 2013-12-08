@@ -3,6 +3,15 @@ RubyPI
 
 An EVE Online Planetary Interaction tool, written in Ruby.
 
+Install Ruby from source on Linux, Mac
+--------------------------------------
+
+* Download ruby source: http://cache.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p247.tar.gz
+* tar xzf ruby-2.0.0-p247.tar.gz
+* cd ruby-2.0.0-p247
+* ./configure
+* make
+* sudo make install
 
 Installation on Linux, Mac
 --------------------------
