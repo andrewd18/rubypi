@@ -20,6 +20,10 @@ class ExtractorController
 	@building_model.product_name = new_product_name
   end
   
+  def set_extracted_quantity(new_quantity)
+	@building_model.quantity_extracted_per_hour = new_quantity
+  end
+  
   def set_output_building(new_building)
 	@building_model.production_cycle_output_building = new_building
   end

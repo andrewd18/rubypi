@@ -39,13 +39,16 @@ class ExtractorView < Gtk::Box
 	
 	# Left column.
 	extractor_label = Gtk::Label.new("Extractor")
-	extract_label = Gtk::Label.new("Extract:")
-	
-	@product_combo_box = SimpleComboBox.new
 	@building_image = BuildingImage.new
+	
+	extract_label = Gtk::Label.new("Extract:")
+	@product_combo_box = SimpleComboBox.new
 	
 	extraction_time_label = Gtk::Label.new("Extraction Time in Hours:")
 	@extraction_time_scale = SetExtractionTimeSlider.new
+	
+	extracted_quantity_label = Gtk::Label.new("Extracted Quantity Per Hour:")
+	@extracted_quantity_slider = Gtk::Scale.new(:horizontal, 0, Extractor::MAX_EXTRACTION_QUANTITY_PER_HOUR, 1)
 	
 	
 	
@@ -70,6 +73,8 @@ class ExtractorView < Gtk::Box
 	extractor_options_table.attach(@product_combo_box, 1, 2)
 	extractor_options_table.attach(extraction_time_label, 2, 1)
 	extractor_options_table.attach(@extraction_time_scale, 2, 2)
+	extractor_options_table.attach(extracted_quantity_label, 3, 1)
+	extractor_options_table.attach(@extracted_quantity_slider, 3, 2)
 	
 	extractor_column.pack_start(extractor_options_table, :expand => false)
 	
@@ -96,8 +101,12 @@ class ExtractorView < Gtk::Box
 	  @controller.set_extracted_product_name(combo_box.selected_item)
 	end
 	
-	@on_extraction_time_change_signal = @extraction_time_scale.signal_connect("value-changed") do |combo_box|
-	  @controller.set_extraction_time_scale(combo_box.value)
+	@on_extraction_time_change_signal = @extraction_time_scale.signal_connect("value-changed") do |scale|
+	  @controller.set_extraction_time_scale(scale.value)
+	end
+	
+	@on_extracted_quantity_change_signal = @extracted_quantity_slider.signal_connect("value-changed") do |scale|
+	  @controller.set_extracted_quantity(scale.value)
 	end
 	
 	@on_output_building_change_signal = @output_building_combo_box.signal_connect("changed") do |combo_box|
@@ -130,6 +139,10 @@ class ExtractorView < Gtk::Box
 	  else
 		@extraction_time_scale.value = @building_model.extraction_time_in_hours
 	  end
+	end
+	
+	@extracted_quantity_slider.signal_handler_block(@on_extracted_quantity_change_signal) do
+	  @extracted_quantity_slider.value = @building_model.quantity_extracted_per_hour
 	end
 	
 	# Output building.
