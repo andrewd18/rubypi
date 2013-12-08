@@ -89,6 +89,7 @@ class Extractor < PlanetaryBuilding
 	@isk_cost = ISK_COST
 	@product_name = product_name
 	@extraction_time = nil
+	@quantity_extracted_per_hour = 0
 	
 	@extractor_heads = Array.new
 	
@@ -232,6 +233,18 @@ class Extractor < PlanetaryBuilding
 	return @product_name
   end
   
+  def quantity_extracted_per_hour
+	return @quantity_extracted_per_hour
+  end
+  
+  def quantity_extracted_per_hour=(new_quantity)
+	if ((new_quantity.nil?) or (new_quantity < 0))
+		@quantity_extracted_per_hour = 0
+	else
+		@quantity_extracted_per_hour = new_quantity
+	end
+  end
+  
   def extraction_time
 	return @extraction_time
   end
@@ -278,5 +291,21 @@ class Extractor < PlanetaryBuilding
   def extraction_time_in_days=(new_extraction_time)
 	new_extraction_time_in_hours = (new_extraction_time * 24.0)
 	self.extraction_time=(new_extraction_time_in_hours)
+  end
+  
+  def output_products_per_hour
+	if (@product_name == nil)
+		return {}
+	else
+		return {@product_name => (@quantity_extracted_per_hour)}
+	end
+  end
+  
+  def output_products_total
+	if (@product_name == nil)
+		return {}
+	else
+		return {@product_name => (@quantity_extracted_per_hour * @extraction_time)}
+	end
   end
 end

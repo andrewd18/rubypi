@@ -516,6 +516,47 @@ class TestCaseExtractor < Test::Unit::TestCase
 	assert_equal(4.0, @building.production_cycle_time_in_hours)
   end
   
+  #
+  # Quantity
+  #
+  def test_extractor_quantity_extracted_per_hour_is_zero_if_not_set
+	assert_equal(0, @building.quantity_extracted_per_hour)
+  end
+  
+  def test_extractor_can_set_quantity_extracted_per_hour
+	@building.quantity_extracted_per_hour = 500
+	
+	assert_equal(500, @building.quantity_extracted_per_hour)
+  end
+  
+  def test_extractor_sets_quantity_extracted_per_hour_to_zero_if_given_negative_number
+	@building.quantity_extracted_per_hour = 500
+	assert_equal(500, @building.quantity_extracted_per_hour)
+	
+	@building.quantity_extracted_per_hour = -1234
+	
+	assert_equal(0, @building.quantity_extracted_per_hour)
+  end
+  
+  def test_extractor_can_give_output_products_per_hour
+	@building.product_name = "Carebear Tears"
+	@building.quantity_extracted_per_hour = 500
+	
+	expected_hash = {"Carebear Tears" => 500}
+	
+	assert_equal(expected_hash, @building.output_products_per_hour)
+  end
+  
+  def test_extractor_can_give_output_products_total
+	@building.product_name = "Carebear Tears"
+	@building.quantity_extracted_per_hour = 500
+	@building.extraction_time_in_hours = 240
+	
+	expected_hash = {"Carebear Tears" => (500 * 240)}
+	
+	assert_equal(expected_hash, @building.output_products_total)
+  end
+  
   # 
   # "Observable" tests
   # 
