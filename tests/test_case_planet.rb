@@ -862,7 +862,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_true(planet.pzero_product_list.include?("Autotrophs"))
 	assert_true(planet.pzero_product_list.include?("Carbon Compounds"))
-	assert_true(planet.pzero_product_list.include?("Micro Organisms"))
+	assert_true(planet.pzero_product_list.include?("Microorganisms"))
 	assert_true(planet.pzero_product_list.include?("Complex Organisms"))
 	assert_true(planet.pzero_product_list.include?("Aqueous Liquids"))
 	
@@ -874,7 +874,7 @@ class TestCasePlanet < Test::Unit::TestCase
 	
 	assert_true(planet.has_pzero?("Autotrophs"))
 	assert_true(planet.has_pzero?("Carbon Compounds"))
-	assert_true(planet.has_pzero?("Micro Organisms"))
+	assert_true(planet.has_pzero?("Microorganisms"))
 	assert_true(planet.has_pzero?("Complex Organisms"))
 	assert_true(planet.has_pzero?("Aqueous Liquids"))
 	
