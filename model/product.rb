@@ -1,8 +1,12 @@
 require 'yaml'
+require 'net/http'
+require 'rexml/document'
 
 class Product
   attr_reader :name
   attr_reader :p_level
+  attr_reader :eve_db_id
+  attr_accessor :eve_central_median
   
   # Values confirmed as of Odyssey 1.0.10.
   
@@ -31,11 +35,17 @@ class Product
   end
   
   def self.find_by_name(searched_name)
+	# Find returns the first matching instance or nil.
 	@@product_instances.find {|instance| instance.name == searched_name}
   end
   
   def self.find_by_p_level(searched_p_level)
 	@@product_instances.select {|instance| instance.p_level == searched_p_level}
+  end
+  
+  def self.find_by_eve_db_id(searched_db_id)
+	# Find returns the first matching instance or nil.
+	@@product_instances.find {|instance| instance.eve_db_id == searched_db_id}
   end
   
   def self.find_or_create(name, p_level)
@@ -77,8 +87,63 @@ class Product
 	
 	return @@product_instances
   end
+  
+  def self.update_eve_central_values
+	return false unless (@@product_instances != [])
+	
+	# Create params list.
+	product_ids = []
+	
+	@@product_instances.each do |product|
+		if (product.eve_db_id != nil)
+			product_ids << product.eve_db_id
+		end
+	end
+	
+	marketstat_url = URI('http://api.eve-central.com/api/marketstat')
+	url_params = { :typeid => product_ids }
+	
+	marketstat_url.query = URI.encode_www_form(url_params)
+	
+	# Pull down XML.
+	# 
+	http_result = Net::HTTP.get_response(marketstat_url)
+	
+	raw_xml_output = ""
+	
+	if http_result.is_a?(Net::HTTPSuccess)
+		raw_xml_output = http_result.body
+	else
+		return false
+	end
+	
+	rexml_doc = REXML::Document.new raw_xml_output
+	
+	# For each XML element within the marketstat tag...
+	rexml_doc.elements.each("evec_api/marketstat/type") do |type_tag|
+		
+		# Get the ID. This returns a string.
+		type_id = type_tag.attributes["id"]
+		
+		# Find the matching product instance.
+		product_instance = self.find_by_eve_db_id(type_id.to_i)
+		
+		if (product_instance.nil?)
+		  puts "Unknown type_id: #{type_id}, #{type_id.class}"
+		else
+		  # Update the product instance with the eve_central median value.
+		  tag_value = type_tag.elements["all/median"].text
+		  product_instance.eve_central_median = tag_value.to_f
+		end
+	end
+	
+	# Force a save to the Products.yml file.
+	self.save_to_yaml
+	
+	return true
+  end
 
-  def initialize(name, p_level)
+  def initialize(name, p_level, eve_db_id = nil, eve_central_median = nil)
 	existing_product_with_same_name = self.class.find_by_name(name)
 	raise ArgumentError, "A product with the name \"#{name}\" already exists." unless existing_product_with_same_name.nil?
 	
@@ -89,6 +154,8 @@ class Product
 	
 	# Ok, it's a valid level.
 	@p_level = p_level
+	@eve_db_id = eve_db_id
+	@eve_central_value = eve_central_median
 	
 	@@product_instances << self
 	
