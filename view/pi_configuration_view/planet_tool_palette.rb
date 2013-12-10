@@ -2,8 +2,6 @@
 
 require 'gtk3'
 
-require_relative 'refresh_eve_central_data_dialog.rb'
-
 require_relative '../../model/product.rb'
 
 class PlanetToolPalette < Gtk::Toolbar
