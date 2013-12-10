@@ -588,6 +588,15 @@ class Planet
 	return output_products_hash
   end
   
+  def adjusted_products_per_hour
+	adjusted_hash = {}
+	
+	adjusted_hash.merge!(self.output_products_per_hour){|product_name, adjusted_val, created_val| adjusted_val + created_val}
+	adjusted_hash.merge!(self.input_products_per_hour){|product_name, adjusted_val, used_val| adjusted_val - used_val}
+	
+	return adjusted_hash
+  end
+  
   def remove_planet
 	# Lean on parent pi_configuration function.
 	@pi_configuration.remove_planet(self)
