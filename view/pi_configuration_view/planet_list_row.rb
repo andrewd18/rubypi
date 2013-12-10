@@ -51,10 +51,10 @@ class PlanetListRow < Gtk::Box
 	planet_import_list_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	planet_import_list_scrolled_window.add(@planet_import_list)
 	planet_import_cost_label = Gtk::Label.new("ISK Spent / Hour:")
-	planet_import_cost_value = IskAmountLabel.new()
+	@planet_import_cost_value = IskAmountLabel.new(@planet_model.input_isk_per_hour)
 	import_isk_cost_row = Gtk::Box.new(:horizontal)
 	import_isk_cost_row.pack_start(planet_import_cost_label)
-	import_isk_cost_row.pack_start(planet_import_cost_value)
+	import_isk_cost_row.pack_start(@planet_import_cost_value)
 	
 	planet_imports_column = Gtk::Box.new(:vertical)
 	planet_imports_column.pack_start(imports_label, :expand => false)
@@ -67,10 +67,10 @@ class PlanetListRow < Gtk::Box
 	planet_export_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	planet_export_scrolled_window.add(@planet_export_list)
 	planet_export_cost_label = Gtk::Label.new("ISK Created / Hour:")
-	planet_export_cost_value = IskAmountLabel.new()
+	@planet_export_cost_value = IskAmountLabel.new(@planet_model.output_isk_per_hour)
 	export_isk_cost_row = Gtk::Box.new(:horizontal)
 	export_isk_cost_row.pack_start(planet_export_cost_label)
-	export_isk_cost_row.pack_start(planet_export_cost_value)
+	export_isk_cost_row.pack_start(@planet_export_cost_value)
 	
 	planet_exports_column = Gtk::Box.new(:vertical)
 	planet_exports_column.pack_start(exports_label, :expand => false)
@@ -84,10 +84,10 @@ class PlanetListRow < Gtk::Box
 	planet_adjusted_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	planet_adjusted_scrolled_window.add(@planet_adjusted_list)
 	planet_adjusted_cost_label = Gtk::Label.new("Adj. ISK / Hour:")
-	planet_adjusted_cost_value = IskAmountLabel.new()
+	@planet_adjusted_cost_value = IskAmountLabel.new(@planet_model.adjusted_isk_per_hour)
 	adjusted_isk_cost_row = Gtk::Box.new(:horizontal)
 	adjusted_isk_cost_row.pack_start(planet_adjusted_cost_label)
-	adjusted_isk_cost_row.pack_start(planet_adjusted_cost_value)
+	adjusted_isk_cost_row.pack_start(@planet_adjusted_cost_value)
 	
 	
 	planet_adjusted_column = Gtk::Box.new(:vertical)
@@ -114,5 +114,9 @@ class PlanetListRow < Gtk::Box
 	@planet_image.planet_model = @planet_model
 	@planet_buildings_box.planet_model = @planet_model
 	@planet_import_list.planet_model = @planet_model
+	
+	@planet_import_cost_value.isk_value = @planet_model.input_isk_per_hour
+	@planet_export_cost_value.isk_value = @planet_model.output_isk_per_hour
+	@planet_adjusted_cost_value.isk_value = @planet_model.adjusted_isk_per_hour
   end
 end

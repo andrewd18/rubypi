@@ -7,6 +7,7 @@ require_relative 'up_to_pi_config_button.rb'
 
 require_relative '../common/planet_import_list.rb'
 require_relative '../common/planet_export_list.rb'
+require_relative '../common/isk_amount_label.rb'
 
 require_relative '../gtk_helpers/clear_sort_button.rb'
 
@@ -49,22 +50,32 @@ class PlanetView < Gtk::Box
 	planet_import_list_scrolled_window = Gtk::ScrolledWindow.new
 	planet_import_list_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	planet_import_list_scrolled_window.add(@planet_import_list)
+	@planet_import_isk_per_hour = IskAmountLabel.new()
 	
 	planet_import_frame = Gtk::Frame.new
 	planet_import_vbox = Gtk::Box.new(:vertical)
 	planet_import_vbox.pack_start(Gtk::Label.new("Products Used / Hour"), :expand => false)
 	planet_import_vbox.pack_start(planet_import_list_scrolled_window, :expand => true)
+	import_isk_row = Gtk::Box.new(:horizontal)
+	import_isk_row.pack_start(Gtk::Label.new("Isk Cost / Hour: "), :expand => false)
+	import_isk_row.pack_start(@planet_import_isk_per_hour, :expand => true)
+	planet_import_vbox.pack_start(import_isk_row, :expand => false)
 	planet_import_frame.add(planet_import_vbox)
 	
 	@planet_export_list = PlanetExportList.new(@planet_model)
 	planet_export_list_scrolled_window = Gtk::ScrolledWindow.new
 	planet_export_list_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	planet_export_list_scrolled_window.add(@planet_export_list)
+	@planet_export_isk_per_hour = IskAmountLabel.new()
 	
 	planet_export_frame = Gtk::Frame.new
 	planet_export_vbox = Gtk::Box.new(:vertical)
 	planet_export_vbox.pack_start(Gtk::Label.new("Products Created / Hour"), :expand => false)
 	planet_export_vbox.pack_start(planet_export_list_scrolled_window, :expand => true)
+	export_isk_row = Gtk::Box.new(:horizontal)
+	export_isk_row.pack_start(Gtk::Label.new("Isk Created / Hour: "), :expand => false)
+	export_isk_row.pack_start(@planet_export_isk_per_hour, :expand => true)
+	planet_export_vbox.pack_start(export_isk_row, :expand => false)
 	planet_export_frame.add(planet_export_vbox)
 	
 	right_column_vbox = Gtk::Box.new(:vertical)
@@ -95,5 +106,7 @@ class PlanetView < Gtk::Box
 	@poco_stats_widget.planet_model = (@planet_model)
 	@planet_import_list.planet_model = (@planet_model)
 	@planet_export_list.planet_model = (@planet_model)
+	@planet_import_isk_per_hour.isk_value = (@planet_model.input_isk_per_hour)
+	@planet_export_isk_per_hour.isk_value = (@planet_model.output_isk_per_hour)
   end
 end

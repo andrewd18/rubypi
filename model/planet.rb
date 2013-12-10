@@ -574,6 +574,17 @@ class Planet
 	return input_products_hash
   end
   
+  def input_isk_per_hour
+	isk_value = 0.0
+	
+	input_products_per_hour.each_pair do |product_name, quantity|
+	  product = Product.find_by_name(product_name)
+	  isk_value += (quantity * product.eve_central_median)
+	end
+	
+	return isk_value
+  end
+  
   def output_products_per_hour
 	output_products_hash = {}
 	
@@ -588,6 +599,17 @@ class Planet
 	return output_products_hash
   end
   
+  def output_isk_per_hour
+	isk_value = 0.0
+	
+	output_products_per_hour.each_pair do |product_name, quantity|
+	  product = Product.find_by_name(product_name)
+	  isk_value += (quantity * product.eve_central_median)
+	end
+	
+	return isk_value
+  end
+  
   def adjusted_products_per_hour
 	adjusted_hash = {}
 	
@@ -595,6 +617,17 @@ class Planet
 	adjusted_hash.merge!(self.input_products_per_hour){|product_name, adjusted_val, used_val| adjusted_val - used_val}
 	
 	return adjusted_hash
+  end
+  
+  def adjusted_isk_per_hour
+	isk_value = 0.0
+	
+	adjusted_products_per_hour.each_pair do |product_name, quantity|
+	  product = Product.find_by_name(product_name)
+	  isk_value += (quantity * product.eve_central_median)
+	end
+	
+	return isk_value
   end
   
   def remove_planet
