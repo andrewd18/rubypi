@@ -4,6 +4,7 @@ require_relative '../common/planet_image.rb'
 require_relative '../common/building_count_table.rb'
 require_relative '../common/planet_import_list.rb'
 require_relative '../common/planet_export_list.rb'
+require_relative '../common/planet_adjusted_list.rb'
 
 class PlanetListRow < Gtk::Box
   def initialize(controller, planet_model)
@@ -49,23 +50,56 @@ class PlanetListRow < Gtk::Box
 	planet_import_list_scrolled_window = Gtk::ScrolledWindow.new
 	planet_import_list_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	planet_import_list_scrolled_window.add(@planet_import_list)
+	planet_import_cost_label = Gtk::Label.new("ISK Spent / Hour:")
+	planet_import_cost_value = IskAmountLabel.new()
+	import_isk_cost_row = Gtk::Box.new(:horizontal)
+	import_isk_cost_row.pack_start(planet_import_cost_label)
+	import_isk_cost_row.pack_start(planet_import_cost_value)
+	
 	planet_imports_column = Gtk::Box.new(:vertical)
 	planet_imports_column.pack_start(imports_label, :expand => false)
 	planet_imports_column.pack_start(planet_import_list_scrolled_window, :expand => true)
+	planet_imports_column.pack_start(import_isk_cost_row, :expand => false)
 	
 	exports_label = Gtk::Label.new("Products Created / Hour")
 	@planet_export_list = PlanetExportList.new(@planet_model)
 	planet_export_scrolled_window = Gtk::ScrolledWindow.new
 	planet_export_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
 	planet_export_scrolled_window.add(@planet_export_list)
+	planet_export_cost_label = Gtk::Label.new("ISK Created / Hour:")
+	planet_export_cost_value = IskAmountLabel.new()
+	export_isk_cost_row = Gtk::Box.new(:horizontal)
+	export_isk_cost_row.pack_start(planet_export_cost_label)
+	export_isk_cost_row.pack_start(planet_export_cost_value)
+	
 	planet_exports_column = Gtk::Box.new(:vertical)
 	planet_exports_column.pack_start(exports_label, :expand => false)
 	planet_exports_column.pack_start(planet_export_scrolled_window, :expand => true)
+	planet_exports_column.pack_start(export_isk_cost_row, :expand => false)
+	
+	
+	adjusted_label = Gtk::Label.new("Adjusted Products / Hour")
+	@planet_adjusted_list = PlanetAdjustedList.new(@planet_model)
+	planet_adjusted_scrolled_window = Gtk::ScrolledWindow.new
+	planet_adjusted_scrolled_window.set_policy(Gtk::PolicyType::NEVER, Gtk::PolicyType::AUTOMATIC)
+	planet_adjusted_scrolled_window.add(@planet_adjusted_list)
+	planet_adjusted_cost_label = Gtk::Label.new("Adj. ISK / Hour:")
+	planet_adjusted_cost_value = IskAmountLabel.new()
+	adjusted_isk_cost_row = Gtk::Box.new(:horizontal)
+	adjusted_isk_cost_row.pack_start(planet_adjusted_cost_label)
+	adjusted_isk_cost_row.pack_start(planet_adjusted_cost_value)
+	
+	
+	planet_adjusted_column = Gtk::Box.new(:vertical)
+	planet_adjusted_column.pack_start(adjusted_label, :expand => false)
+	planet_adjusted_column.pack_start(planet_adjusted_scrolled_window, :expand => true)
+	planet_adjusted_column.pack_start(adjusted_isk_cost_row, :expand => false)
 	
 	self.pack_start(planet_image_and_name_column, :padding => 5, :expand => false)
 	self.pack_start(planet_building_box_and_buttons_column, :padding => 5, :expand => false)
 	self.pack_start(planet_imports_column, :padding => 5, :expand => true)
 	self.pack_start(planet_exports_column, :padding => 5, :expand => true)
+	self.pack_start(planet_adjusted_column, :padding => 5, :expand => true)
 	
 	return self
   end
