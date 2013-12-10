@@ -2,6 +2,10 @@
 
 require 'gtk3'
 
+require_relative 'refresh_eve_central_data_dialog.rb'
+
+require_relative '../../model/product.rb'
+
 class PlanetToolPalette < Gtk::Toolbar
   def initialize(controller)
 	# Set up base GTK+ requirements.
@@ -87,11 +91,31 @@ class PlanetToolPalette < Gtk::Toolbar
 	list_of_buttons << add_plasma_planet_button
 	
 	
+	
+	second_separator = Gtk::SeparatorToolItem.new
+	list_of_buttons << second_separator
+	
+	update_eve_central_data_button = Gtk::ToolButton.new(:icon_widget => Gtk::Image.new(:file => "view/images/16x16/refresh_icon.png"), :label => "Refresh from EVE-Central")
+	update_eve_central_data_button.signal_connect("clicked") do |widget, event|
+		self.refresh_eve_central_data
+	end
+	list_of_buttons << update_eve_central_data_button
+	
 	list_of_buttons.each_with_index do |button, index|
 	  self.insert(button, index)
 	end
 	
 	return self
+  end
+  
+  def refresh_eve_central_data
+	seconds_in_an_hour = 3600
+	
+	if ((Time.now - seconds_in_an_hour) > Product.last_updated_time)
+		Product.update_eve_central_values
+	else
+		puts "Already updated in the last hour."
+	end
   end
   
   def save_to_yaml

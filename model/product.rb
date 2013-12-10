@@ -29,6 +29,7 @@ class Product
                             4 => 1350000.00}
   
   @@product_instances = Array.new
+  @@last_updated_time = nil
   
   def self.all
 	return @@product_instances
@@ -67,23 +68,30 @@ class Product
   end
   
   def self.save_to_yaml
-	abs_filepath = File.expand_path("Products.yml", File.dirname(__FILE__))
-	yaml_file = File.open(abs_filepath, "w")
-
-	yaml_file.write(YAML::dump(@@product_instances))
-
-	yaml_file.close
+	product_instance_file_path = File.expand_path("Products.yml", File.dirname(__FILE__))
+	
+	product_instance_file = File.open(product_instance_file_path, "w")
+	product_instance_file.write(YAML::dump(@@product_instances))
+	product_instance_file.close
+	
+	last_updated_file_path = File.expand_path("Products_Last_Updated_Time.yml", File.dirname(__FILE__))
+	last_updated_file = File.open(last_updated_file_path, "w")
+	last_updated_file.write(YAML::dump(Time.now))
+	last_updated_file.close
 	
 	return true
   end
   
   def self.load_from_yaml
-	abs_filepath = File.expand_path("Products.yml", File.dirname(__FILE__))
-	yaml_file = File.open(abs_filepath, "r")
-
-	@@product_instances = YAML::load(yaml_file)
-
-	yaml_file.close
+	product_instance_file_path = File.expand_path("Products.yml", File.dirname(__FILE__))
+	product_instance_file_path = File.open(product_instance_file_path, "r")
+	@@product_instances = YAML::load(product_instance_file_path)
+	product_instance_file_path.close
+	
+	last_updated_file_path = File.expand_path("Products_Last_Updated_Time.yml", File.dirname(__FILE__))
+	last_updated_file = File.open(last_updated_file_path, "r")
+	@@last_updated_time = YAML::load(last_updated_file)
+	last_updated_file.close
 	
 	return @@product_instances
   end
@@ -141,6 +149,10 @@ class Product
 	self.save_to_yaml
 	
 	return true
+  end
+  
+  def self.last_updated_time
+	return @@last_updated_time
   end
 
   def initialize(name, p_level, eve_db_id = nil, eve_central_median = nil)

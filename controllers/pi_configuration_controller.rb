@@ -70,6 +70,10 @@ class PIConfigurationController
 	self.start_observing_model
   end
   
+  def refresh_eve_central_data
+	Product.update_eve_central_values
+  end
+  
   def edit_selected_planet(planet_instance)
 	$ruby_pi_main_gtk_window.load_controller_for_model(planet_instance)
   end
