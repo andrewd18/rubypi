@@ -8,27 +8,27 @@
   name: Autotrophs
   p_level: 0
   eve_db_id: 2305
-  eve_central_median: 2.02
+  eve_central_median: 2.05
 - !ruby/object:Product
   name: Base Metals
   p_level: 0
   eve_db_id: 2267
-  eve_central_median: 1.1
+  eve_central_median: 1.08
 - !ruby/object:Product
   name: Carbon Compounds
   p_level: 0
   eve_db_id: 2288
-  eve_central_median: 2.0
+  eve_central_median: 1.96
 - !ruby/object:Product
   name: Complex Organisms
   p_level: 0
   eve_db_id: 2287
-  eve_central_median: 0.72
+  eve_central_median: 0.71
 - !ruby/object:Product
   name: Felsic Magma
   p_level: 0
   eve_db_id: 2307
-  eve_central_median: 3.04
+  eve_central_median: 3.05
 - !ruby/object:Product
   name: Heavy Metals
   p_level: 0
@@ -48,7 +48,7 @@
   name: Noble Gas
   p_level: 0
   eve_db_id: 2310
-  eve_central_median: 1.9
+  eve_central_median: 1.78
 - !ruby/object:Product
   name: Noble Metals
   p_level: 0
@@ -58,7 +58,7 @@
   name: Non-CS Crystals
   p_level: 0
   eve_db_id: 2306
-  eve_central_median: 3.31
+  eve_central_median: 3.32
 - !ruby/object:Product
   name: Planktic Colonies
   p_level: 0
@@ -68,67 +68,67 @@
   name: Reactive Gas
   p_level: 0
   eve_db_id: 2311
-  eve_central_median: 3.0
+  eve_central_median: 2.99
 - !ruby/object:Product
   name: Suspended Plasma
   p_level: 0
   eve_db_id: 2308
-  eve_central_median: 1.01
+  eve_central_median: 1.02
 - !ruby/object:Product
   name: Bacteria
   p_level: 1
   eve_db_id: 2393
-  eve_central_median: 36.01
+  eve_central_median: 38.04
 - !ruby/object:Product
   name: Biofuels
   p_level: 1
   eve_db_id: 2396
-  eve_central_median: 97.0
+  eve_central_median: 95.01
 - !ruby/object:Product
   name: Biomass
   p_level: 1
   eve_db_id: 3779
-  eve_central_median: 227.04
+  eve_central_median: 100.0
 - !ruby/object:Product
   name: Chiral Structures
   p_level: 1
   eve_db_id: 2401
-  eve_central_median: 414.51
+  eve_central_median: 414.03
 - !ruby/object:Product
   name: Electrolytes
   p_level: 1
   eve_db_id: 2390
-  eve_central_median: 290.0
+  eve_central_median: 290.06
 - !ruby/object:Product
   name: Industrial Fibers
   p_level: 1
   eve_db_id: 2397
-  eve_central_median: 349.35
+  eve_central_median: 347.01
 - !ruby/object:Product
   name: Oxidizing Compound
   p_level: 1
   eve_db_id: 2392
-  eve_central_median: 343.54
+  eve_central_median: 336.56
 - !ruby/object:Product
   name: Oxygen
   p_level: 1
   eve_db_id: 3683
-  eve_central_median: 220.03
+  eve_central_median: 220.09
 - !ruby/object:Product
   name: Plasmoids
   p_level: 1
   eve_db_id: 2389
-  eve_central_median: 206.71
+  eve_central_median: 206.72
 - !ruby/object:Product
   name: Precious Metals
   p_level: 1
   eve_db_id: 2399
-  eve_central_median: 450.66
+  eve_central_median: 450.35
 - !ruby/object:Product
   name: Proteins
   p_level: 1
   eve_db_id: 2395
-  eve_central_median: 393.05
+  eve_central_median: 390.74
 - !ruby/object:Product
   name: Reactive Metals
   p_level: 1
@@ -138,22 +138,22 @@
   name: Silicon
   p_level: 1
   eve_db_id: 9828
-  eve_central_median: 400.01
+  eve_central_median: 400.0
 - !ruby/object:Product
   name: Toxic Metals
   p_level: 1
   eve_db_id: 2400
-  eve_central_median: 298.75
+  eve_central_median: 281.02
 - !ruby/object:Product
   name: Water
   p_level: 1
   eve_db_id: 3645
-  eve_central_median: 232.71
+  eve_central_median: 214.05
 - !ruby/object:Product
   name: Biocells
   p_level: 2
   eve_db_id: 2329
-  eve_central_median: 6340.0
+  eve_central_median: 6338.97
 - !ruby/object:Product
   name: Construction Blocks
   p_level: 2
@@ -163,12 +163,12 @@
   name: Consumer Electronics
   p_level: 2
   eve_db_id: 9836
-  eve_central_median: 7307.04
+  eve_central_median: 7310.23
 - !ruby/object:Product
   name: Coolant
   p_level: 2
   eve_db_id: 9832
-  eve_central_median: 5100.0
+  eve_central_median: 5013.87
 - !ruby/object:Product
   name: Enriched Uranium
   p_level: 2
@@ -178,12 +178,12 @@
   name: Fertilizer
   p_level: 2
   eve_db_id: 3693
-  eve_central_median: 7498.98
+  eve_central_median: 7498.99
 - !ruby/object:Product
   name: Genetically Enhanced Livestock
   p_level: 2
   eve_db_id: 15317
-  eve_central_median: 100.0
+  eve_central_median: 100.5
 - !ruby/object:Product
   name: Livestock
   p_level: 2
@@ -193,12 +193,12 @@
   name: Mechanical Parts
   p_level: 2
   eve_db_id: 3689
-  eve_central_median: 101.04
+  eve_central_median: 545.3
 - !ruby/object:Product
   name: Microfiber Shielding
   p_level: 2
   eve_db_id: 2327
-  eve_central_median: 9391.83
+  eve_central_median: 9391.65
 - !ruby/object:Product
   name: Miniature Electronics
   p_level: 2
@@ -213,22 +213,22 @@
   name: Oxides
   p_level: 2
   eve_db_id: 2317
-  eve_central_median: 3200.0
+  eve_central_median: 3501.17
 - !ruby/object:Product
   name: Polyaramids
   p_level: 2
   eve_db_id: 2321
-  eve_central_median: 8361.48
+  eve_central_median: 8650.01
 - !ruby/object:Product
   name: Polytextiles
   p_level: 2
   eve_db_id: 3695
-  eve_central_median: 5200.22
+  eve_central_median: 5253.54
 - !ruby/object:Product
   name: Rocket Fuel
   p_level: 2
   eve_db_id: 9830
-  eve_central_median: 7298.99
+  eve_central_median: 7500.0
 - !ruby/object:Product
   name: Silicate Glass
   p_level: 2
@@ -243,22 +243,22 @@
   name: Supertensile Plastics
   p_level: 2
   eve_db_id: 2312
-  eve_central_median: 6849.0
+  eve_central_median: 6647.0
 - !ruby/object:Product
   name: Synthetic Oil
   p_level: 2
   eve_db_id: 3691
-  eve_central_median: 8200.0
+  eve_central_median: 8198.95
 - !ruby/object:Product
   name: Test Cultures
   p_level: 2
   eve_db_id: 2319
-  eve_central_median: 4500.06
+  eve_central_median: 4457.6
 - !ruby/object:Product
   name: Transmitter
   p_level: 2
   eve_db_id: 9840
-  eve_central_median: 7818.39
+  eve_central_median: 7800.0
 - !ruby/object:Product
   name: Viral Agent
   p_level: 2
@@ -268,22 +268,22 @@
   name: Water-Cooled CPU
   p_level: 2
   eve_db_id: 2328
-  eve_central_median: 1681.01
+  eve_central_median: 1661.01
 - !ruby/object:Product
   name: Biotech Research Reports
   p_level: 3
   eve_db_id: 2358
-  eve_central_median: 7400.0
+  eve_central_median: 7500.0
 - !ruby/object:Product
   name: Camera Drones
   p_level: 3
   eve_db_id: 2345
-  eve_central_median: 40400.0
+  eve_central_median: 44556.01
 - !ruby/object:Product
   name: Condensates
   p_level: 3
   eve_db_id: 2344
-  eve_central_median: 2.59
+  eve_central_median: 2.44
 - !ruby/object:Product
   name: Cryoprotectant Solution
   p_level: 3
@@ -308,12 +308,12 @@
   name: Hazmat Detection Systems
   p_level: 3
   eve_db_id: 2366
-  eve_central_median: 90799.96
+  eve_central_median: 90799.94
 - !ruby/object:Product
   name: Hermetic Membranes
   p_level: 3
   eve_db_id: 2361
-  eve_central_median: 60600.55
+  eve_central_median: 60710.01
 - !ruby/object:Product
   name: High-Tech Transmitters
   p_level: 3
@@ -323,7 +323,7 @@
   name: Industrial Explosives
   p_level: 3
   eve_db_id: 2360
-  eve_central_median: 38503.66
+  eve_central_median: 3002.83
 - !ruby/object:Product
   name: Neocoms
   p_level: 3
@@ -333,7 +333,7 @@
   name: Nuclear Reactors
   p_level: 3
   eve_db_id: 2352
-  eve_central_median: 9972.51
+  eve_central_median: 9971.0
 - !ruby/object:Product
   name: Planetary Vehicles
   p_level: 3
@@ -348,12 +348,12 @@
   name: Smartfab Units
   p_level: 3
   eve_db_id: 2351
-  eve_central_median: 35000.0
+  eve_central_median: 1000.0
 - !ruby/object:Product
   name: Supercomputers
   p_level: 3
   eve_db_id: 2349
-  eve_central_median: 67001.13
+  eve_central_median: 67001.16
 - !ruby/object:Product
   name: Synthetic Synapses
   p_level: 3
@@ -363,42 +363,42 @@
   name: Transcranial Microcontrollers
   p_level: 3
   eve_db_id: 12836
-  eve_central_median: 15750.13
+  eve_central_median: 1001.0
 - !ruby/object:Product
   name: Ukomi Superconductors
   p_level: 3
   eve_db_id: 17136
-  eve_central_median: 27500.73
+  eve_central_median: 30000.0
 - !ruby/object:Product
   name: Vaccines
   p_level: 3
   eve_db_id: 28974
-  eve_central_median: 601.06
+  eve_central_median: 31610.09
 - !ruby/object:Product
   name: Broadcast Node
   p_level: 4
   eve_db_id: 2867
-  eve_central_median: 1426995.21
+  eve_central_median: 1422997.18
 - !ruby/object:Product
   name: Integrity Response Drones
   p_level: 4
   eve_db_id: 2868
-  eve_central_median: 1542499.98
+  eve_central_median: 1529997.0
 - !ruby/object:Product
   name: Nano-Factory
   p_level: 4
   eve_db_id: 2869
-  eve_central_median: 10.0
+  eve_central_median: 55.0
 - !ruby/object:Product
   name: Organic Mortar Applicators
   p_level: 4
   eve_db_id: 2870
-  eve_central_median: 480101.06
+  eve_central_median: 506500.01
 - !ruby/object:Product
   name: Recursive Computing Module
   p_level: 4
   eve_db_id: 2871
-  eve_central_median: 1088064.82
+  eve_central_median: 1066998.1
 - !ruby/object:Product
   name: Self-Harmonizing Power Core
   p_level: 4
@@ -413,4 +413,4 @@
   name: Wetware Mainframe
   p_level: 4
   eve_db_id: 2876
-  eve_central_median: 550.0
+  eve_central_median: 100.0

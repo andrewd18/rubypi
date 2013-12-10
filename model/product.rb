@@ -115,7 +115,10 @@ class Product
 	
 	# Pull down XML.
 	# 
-	http_result = Net::HTTP.get_response(marketstat_url)
+	evec_request = Net::HTTP::Get.new(marketstat_url)
+	evec_request.add_field('User-Agent', 'RubyPI')
+	
+	http_result = Net::HTTP.start(marketstat_url.host, marketstat_url.port) {|http| http.request(evec_request) }
 	
 	raw_xml_output = ""
 	
