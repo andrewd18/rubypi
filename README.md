@@ -27,4 +27,3 @@ Running RubyPI
 --------------
 
  * Linux, OSX, Windows Native: Run "ruby ruby_pi.rb" from the command line.
- * Windows Prepackaged: Run rubypi.exe, which will auto-unpack Ruby and run RubyPI. Because of this unpacking, please ignore any antivirus warnings.
