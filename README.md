@@ -3,6 +3,8 @@ RubyPI
 
 An EVE Online Planetary Interaction tool, written in Ruby.
 
+This tool is currently unmaintained due to real life time constraints. Bug reports will not be investigated.
+
 
 Installation on Linux, Mac
 --------------------------
@@ -19,13 +21,6 @@ Installation on Windows (Native)
  * Install Ruby 1.9 or 2.0 on your machine from http://rubyinstaller.org/
  * Run "gem install bundle" from the command line.
  * Run "bundle install" from the command line which should get the dependencies you need.
-
-
-Installation on Windows (Prepackaged)
--------------------------------------
-
- * Download the latest prepackaged edition for Windows from http://andrewd18.com/rubypi/
- * Unzip it somewhere. Requires 7zip (available at http://www.7-zip.org/).
 
 
 Running RubyPI
